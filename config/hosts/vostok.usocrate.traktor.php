@@ -15,7 +15,6 @@ define ('SKIN_URL', '/skin/');
 define ('IMAGES_URL', SKIN_URL.'images/');
 
 // Yahoo! User Interface
-define ('YUI_URL', '/outsourcing/yui_3.17.2/');
 define ('YUI_SEEDFILE_URI', '/outsourcing/yui_3.17.2/yui/yui-min.js');
 
 // Pure
