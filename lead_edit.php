@@ -1,0 +1,359 @@
+<?php
+require_once './config/main.inc.php';
+
+session_start();
+ToolBox::getDBAccess();
+
+if (empty ($_SESSION['user_id'])) {
+	header('Location:login.php');
+	exit;
+} else {
+	$user = new User($_SESSION['user_id']);
+	$user->feed();
+}
+
+// messages à délivrer
+$messages = array();
+
+// Formatage des données saisies par l'utilisateur
+if (isset($_POST)) {
+	ToolBox::formatUserPost($_POST);
+}
+
+if (isset($_REQUEST['lead_id']) && is_numeric($_REQUEST['lead_id'])) {
+	//
+	// la piste est connue
+	//
+	$lead = new Lead($_REQUEST['lead_id']);
+	if (!empty($_POST['deletion_order'])) {
+		//
+		// on supprime la piste
+		//
+		$lead->delete();
+		header('Location:leads.php');
+		exit;
+	} else {
+		//
+		// on récupère les données de la piste
+		//
+		$lead->feed();
+		$individual = $lead->getIndividual();
+		if (isset($individual)) {
+			$individual->feed();
+		}
+		$society = $lead->getSociety();
+		if (isset($society)) $society->feed();
+	}
+} else {
+	//
+	// la piste est nouvelle
+	//
+	$lead = new Lead();
+}
+
+//
+// Traitement de la société concernée par la piste.
+//
+if (isset($_REQUEST['society_id']) && is_numeric($_REQUEST['society_id'])) {
+	//
+	// on demande le rattachement de la piste à une société donnée.
+	//
+	$society = new Society($_REQUEST['society_id']);
+	$society->feed();
+	$lead->setSociety($society);
+} elseif (isset($_POST['society_submission']) && !empty($_POST['society_submission'])) {
+	//
+	// on demande le rattachement de la piste à une nouvelle société.
+	//
+	$society = new Society();
+	$society->feed($_POST);
+
+	// on exige au moins un nom pour créer la Société
+	if ($society->getName() || $society->getId()){
+		if (!$society->getId()) $society->identifyFromName();
+
+		// geolocalisation
+		if (!empty($_POST['society_address'])) {
+			$society->getAddressFromGoogle($_POST['society_address']);
+		}
+
+		//
+		// société-mère
+		//
+		if (!empty($_POST['society_parent_name'])) {
+			$society_parent = new Society();
+			$society_parent->setName($_POST['society_parent_name']);
+			if (!$society_parent->identifyfromName()) {
+				// création d'une nouvelle société
+				$society_parent->toDB();
+			}
+			$relationship = new Relationship();
+			$relationship->setItem($society, 0);
+			$relationship->setItemRole('filiale', 0);
+			$relationship->setItem($society_parent, 1);
+			$relationship->setItemRole('maison-mère', 1);
+		}
+		$society->toDB();
+		if (isset($relationship)) $relationship->toDB();
+		$lead->setSociety($society);
+
+		//
+		// activités
+		//
+		if (isset($_POST['industries_ids'])) {
+			$society->resetIndustries();
+			foreach ($_POST['industries_ids'] as $id) {
+				if (empty($id)) continue;
+				$i = new Industry($id);
+				$society->addIndustry($i);
+			}
+			$society->saveIndustries();
+		}
+	}
+}
+
+//
+// Traitement de l'individu lié à la piste
+//
+if (isset($_REQUEST['individual_id']) && is_numeric($_REQUEST['individual_id'])) {
+	//
+	// On demande l'association de la piste avec un individu donné
+	//
+	$individual = new Individual($_REQUEST['individual_id']);
+	$individual->feed();
+	$lead->setIndividual($individual);
+} elseif (isset($_POST['individual_input']) && is_numeric($_POST['individual_input'])) {
+	//
+	// On demande l'association de la piste avec un nouvel individu
+	//
+	$individual = new Individual();
+	$individual->feed($_POST);
+	// on exige au moins un nom ou un prénom pour créer l'individu
+	if ($individual->getFirstName() || $individual->getLastName() || $individual->getId()){
+		/**
+		 * si identifiant inconnu, tentative d'identification à partir du prénom et nom
+		 */
+		if (!$individual->getId() && $individual->getFirstName() && $individual->getLastName()) {
+			$individual->identifyFromName();
+		}
+		$individual->toDB();
+		$lead->setIndividual($individual);
+	}
+}
+
+//
+// Traitement de la participation de l'individu à la société concernée.
+//
+if (!empty($_POST['membership_submission'])) {
+	//
+	// enregistrement de la participation
+	//
+	$memberships = $individual->getMemberships($society);
+	if (count($memberships)==0) {
+		$membership = new Membership();
+		$membership->feed($_POST, 'membership_');
+		$membership->setIndividual($individual);
+		$membership->setSociety($society);
+		$membership->toDB();
+	}
+}
+
+//
+// Enregistrement des données de la piste.
+//
+if (!empty($_POST['toDB_order'])) {
+	if (!empty($_POST['lead_shortdescription'])) {
+		$lead->setShortDescription($_POST['lead_shortdescription']);
+	}
+	if (isset($_POST['lead_description'])) {
+		$lead->setDescription($_POST['lead_description']);
+	}
+	if (isset($_POST['lead_type'])) {
+		$lead->setType($_POST['lead_type']);
+	}
+	if (isset($_POST['lead_status'])) {
+		$lead->setStatus($_POST['lead_status']);
+	}
+	if (isset($_POST['lead_source'])) {
+		$lead->setSource($_POST['lead_source']);
+	}
+	if (isset($_POST['lead_source_description'])) {
+		$lead->setSourceDescription($_POST['lead_source_description']);
+	}
+	$lead->toDB();
+	header('Location:leads.php');
+	exit;
+}
+$doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->getName() : 'Une des pistes à suivre';
+?>
+<!doctype html>
+<html lang="fr">
+<head>
+<title><?php echo ToolBox::toHtml($doc_title); ?></title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="stylesheet" type="text/css" href="<?php echo PURE_SEEDFILE_URI ?>">
+<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
+<link rel="stylesheet" href="<?php echo SKIN_URL ?>pure-skin-vostok.css" type="text/css">
+<link rel="icon" type="image/x-icon" href="<?php echo SKIN_URL ?>favicon.ico" />
+<script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
+<script type="text/javascript" src="js/controls.js"></script>
+</head>
+<body id="leadEditDoc"  class="pure-skin-vostok">
+	<div class="pure-g-r">
+		<div class="pure-u-1 ban">
+			<header>
+				<div class="brand">
+					<a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a>
+				</div><?php echo ToolBox::toHtml($doc_title); ?></header>
+		</div>
+		<div class="pure-u-1">
+			<div>
+				<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" class="pure-form pure-form-stacked">
+					<input name="lead_id" type="hidden" value="<?php if ($lead->getId()) echo $lead->getId() ?>" />
+					<div class="pure-g-r">
+						<div class="pure-u-1-3">
+							<fieldset>
+								<legend>La piste</legend>
+								<label for="l_shortdescription_i">intitulé <small>(piste)</small>
+								</label> <input id="l_shortdescription_i" name="lead_shortdescription" type="text" value="<?php echo ToolBox::toHtml($lead->getShortDescription()); ?>" maxlength="255" /> <label for="l_description_i">description</label>
+								<textarea id="l_description_i" name="lead_description" cols="55" rows="6"><?php echo $lead->getDescription() ?></textarea>
+								<label for="lead_type_i">type</label> <input id="lead_type_i" name="lead_type" type="text" value="<?php echo ToolBox::toHtml($lead->getType()) ?>" /> <label for="lead_source_i">origine</label> <input id="lead_source_i" name="lead_source" type="text" value="<?php echo ToolBox::toHtml($lead->getSource()) ?>" size="55" /> <label for="l_source_description_ta">précisions sur l'origine</label>
+								<textarea id="l_source_description_ta" name="lead_source_description" cols="55" rows="3">
+								<?php echo ToolBox::toHtml($lead->getSourceDescription()); ?>
+							</textarea>
+								<label for="l_status_i">état</label> <select id="l_status_i" name="lead_status"><?php echo $lead->getStatusOptionsTags(); ?>
+								</select>
+							</fieldset>
+						</div>
+						<div class="pure-u-1-3">
+							<?php if (!(isset($society ) && $society->hasId())): ?>
+							<fieldset>
+								<legend>Quelle société est concernée ?</legend>
+								<label for="s_name_i">nom</label> <input id="s_name_i" name="society_name" type="text" size="35" /> <label for="s_parent_name_i">nom de la société mère</label> <input id="s_parent_name_i" type="text" name="society_parent_name" size="35" /> <label for="s_url_i">url</label> <input id="s_url_i" name="society_url" type="url" size="35" onchange="javascript:checkUrlInput('s_url_i', 's_web_link_o');" /> <a id="s_web_link_o" class="weblink" href="#" style="display: none">[voir]</a> <label for="ind_s">activité</label>
+								<select id="ind_s" name="industries_ids[]" multiple="multiple" size="7">
+									<option value="">-- choisir --</option>
+									<?php echo isset($society) ? $system->getIndustryOptionsTags($society->getIndustriesIds()) : $system->getIndustryOptionsTags() ?>
+								</select> <label for="s_address_i">adresse</label> <input id="s_address_i" name="society_address" type="text" size="35" /> <label for="s_phone_i">téléphone</label> <input id="s_phone_i" name="membership_phone" type="text" size="12" /> <label for="s_description_ta">description</label>
+								<textarea id="s_description_ta" name="society_description" cols="15" rows="15"></textarea>
+								<input name="society_submission" type="hidden" value="1" />
+							</fieldset>
+							<?php endif; ?>
+							<?php 
+							if (isset($society) && $society->hasId()) {
+								echo '<input name="society_id" type="hidden" value="'.$society->getId().'"/>';
+								echo '<section>';
+								echo '<h2>Société</h2>';
+								echo '<div><a href="/society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a></div>';
+								echo '</section>';
+							}
+							?>
+						</div>
+
+						<div class="pure-u-1-3">
+							<?php if (!(isset($individual) && $individual->hasId())) : ?>
+							<fieldset>
+								<legend>Qui est à l'origine de la piste ?</legend>
+								<label for="i_o1" class="pure-radio"><input for="i_o1" name="individual_input" type="radio" value="1" <?php echo isset($society) && $society->hasId() ? 'checked="checked"' : 'disabled="disabled"' ?> /> un membre déjà enregistré</label>
+								<div>
+									<select id="i_s" name="individual_id" <?php if (!(isset($society) && $society->hasId())) echo ' style="display:none"' ?>>
+										<option value="">-- choisis --</option>
+										<?php if (isset($society)) echo $society->getMembersOptionsTags() ?>
+									</select> <label for="i_o2" class="pure-radio"><input id="i_o2" name="individual_input" type="radio" value="2" <?php if(!(isset($society) && $society->hasId())) echo ' checked="checked"' ?> /> un nouvel individu</label> <label for="i_salutation_s">civilité</label> <select id="i_salutation_s" name="individual_salutation">
+										<option value="">-- choisis --</option>
+										<?php
+										$individual = new Individual;
+										echo $individual->getSalutationOptionsTags();
+										?>
+									</select> <label for="i_firstName_i">prénom</label> <input id="i_firstName_i" name="individual_firstName" type="text" size="15" /> <label for="i_lastName_i">nom</label> <input id="i_lastName_i" name="individual_lastName" type="text" size="15" /> <label for="i_mobile_i">mobile</label> <input id="i_mobile_i" name="individual_mobile" type="text" size="12" /> <input name="individual_submission" type="hidden" value="1" /> <label for="ms_submission_i" class="pure-checkbox"><input id="ms_submission_i"
+										type="checkbox" name="membership_submission" value="1" /> fait partie de la société ?</label>
+									<fieldset id="membership_fieldset">
+										<legend>Quelle implication ?</legend>
+										<label for="ms_department_i">service</label> <input id="ms_department_i" name="membership_department" type="text" size="35" /> <label for="ms_title_i">fonction</label> <input id="ms_title_i" name="membership_title" type="text" size="35" /> <label for="ms_phone_i">téléphone</label> <input id="ms_phone_i" name="membership_phone" type="text" size="12" /> <label for="ms_email_i">email</label> <input id="ms_email_i" name="membership_email" type="email" size="35" /> <label for="ms_url_i">Page perso.</label>
+										<input id="ms_url_i" name="membership_url" type="url" size="35" maxlength="255" onchange="javascript:checkUrlInput('ms_url_i', 'membership_url_link');" /> <a id="membership_url_link" class="weblink" href="#" style="display: none">[voir]</a>
+									</fieldset>
+								</div>
+							</fieldset>
+						</div>
+						<?php endif; ?>
+						<?php
+						if (isset($individual) && $individual->hasId()) {
+							echo '<section>';
+							echo '<h2>Qui est à l\'origine de la piste ?</h2>';
+							echo '<a href="individual.php?individual_id='.$individual->getId().'">'.$individual->getWholeName().'</a>';
+							echo ' <small>(<a href="lead_contact_edit.php?lead_id='.$lead->getId().'">modifier</a>)</small>';
+							echo '<input name="individual_id" type="hidden" value="'.$individual->getId().'"/>';
+							echo '</section>';
+						}
+						?>
+					</div>
+					<div>
+						<button name="toDB_order" type="submit" value="1" class="pure-button pure-button-primary">enregistrer</button>
+						<button name="deletion_order" type="submit" value="1" class="pure-button">supprimer</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="pure-u-1">
+			<footer><?php include 'menu.inc.php'; ?></footer>
+		</div>
+	</div>
+	<script type="text/javascript">
+		YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
+			function optionFormatter(query, results) {
+				return Y.Array.map(results, function (result) {
+					return result.highlighted + ' <small>(' + result.raw.count +')</small>';
+				});
+			};
+			
+			Y.one('body').addClass('yui3-skin-sam');
+		
+			Y.one('#lead_type_i').plug(Y.Plugin.AutoComplete, {
+		    	resultHighlighter: 'phraseMatch',
+		   		resultListLocator: 'types',
+		   		resultFormatter: optionFormatter,
+		   		resultTextLocator: 'value',
+		   		source: '<?php echo APPLI_URL ?>lead_types.json.php?query={query}'
+		   	});
+		
+			Y.one('#lead_source_i').plug(Y.Plugin.AutoComplete, {
+				resultHighlighter: 'phraseMatch',
+				resultListLocator: 'sources',
+				resultFormatter: optionFormatter,
+				resultTextLocator: 'value',
+				source: '<?php echo APPLI_URL ?>lead_sources.json.php?query={query}'
+			});
+			<?php if (!(isset($society) && $society->hasId())): ?>
+			Y.one('#s_name_i').plug(Y.Plugin.AutoComplete, {
+		    	resultHighlighter: 'phraseMatch',
+		    	resultListLocator: 'names',
+		    	minQueryLength:3,
+		   		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
+		   	});
+			Y.one('#s_parent_name_i').plug(Y.Plugin.AutoComplete, {
+		    	resultHighlighter: 'phraseMatch',
+		    	resultListLocator: 'names',
+		    	minQueryLength:3,
+		   		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
+		   	});
+		   	<?php endif; ?>
+			Y.one('#ms_title_i').plug(Y.Plugin.AutoComplete, {
+		    	resultHighlighter: 'phraseMatch',
+		    	resultListLocator: 'titles',
+		    	resultFormatter: optionFormatter,
+				resultTextLocator: 'value',
+		    	minQueryLength:2,
+		   		source: '<?php echo APPLI_URL ?>membership_titles.json.php?query={query}'
+		   	});
+			Y.one('#ms_department_i').plug(Y.Plugin.AutoComplete, {
+		    	resultHighlighter: 'phraseMatch',
+		    	resultListLocator: 'departments',
+		    	resultFormatter: optionFormatter,
+				resultTextLocator: 'value',
+		    	minQueryLength:2,
+		   		source: '<?php echo APPLI_URL ?>membership_departments.json.php?query={query}'
+		   	});
+		});
+	</script>
+</body>
+</html>

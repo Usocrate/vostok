@@ -1,0 +1,14 @@
+@charset "utf-8";
+@import url('main.css');
+BODY {
+	margin:20px;;
+	white-space:normal;
+	/*
+	background-image:url('images/youri.gif');
+	background-position:bottom left;
+	background-repeat:no-repeat;
+	*/
+	border-width:4px 4px 4px 4px;
+	border-color:#CCCCCC;	
+	border-style:solid;
+	background-color:#FFFFFF;}

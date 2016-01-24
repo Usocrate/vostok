@@ -1,0 +1,186 @@
+<?php
+require_once 'config/main.inc.php';
+
+session_start();
+ToolBox::getDBAccess();
+
+if (empty ($_SESSION['user_id'])) {
+	header('Location:login.php');
+	exit;
+} else {
+	$user = new User($_SESSION['user_id']);
+	$user->feed();
+}
+
+/**
+ * paramètres de pagination
+ **/
+$page_items_nb = 20;
+
+// si ordre d'effectuer une nouvelle recherche,
+// les données propres à la sélection de leads courante sont réinitialisées
+if (isset ($_REQUEST['lead_newsearch_order']) || empty ($_SESSION['lead_search'])) {
+	ToolBox::formatUserPost($_REQUEST);
+	$_SESSION['lead_search'] = array ();
+	if (isset ($_REQUEST['lead_type']) && strcmp($_REQUEST['lead_type'],'-1')!=0) {
+		$_SESSION['lead_search']['type'] = $_REQUEST['lead_type'];
+	}
+	if (isset ($_REQUEST['lead_source']) && strcmp($_REQUEST['lead_source'],'-1')!=0) {
+		$_SESSION['lead_search']['source'] = $_REQUEST['lead_source'];
+	}
+	if (isset ($_REQUEST['lead_status']) && strcmp($_REQUEST['lead_status'],'-1')!=0) {
+		$_SESSION['lead_search']['status'] = $_REQUEST['lead_status'];
+	}
+	$_SESSION['lead_search']['page_index'] = 1;
+	$_SESSION['lead_search']['sort_key'] = 'lead_creation_date';
+	$_SESSION['lead_search']['sort_order'] = 'DESC';
+}
+if (!isset ($_SESSION['lead_search'])) {
+	$_SESSION['lead_search'] = array ();
+}
+// critères de filtrage
+$criterias = array ();
+if (isset ($_SESSION['lead_search']['type'])) {
+	if (empty($_SESSION['lead_search']['type'])) {
+		$criterias[] = '(lead_type="" OR lead_type IS NULL)';
+	} else {
+		$criterias[] = 'lead_type = "' . mysql_real_escape_string($_SESSION['lead_search']['type']) . '"';
+	}
+}
+if (isset ($_SESSION['lead_search']['source'])) {
+	if (empty($_SESSION['lead_search']['source'])) {
+		$criterias[] = '(lead_source = "" OR lead_source IS NULL)';
+	} else {
+		$criterias[] = 'lead_source = "' . mysql_real_escape_string($_SESSION['lead_search']['source']) . '"';
+	}
+}
+if (isset ($_SESSION['lead_search']['status'])) {
+	$criterias[] = 'lead_status = "' . mysql_real_escape_string($_SESSION['lead_search']['status']) . '"';
+}
+
+// nb de pistes correspondant aux critères
+$leads_nb = $system->getLeadsNb($criterias);
+
+// nb de pages nécessaire à l'affichage des pistes
+$pages_nb = ceil($leads_nb / $page_items_nb);
+
+//	changement de page
+if (isset ($_REQUEST['lead_search_page_index']))
+	$_SESSION['lead_search']['page_index'] = $_REQUEST['lead_search_page_index'];
+
+//	sélection de leads correspondant aux critères (dont le nombre dépend de la variable $page_items_nb)
+$page_debut = ($_SESSION['lead_search']['page_index'] - 1) * $page_items_nb;
+$page_rowset = $system->getLeadsRowset($criterias, $_SESSION['lead_search']['sort_key'], $_SESSION['lead_search']['sort_order'], $page_debut, $page_items_nb);
+
+//	la sélection de pistes
+$leads = array ();
+while ($row = mysql_fetch_assoc($page_rowset)) {
+	$l = new Lead();
+	$l->feed($row);
+	$l->getIndividual()->feed($row);
+	$l->getSociety()->feed($row);
+	$leads[] = $l;
+}
+
+$doc_title = 'Les pistes ('.$leads_nb.')';
+?>
+<!doctype html>
+<html lang="fr">
+<head>
+	<title><?php echo APPLI_NAME.' : '.ToolBox::toHtml($doc_title) ?></title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" type="text/css" href="<?php echo PURE_SEEDFILE_URI ?>">
+	<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
+	<link rel="stylesheet" href="<?php echo SKIN_URL ?>pure-skin-vostok.css" type="text/css">
+</head>
+<body class="pure-skin-vostok">
+	<div class="pure-g-r">
+		<div class="pure-u-1 ban">
+			<header><div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div><?php echo ToolBox::toHtml($doc_title); ?></header>
+		</div>
+		<div class="pure-u-1">
+			<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="pure-form">
+				<label for="lead_type_i">type</label>
+				<select id="lead_type_i" name="lead_type">
+					<option value="-1">-- tous --</option>
+					<?php echo isset($_SESSION['lead_search']['type']) ? Lead::getKnownTypesAsOptionsTags($_SESSION['lead_search']['type']) : Lead::getKnownTypesAsOptionsTags() ?>
+				</select>
+				<label for="lead_source_i">origine</label>
+				<select id="lead_source_i" name="lead_source">
+					<option value="-1">-- toutes --</option>
+					<?php echo isset($_SESSION['lead_search']['source']) ? Lead::getKnownSourcesAsOptionsTags($_SESSION['lead_search']['source']) : Lead::getKnownSourcesAsOptionsTags() ?>
+				</select>
+				<label for="lead_status_i">état</label>
+				<select id="lead_status_i" name="lead_status">
+					<option value="-1">-- tous --</option>
+					<?php
+					$searchPattern = new Lead();
+					if (isset($_SESSION['lead_search']['status'])) {
+						$searchPattern->setStatus($_SESSION['lead_search']['status']);
+					}
+					echo $searchPattern->getStatusOptionsTags();
+					?>
+				</select>
+				<button type="submit" name="lead_newsearch_order" value="1" class="pure-button">Filtrer</button>
+			</form>
+		</div>
+		<div class="pure-u-1">
+			<?php
+				if (count($leads) > 0) {
+					echo '<ul class="pure-g-r">';
+					foreach ($leads as $l) {
+						echo '<li class="pure-u-1-3">';
+						echo '<div class="pan">';
+						//echo '<strong>';
+						//	society
+						$href = 'society.php?society_id=' . $l->society->getId();
+						echo '<a href="' . $href . '">';
+						echo $l->society->getNameForHtmlDisplay();
+						echo '</a>';
+						//echo '</strong>';
+						if ($l->society->getUrl()) {
+							echo ' '.$l->society->getWebHtmlLink();
+						}
+						echo '<br/>';
+			
+						// individual
+						echo '<a href="individual.php?individual_id=' . $l->individual->getId(). '">'.$l->individual->getWholeName().'</a><br />';
+			
+						//	baseline
+						$baseline_elt = array ();
+						if ($l->getType()) {
+							$baseline_elt[] = $l->getType();
+						}
+						if ($l->getCreationDate()) {
+							$baseline_elt[] = $l->getCreationDateFr();
+						}
+						if (count($baseline_elt) > 0) {
+							echo '<div><small>' . implode(' - ', $baseline_elt) . '</small></div>';
+						}
+						
+						//title
+						if ($l->getShortDescription()) {
+							echo '<div><strong>' . $l->getShortDescription() . '</strong></div>';
+						}
+						echo '<a class="editlink" href="lead_edit.php?lead_id=' . $l->getId() . '">[édition]</a>';
+						echo '</div>';
+						echo '</li>';
+					}
+					echo '</ul>';
+				}
+			?>
+		</div>
+		<div class="pure-u-1">
+		<?php
+			if ($pages_nb > 1) {
+				$params = array ();
+				echo ToolBox::getHtmlPagesNav($_SESSION['lead_search']['page_index'], $pages_nb, $params, 'lead_search_page_index');
+			}
+		?>
+		</div>
+		<div class="pure-u-1">Enregistrer une <a href="lead_edit.php">nouvelle piste</a></div>
+		<div class="pure-u-1"><footer><?php include 'menu.inc.php'; ?></footer></div>
+	</div>
+</body>
+</html>
