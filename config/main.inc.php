@@ -4,14 +4,11 @@ iconv_set_encoding('input_encoding', 'UTF-8');
 iconv_set_encoding('output_encoding', 'UTF-8');
 
 switch($_SERVER['HTTP_HOST']){
-	case 'vostok.usocrate.chosta' :
-		require 'hosts/vostok.usocrate.chosta.php';
+	case 'vostok.chosta' :
+		require 'hosts/vostok.chosta.php';
 		break;
 	case 'vostok.usocrate.traktor' :
 		require 'hosts/vostok.usocrate.traktor.php';
-		break;
-	case 'vostok.usocrate.mp110352' :
-		require 'hosts/vostok.usocrate.mp110352.php';
 		break;
 	default : // sur vist
 		require 'hosts/vostok.usocrate.fr.php';

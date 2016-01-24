@@ -7,10 +7,10 @@ define ('APPLI_NAME', 'Vostok Test (chosta)');
 define ('APPLI_DESCRIPTION', APPLI_NAME);
 define ('APPLI_PUBLISHER', 'Florent Chanavat');
 define ('APPLI_CREATOR', 'Florent Chanavat');
-define ('APPLI_DIR', 'C:/Users/Florent/www/usocrate/vostok');
-define ('CLASS_DIR', 'C:/Users/Florent/www/usocrate/vostok/classes');
+define ('APPLI_DIR', 'C:/Users/Florent/www/vostok');
+define ('CLASS_DIR', 'C:/Users/Florent/www/vostok/classes');
 define ('DATA_DIR', 'C:/Users/Florent/www/usocrate_data/vostok');
-define ('APPLI_URL','http://vostok.usocrate.chosta/');
+define ('APPLI_URL','http://vostok.chosta/');
 define ('SKIN_URL', '/skin/');
 define ('IMAGES_URL', SKIN_URL.'images/');
 
