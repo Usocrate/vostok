@@ -30,7 +30,7 @@ $leads = $society->getLeads();
 // évènements
 $events = $society->getEvents();
 
-$doc_title = $society->getNameForHtmlDisplay();
+$doc_title = $society->getName();
 ?>
 <!doctype html>
 <html lang="fr">
