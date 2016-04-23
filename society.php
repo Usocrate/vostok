@@ -44,65 +44,39 @@ $doc_title = $society->getNameForHtmlDisplay();
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body id="societyDoc">
+<?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<?php include 'navbar.inc.php'; ?>
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
-	
-	<section class="dataSheet">
-	<?php 
-		if ($society->hasUrl()) {
-			echo $society->getHtmlThumbnailLink();
-		}
-
-		$line_elt = array();
-
-		// affichage date de création et lien web.
-		if ($society->getCreationDate()) {
-			$line_elt[] = '<small >créée le '.ToolBox::toHtml($society->getCreationDateFr()).'</small>';
-		}
-		if (count($line_elt)) echo '<p>'.implode(' - ', $line_elt).'</p>';
-
-
-		// affichage coordonnées.
-		if ($society->getStreet() || $society->getCity() || $society->getPostalcode()){
-			echo '<address>';
-			echo ToolBox::toHtml($society->getAddress());
-			if ($society->getCoordinates()) {
-				echo ' <small>('.ToolBox::toHtml($society->getCoordinates()).')</small>';
-			}
-			echo '</address>';
-		}
-		if ($society->getPhone()) echo '<small>tél. : </small>'.ToolBox::toHtml($society->getPhone()).'<br />';
-
-		echo '<div>';
-		echo '<strong>activité(s) :</strong>';
-		$industries = $society->getIndustries();
-		if (count($industries)>0) {
-			echo '<ul id="industries_list">';
-			foreach ($industries as $i) {
-				echo '<li>'.$i->getHtmlLink().'</li>';
-			}
-			echo '</ul>';
-		} else {
-			echo '<small>aucune activit�</small>';
-		}
-		echo '</div>';
-
-		if ($society->getDescription()) {
-			echo '<div><blockquote>'.ToolBox::toHtml($society->getDescription()).'</blockquote></div>';
-		}
-		?>
-		<p>
-			<a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><span class="glyphicon glyphicon-edit"></span> édition</a>
-		</p>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a></small></h1>
+    <section>
+        <?php
+            // affichage coordonnées.
+            if ($society->getStreet() || $society->getCity() || $society->getPostalcode()){
+                echo '<address>';
+                echo ToolBox::toHtml($society->getAddress());
+                if ($society->getCoordinates()) {
+                    echo ' <small>('.ToolBox::toHtml($society->getCoordinates()).')</small>';
+                }
+                echo '</address>';
+            }
+        
+            if ($society->getDescription()) {
+                echo '<blockquote>'.ToolBox::toHtml($society->getDescription()).'</blockquote>';
+            }
+            $industries = $society->getIndustries();
+            if (count($industries)>0) {
+                echo '<div>';
+                foreach ($industries as $i) {
+                    echo '<span class="badge">'.$i->getHtmlLink().'</span> ';
+                }
+                echo '<div>';
+            }
+        ?>
 	</section>
 	
 	<div class="row">
 		<div class="col-md-3">
 			<section>
-				<h2>
-					Les personnes de ma connaissance <small>(les participations)</small>
-				</h2>
+				<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
 				<ul class="list-group">
 					<?php
 					foreach ($memberships as $ms) {
@@ -113,21 +87,18 @@ $doc_title = $society->getNameForHtmlDisplay();
 						if ($ms->getDepartment()) $smallTag_elt[] = ToolBox::toHtml($ms->getDepartment());
 						if ($ms->getTitle()) $smallTag_elt[] = ToolBox::toHtml($ms->getTitle());
 						if (count($smallTag_elt)>0) {
-							echo ' <small>(';
-							echo implode(' / ', $smallTag_elt);
-							echo ')</small>';
+							echo '<div><small>'.implode(' / ', $smallTag_elt).'</small></div>';
 						}
-						echo '&nbsp<a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a>';
+						echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></div>';
 						echo '</li>';
 					}
 					?>
-					<li class="list-group-item"><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>">Nouvelle participation</a></li>
 				</ul>
 			</section>
 		</div>
 		<div class="col-md-3">
 			<section>
-				<h2>Les pistes</h2>
+				<h2>Les pistes<small><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
 				<ul class="list-group">
 					<?php
 					foreach ($leads as $l) {
@@ -139,13 +110,12 @@ $doc_title = $society->getNameForHtmlDisplay();
 						echo '</li>';
 					}
 					?>
-					<li class="list-group-item"><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>">Nouvelle piste</a></li>
 				</ul>
 			</section>
 		</div>
 		<div class="col-md-3">
 			<section>
-				<h2>Évènements</h2>
+				<h2>Évènements<small><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
 				<ul class="list-group">
 					<?php
 					foreach ($events as $e) {
@@ -157,13 +127,12 @@ $doc_title = $society->getNameForHtmlDisplay();
 						echo '</li>';
 					}
 					?>
-					<li class="list-group-item"><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>">Nouvel évènement</a></li>
 				</ul>
 			</section>
 		</div>
 		<div class="col-md-3">
 			<section>
-				<h2>Relation avec d'autres sociétés</h2>
+				<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
 				<ul class="list-group">
 					<?php
 					$rowset = $society->getRelationshipsWithSocietyRowset();
@@ -185,7 +154,6 @@ $doc_title = $society->getNameForHtmlDisplay();
 						echo '</li>';
 					}
 					?>
-					<li class="list-group-item"><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>">Nouvelle relation</a></li>
 				</ul>
 			</section>
 		</div>

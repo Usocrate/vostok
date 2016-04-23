@@ -17,10 +17,6 @@ switch ($_SERVER ['HTTP_HOST']) {
 		require 'hosts/vostok.usocrate.fr.php';
 }
 // commun
-define ( 'TROMBINOSCOPE_DIR', DATA_DIR . '/trombinoscope' );
-define ( 'TROMBINOSCOPE_URL', '/trombinoscope' );
-define ( 'CV_DIR', DATA_DIR . '/cv' );
-define ( 'CV_URL', '/cv' );
 define ( 'APPLI_VERSION', '2.00' );
 define ( 'COOKIES_LIFETIME', 60 * 60 * 24 * 7 ); // 7 jours;
 define ( 'CRYPT_SALT', 'uf' ); // la clef permettant de crypter le mot de passe;

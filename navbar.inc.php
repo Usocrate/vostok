@@ -23,16 +23,17 @@
 						<li><a href="/societies_list.php?society_newsearch=1">Toutes</a></li>
 						<li><a href="/cities.php">Par ville</a></li>
 						<li><a href="/industries.php">Par activité</a></li>
-						<li><a href="/societies_list.php?society_newsearch=1&amp;society_city=">Avec ville n.c.</a></li>
+						<li role="separator" class="divider"></li>
 						<li><a href="/society_edit.php">Nouvelle société</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="/societies_list.php?society_newsearch=1&amp;society_city=">Avec ville n.c.</a></li>
 					</ul>
 				</li>
-				<li><a href="/individuals.php?individual_newsearch=1">Les individus</a></li>
+				<li><a href="/individuals.php?individual_newsearch=1">Les gens</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus <span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="http://todo.usocrate.fr/index.php?sProject=Vostok">TodoList</a></li>
 						<li><a href="/login.php?anonymat_submission=1">Se déconnecter</a></li>
 					</ul></li>
 			</ul>

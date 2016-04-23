@@ -39,7 +39,7 @@ if (isset ( $_POST )) {
 	}
 }
 
-$doc_title = 'Un évènement survient chez ' . $society->getNameForHtmlDisplay ();
+$doc_title = 'Un évènement survient chez ' . $society->getName();
 ?>
 <!doctype html>
 <html lang="fr">
@@ -53,51 +53,50 @@ $doc_title = 'Un évènement survient chez ' . $society->getNameForHtmlDisplay (
     <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
 <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 <body>
+<?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<?php include 'navbar.inc.php'; ?>
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
-	
+	<h1>Un évènement survient chez <?php echo '<a href="/society.php?society_id='.$society->getId().'">'.ToolBox::toHtml($society->getName()).'</a>'; ?></h1>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<input name="task_id" type="hidden" value="save" />
-		<?php if ($event->hasId()) : ?>
-		<input name="event_id" type="hidden" value="<?php echo $event->getId() ?>" />
-		<?php endif; ?>
-		<?php if ($society->hasId()): ?>
-		<input name="society_id" type="hidden" value="<?php echo $society->getId() ?>" />
-		<?php endif; ?>
-		<fieldset>
-			<legend>Description de l&rsquo;évènement</legend>
-			<p>
-				<label>Quand ?</label><br /> <input name="datetime" type="text" value="<?php echo $event->hasDatetime()? $event->getDatetime() : date('Y-m-d h:i:s', time()) ?>" size="25" maxlength="19" />
-			</p>
-			<p>
-				<label>Quelle est la nature de l&rsquo;évènement ?</label><br /> <select name="type">
-					<?php echo $event->hasType() ? Event::getTypeOptionsTags($event->getType()) : Event::getTypeOptionsTags(); ?>
-				</select>
-			</p>
-			<p>
-				<label>Quelle est ici ta position ?</label><br />
 
-				<?php
-				if ($event->hasUserPosition () && strcmp ( $event->getUserPosition (), 'active' ) == 0) {
-					echo '<div class="radio"><label><input name="user_position" type="radio" value="active" checked="checked" />active</label></div>';
-					echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" />passive</label></div>';
-				} else {
-					echo '<div class="radio"><label><input name="user_position" type="radio" value="active" />active</label></div>';
-					echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" checked="checked" />passive</label></div>';
-				}
-				?>
-			</p>
-			<p>
-				<label>Quel est le média ?</label><br /> <select name="media">
-					<?php echo $event->hasMedia() ? Event::getMediaOptionsTags($event->getMedia()) : Event::getMediaOptionsTags(); ?>
-				</select>
-			</p>
-			<p>
-				<label>Commentaire</label> <br />
-				<textarea name="comment" cols="55" rows="10"><?php echo ToolBox::toHtml($event->getComment()) ?></textarea>
-			</p>
-		</fieldset>
+		<?php if ($event->hasId()) : ?>
+			<input name="event_id" type="hidden" value="<?php echo $event->getId() ?>" />
+		<?php endif; ?>
+
+		<?php if ($society->hasId()): ?>
+			<input name="society_id" type="hidden" value="<?php echo $society->getId() ?>" />
+		<?php endif; ?>
+
+		<div class="form-group">
+			<label>Quand ?</label>
+			<input name="datetime" type="text" value="<?php echo $event->hasDatetime()? $event->getDatetime() : date('Y-m-d h:i:s', time()) ?>" size="25" maxlength="19" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>Quelle est la nature de l&rsquo;évènement ?</label><br />
+			<select name="type" class="form-control">
+				<?php echo $event->hasType() ? Event::getTypeOptionsTags($event->getType()) : Event::getTypeOptionsTags(); ?>
+			</select>
+		</div>
+		<?php
+			if ($event->hasUserPosition () && strcmp ( $event->getUserPosition (), 'active' ) == 0) {
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="active" checked="checked" />actif</label></div>';
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" />passif</label></div>';
+			} else {
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="active" />active</label></div>';
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" checked="checked" />passive</label></div>';
+			}
+		?>
+		<div class="form-group">
+			<label>Quel est le média ?</label>
+			<select name="media" class="form-control">
+				<?php echo $event->hasMedia() ? Event::getMediaOptionsTags($event->getMedia()) : Event::getMediaOptionsTags(); ?>
+			</select>
+		</div>
+		<div class="form-group">
+			<label>Commentaire</label>
+			<textarea name="comment" cols="55" rows="10" class="form-control"><?php echo ToolBox::toHtml($event->getComment()) ?></textarea>
+		</div>
+
 		<button type="submit" class="btn btn-primary">Enregistrer</button>
 	</form>
 </div>	

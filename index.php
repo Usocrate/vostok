@@ -23,26 +23,27 @@ $doc_title = 'Accueil';
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
+    <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+    <script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+</head>
 <body>
-<?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
-	
-	<div class="row">
-		<div class="col-md-6">
-			<section>
-				<h2>Les derniers évènements enregistrés</h2>
-				<?php echo EventCollection::getLastHistoryEvents()->toHtml(); ?>
-			</section>
-		</div>
-		<div class="col-md-6">
-			<section>
-				<h2>Les prochains évènements plannifiés</h2>
-				<?php echo EventCollection::getNextPlanningEvents()->toHtml(); ?>
-			</section>
-		</div>
-	</div>
-</div>	
+    <?php include 'navbar.inc.php'; ?>
+    <div class="container-fluid">
+    	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+    	<div class="row">
+    		<div class="col-md-6">
+    			<section>
+    				<h2>Les derniers évènements enregistrés</h2>
+    				<?php echo EventCollection::getLastHistoryEvents()->toHtml(); ?>
+    			</section>
+    		</div>
+    		<div class="col-md-6">
+    			<section>
+    				<h2>Les prochains évènements planifiés</h2>
+    				<?php echo EventCollection::getNextPlanningEvents()->toHtml(); ?>
+    			</section>
+    		</div>
+    	</div>
+	</div>	
 </body>
 </html>

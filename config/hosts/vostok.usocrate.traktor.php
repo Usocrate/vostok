@@ -13,6 +13,10 @@ define ('DATA_DIR', 'C:/Users/florent/www/usocrate_data/vostok');
 define ('APPLI_URL','http://vostok.usocrate.traktor/');
 define ('SKIN_URL', '/skin/');
 define ('IMAGES_URL', SKIN_URL.'images/');
+define ( 'TROMBINOSCOPE_DIR', DATA_DIR . '/trombinoscope' );
+define ( 'TROMBINOSCOPE_URL', '/trombinoscope' );
+define ( 'CV_DIR', DATA_DIR . '/cv' );
+define ( 'CV_URL', '/cv' );
 
 // Yahoo! User Interface
 define ('YUI_SEEDFILE_URI', '/outsourcing/yui_3.17.2/yui/yui-min.js');

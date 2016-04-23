@@ -51,8 +51,7 @@ $doc_title = $individual->getWholeName();
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a></small></h1>
 	<div class="row">
 		<div class="col-md-8">
 			<section>
@@ -85,10 +84,6 @@ $doc_title = $individual->getWholeName();
 					<?php echo $individual->getAttribute('postalCode') ? $individual->getAttribute('postalCode') : 'n.c.' ?>
 					<br /> <small>pays : </small>
 					<?php echo $individual->getAttribute('country') ? $individual->getAttribute('country') : 'n.c.' ?>
-					<br />
-					<p>
-						<a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-edit"></span> édition</a>
-					</p>
 					<?php
 					if ($individual->getCvUrl()) {
 						echo '<p><a href="'.$individual->getCvUrl().'">cv</a></p>';

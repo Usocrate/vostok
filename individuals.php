@@ -51,10 +51,9 @@ if (isset($_REQUEST['individual_newsearch']) || empty($_SESSION['individual_sear
     $_SESSION['individual_search']['sort_key'] = 'individual_lastName';
     $_SESSION['individual_search']['sort_order'] = 'ASC';
 }
-if (! isset($_SESSION['individual_search']))
+if (! isset($_SESSION['individual_search'])) {
     $_SESSION['individual_search'] = array();
-    
-    // print_r($_SESSION);
+}
     
 // critères de filtrage
 $criteria = array();
@@ -89,12 +88,12 @@ if ($individuals->getSize() == 1) {
     header('Location:individual.php?individual_id=' . $i->current()->getId());
     exit();
 }
-$doc_title = 'Les individus';
+$doc_title = 'Les gens';
 ?>
 <!doctype html>
 <html lang="fr">
 <head>
-    <title><?php echo APPLI_NAME ?>: Liste des individus</title>
+    <title><?php echo APPLI_NAME.':'.$doc_title ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
@@ -105,23 +104,27 @@ $doc_title = 'Les individus';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?><small><a href="individual_edit.php"> <span class="glyphicon glyphicon-plus"></span></a></small></h1>
 	
 	<?php if (count($messages)>0) echo '<section class="alerte">'.implode('<br />', $messages).'</section>'?>
 	
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
+		<div class="form-group">
+			<label for="individual_lastName_i">Nom</label>
+			<input id="individual_lastName_i" name="individual_lastName" type="text" value="<?php if (isset($_SESSION['individual_search']['lastName'])) echo $_SESSION['individual_search']['lastName'] ?>" placeholder="nom de famille" class="form-control" />
+		</div>
 		<div class="checkbox">
-            <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> />Les individus isolés seulement</label>
+            <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> /> Sans société</label>
  		</div>
 		<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
 	</form>
-
+	
 	<section>
     	<?php
         if ($individuals->getSize() > 0) {
-            echo '<ul class="row">';
+            echo '<ul class="list-group">';
             do {
-                echo '<li class="col-md-3">';
+                echo '<li class="list-group-item">';
                 echo '<a href="individual.php?individual_id=' . $i->current()->getId() . '">' . $i->current()->getWholeName() . '</a>';
                 echo '</li>';
             } while ($i->next());
@@ -136,7 +139,6 @@ $doc_title = 'Les individus';
             }
             ?>
     	</div>
-    	<div>Enregistrer un <a href="individual_edit.php"><strong>nouvel individu</strong> </a></div>
 	</section>
 </div>	
 </body>

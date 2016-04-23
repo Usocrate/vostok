@@ -13,6 +13,10 @@ define ('DATA_DIR', '/srv/U/www/usocrate_data/vostok');
 define ('APPLI_URL','http://vostok.usocrate.fr/');
 define ('SKIN_URL', '/skin/');
 define ('IMAGES_URL', SKIN_URL.'images/');
+define ( 'TROMBINOSCOPE_DIR', DATA_DIR . '/trombinoscope' );
+define ( 'TROMBINOSCOPE_URL', '/trombinoscope' );
+define ( 'CV_DIR', DATA_DIR . '/cv' );
+define ( 'CV_URL', '/cv' );
 define ('GOOGLE_MAPS_API_KEY', 'ABQIAAAA5b4RSJ4b0l6G30KHth1RyxT9EP-X3iUMqrKgizFQ5dGr1jh7WxSPXnmx1_xPAmOZ-ORb0NFuZDR3SQ');
 
 // Yahoo! User Interface

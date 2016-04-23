@@ -123,14 +123,14 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
     <script type="application/javascript" src="js/controls.js"></script>
-<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
+	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+</head>
 <body id="societiesListDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
-	<section>
-    	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
+	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group">
         		<label for="s_name_i">nom</label>
         		<input id="s_name_i" name="society_name" type="text" value="<?php echo $search_pattern->getName(); ?>" class="form-control" /> 
@@ -158,9 +158,8 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     		
     		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
     	</form>
-    </section>
-    <section>
-    	<form method="post" action="societies_merge.php">
+   
+       	<form method="post" action="societies_merge.php">
     		<table class="table">
     			<thead>
     				<tr>
@@ -175,14 +174,16 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     				<tr>
     					<td colspan="5" style="text-align: left">
     						<button type="button" class="btn btn-default" onclick="check('society_id[]')">tout cocher</button> /
-    						<button type="button" class="btn btn-default" onclick="uncheck('society_id[]')">tout décocher</button> <label for="task_id">Pour la sélection :</label> <!--
+    						<button type="button" class="btn btn-default" onclick="uncheck('society_id[]')">tout décocher</button>
+    						<label for="task_id">Pour la sélection :</label>
+                            <!--
                 			<select id="task_id" name="task_id">
                 				<option value="0">- choisir -</option>
                 				<option value="1"<?php if (isset($params['task_id']) && $params['task_id']==1) echo 'selected="selected"' ?>>fusionner</option>
                 				<option value="2"<?php if (isset($params['task_id']) && $params['task_id']==2) echo 'selected="selected"' ?>>supprimer</option>
                 			</select>
                 			-->
-    						<button name="task_submission" type="submit" value="1" class="btn btn-primary">fusionner</button> Créer une <a href="society_edit.php"><strong>nouvelle société</strong> </a>
+    						<button name="task_submission" type="submit" value="1" class="btn btn-default">fusionner</button> 
     					</td>
     				</tr>
     			</tfoot>
@@ -219,7 +220,6 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     		}
     		?>
     	</div>
-    </section>
 </div>	
 </body>
 </html>

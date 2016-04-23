@@ -97,7 +97,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 <div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
-	<section class="dataSheet">
+	<section>
 		<form id="relationship_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 			<input name="item0_class" type="hidden" value="Society" />
 			<input name="item1_class" type="hidden" value="Society" />

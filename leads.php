@@ -97,9 +97,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-		
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
-	
+	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="/lead_edit.php"><span class="glyphicon glyphicon-plus"></span></a></small></h1>
 	<section>
     	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group">
@@ -140,7 +138,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 					echo '<li class="list-group-item">';
 					//title
 					if ($l->getShortDescription()) {
-					    echo '<h2>' . $l->getShortDescription() . '</h2>';
+					    echo '<h2>'.$l->getShortDescription().'<small><a href="lead_edit.php?lead_id=' . $l->getId() . '"> <span class="glyphicon glyphicon-edit"></span></a></small></h2>';
 					}
 					//	society
 					$href = 'society.php?society_id=' . $l->society->getId();
@@ -153,8 +151,9 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 					echo '<br/>';
 		
 					// individual
-					echo '<a href="individual.php?individual_id=' . $l->individual->getId(). '">'.$l->individual->getWholeName().'</a><br />';
-		
+					if ($l->individual->getId()) {
+					   echo '<a href="individual.php?individual_id=' . $l->individual->getId(). '">'.$l->individual->getWholeName().'</a><br />';
+					}
 					//	baseline
 					$baseline_elt = array ();
 					if ($l->getType()) {
@@ -166,8 +165,6 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 					if (count($baseline_elt) > 0) {
 						echo '<div><small>' . implode(' - ', $baseline_elt) . '</small></div>';
 					}
-					
-					echo '<a href="lead_edit.php?lead_id=' . $l->getId() . '"><span class="glyphicon glyphicon-edit"></span> édition</a>';
 					echo '</li>';
 				}
 				echo '</ul>';
@@ -181,7 +178,6 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 		}
 	?>
 	</div>
-	<div>Enregistrer une <a href="lead_edit.php">nouvelle piste</a></div>
 	</section>
 </div>
 </body>
