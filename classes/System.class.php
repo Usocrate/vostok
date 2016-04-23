@@ -398,9 +398,9 @@ class System {
 	 * Concerne les types de pistes, fusionne 2 catégories.
 	 * 
 	 * @param string $type1
-	 *        	Le type de référence à conserver
+	 *  	Le type de référence à conserver
 	 * @param string $type2
-	 *        	Le type à faire disparaître
+	 *  	Le type à faire disparaître
 	 * @since 16/01/2006
 	 */
 	public function mergeLeadTypes($type1, $type2) {
@@ -450,7 +450,7 @@ class System {
 	 * 
 	 * @return array
 	 * @param
-	 *        	ids array
+	 *  	ids array
 	 * @since 19/08/2006
 	 */
 	public function getIndustriesFromIds($ids) {

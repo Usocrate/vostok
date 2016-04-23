@@ -216,7 +216,7 @@ class Membership {
 	 */
 	public function getWebHtmlLink()
 	{
-		return $this->getUrl() ? '<a href="'.$this->getUrl().'" class="weblink" title="'.$this->getUrl().'">[web]</a>' : NULL;	
+		return $this->getUrl() ? '<a href="'.$this->getUrl().'" title="'.$this->getUrl().'">[web]</a>' : NULL;	
 	}	
 	/**
 	 * Enregistre en base de données les attributs de la participation.

@@ -87,114 +87,145 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 <!doctype html>
 <html lang="fr">
 <head>
-<title><?php echo $doc_title ?></title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" type="text/css" href="<?php echo PURE_SEEDFILE_URI ?>">
+    <title><?php echo $doc_title ?></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
+    <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
+    <script type="text/javascript" src="js/controls.js"></script>
+    <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
+</head>
+<body>
+	<header><div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div></header>
+	
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 
-<script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
-<script type="text/javascript" src="js/controls.js"></script>
-<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css"><link rel="stylesheet" href="<?php echo SKIN_URL ?>pure-skin-vostok.css" type="text/css"></head>
-<body class="pure-skin-vostok">
-	<div class="pure-g-r">
-		<div class="pure-u-1 ban">
-			<header><div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div><?php echo ToolBox::toHtml($doc_title); ?></header>
-		</div>
-		<div class="pure-u-1">
-			<form id="membership_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" class="pure-form pure-form-stacked">
-				<?php
-				if ($membership->getId()) {
-					echo '<input name="membership_id" type="hidden" value="'.$membership->getId().'" />';
-				}
-				if (isset($_REQUEST['individual_id'])) {
-					echo '<input name="individual_id" type="hidden" value="'.$_REQUEST['individual_id'].'" />';
-				}
-				if (isset($_REQUEST['society_id'])) {
-					echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />';
-				}
-				?>
-				<p>
-					<?php
-					if (!isset($society) || !$society->getId()) {
-						echo '<div class="pure-control-group">';
-						echo '<label for="s_name_i">Nom de la Société</label><br />';
-						echo '<input id="s_name_i" name="society_name" type="text" maxlength="255" size="35" />';
-						echo '</div>';
-					} else {
-						echo '<div>';
-						echo '<small>Société : </small>';
-						echo '<a href="society.php?society_id='.$society->getId().'">'.$society->getName().'</a>';
-						echo '<label for="newsociety_id">Transférer dans une société liée</label>';
-						echo '<select name="newsociety_id">';
-						echo '<option value="">-- choisir --</option>';
-						echo $society->getRelatedSocietiesOptionsTags();
-						echo '</select>';
-						echo '</div>';
-					}
-					?>
-				</p>
-				<div class="pure-g-r">
-					<div class="pure-u-1-2">
-						<?php
-						if (!isset($individual)) {
-							$individual = new Individual();
-							echo '<fieldset>';
-							echo '<legend>Qui ?</legend>';
-							echo '<div class="pure-control-group">';
-							echo '<label for="individual_salutation_i">Civilité</label>';
-							echo '<select id="individual_salutation_i" name="individual_salutation">';
-							echo '<option>-- choisis --</option>';
-							echo $individual->getSalutationOptionsTags();
-							echo '</select>';
-							echo '</div>';
-							echo '<div class="pure-control-group">';
-							echo '<label for="individual_firstName_i">Prénom</label>';
-							echo '<input id="individual_firstName_i" name="individual_firstName" type="text" maxlength="255" />';
-							echo '</div>';
-							echo '<div class="pure-control-group">';
-							echo '<label for="individual_lastName_i">Nom</label>';
-							echo '<input id="individual_lastName_i" name="individual_lastName" type="text" maxlength="255" />';
-							echo '</div>';
-							echo '</fieldset>';
-						} else {
-							echo '<small>Qui ? : </small>'.$individual->getWholeName().'<br/>';
-						}
-						?>
-						<fieldset>
-							<legend>Activité</legend>
-							<label for="department_i">Service</label><input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" /> <label for="title_i">Fonction</label><input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" /> <label>Page perso</label><input id="membership_url_input" name="url" type="text" value="<?php echo $membership->getUrl(); ?>" size="35" maxlength="255"
-								onchange="javascript:checkUrlInput('membership_url_input', 'membership_url_link');" /> <a id="membership_url_link" class="weblink" href="#" style="display: none">[voir]</a>
-						</fieldset>
-
-						<fieldset>
-							<legend>Contact</legend>
-							<label for="phone_i">Téléphone</label><input id="phone_i" name="phone" type="text" value="<?php echo $membership->getPhone(); ?>" size="15" maxlength="255" /> <label>Mél</label><input name="email" type="text" value="<?php echo $membership->getEmail(); ?>" size="35" maxlength="255" />
-
-						</fieldset>
-						<fieldset>
-							<legend>Période</legend>
-							<label for="init_date_i">Début</label><input id="init_date_i" name="init_date" type="text" value="<?php echo $membership->getAttribute('init_date'); ?>" size="20" /> <label for="end_date_i">Fin</label><input id="end_date_i" name="end_date" type="text" value="<?php echo $membership->getAttribute('end_date'); ?>" size="20" />
-						</fieldset>
-					</div>
-					<div class="pure-u-1-2">
-						<div class="pure-control-group">
-							<label for="comment_i">Commentaire</label>
-							<textarea id="comment_i" name="description" cols="51" rows="5">
-							<?php echo $membership->getDescription(); ?>
-						</textarea>
+	<section>
+    	<form id="membership_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+    		<?php
+    		if ($membership->getId()) {
+    			echo '<input name="membership_id" type="hidden" value="'.$membership->getId().'" />';
+    		}
+    		if (isset($_REQUEST['individual_id'])) {
+    			echo '<input name="individual_id" type="hidden" value="'.$_REQUEST['individual_id'].'" />';
+    		}
+    		if (isset($_REQUEST['society_id'])) {
+    			echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />';
+    		}
+    		?>
+    		<p>
+    			<?php
+    			if (!isset($society) || !$society->getId()) {
+    				echo '<div class="form-group">';
+    				echo '<label for="s_name_i">Nom de la Société</label><br />';
+    				echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35" />';
+    				echo '</div>';
+    			} else {
+    				echo '<div>';
+    				echo '<small>Société : </small>';
+    				echo '<a href="society.php?society_id='.$society->getId().'">'.$society->getName().'</a>';
+    				echo '<label for="newsociety_id">Transférer dans une société liée</label>';
+    				echo '<select name="newsociety_id" class="form-control">';
+    				echo '<option value="">-- choisir --</option>';
+    				echo $society->getRelatedSocietiesOptionsTags();
+    				echo '</select>';
+    				echo '</div>';
+    			}
+    			?>
+    		</p>
+    		<div class="row">
+    			<div class="col-md-6">
+    				<?php
+    				if (!isset($individual)) {
+    					$individual = new Individual();
+    					echo '<fieldset>';
+    					echo '<legend>Qui ?</legend>';
+    					echo '<div class="form-group">';
+    					echo '<label for="individual_salutation_i">Civilité</label>';
+    					echo '<select id="individual_salutation_i" name="individual_salutation">';
+    					echo '<option>-- choisis --</option>';
+    					echo $individual->getSalutationOptionsTags();
+    					echo '</select>';
+    					echo '</div>';
+    					echo '<div class="form-group">';
+    					echo '<label for="individual_firstName_i">Prénom</label>';
+    					echo '<input id="individual_firstName_i" name="individual_firstName" type="text" maxlength="255" class="form-control" />';
+    					echo '</div>';
+    					echo '<div class="form-group">';
+    					echo '<label for="individual_lastName_i">Nom</label>';
+    					echo '<input id="individual_lastName_i" name="individual_lastName" type="text" maxlength="255" class="form-control" />';
+    					echo '</div>';
+    					echo '</fieldset>';
+    				} else {
+    					echo '<small>Qui ? : </small>'.$individual->getWholeName().'<br/>';
+    				}
+    				?>
+    				<fieldset>
+    				
+    					<legend>Activité</legend>
+    					
+    					<div class="form-group">
+        					<label for="department_i">Service</label>
+        					<input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" class="form-control" /> 
+    					</div>
+    					
+    					<div class="form-group">
+        					<label for="title_i">Fonction</label>
+        					<input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" class="form-control" /> 
+    					</div>
+    					
+    					<div class="form-group">
+        					<label>Page perso</label>
+        					<input id="membership_url_input" name="url" type="url" value="<?php echo $membership->getUrl(); ?>" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_input', 'membership_url_link');" />
+        					<a id="membership_url_link" href="#" style="display: none">[voir]</a>
+    					</div>
+    					
+    				</fieldset>
+    
+    				<fieldset>
+    					<legend>Contact</legend>
+    					
+    					<div class="form-group">
+        					<label for="phone_i">Téléphone</label>
+        					<input id="phone_i" name="phone" type="tel" value="<?php echo $membership->getPhone(); ?>" size="15" maxlength="255" class="form-control" />
+    					</div>
+    					
+    					<div class="form-group">
+    						<label>Mél</label>
+    						<input name="email" type="email" value="<?php echo $membership->getEmail(); ?>" size="35" maxlength="255" class="form-control" />
+    					</div>
+     				</fieldset>
+    			</div>
+    			<div class="col-md-6">
+    				<fieldset>
+    					<legend>Période</legend>
+    					<div class="form-group">
+    						<label for="init_date_i">Début</label>
+    						<input id="init_date_i" name="init_date" type="date" value="<?php echo $membership->getAttribute('init_date'); ?>" size="20" class="form-control" />
 						</div>
-					</div>
-				</div>
-				<button name="task" type="submit" value="membership_submission" class="pure-button pure-button-primary">Enregistrer</button>
-				<?php if ($membership->getId()) : ?>
-				<button name="task" type="submit" value="membership_deletion" class="pure-button">Supprimer</button>
-				<?php endif; ?>
-			</form>
-		</div>
-		<div class="pure-u-1">
-			<footer><?php include 'menu.inc.php'; ?></footer>
-		</div>
-	</div>
+						<div class="form-group">
+							<label for="end_date_i">Fin</label>
+							<input id="end_date_i" name="end_date" type="date" value="<?php echo $membership->getAttribute('end_date'); ?>" size="20" class="form-control" />
+						</div>
+    				</fieldset>
+    				<div class="form-group">
+    					<label for="comment_i">Commentaire</label>
+    					<textarea id="comment_i" name="description" cols="51" rows="5" class="form-control">
+        					<?php echo $membership->getDescription(); ?>
+        				</textarea>
+    				</div>
+    			</div>
+    		</div>
+    		<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
+    		<?php if ($membership->getId()) : ?>
+    			<button name="task" type="submit" value="membership_deletion" class="btn btn-default">Supprimer</button>
+    		<?php endif; ?>
+    	</form>
+	</section>
+
+	<footer><?php include 'menu.inc.php'; ?></footer>
+
 	<script type="text/javascript">
 		YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
 			function optionFormatter(query, results) {
@@ -207,28 +238,28 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 				Y.one('body').addClass('yui3-skin-sam');
 				if(Y.one('#s_name_i')!==null) {
 					Y.one('#s_name_i').plug(Y.Plugin.AutoComplete, {
-				    	resultHighlighter: 'phraseMatch',
-				    	resultListLocator: 'names',
-				    	minQueryLength:3,
-				   		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
-				   	});
+				 	resultHighlighter: 'phraseMatch',
+				 	resultListLocator: 'names',
+				 	minQueryLength:3,
+				 		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
+				 	});
 				}
 				Y.one('#title_i').plug(Y.Plugin.AutoComplete, {
-			    	resultHighlighter: 'phraseMatch',
-			    	resultListLocator: 'titles',
-			    	resultFormatter: optionFormatter,
+			 	resultHighlighter: 'phraseMatch',
+			 	resultListLocator: 'titles',
+			 	resultFormatter: optionFormatter,
 					resultTextLocator: 'value',
-			    	minQueryLength:2,
-			   		source: '<?php echo APPLI_URL ?>membership_titles.json.php?query={query}'
-			   	});
+			 	minQueryLength:2,
+			 		source: '<?php echo APPLI_URL ?>membership_titles.json.php?query={query}'
+			 	});
 				Y.one('#department_i').plug(Y.Plugin.AutoComplete, {
-			    	resultHighlighter: 'phraseMatch',
-			    	resultListLocator: 'departments',
-			    	resultFormatter: optionFormatter,
+			 	resultHighlighter: 'phraseMatch',
+			 	resultListLocator: 'departments',
+			 	resultFormatter: optionFormatter,
 					resultTextLocator: 'value',
-			    	minQueryLength:2,
-			   		source: '<?php echo APPLI_URL ?>membership_departments.json.php?query={query}'
-			   	});	
+			 	minQueryLength:2,
+			 		source: '<?php echo APPLI_URL ?>membership_departments.json.php?query={query}'
+			 	});	
 			});
 		});
 	</script>

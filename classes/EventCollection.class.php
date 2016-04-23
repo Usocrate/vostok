@@ -96,12 +96,12 @@ Class EventCollection extends Collection {
 			$i = $this->getIterator();
 			$i->rewind();
 			$pieces = array();
-			$html = '<ul>';
+			$html = '<ul class="list-group">';
 			while ($i->current()) {
-				$html.= '<li>';
-				$html.= '<strong><a href="society_event_edit.php?event_id='.$i->current()->getId().'">';
+				$html.= '<li class="list-group-item">';
+				$html.= '<h3><a href="society_event_edit.php?event_id='.$i->current()->getId().'">';
 				$html.= ToolBox::toHtml($i->current()->getName());
-				$html.= '</a></strong>';
+				$html.= '</a></h3>';
 				$html.= ' <small>(<a href="society.php?society_id='.$i->current()->getSociety()->getId().'">'.ToolBox::toHtml($i->current()->getSociety()->getName()).'</a>)</small>';
 				$html.= '<p>'.ToolBox::toHtml($i->current()->getComment()).'</p>';
 				$html.= '</li>';

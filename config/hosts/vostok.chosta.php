@@ -17,8 +17,5 @@ define ('IMAGES_URL', SKIN_URL.'images/');
 // Yahoo! User Interface
 define ('YUI_SEEDFILE_URI', '/outsourcing/yui_3.17.2/yui/yui-min.js');
 
-// Pure
-define ('PURE_SEEDFILE_URI', '/outsourcing/pure/0.3.0/pure-min.css');
-
 // Bluga.net WebThumb snapping the web
 define('BLUGA_DIR', 'C:/Users/Florent/www/usocrate/outsourcing/Bluga.net-Webthumb-API-for-PHP');

@@ -16,7 +16,7 @@
 	$societies = array();
 ?>
 <html>
-<body class="pure-skin-vostok">
+<body>
 <?php 	
 while ($row = mysql_fetch_assoc($page_rowset)) {
 	$societies[] = new Society();

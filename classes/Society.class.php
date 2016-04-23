@@ -434,7 +434,7 @@ class Society {
 	 */
 	public function getWebHtmlLink()
 	{
-		return $this->getUrl() ? '<a href="'.$this->getUrl().'" class="weblink" title="'.$this->getUrl().'">[web]</a>' : NULL;
+		return $this->getUrl() ? '<a href="'.$this->getUrl().'" title="'.$this->getUrl().'">[web]</a>' : NULL;
 	}
 	/**
 	 * Indique si la miniature du site web de la société a déjà été enregistré.

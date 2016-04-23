@@ -14,8 +14,8 @@ $users = $system->getUsers();
 <head>
 <title>Génération de mot de passe htaccess</title>
 <link rel="stylesheet" href="<?php echo SKIN_URL ?>standalone.css" type="text/css" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css"><link rel="stylesheet" href="<?php echo SKIN_URL ?>pure-skin-vostok.css" type="text/css"></head>
-<body class="pure-skin-vostok">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css"></head>
+<body>
 <h1><?php echo $system->getHtmlLink(); ?> Génération de mot de passe htaccess</h1>
 <blockquote>
 Chacun des utilisateurs enregistrés en base de données se voit attribuer un compte dans le fichier .htpassword pour pouvoir accéder aux répertoires à accès restreint.

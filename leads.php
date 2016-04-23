@@ -90,97 +90,100 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 	<title><?php echo APPLI_NAME.' : '.ToolBox::toHtml($doc_title) ?></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" type="text/css" href="<?php echo PURE_SEEDFILE_URI ?>">
+	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-	<link rel="stylesheet" href="<?php echo SKIN_URL ?>pure-skin-vostok.css" type="text/css">
 </head>
-<body class="pure-skin-vostok">
-	<div class="pure-g-r">
-		<div class="pure-u-1 ban">
-			<header><div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div><?php echo ToolBox::toHtml($doc_title); ?></header>
-		</div>
-		<div class="pure-u-1">
-			<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="pure-form">
-				<label for="lead_type_i">type</label>
-				<select id="lead_type_i" name="lead_type">
-					<option value="-1">-- tous --</option>
-					<?php echo isset($_SESSION['lead_search']['type']) ? Lead::getKnownTypesAsOptionsTags($_SESSION['lead_search']['type']) : Lead::getKnownTypesAsOptionsTags() ?>
-				</select>
-				<label for="lead_source_i">origine</label>
-				<select id="lead_source_i" name="lead_source">
-					<option value="-1">-- toutes --</option>
-					<?php echo isset($_SESSION['lead_search']['source']) ? Lead::getKnownSourcesAsOptionsTags($_SESSION['lead_search']['source']) : Lead::getKnownSourcesAsOptionsTags() ?>
-				</select>
-				<label for="lead_status_i">état</label>
-				<select id="lead_status_i" name="lead_status">
-					<option value="-1">-- tous --</option>
-					<?php
-					$searchPattern = new Lead();
-					if (isset($_SESSION['lead_search']['status'])) {
-						$searchPattern->setStatus($_SESSION['lead_search']['status']);
-					}
-					echo $searchPattern->getStatusOptionsTags();
-					?>
-				</select>
-				<button type="submit" name="lead_newsearch_order" value="1" class="pure-button">Filtrer</button>
-			</form>
-		</div>
-		<div class="pure-u-1">
-			<?php
-				if (count($leads) > 0) {
-					echo '<ul class="pure-g-r">';
-					foreach ($leads as $l) {
-						echo '<li class="pure-u-1-3">';
-						echo '<div class="pan">';
-						//echo '<strong>';
-						//	society
-						$href = 'society.php?society_id=' . $l->society->getId();
-						echo '<a href="' . $href . '">';
-						echo $l->society->getNameForHtmlDisplay();
-						echo '</a>';
-						//echo '</strong>';
-						if ($l->society->getUrl()) {
-							echo ' '.$l->society->getWebHtmlLink();
-						}
-						echo '<br/>';
-			
-						// individual
-						echo '<a href="individual.php?individual_id=' . $l->individual->getId(). '">'.$l->individual->getWholeName().'</a><br />';
-			
-						//	baseline
-						$baseline_elt = array ();
-						if ($l->getType()) {
-							$baseline_elt[] = $l->getType();
-						}
-						if ($l->getCreationDate()) {
-							$baseline_elt[] = $l->getCreationDateFr();
-						}
-						if (count($baseline_elt) > 0) {
-							echo '<div><small>' . implode(' - ', $baseline_elt) . '</small></div>';
-						}
-						
-						//title
-						if ($l->getShortDescription()) {
-							echo '<div><strong>' . $l->getShortDescription() . '</strong></div>';
-						}
-						echo '<a class="editlink" href="lead_edit.php?lead_id=' . $l->getId() . '">[édition]</a>';
-						echo '</div>';
-						echo '</li>';
-					}
-					echo '</ul>';
-				}
-			?>
-		</div>
-		<div class="pure-u-1">
+<body>
+	<header>
+		<div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div>
+	</header>
+	
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	
+	<section>
+    	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
+    		<div class="form-group">
+        		<label for="lead_type_i">type</label>
+        		<select id="lead_type_i" name="lead_type" class="form-control">
+        			<option value="-1">-- tous --</option>
+        			<?php echo isset($_SESSION['lead_search']['type']) ? Lead::getKnownTypesAsOptionsTags($_SESSION['lead_search']['type']) : Lead::getKnownTypesAsOptionsTags() ?>
+        		</select>
+    		</div>
+    		<div class="form-group">
+        		<label for="lead_source_i">origine</label>
+        		<select id="lead_source_i" name="lead_source" class="form-control">
+        			<option value="-1">-- toutes --</option>
+        			<?php echo isset($_SESSION['lead_search']['source']) ? Lead::getKnownSourcesAsOptionsTags($_SESSION['lead_search']['source']) : Lead::getKnownSourcesAsOptionsTags() ?>
+        		</select>
+        	</div>
+        	<div class="form-group">
+        		<label for="lead_status_i">état</label>
+        		<select id="lead_status_i" name="lead_status" class="form-control">
+        			<option value="-1">-- tous --</option>
+        			<?php
+        			$searchPattern = new Lead();
+        			if (isset($_SESSION['lead_search']['status'])) {
+        				$searchPattern->setStatus($_SESSION['lead_search']['status']);
+        			}
+        			echo $searchPattern->getStatusOptionsTags();
+        			?>
+        		</select>
+    		</div>
+    		<button type="submit" name="lead_newsearch_order" value="1" class="btn btn-default">Filtrer</button>
+    	</form>
+	</section>
+	<section>
 		<?php
-			if ($pages_nb > 1) {
-				$params = array ();
-				echo ToolBox::getHtmlPagesNav($_SESSION['lead_search']['page_index'], $pages_nb, $params, 'lead_search_page_index');
+			if (count($leads) > 0) {
+				echo '<ul class="list-group">';
+				foreach ($leads as $l) {
+					echo '<li class="list-group-item">';
+					//title
+					if ($l->getShortDescription()) {
+					    echo '<h2>' . $l->getShortDescription() . '</h2>';
+					}
+					//	society
+					$href = 'society.php?society_id=' . $l->society->getId();
+					echo '<a href="' . $href . '">';
+					echo $l->society->getNameForHtmlDisplay();
+					echo '</a>';
+					if ($l->society->getUrl()) {
+						echo ' '.$l->society->getWebHtmlLink();
+					}
+					echo '<br/>';
+		
+					// individual
+					echo '<a href="individual.php?individual_id=' . $l->individual->getId(). '">'.$l->individual->getWholeName().'</a><br />';
+		
+					//	baseline
+					$baseline_elt = array ();
+					if ($l->getType()) {
+						$baseline_elt[] = $l->getType();
+					}
+					if ($l->getCreationDate()) {
+						$baseline_elt[] = $l->getCreationDateFr();
+					}
+					if (count($baseline_elt) > 0) {
+						echo '<div><small>' . implode(' - ', $baseline_elt) . '</small></div>';
+					}
+					
+					echo '<a href="lead_edit.php?lead_id=' . $l->getId() . '"><span class="glyphicon glyphicon-edit"></span> édition</a>';
+					echo '</li>';
+				}
+				echo '</ul>';
 			}
 		?>
-		</div>
-		<div class="pure-u-1">Enregistrer une <a href="lead_edit.php">nouvelle piste</a></div>
-		<div class="pure-u-1"><footer><?php include 'menu.inc.php'; ?></footer></div>
+	<div>
+	<?php
+		if ($pages_nb > 1) {
+			$params = array ();
+			echo ToolBox::getHtmlPagesNav($_SESSION['lead_search']['page_index'], $pages_nb, $params, 'lead_search_page_index');
+		}
+	?>
 	</div>
+	<div>Enregistrer une <a href="lead_edit.php">nouvelle piste</a></div>
+	</section>
+	<footer><?php include 'menu.inc.php'; ?></footer>
 </body>
 </html>

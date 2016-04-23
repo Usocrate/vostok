@@ -34,43 +34,48 @@ if (isset ( $_POST ['task'] )) {
 <!doctype html>
 <html lang="fr">
 <head>
-<title><?php echo $doc_title ?></title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" type="text/css" href="<?php echo PURE_SEEDFILE_URI ?>">
-<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-<link rel="stylesheet" href="<?php echo SKIN_URL ?>pure-skin-vostok.css" type="text/css">
+    <title><?php echo $doc_title ?></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
 </head>
-<body class="pure-skin-vostok">
-	<div class="pure-g-r">
-		<div class="pure-u-1 ban">
-			<header>
-				<div class="brand">
-					<a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a>
-				</div><?php echo ToolBox::toHtml($doc_title); ?></header>
-		</div>
-		<?php
-		if (count ( $messages ) > 0) {
-			echo '<div class="pure-u-1">';
-			foreach ( $messages as $m ) {
-				echo '<p>' . $m . '</p>';
-			}
-			echo '</div>';
+<body>
+	<header>
+		<div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div>
+	</header>
+	
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	
+	<?php
+	if (count ( $messages ) > 0) {
+		echo '<section>';
+		foreach ( $messages as $m ) {
+			echo '<p>' . $m . '</p>';
 		}
-		?>
-		<div class="pure-u-1">
-			<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" class="pure-form">
-				<label for="lead_type_todrop">La catégorie obsolète</label> <select name="lead_type_todrop">
-					<?php echo Lead::getKnownTypesAsOptionsTags()?>
-				</select><small> à remplacer par </small> <label>La catégorie référence</label> <select name="lead_type_ref">
-					<?php echo Lead::getKnownTypesAsOptionsTags()?>
-				</select> <input name="task" type="hidden" value="lead_types_merge" />
-				<button type="submit" class="pure-button pure-button-primary">Ok</button>
-			</form>
-		</div>
-		<div class="pure-u-1">
-			<footer><?php include 'menu.inc.php'; ?></footer>
-		</div>
-	</div>
+		echo '</section>';
+	}
+	?>
+	<section>
+    	<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+    		<div class="form-group">
+        		<label for="lead_type_todrop">La catégorie obsolète</label>
+        		<select name="lead_type_todrop" class="form-control">
+        			<?php echo Lead::getKnownTypesAsOptionsTags()?>
+        		</select>
+    		</div>
+    		<small> à remplacer par </small> 
+    		<div class="form-group">
+        		<label>La catégorie référence</label>
+        		<select name="lead_type_ref" class="form-control">
+        			<?php echo Lead::getKnownTypesAsOptionsTags()?>
+        		</select>
+    		</div>
+    		<input name="task" type="hidden" value="lead_types_merge" />
+    		<button type="submit" class="btn btn-primary">Ok</button>
+    	</form>
+	</section>
+	<footer><?php include 'menu.inc.php'; ?></footer>
 </body>
 </html>

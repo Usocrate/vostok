@@ -109,55 +109,96 @@ $doc_title = 'Une piste';
 <title>Une des pistes (sa fiche détaillées)</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" type="text/css" href="<?php echo PURE_SEEDFILE_URI ?>">
-
+<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
+<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
 <script type="text/javascript" src="js/controls.js"></script>
-<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css"><link rel="stylesheet" href="<?php echo SKIN_URL ?>pure-skin-vostok.css" type="text/css"></head>
-<body class="pure-skin-vostok">
-	<div class="pure-g-r">
-		<div class="pure-u-1 ban">
-			<header><div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div><?php echo ToolBox::toHtml($doc_title); ?></header>
-		</div>
-		<div class="pure-u-1">
-			<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" class="pure-form pure-form-stacked">
-				<input name="lead_id" type="hidden" value="<?php if ($lead->getId()) echo $lead->getId() ?>" />
-				<div>
-					<?php if (is_null($individual) || !$individual->getId()): ?>
-					<fieldset>
-						<legend>Qui est à l'origine de la piste ?</legend>
-						<label for="individual_salutation">civilité</label> <select name="individual_salutation">
-							<option value="">-- choisis --</option>
-							<?php
-							$individual = new Individual();
-							echo $individual->getSalutationOptionsTags();
-							?>
-						</select> <label for="individual_firstName">prénom <small>(individual)</small>
-						</label> <input name="individual_firstName" type="text" size="15" /> <label for="individual_lastName">nom</label> <input name="individual_lastName" type="text" size="15" /> <label for="individual_mobile">mobile</label> <input name="individual_mobile" type="text" size="12" /> <input name="individual_submission" type="hidden" value="1" />
-						<fieldset id="membership_fieldset">
-							<legend>fait partie de la société ?</legend>
-							<input type="checkbox" name="membership_submission" value="1" /> <label for="membership_submmission" style="display: inline">oui</label> <br /> <label for="membership_department">service</label> <input name="membership_department" type="text" size="12" /> <label for="membership_title">fonction</label> <input name="membership_title" type="text" size="12" /> <label for="membership_phone">téléphone</label> <input name="membership_phone" type="text" size="12" /> <label for="membership_email">email</label>
-							<input name="membership_email" type="text" size="12" /> <label for="membership_url">Page perso</label> <input id="membership_url_input" name="membership_url" type="text" size="35" maxlength="255" onchange="javascript:checkUrlInput('membership_url_input', 'membership_url_link');" /> <a id="membership_url_link" class="weblink" href="#" style="display: none">[voir]</a>
-						</fieldset>
-					</fieldset>
-					<?php endif; ?>
-				</div>
-				<?php
-				if (isset($individual) && $individual->getId()) {
-					echo '<label>Qui est à l\'origine de la piste<label>';
-					echo '<select name="individual_id" type="hidden" value="'.$individual->getId().'">';
-					echo '<option>-- choisir --</option>';
-					echo $society->getMembersOptionsTags($individual->getId());
-					echo '</select>';
-				}
-				?>
-				<hr />
-				<button name="toDB_order" type="submit" value="1" class="pure-button pure-button-primary">enregistrer</button>
-				<button name="deletion_order" type="submit" value="1" class="pure-button">supprimer</button>
-			</form>
-		</div>
-		<div class="pure-u-1">
-			<footer><?php include 'menu.inc.php'; ?></footer>
-		</div>
-	</div>
+<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css"></head>
+<body>
+	<header><div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div></header>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<section>
+    	<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+    		<input name="lead_id" type="hidden" value="<?php if ($lead->getId()) echo $lead->getId() ?>" />
+    		<div>
+    			<?php if (is_null($individual) || !$individual->getId()): ?>
+    			<fieldset>
+    				<legend>Qui est à l'origine de la piste ?</legend>
+    				
+    				<div class="form-group">
+        				<label for="individual_salutation">civilité</label>
+        				<select name="individual_salutation" class="form-control">
+        					<option value="">-- choisis --</option>
+        					<?php
+        					$individual = new Individual();
+        					echo $individual->getSalutationOptionsTags();
+        					?>
+        				</select>
+    				</div>
+    				
+    				<div class="form-group">
+        				<label for="individual_firstName">prénom <small>(individual)</small></label>
+        				<input name="individual_firstName" type="text" size="15" class="form-control" />
+    				</div>
+    				
+    				<div class="form-group">
+        				<label for="individual_lastName">nom</label>
+        				<input name="individual_lastName" type="text" size="15" class="form-control" />
+    				</div>
+    				
+    				<div class="form-group">
+        				<label for="individual_mobile">mobile</label>
+        				<input name="individual_mobile" type="tel" size="12" class="form-control" />
+        				<input name="individual_submission" type="hidden" value="1" />
+    				</div>
+    				
+    				<fieldset id="membership_fieldset">
+    					<legend>fait partie de la société ?</legend>
+    					<div class="checkbox">
+    						<label><input type="checkbox" name="membership_submission" value="1" /> oui</label>
+    					</div>
+						<div class="checkbox">
+							<label><input name="membership_department" type="text" size="12" /> service</label>
+						</div>
+						<div class="form-group">
+							<label for="membership_title">fonction</label>
+							<input name="membership_title" type="text" size="12" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+							<label for="membership_phone">téléphone</label>
+							<input name="membership_phone" type="tel" size="12" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+						<label for="membership_email">email</label>
+    					<input name="membership_email" type="email" size="12" class="form-control" />
+    					</div>
+						
+						<div class="form-group">
+							<label for="membership_url">Page perso</label>
+							<input id="membership_url_input" name="membership_url" type="text" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_input', 'membership_url_link');" /> 
+    						<a id="membership_url_link" href="#" style="display: none">[voir]</a>
+						</div>
+    				</fieldset>
+    			</fieldset>
+    			<?php endif; ?>
+    		</div>
+    		<?php
+    		if (isset($individual) && $individual->getId()) {
+    			echo '<div class="form-group">';
+    		    echo '<label>Qui est à l\'origine de la piste<label>';
+    			echo '<select name="individual_id" type="hidden" value="'.$individual->getId().'" class="form-control">';
+    			echo '<option>-- choisir --</option>';
+    			echo $society->getMembersOptionsTags($individual->getId());
+    			echo '</select>';
+    			echo '<div>';
+    		}
+    		?>
+    		<hr />
+    		<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+    		<button name="deletion_order" type="submit" value="1" class="btn btn-default">supprimer</button>
+    	</form>
+	</section>
+	<footer><?php include 'menu.inc.php'; ?></footer>
 </body>
 </html>

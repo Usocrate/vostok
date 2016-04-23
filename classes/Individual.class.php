@@ -362,7 +362,7 @@ class Individual {
 	/**
 	 *
 	 * @since 07/08/2014
-	 * @param array $uploadedFile        	
+	 * @param array $uploadedFile  	
 	 * @return boolean
 	 */
 	public function filePhoto(array $uploadedFile) {
@@ -458,9 +458,9 @@ class Individual {
 	 * 
 	 * @return resource
 	 * @param int $offset
-	 *        	Le numéro de l'enregistrement à partir duquel la sélection commence
+	 *  	Le numéro de l'enregistrement à partir duquel la sélection commence
 	 * @param int $row_count
-	 *        	La taille de la sélection en nombre d'enregistrements
+	 *  	La taille de la sélection en nombre d'enregistrements
 	 * @version 25/06/2006
 	 */
 	public function getMembershipsRowset($criterias = NULL, $sort_key = NULL, $sort_order = NULL, $offset = 0, $row_count = NULL) {
@@ -567,7 +567,7 @@ class Individual {
 	 * 
 	 * @return boolean
 	 * @param int $society_id
-	 *        	L'identifiant de la société
+	 *  	L'identifiant de la société
 	 */
 	public function isMember($society_id) {
 		$sql = 'SELECT * FROM membership';

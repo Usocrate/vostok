@@ -25,7 +25,16 @@ define ( 'APPLI_VERSION', '2.00' );
 define ( 'COOKIES_LIFETIME', 60 * 60 * 24 * 7 ); // 7 jours;
 define ( 'CRYPT_SALT', 'uf' ); // la clef permettant de crypter le mot de passe;
 define ( 'MOSTUSED_PERIOD', 100 ); // la période prise en compte pour le calcul des ressources les plus fréquemment utilisées (en jours);
-                                 
+
+// Bootstrap
+define ( 'BOOTSTRAP_CSS_URI', SKIN_URL.'bootstrap/css/bootstrap.min.css');
+define ( 'BOOTSTRAP_CSS_THEME_URI', SKIN_URL.'bootstrap/css/bootstrap-theme.min.css');
+define ( 'BOOTSTRAP_JS_URI', SKIN_URL.'bootstrap/js/bootstrap.min.js');
+
+// JQuery
+define ( 'JQUERY_URI', 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js' );
+define ( 'JQUERY_UI_URI', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js' );
+         
 // google maps
 if (defined ( 'GOOGLE_MAPS_API_KEY' )) {
 	define ( 'GOOGLE_MAPS_API_URL', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . GOOGLE_MAPS_API_KEY );

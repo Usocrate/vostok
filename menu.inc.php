@@ -12,8 +12,8 @@ if ($closeToBirthDateIndividuals->getSize()>0) {
 	echo '</section>';
 }
 ?>
-<nav>
-	<section>
+<nav class="row">
+	<div class="col-md-3">
 		<h1>Les pistes</h1>
 		<ul>
 			<li><a href="/leads.php?lead_newsearch_order=1">Toutes</a></li>
@@ -22,31 +22,35 @@ if ($closeToBirthDateIndividuals->getSize()>0) {
 			<li><a href="/lead_types_admin.php">Types de piste</a></li>
 			<li><a href="/lead_edit.php">Nouvelle piste</a></li>
 		</ul>
-	</section>
-	<section>
+	</div>
+	<div class="col-md-3">
 		<h1>Les individus</h1>
 		<ul>
 			<li><a href="/individuals.php?individual_newsearch=1">Tous</a></li>
 			<li>
-				<form method="post" action="/individuals.php" class="pure-form">
-					<label for="individual_lastName_i">Nom<input id="individual_lastName_i" name="individual_lastName" type="text" value="<?php if (isset($_SESSION['individual_search']['lastName'])) echo $_SESSION['individual_search']['lastName'] ?>" placeholder="nom de famille" />
-					</label>
-					<button type="submit" name="individual_newsearch" value="filtrer" class="pure-button">ok</button>
+				<form method="post" action="/individuals.php" class="form-inline">
+					<div class="form-group">
+						<label for="individual_lastName_i">Nom</label>
+						<input id="individual_lastName_i" name="individual_lastName" type="text" value="<?php if (isset($_SESSION['individual_search']['lastName'])) echo $_SESSION['individual_search']['lastName'] ?>" placeholder="nom de famille" class="form-control" />
+					</div>
+					<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">ok</button>
 				</form>
 			</li>
 			<li><a href="/individuals.php?individual_toCheck=1&amp;individual_newsearch=1">Les individus isolés</a></li>
 			<li><a href="/individual_edit.php">Nouvel individu</a></li>
 		</ul>
-	</section>
-	<section>
+	</div>
+	<div class="col-md-3">
 		<h1>Les sociétés</h1>
 		<ul>
 			<li><a href="/societies_list.php?society_newsearch=1">Toutes</a></li>
 			<li>
-				<form method="post" action="/societies_list.php" class="pure-form">
-					<label>Nom<input id="society_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION['society_search']['name'])) echo $_SESSION['society_search']['name'] ?>" size="5" />
-					</label>
-					<button type="submit" name="society_newsearch" value="filtrer" class="pure-button">ok</button>
+				<form method="post" action="/societies_list.php" class="form-inline">
+					<div class="form-group">
+    					<label for="society_name_i">Nom</label>
+    					<input id="society_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION['society_search']['name'])) echo $_SESSION['society_search']['name'] ?>" size="5" class="form-control" />
+					</div>
+					<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">ok</button>
 					<input type="hidden" name="society_newsearch" value="1" />
 				</form>
 			</li>
@@ -55,13 +59,13 @@ if ($closeToBirthDateIndividuals->getSize()>0) {
 			<li><a href="/societies_list.php?society_newsearch=1&amp;society_city=">Avec ville n.c.</a></li>
 			<li><a href="/society_edit.php">Nouvelle société</a></li>
 		</ul>
-	</section>
-	<section>
+	</div>
+	<div class="col-md-3">
 		<h1>Divers</h1>
 		<ul>
 			<li><a href="/index.php">Accueil</a></li>
 			<li><a href="http://todo.usocrate.fr/index.php?sProject=Vostok">TodoList</a></li>
 			<li><a href="/login.php?anonymat_submission=1">Se déconnecter</a></li>
 		</ul>
-	</section>
+	</div>
 </nav>

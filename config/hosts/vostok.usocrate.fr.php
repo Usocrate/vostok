@@ -18,10 +18,7 @@ define ('GOOGLE_MAPS_API_KEY', 'ABQIAAAA5b4RSJ4b0l6G30KHth1RyxT9EP-X3iUMqrKgizFQ
 // Yahoo! User Interface
 define ('YUI_SEEDFILE_URI', '/outsourcing/yui_3/build/yui/yui-min.js');
 
-// Pure
-define ('PURE_SEEDFILE_URI', '/outsourcing/pure/0.3.0/pure-min.css');
-
 // Bluga.net WebThumb snapping the web
 define('BLUGA_DIR', '/srv/U/www/outsourcing/Bluga.net-Webthumb-API-for-PHP/Bluga/');
 define('WEBTHUMB_KEY','a4905c782c42c8ab297f21be6409d5f7');
-define('WEBTHUMB_USER_ID','4522');
+define('WEBTHUMSER_ID','4522');
