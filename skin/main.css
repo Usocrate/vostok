@@ -1,45 +1,5 @@
 @charset "utf-8";
 
-NAV {
-	background-color: #2f5369;
-	background-image: url(images/youri_2-2.png);
-	background-repeat: no-repeat;
-	background-position: top left;
-	color: #fff;
-	padding: 1em 0 0 140px;
-}
-
-NAV SECTION {
-	display: inline-block;
-	vertical-align: top;
-}
-
-NAV H1 {
-	border: 0;
-	color: #84c6f1;
-	font-weight: bold;
-	padding: 0 .4em;
-	font-size:1.2em;
-}
-
-NAV LI {
-	list-style-type: disc;
-	list-style-position: outside;
-	line-height: 1.6em;
-}
-
-NAV A {
-	color: #fff;
-}
-
-SECTION, BODY>FORM, BODY>TABLE {
-	margin:1.2em 1em;
-}
-
-SECTION>UL.list-group {
-	margin:0;
-}
-
 SPAN.badge>A {
 	color:inherit;
 	font-size:inherit;
@@ -73,6 +33,7 @@ HEADER {
 	background-color: #2f5369;
 	color: #fff;
 }
+
 HEADER A {
 	color:inherit;
 }

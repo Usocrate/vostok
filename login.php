@@ -39,10 +39,10 @@ $doc_title = 'Il faut s\'identifier';
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
     <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-</head>
+<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 
 <body id="loginDoc" >
-	
+<div class="container-fluid">	
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<div>
@@ -71,5 +71,6 @@ $doc_title = 'Il faut s\'identifier';
     		});
     	});
 	</script>
+</div>
 </body>
 </html>

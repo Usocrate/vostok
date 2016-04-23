@@ -18,22 +18,21 @@ $doc_title = 'Les sociétés classées par ville';
 <!doctype html>
 <html lang="fr">
 <head>
-<title><?php echo APPLI_NAME ?>: Répartition des sociétés par ville</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
+    <title><?php echo APPLI_NAME ?>: Répartition des sociétés par ville</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
+    <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+    <script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body>
-	<header>
-		<div class="brand">
-			<a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a>
-		</div>
-	</header>
-	
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+<?php include 'navbar.inc.php'; ?>
+<div class="container-fluid">
 
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	
 	<table class="table">
 		<thead>
 			<tr>
@@ -60,7 +59,6 @@ $doc_title = 'Les sociétés classées par ville';
         ?>
 		</tbody>
 	</table>
-	
-	<footer><?php include 'menu.inc.php'; ?></footer>
+</div>	
 </body>
 </html>

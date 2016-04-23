@@ -93,12 +93,11 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-</head>
+<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 <body>
-	<header>
-		<div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div>
-	</header>
-	
+<?php include 'navbar.inc.php'; ?>
+<div class="container-fluid">
+		
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<section>
@@ -184,6 +183,6 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 	</div>
 	<div>Enregistrer une <a href="lead_edit.php">nouvelle piste</a></div>
 	</section>
-	<footer><?php include 'menu.inc.php'; ?></footer>
+</div>
 </body>
 </html>

@@ -95,10 +95,10 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
     <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <script type="text/javascript" src="js/controls.js"></script>
     <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-</head>
+<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 <body>
-	<header><div class="brand"><a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a></div></header>
-	
+<?php include 'navbar.inc.php'; ?>
+<div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 
 	<section>
@@ -224,7 +224,7 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
     	</form>
 	</section>
 
-	<footer><?php include 'menu.inc.php'; ?></footer>
+	
 
 	<script type="text/javascript">
 		YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
@@ -263,5 +263,6 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 			});
 		});
 	</script>
+</div>
 </body>
 </html>

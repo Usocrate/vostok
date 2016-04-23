@@ -91,14 +91,12 @@ if (isset ( $item0 ) && isset ( $item1 )) {
     <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <script type="text/javascript" src="js/controls.js"></script>
     <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-</head>
+<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 <body>
-	<header>
-		<div class="brand">
-			<a href="<?php echo APPLI_URL?>"><?php echo ToolBox::toHtml(APPLI_NAME) ?></a>
-		</div>
-	</header>
-	</section>
+<?php include 'navbar.inc.php'; ?>
+<div class="container-fluid">
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	
 	<section class="dataSheet">
 		<form id="relationship_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 			<input name="item0_class" type="hidden" value="Society" />
@@ -172,28 +170,29 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			<?php endif; ?>
 		</form>
 	</section>
-	<script type="text/javascript">
-		YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
-			Y.on('domready', function () {
-				Y.one('body').addClass('yui3-skin-sam');
-	
-				if(Y.one('#s1_name_i')!==null) {
-					Y.one('#s1_name_i').plug(Y.Plugin.AutoComplete, {
-				 	resultHighlighter: 'phraseMatch',
-				 	resultListLocator: 'names',
-				 	minQueryLength:3,
-				 		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
-				 	});
-				}
-			 	
-				Y.one('#s2_name_i').plug(Y.Plugin.AutoComplete, {
+</div>
+<script type="text/javascript">
+	YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
+		Y.on('domready', function () {
+			Y.one('body').addClass('yui3-skin-sam');
+
+			if(Y.one('#s1_name_i')!==null) {
+				Y.one('#s1_name_i').plug(Y.Plugin.AutoComplete, {
 			 	resultHighlighter: 'phraseMatch',
 			 	resultListLocator: 'names',
 			 	minQueryLength:3,
 			 		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
-			 	}); 	
-			});
+			 	});
+			}
+		 	
+			Y.one('#s2_name_i').plug(Y.Plugin.AutoComplete, {
+		 	resultHighlighter: 'phraseMatch',
+		 	resultListLocator: 'names',
+		 	minQueryLength:3,
+		 		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
+		 	}); 	
 		});
-	</script>
+	});
+</script>
 </body>
 </html>
