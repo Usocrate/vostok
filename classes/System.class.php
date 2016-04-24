@@ -293,7 +293,7 @@ class System {
 		if (count ( $criterias ) > 0) {
 			$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
 		}
-		
+		//echo $sql;
 		$rowset = mysql_query ( $sql );
 		$row = mysql_fetch_row ( $rowset );
 		return $row [0];

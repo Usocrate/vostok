@@ -17,7 +17,7 @@ if (isset($_REQUEST['society_id'])) {
 	$society->setId($_REQUEST['society_id']);
 	$society->feed();
 }
-$doc_title = 'Une société (sa fiche détaillée en édition)';
+$doc_title = $society->hasId() ? $society->getName() : 'Une société';
 
 if (isset($_POST['task'])) {
 	switch ($_POST['task']) {
@@ -99,7 +99,7 @@ if (isset($_POST['task'])) {
         		</div>
         		
         		<div class="form-group">
-            		<label>nom de la société mère</label>
+            		<label>Société mère</label>
                 	<?php
                 	$parentSociety = $society->getParentSociety();
                 	$value = $parentSociety ? $parentSociety->getName() : '';

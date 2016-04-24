@@ -20,14 +20,12 @@ if (empty($_SESSION['user_id'])) {
 			header('Location:index.php');
 			exit;
 		}
-	} else {
-		$messages[] = 'L\'utilisateur n\'est <em>pas identifié</em>';
 	}
 } else {
 	header('Location:index.php');
 	exit;
 }
-$doc_title = 'Il faut s\'identifier';
+$doc_title = APPLI_NAME;
 ?>
 <!doctype html>
 <html lang="fr">

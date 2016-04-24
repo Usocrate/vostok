@@ -57,7 +57,7 @@ if (! empty ( $_SESSION ['society_search'] ['name'] )) {
 //
 if (isset ( $_SESSION ['society_search'] ['industry_id'] )) {
 	if (empty ( $_SESSION ['society_search'] ['industry_id'] )) {
-		$criterias [] = 'industry_id IS NULL';
+		//$criterias [] = 'industry_id IS NULL';
 	} else {
 		$criterias [] = 'industry_id = "' . $_SESSION ['society_search'] ['industry_id'] . '"';
 	}
@@ -67,7 +67,7 @@ if (isset ( $_SESSION ['society_search'] ['industry_id'] )) {
 if (isset ( $_SESSION ['society_search'] ['city'] )) {
 	$search_pattern->setCity ( $_SESSION ['society_search'] ['city'] );
 	if (empty ( $_SESSION ['society_search'] ['city'] )) {
-		$criterias [] = '(society_city = "" OR society_city IS NULL)';
+		//$criterias [] = '(society_city = "" OR society_city IS NULL)';
 		// $criterias[] = 'society_city IS NULL';
 	} else {
 		$criterias [] = 'society_city = "' . $search_pattern->getCity () . '"';
@@ -79,7 +79,7 @@ if (isset ( $_SESSION ['society_search'] ['city'] )) {
 if (isset ( $_SESSION ['society_search'] ['postalcode'] )) {
 	$search_pattern->setPostalCode ( $_SESSION ['society_search'] ['postalcode'] );
 	if (empty ( $_SESSION ['society_search'] ['postalcode'] )) {
-		$criterias [] = '(society_postalcode = "" OR society_postalcode IS NULL)';
+		//$criterias [] = '(society_postalcode = "" OR society_postalcode IS NULL)';
 	} else {
 		$criterias [] = 'society_postalcode LIKE "' . $search_pattern->getPostalCode () . '%"';
 	}
@@ -129,7 +129,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
-	
+	<section>	
 	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group">
         		<label for="s_name_i">nom</label>
@@ -158,7 +158,8 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     		
     		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
     	</form>
-   
+   </section>
+   <section>
        	<form method="post" action="societies_merge.php">
     		<table class="table">
     			<thead>
@@ -220,6 +221,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     		}
     		?>
     	</div>
+    </section>
 </div>	
 </body>
 </html>

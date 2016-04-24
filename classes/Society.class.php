@@ -290,7 +290,7 @@ class Society {
 			$elements[] = $this->getCity();
 		}
 		if (count($elements)>0) {
-			return implode(', ', $elements);
+			return implode(' ', $elements);
 		}
 	}
 	/**

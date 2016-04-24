@@ -4,7 +4,11 @@ NAV.navbar {
 	margin-bottom:0;
 }
 
-SPAN.badge>A {
+SECTION {
+	padding:1em 0;
+}
+
+SPAN.badge>A, SPAN.label>A {
 	color:inherit;
 	font-size:inherit;
 	font-weight:inherit;

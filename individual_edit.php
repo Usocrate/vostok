@@ -64,13 +64,14 @@ if (isset($_POST['deletion_order'])) {
 	
 	<?php
         if (count($messages) > 0) {
-            echo '<section>';
+            echo '<div class="alert alert-info" role="alert">';
             foreach ($messages as $m) {
                 echo '<p>' . ToolBox::toHtml($m) . '</p>';
             }
-            echo '</section>';
+            echo '</div>';
         }
     ?>
+    
 	<blockquote>Les informations suivantes concernent la personne d&rsquo;un point de vue strictement individuel, hors toute société.</blockquote>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
 		<?php if (isset($_REQUEST['society_id'])) echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />'?>

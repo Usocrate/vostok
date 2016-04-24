@@ -14,6 +14,7 @@
 					<ul class="dropdown-menu">
 						<li><a href="/leads.php?lead_newsearch_order=1">Toutes</a></li>
 						<li><a href="/leads.php?lead_newsearch_order=1&amp;lead_status=suivie">Suivie</a></li>
+						<li><a href="/leads.php">Dernière recherche</a></li>
 						<li><a href="/leads.php?lead_newsearch_order=1&amp;lead_status=<?php echo urlencode('à suivre') ?>">A suivre</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a href="/lead_types_admin.php">Types de piste</a></li>
@@ -23,6 +24,7 @@
 						<li><a href="/societies_list.php?society_newsearch=1">Toutes</a></li>
 						<li><a href="/cities.php">Par ville</a></li>
 						<li><a href="/industries.php">Par activité</a></li>
+						<li><a href="/societies_list.php">Dernière recherche</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a href="/society_edit.php">Nouvelle société</a></li>
 						<li role="separator" class="divider"></li>

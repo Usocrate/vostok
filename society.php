@@ -49,24 +49,45 @@ $doc_title = $society->getName();
 	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a></small></h1>
     <section>
         <?php
-            // affichage coordonnées.
+            //
+            // adresse physique et url
+            //
+            $address_elt = array();
             if ($society->getStreet() || $society->getCity() || $society->getPostalcode()){
-                echo '<address>';
-                echo ToolBox::toHtml($society->getAddress());
-                if ($society->getCoordinates()) {
-                    echo ' <small>('.ToolBox::toHtml($society->getCoordinates()).')</small>';
+                $geo_elt = array();
+                if ($society->getStreet()) {
+                    $geo_elt[] = ToolBox::toHtml($society->getStreet());
                 }
-                echo '</address>';
+                if ($society->getPostalCode()) {
+                    $geo_elt[] = $society->getPostalCode();
+                }
+                if ($society->getCity()) {
+                    $geo_elt[] = '<a href="/societies_list.php?society_newsearch=1&society_city='.$society->getCity().'">'.ToolBox::toHtml($society->getCity()).'</a>';
+                }
+                if (count($geo_elt)>0) {
+                    $address_elt[] = implode(' ', $geo_elt);
+                }
             }
-        
+            if ($society->getUrl()) {
+                $address_elt [] = '<a href="$society->getUrl()">'.$society->getUrl().'</a>';
+            }
+            if (count($address_elt)>0) {
+                echo '<address>'.implode(' <small>-</small> ', $address_elt).'</address>';
+            }
+            //
+            // description
+            //
             if ($society->getDescription()) {
                 echo '<blockquote>'.ToolBox::toHtml($society->getDescription()).'</blockquote>';
             }
+            //
+            // activités
+            //
             $industries = $society->getIndustries();
             if (count($industries)>0) {
                 echo '<div>';
                 foreach ($industries as $i) {
-                    echo '<span class="badge">'.$i->getHtmlLink().'</span> ';
+                    echo '<span class="label label-default">'.$i->getHtmlLink().'</span> ';
                 }
                 echo '<div>';
             }

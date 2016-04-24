@@ -106,7 +106,15 @@ $doc_title = 'Les gens';
 	
 	<h1><?php echo ToolBox::toHtml($doc_title); ?><small><a href="individual_edit.php"> <span class="glyphicon glyphicon-plus"></span></a></small></h1>
 	
-	<?php if (count($messages)>0) echo '<section class="alerte">'.implode('<br />', $messages).'</section>'?>
+	<?php
+        if (count($messages) > 0) {
+            echo '<div class="alert alert-info" role="alert">';
+            foreach ($messages as $m) {
+                echo '<p>' . ToolBox::toHtml($m) . '</p>';
+            }
+            echo '</div>';
+        }
+    ?>
 	
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
 		<div class="form-group">
