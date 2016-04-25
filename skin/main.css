@@ -112,22 +112,24 @@ DD {
 }
 
 #loginDoc {
-	width: 500px;
-	margin: auto
+	background-image: url("/skin/images/bg.gif");
+}
+
+#loginDoc div.container {
+	 max-width:450px;
+	 background-color:#fff;
 }
 
 #loginDoc FORM {
 	background-image: url(/skin/images/vostok.gif);
 	background-position: top center;
 	background-repeat: no-repeat;
-	width: 500px;
 	margin: auto;
-	padding: 180px 50px 0 50px;
+	padding: 180px 0 0 0;
 }
 
 #loginDoc FOOTER {
 	margin: 20px auto 10px auto;
-	width: 400px;
 	background-image: url(/skin/images/gagarinecasque.gif);
 	background-position: bottom left;
 	background-repeat: no-repeat;

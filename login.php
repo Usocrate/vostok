@@ -40,7 +40,7 @@ $doc_title = APPLI_NAME;
 <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 
 <body id="loginDoc" >
-<div class="container-fluid">	
+<div class="container">	
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<div>

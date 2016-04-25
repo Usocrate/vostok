@@ -7,8 +7,8 @@ switch ($_SERVER ['HTTP_HOST']) {
 	case 'vostok.chosta' :
 		require 'hosts/vostok.chosta.php';
 		break;
-	case 'vostok.usocrate.traktor' :
-		require 'hosts/vostok.usocrate.traktor.php';
+	case 'vostok.traktor' :
+		require 'hosts/vostok.traktor.php';
 		break;
 	case 'vostok.cgdlptl01153' :
 		require 'hosts/vostok.cgdlptl01153.php';
@@ -20,7 +20,7 @@ switch ($_SERVER ['HTTP_HOST']) {
 define ( 'APPLI_VERSION', '2.00' );
 define ( 'COOKIES_LIFETIME', 60 * 60 * 24 * 7 ); // 7 jours;
 define ( 'CRYPT_SALT', 'uf' ); // la clef permettant de crypter le mot de passe;
-define ( 'MOSTUSED_PERIOD', 100 ); // la période prise en compte pour le calcul des ressources les plus fréquemment utilisées (en jours);
+define ( 'MOSTUSED_PERIOD', 100 ); // la pÃ©riode prise en compte pour le calcul des ressources les plus frÃ©quemment utilisÃ©es (en jours);
 
 // Bootstrap
 define ( 'BOOTSTRAP_CSS_URI', SKIN_URL.'bootstrap/css/bootstrap.min.css');
@@ -35,13 +35,14 @@ define ( 'JQUERY_UI_URI', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js' )
 if (defined ( 'GOOGLE_MAPS_API_KEY' )) {
 	define ( 'GOOGLE_MAPS_API_URL', 'http://maps.google.com/maps?file=api&amp;v=2&amp;key=' . GOOGLE_MAPS_API_KEY );
 }
+
 function __autoload($class_name) {
-	if (is_file ( CLASS_DIR . '/' . $class_name . '.class.php' )) {
-		include_once CLASS_DIR . '/' . $class_name . '.class.php';
+	if (is_file ( CLASS_DIR . DIRECTORY_SEPARATOR . $class_name . '.class.php' )) {
+		include_once CLASS_DIR . DIRECTORY_SEPARATOR . $class_name . '.class.php';
 	} else {
 		if (strcmp ( substr ( $class_name, 0, 5 ), 'Bluga' ) == 0) {
-			if (is_file ( BLUGA_DIR . '/' . str_replace ( '_', '/', $class_name ) . '.php' )) {
-				include_once BLUGA_DIR . '/' . str_replace ( '_', '/', $class_name ) . '.php';
+			if (is_file ( BLUGA_DIR . DIRECTORY_SEPARATOR . str_replace ( '_', '/', $class_name ) . '.php' )) {
+				include_once BLUGA_DIR . DIRECTORY_SEPARATOR . str_replace ( '_', '/', $class_name ) . '.php';
 			}
 		}
 	}
