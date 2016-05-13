@@ -99,8 +99,18 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
-
+	<?php 
+		if (isset($individual)&& $individual->getId()) {
+			if (isset($society)&& $society->getId()) {
+				$h1 = '<a href="/individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a> chez <a href="/society.php?society_id='.$society->getId().'">'.ToolBox::toHtml($society->getName()).'</a>';
+			} else {
+				$h1 = 'Une participation de <a href="/individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a>';
+			}
+		} else {
+			$h1 = 'Une participation';
+		}
+	?>
+	<h1><?php echo $h1 ?></h1>
 	<section>
     	<form id="membership_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     		<?php
@@ -118,13 +128,11 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
     			<?php
     			if (!isset($society) || !$society->getId()) {
     				echo '<div class="form-group">';
-    				echo '<label for="s_name_i">Nom de la Société</label><br />';
+    				echo '<label for="s_name_i">Nom de la Société</label>';
     				echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35" />';
     				echo '</div>';
     			} else {
-    				echo '<div>';
-    				echo '<small>Société : </small>';
-    				echo '<a href="society.php?society_id='.$society->getId().'">'.$society->getName().'</a>';
+    				echo '<div class="form-group">';
     				echo '<label for="newsociety_id">Transférer dans une société liée</label>';
     				echo '<select name="newsociety_id" class="form-control">';
     				echo '<option value="">-- choisir --</option>';
@@ -157,12 +165,9 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
     					echo '<input id="individual_lastName_i" name="individual_lastName" type="text" maxlength="255" class="form-control" />';
     					echo '</div>';
     					echo '</fieldset>';
-    				} else {
-    					echo '<small>Qui ? : </small>'.$individual->getWholeName().'<br/>';
     				}
     				?>
     				<fieldset>
-    				
     					<legend>Activité</legend>
     					
     					<div class="form-group">
