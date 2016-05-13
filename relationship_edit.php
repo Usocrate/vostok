@@ -130,12 +130,11 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			}
 			?>
 
-			
 			<div class="form-group">
     			<label>Rôle première société</label>
     			<input name="item0_role" type="text" value="<?php echo $relationship->getItemRole(0); ?>" size="20" class="form-control" />
 			</div>
-			
+
 			<div class="form-group">
     			<label>Rôle deuxième société</label>
     			<input name="item1_role" type="text" value="<?php echo $relationship->getItemRole(1); ?>" size="20" class="form-control" />
@@ -143,19 +142,17 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			
 			<div class="form-group">
     			<label>Début</label>
-    			<input name="init_date" type="date" value="<?php echo $relationship->getAttribute('init_date'); ?>" size="20" class="form-control" />
+    			<input name="init_date" type="text" value="<?php echo $relationship->getAttribute('init_date'); ?>" size="20" class="form-control" />
 			</div>
 			
 			<div class="form-group">
     			<label>Fin</label>
-    			<input name="end_date" type="date" value="<?php echo $relationship->getAttribute('end_date'); ?>" size="20" class="form-control" />
+    			<input name="end_date" type="text" value="<?php echo $relationship->getAttribute('end_date'); ?>" size="20" class="form-control" />
 			</div>
 			
 			<div class="form-group">
     			<label>Commentaire</label>
-    			<textarea name="description" cols="51" rows="5" class="form-control">
-    				<?php echo $relationship->getAttribute('description'); ?>
-    			</textarea>
+    			<textarea name="description" cols="51" rows="5" class="form-control"><?php echo $relationship->getAttribute('description'); ?></textarea>
 			</div>
 			
 			<div class="form-group">

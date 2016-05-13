@@ -202,18 +202,16 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
     					<legend>Période</legend>
     					<div class="form-group">
     						<label for="init_date_i">Début</label>
-    						<input id="init_date_i" name="init_date" type="date" value="<?php echo $membership->getAttribute('init_date'); ?>" size="20" class="form-control" />
+    						<input id="init_date_i" name="init_date" type="text" value="<?php echo $membership->getAttribute('init_date'); ?>" size="20" class="form-control" />
 						</div>
 						<div class="form-group">
 							<label for="end_date_i">Fin</label>
-							<input id="end_date_i" name="end_date" type="date" value="<?php echo $membership->getAttribute('end_date'); ?>" size="20" class="form-control" />
+							<input id="end_date_i" name="end_date" type="text" value="<?php echo $membership->getAttribute('end_date'); ?>" size="20" class="form-control" />
 						</div>
     				</fieldset>
     				<div class="form-group">
     					<label for="comment_i">Commentaire</label>
-    					<textarea id="comment_i" name="description" cols="51" rows="5" class="form-control">
-        					<?php echo $membership->getDescription(); ?>
-        				</textarea>
+    					<textarea id="comment_i" name="description" cols="51" rows="5" class="form-control"><?php echo $membership->getDescription(); ?></textarea>
     				</div>
     			</div>
     		</div>

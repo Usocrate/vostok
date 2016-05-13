@@ -121,12 +121,9 @@ if (isset($_POST['deletion_order'])) {
 			<div class="col-md-4">
 				<fieldset>
 					<legend>infos complémentaires</legend>
-					
 					<div class="form-group">
     					<label for="individual_description_i">description</label>
-    					<textarea id="individual_description_i" cols="51" rows="5" name="individual_description" class="form-control">
-    						<?php echo ToolBox::toHtml($individual->getDescription()); ?>
-    					</textarea>
+    					<textarea id="individual_description_i" cols="51" rows="5" name="individual_description" class="form-control"><?php echo ToolBox::toHtml($individual->getDescription()); ?></textarea>
 					</div>
 					
 					<div class="form-group">
@@ -140,7 +137,6 @@ if (isset($_POST['deletion_order'])) {
 			<div class="col-md-4">
 				<fieldset>
 					<legend>coordonnées (perso)</legend>
-					
 					<div class="form-group">
     					<label>tél. mobile</label>
     					<input type="tel" name="individual_mobile" value="<?php echo ToolBox::toHtml($individual->getMobilePhoneNumber()) ?>" size="15" class="form-control"/>
