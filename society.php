@@ -153,7 +153,7 @@ $doc_title = $society->getName();
 		</div>
 		<div class="col-md-3">
 			<section>
-				<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
+				<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
 				<ul class="list-group">
 					<?php
 					$rowset = $society->getRelationshipsWithSocietyRowset();
