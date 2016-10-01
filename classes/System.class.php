@@ -11,14 +11,91 @@ class System {
 	private $pdo;
 	
 	/**
-	 *
-	 * @version 04/08/2014
+	 * @version 01/10/2016
+	 * @param string $path
 	 */
-	public function __construct($db_host, $db_name, $db_user, $db_password) {
-		$this->db_host = $db_host;
-		$this->db_name = $db_name;
-		$this->db_user = $db_user;
-		$this->db_password = $db_password;
+	public function __construct($path) {
+		$this->config_file_path = $path;
+		if ($this->configFileExists ()) {
+			$this->parseConfigFile ();
+		}
+	}
+	public function setDbHost($input)
+	{
+		$this->db_host = $input;
+	}
+	
+	public function setDbName($input)
+	{
+		$this->db_name = $input;
+	}
+	
+	public function setDbUser($input)
+	{
+		$this->db_user = $input;
+	}
+	
+	public function setDbPassword($input)
+	{
+		$this->db_password = $input;
+	}	
+	/**
+	 * @since 01/10/2016
+	 * @return boolean
+	 */
+	public function configFileExists() {
+		return file_exists ( $this->config_file_path );
+	}
+	/**
+	 * @since 01/10/2016
+	 * @throws Exception
+	 * @return boolean
+	 */
+	public function parseConfigFile() {
+		try {
+			if (is_readable ( $this->config_file_path )) {
+				$data = json_decode ( file_get_contents ( $this->config_file_path ), true );
+				foreach ( $data as $key => $value ) {
+					switch ($key) {
+						case 'db_host' :
+							$this->db_host = $value;
+							break;
+						case 'db_name' :
+							$this->db_name = $value;
+							break;
+						case 'db_user' :
+							$this->db_user = $value;
+							break;
+						case 'db_password' :
+							$this->db_password = $value;
+							break;
+					}
+				}
+			} else {
+				throw new Exception ( 'Le fichier de configuration doit être accessible en lecture.' );
+			}
+		} catch ( Exception $e ) {
+			$this->reportException ( __METHOD__, $e );
+			return false;
+		}
+	}
+	/**
+	 * @since 01/10/2016
+	 * @return number|boolean
+	 */
+	public function saveConfigFile() {
+		try {
+			$a = array (
+					'db_host' => $this->db_host,
+					'db_name' => $this->db_name,
+					'db_user' => $this->db_user,
+					'db_password' => $this->db_password,
+			);
+			return file_put_contents ( $this->config_file_path, json_encode ( $a ) );
+		} catch ( Exception $e ) {
+			$this->reportException ( __METHOD__, $e );
+			return false;
+		}
 	}
 	
 	/**
@@ -61,7 +138,7 @@ class System {
 	}
 	/**
 	 * Renvoie l'ensemble des utilisateurs accrédités.
-	 * 
+	 *
 	 * @return array
 	 * @since 26/02/2006
 	 * @version 04/08/2014
@@ -71,9 +148,9 @@ class System {
 		try {
 			$output = array ();
 			$sql = 'SELECT * FROM user';
-			foreach ($system->getPdo()->query($sql) as $data) {
+			foreach ( $system->getPdo ()->query ( $sql ) as $data ) {
 				$u = new User ();
-				$u->feed ( $data);
+				$u->feed ( $data );
 				array_push ( $output, $u );
 			}
 			return $output;
@@ -243,7 +320,7 @@ class System {
 	}
 	/**
 	 * Obtient les personnes dont la date d'anniversaire est proche de la date courante.
-	 * 
+	 *
 	 * @since 22/12/2006
 	 * @version 04/08/2014
 	 * @return IndividualCollection
@@ -263,7 +340,7 @@ class System {
 	}
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
-	 * 
+	 *
 	 * @return resource
 	 */
 	public function getSocietiesRowset($criterias = NULL, $sort_key = 'society_name', $sort_order = 'ASC', $offset = 0, $nb = NULL) {
@@ -293,7 +370,7 @@ class System {
 		if (count ( $criterias ) > 0) {
 			$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
 		}
-		//echo $sql;
+		// echo $sql;
 		$rowset = mysql_query ( $sql );
 		$row = mysql_fetch_row ( $rowset );
 		return $row [0];
@@ -323,7 +400,7 @@ class System {
 	}
 	/**
 	 * Retourne le nombre de sociétés groupées par ville.
-	 * 
+	 *
 	 * @return resource
 	 * @version 09/2005
 	 */
@@ -340,7 +417,7 @@ class System {
 	}
 	/**
 	 * Retourne le nombre de sociétés groupées par activité.
-	 * 
+	 *
 	 * @return resource
 	 * @version 09/2005
 	 */
@@ -376,7 +453,7 @@ class System {
 	}
 	/**
 	 * Renvoie le nombre de piste correspondant éventuellement à certains critères.
-	 * 
+	 *
 	 * @return int
 	 * @version 10/2005
 	 */
@@ -396,11 +473,11 @@ class System {
 	}
 	/**
 	 * Concerne les types de pistes, fusionne 2 catégories.
-	 * 
+	 *
 	 * @param string $type1
-	 *  	Le type de référence à conserver
+	 *        	Le type de référence à conserver
 	 * @param string $type2
-	 *  	Le type à faire disparaître
+	 *        	Le type à faire disparaître
 	 * @since 16/01/2006
 	 */
 	public function mergeLeadTypes($type1, $type2) {
@@ -410,7 +487,7 @@ class System {
 	}
 	/**
 	 * Obtient les enregistrements des activités.
-	 * 
+	 *
 	 * @return resource
 	 * @since 16/07/2006
 	 * @version 19/08/2006
@@ -430,7 +507,7 @@ class System {
 	}
 	/**
 	 * Obtient la liste des activités.
-	 * 
+	 *
 	 * @return array
 	 * @since 16/07/2006
 	 * @version 19/08/2006
@@ -447,10 +524,10 @@ class System {
 	}
 	/**
 	 * Obtient la liste d'activités à partir de la liste de leur identifiant.
-	 * 
+	 *
 	 * @return array
 	 * @param
-	 *  	ids array
+	 *        	ids array
 	 * @since 19/08/2006
 	 */
 	public function getIndustriesFromIds($ids) {
@@ -463,7 +540,7 @@ class System {
 	}
 	/**
 	 * Rassemble plusieurs activités en une seule.
-	 * 
+	 *
 	 * @return Industry
 	 * @since 19/08/2006
 	 */
@@ -484,7 +561,7 @@ class System {
 	}
 	/**
 	 * Obtient la liste des activités enregistrées sous forme de tags HTML 'option'.
-	 * 
+	 *
 	 * @since 16/07/2006
 	 * @version 29/10/2013
 	 */

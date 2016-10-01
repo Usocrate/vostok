@@ -20,7 +20,7 @@ switch ($_SERVER ['HTTP_HOST']) {
 define ( 'APPLI_VERSION', '2.00' );
 define ( 'COOKIES_LIFETIME', 60 * 60 * 24 * 7 ); // 7 jours;
 define ( 'CRYPT_SALT', 'uf' ); // la clef permettant de crypter le mot de passe;
-define ( 'MOSTUSED_PERIOD', 100 ); // la pÃ©riode prise en compte pour le calcul des ressources les plus frÃ©quemment utilisÃ©es (en jours);
+define ( 'MOSTUSED_PERIOD', 100 ); // la période prise en compte pour le calcul des ressources les plus frÃ©quemment utilisÃ©es (en jours);
 
 // Bootstrap
 define ( 'BOOTSTRAP_CSS_URI', SKIN_URL.'bootstrap/css/bootstrap.min.css');
@@ -47,4 +47,14 @@ function __autoload($class_name) {
 		}
 	}
 }
-$system = new System ( DB_HOST, DB_NAME, DB_USER, DB_PASSWORD );
+$system = new System( './config/host.json' );
+// hack temporaire pour générer le fichier JSON (01/10/2016)
+if (!$system->configFileExists()) {
+	$system->setDbHost(DB_HOST);
+	$system->setDbName(DB_NAME);
+	$system->setDbUser(DB_USER);
+	$system->setDbPassword(DB_PASSWORD);
+	$system->saveConfigFile();	
+}
+
+//$system = new System ( DB_HOST, DB_NAME, DB_USER, DB_PASSWORD );
