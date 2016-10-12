@@ -75,7 +75,7 @@ $doc_title = $individual->getWholeName();
 					<br /> <small>email : </small>
 					<?php echo $individual->getEmailHtml() ? $individual->getEmailHtml() : 'n.c.' ?>
 					<br /> <small>web : </small>
-					<?php echo $individual->getAttribute('web') ? '<a href="'.$individual->getAttribute('web').'">'.$individual->getAttribute('web').'</a>' : 'n.c.'; ?>
+					<?php echo $individual->getAttribute('web') ? '<a href="'.$individual->getAttribute('web').'" target="_blank">'.$individual->getAttribute('web').'</a>' : 'n.c.'; ?>
 					<br /> <small>adresse : </small>
 					<?php echo $individual->getAttribute('street') ? $individual->getAttribute('street') : 'n.c.' ?>
 					<br /> <small>ville : </small>
@@ -89,7 +89,7 @@ $doc_title = $individual->getWholeName();
 						echo '<p><a href="'.$individual->getCvUrl().'">cv</a></p>';
 					}
 					if ($individual->getGoogleQueryUrl()) {
-						echo '<p><a href="'.$individual->getGoogleQueryUrl().'">'.$individual->getWholeName().' dans Google</a></p>';
+						echo '<p><a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.$individual->getWholeName().' dans Google</a></p>';
 					}
 					?>
 				</div>

@@ -69,7 +69,7 @@ $doc_title = $society->getName();
                 }
             }
             if ($society->getUrl()) {
-                $address_elt [] = '<a href="'.$society->getUrl().'">'.$society->getUrl().'</a>';
+                $address_elt [] = '<a href="'.$society->getUrl().'" target="_blank">'.$society->getUrl().'</a>';
             }
             if (count($address_elt)>0) {
                 echo '<address>'.implode(' <small>-</small> ', $address_elt).'</address>';
