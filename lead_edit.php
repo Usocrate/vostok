@@ -1,5 +1,15 @@
 <?php
-require_once './config/main.inc.php';
+function __autoload($class_name) {
+	$path = './classes/';
+	if (is_file ( $path . $class_name . '.class.php' )) {
+		include_once $path . $class_name . '.class.php';
+	} elseif ($path . $class_name . '.interface.php') {
+		include_once $path . $class_name . '.interface.php';
+	}
+}
+$system = new System( './config/host.json' );
+
+require_once './config/boot.php';
 
 session_start();
 ToolBox::getDBAccess();
@@ -194,8 +204,8 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
-    <link rel="icon" type="image/x-icon" href="<?php echo SKIN_URL ?>favicon.ico" />
+    <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="<?php echo $system->getSkinUrl() ?>favicon.ico" />
     <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <script type="text/javascript" src="js/controls.js"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
@@ -435,7 +445,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	 		resultListLocator: 'types',
 	 		resultFormatter: optionFormatter,
 	 		resultTextLocator: 'value',
-	 		source: '<?php echo APPLI_URL ?>lead_types.json.php?query={query}'
+	 		source: '<?php echo $system->getAppliUrl() ?>lead_types.json.php?query={query}'
 	 	});
 	
 		Y.one('#lead_source_i').plug(Y.Plugin.AutoComplete, {
@@ -443,20 +453,20 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 			resultListLocator: 'sources',
 			resultFormatter: optionFormatter,
 			resultTextLocator: 'value',
-			source: '<?php echo APPLI_URL ?>lead_sources.json.php?query={query}'
+			source: '<?php echo $system->getAppliUrl() ?>lead_sources.json.php?query={query}'
 		});
 		<?php if (!(isset($society) && $society->hasId())): ?>
 		Y.one('#s_name_i').plug(Y.Plugin.AutoComplete, {
 	 	resultHighlighter: 'phraseMatch',
 	 	resultListLocator: 'names',
 	 	minQueryLength:3,
-	 		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
+	 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
 	 	});
 		Y.one('#s_parent_name_i').plug(Y.Plugin.AutoComplete, {
 	 	resultHighlighter: 'phraseMatch',
 	 	resultListLocator: 'names',
 	 	minQueryLength:3,
-	 		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
+	 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
 	 	});
 	 	<?php endif; ?>
 		Y.one('#ms_title_i').plug(Y.Plugin.AutoComplete, {
@@ -465,7 +475,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	 	resultFormatter: optionFormatter,
 			resultTextLocator: 'value',
 	 	minQueryLength:2,
-	 		source: '<?php echo APPLI_URL ?>membership_titles.json.php?query={query}'
+	 		source: '<?php echo $system->getAppliUrl() ?>membership_titles.json.php?query={query}'
 	 	});
 		Y.one('#ms_department_i').plug(Y.Plugin.AutoComplete, {
 	 	resultHighlighter: 'phraseMatch',
@@ -473,7 +483,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	 	resultFormatter: optionFormatter,
 			resultTextLocator: 'value',
 	 	minQueryLength:2,
-	 		source: '<?php echo APPLI_URL ?>membership_departments.json.php?query={query}'
+	 		source: '<?php echo $system->getAppliUrl() ?>membership_departments.json.php?query={query}'
 	 	});
 	});
 </script>

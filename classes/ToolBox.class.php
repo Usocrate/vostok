@@ -11,18 +11,25 @@ class ToolBox {
 		return htmlentities ( $input, ENT_QUOTES, 'UTF-8' );
 	}
 	/**
+	 *
 	 * @version 01/08/2014
 	 */
 	public static function toHtml($input) {
-		return htmlentities($input, ENT_HTML5);
+		return htmlentities ( $input, ENT_HTML5 );
 	}
 	public static function getDBAccess() {
-		// echo 'vars de connection: '.DB_HOST.', '.DB_USER.', '.DB_PASSWORD.', '.DB_NAME.'<br />';
+		global $system;
+		define ( 'DB_HOST', $system->getDbHost () );
+		define ( 'DB_NAME', $system->getDbName () );
+		define ( 'DB_USER', $system->getDbUser () );
+		define ( 'DB_PASSWORD', $system->getDbPassword () );
+		print_r($system);
 		$connexion = mysql_connect ( DB_HOST, DB_USER, DB_PASSWORD );
 		mysql_select_db ( DB_NAME, $connexion );
 		mysql_query ( 'SET NAMES "utf8"' );
 	}
 	/**
+	 *
 	 * @version 01/08/2014
 	 */
 	public static function getHtmlPagesNav($page_index = 1, $pages_nb, $param, $page_index_param_name = 'page_index') {
@@ -79,13 +86,13 @@ class ToolBox {
 		} else {
 			$nav_items [] = '<li><a class="next">&#187;&#187;</a></li>';
 		}
-		return '<ul class="pagination">' . implode ('', $nav_items ) . '</ul>';
+		return '<ul class="pagination">' . implode ( '', $nav_items ) . '</ul>';
 	}
 	/**
 	 * Transforme un tableau en chaîne de paramètres à intégrer dans une url.
 	 *
 	 * @param
-	 *  	$array
+	 *        	$array
 	 * @return string
 	 * @version 2009-04-17
 	 */
@@ -103,7 +110,7 @@ class ToolBox {
 	/**
 	 * Remplace tous les caractères accentués d'une chaîne.
 	 *
-	 * @param string $input  	
+	 * @param string $input        	
 	 * @return string
 	 */
 	public static function sans_accent($input) {
@@ -137,7 +144,7 @@ class ToolBox {
 	/**
 	 * Obtient le timestamp Unix correspondant à un datetime (format Mysql)
 	 *
-	 * @param string $input  	
+	 * @param string $input        	
 	 */
 	public static function mktimeFromMySqlDatetime($input) {
 		list ( $date, $time ) = explode ( ' ', $input );
@@ -147,7 +154,7 @@ class ToolBox {
 	}
 	/**
 	 * Ajoute un répertoire dans la liste des répertoires utilisés dans la recherche de fichiers à inclure.
-	 * 
+	 *
 	 * @since 27/12/2010
 	 */
 	public static function addIncludePath($input) {
