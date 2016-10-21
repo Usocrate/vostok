@@ -1,5 +1,15 @@
 <?php
-require_once 'config/main.inc.php';
+function __autoload($class_name) {
+	$path = './classes/';
+	if (is_file ( $path . $class_name . '.class.php' )) {
+		include_once $path . $class_name . '.class.php';
+	} elseif ($path . $class_name . '.interface.php') {
+		include_once $path . $class_name . '.interface.php';
+	}
+}
+$system = new System( './config/host.json' );
+
+require_once 'config/boot.php';
 
 session_start();
 ToolBox::getDBAccess();
@@ -94,7 +104,7 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
     <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <script type="text/javascript" src="js/controls.js"></script>
-    <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
 <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -244,7 +254,7 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 				 	resultHighlighter: 'phraseMatch',
 				 	resultListLocator: 'names',
 				 	minQueryLength:3,
-				 		source: '<?php echo APPLI_URL ?>society_names.json.php?query={query}'
+				 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
 				 	});
 				}
 				Y.one('#title_i').plug(Y.Plugin.AutoComplete, {
@@ -253,7 +263,7 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 			 	resultFormatter: optionFormatter,
 					resultTextLocator: 'value',
 			 	minQueryLength:2,
-			 		source: '<?php echo APPLI_URL ?>membership_titles.json.php?query={query}'
+			 		source: '<?php echo $system->getAppliUrl() ?>membership_titles.json.php?query={query}'
 			 	});
 				Y.one('#department_i').plug(Y.Plugin.AutoComplete, {
 			 	resultHighlighter: 'phraseMatch',
@@ -261,7 +271,7 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 			 	resultFormatter: optionFormatter,
 					resultTextLocator: 'value',
 			 	minQueryLength:2,
-			 		source: '<?php echo APPLI_URL ?>membership_departments.json.php?query={query}'
+			 		source: '<?php echo $system->getAppliUrl() ?>membership_departments.json.php?query={query}'
 			 	});	
 			});
 		});

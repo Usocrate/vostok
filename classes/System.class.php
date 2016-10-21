@@ -8,11 +8,16 @@ class System {
 	private $db_name;
 	private $db_user;
 	private $db_password;
+	private $appli_name;
+	private $appli_description;
+	private $appli_url;
+	private $dir_path;
 	private $pdo;
-	
+
 	/**
+	 *
 	 * @version 01/10/2016
-	 * @param string $path
+	 * @param string $path        	
 	 */
 	public function __construct($path) {
 		$this->config_file_path = $path;
@@ -20,26 +25,73 @@ class System {
 			$this->parseConfigFile ();
 		}
 	}
-	public function setDbHost($input)
-	{
+	public function setDbHost($input) {
 		$this->db_host = $input;
 	}
-	
-	public function setDbName($input)
-	{
+	public function setDbName($input) {
 		$this->db_name = $input;
 	}
-	
-	public function setDbUser($input)
-	{
+	public function setDbUser($input) {
 		$this->db_user = $input;
 	}
-	
-	public function setDbPassword($input)
-	{
+	public function setDbPassword($input) {
 		$this->db_password = $input;
+	}
+	public function setAppliName($input) {
+		$this->appli_name;
+	}
+	public function getAppliName() {
+		return $this->appli_name;
+	}
+	public function setAppliDescription($input) {
+		$this->appli_description;
+	}
+	public function getAppliDescription() {
+		return $this->appli_description;
+	}
+	public function setAppliUrl($input) {
+		$this->appli_url;
+	}
+	public function getAppliUrl() {
+		return $this->appli_url;
+	}
+	public function getSkinUrl() {
+		return $this->appli_url.'/skin/';
 	}	
+	public function getImagesUrl() {
+		return $this->getSkinUrl().'images/';
+	}
+	public function getCvUrl() {
+		return $this->appli_url.'/cv/';
+	}
+	public function getTrombiUrl() {
+		return $this->appli_url.'/data/trombinoscope/';
+	}	
+	public function setDirPath($input) {
+		$this->dir_path;
+	}
+	public function getDirPath() {
+		return $this->dir_path;
+	}
+	public function getDirPath() {
+		return $this->dir_path;
+	}
+	public function getClassDirPath() {
+		return $this->dir_path.DIRECTORY_SEPARATOR.'classes';
+	}
+	public function getDataDirPath() {
+		return $this->dir_path.DIRECTORY_SEPARATOR.'data';
+	}	
+	public function getCvDirPath() {
+		return $this->getDataDirPath().DIRECTORY_SEPARATOR.'cv';
+	}
+	public function getTrombiDirPath() {
+		return $this->getDataDirPath().DIRECTORY_SEPARATOR.'trombinoscope';
+	}	
+
+	
 	/**
+	 *
 	 * @since 01/10/2016
 	 * @return boolean
 	 */
@@ -47,6 +99,7 @@ class System {
 		return file_exists ( $this->config_file_path );
 	}
 	/**
+	 *
 	 * @since 01/10/2016
 	 * @throws Exception
 	 * @return boolean
@@ -69,6 +122,18 @@ class System {
 						case 'db_password' :
 							$this->db_password = $value;
 							break;
+						case 'appli_name' :
+							$this->appli_name = $value;
+							break;
+						case 'appli_description' :
+							$this->appli_description = $value;
+							break;
+						case 'appli_url' :
+							$this->appli_url = $value;
+							break;
+						case 'dir_path' :
+							$this->dir_path = $value;
+							break;
 					}
 				}
 			} else {
@@ -80,6 +145,7 @@ class System {
 		}
 	}
 	/**
+	 *
 	 * @since 01/10/2016
 	 * @return number|boolean
 	 */
@@ -90,6 +156,10 @@ class System {
 					'db_name' => $this->db_name,
 					'db_user' => $this->db_user,
 					'db_password' => $this->db_password,
+					'appli_name' => $this->appli_name,
+					'appli_description' => $this->appli_description,
+					'appli_url' => $this->appli_url,
+					'dir_path' => $this->dir_path
 			);
 			return file_put_contents ( $this->config_file_path, json_encode ( $a ) );
 		} catch ( Exception $e ) {
@@ -134,7 +204,7 @@ class System {
 	 * @return string
 	 */
 	public function getHtmlLink() {
-		return '<a href="' . APPLI_URL . '">' . ToolBox::html5entities ( APPLI_NAME ) . '</a>';
+		return '<a href="' . $system->getAppliUrl () . '">' . ToolBox::html5entities ( $system->getAppliName () ) . '</a>';
 	}
 	/**
 	 * Renvoie l'ensemble des utilisateurs accrédités.

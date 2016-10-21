@@ -1,5 +1,5 @@
 <?php
-require 'main.inc.php';
+require 'boot.php';
 include_once '../class/ToolBox.class.php';
 include_once '../class/system.class.php';
 
@@ -13,8 +13,8 @@ $users = $system->getUsers();
 <html>
 <head>
 <title>Génération de mot de passe htaccess</title>
-<link rel="stylesheet" href="<?php echo SKIN_URL ?>standalone.css" type="text/css" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css"><script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
+<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>standalone.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css"><script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 <body>
 <h1><?php echo $system->getHtmlLink(); ?> Génération de mot de passe htaccess</h1>
 <blockquote>

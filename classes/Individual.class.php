@@ -108,7 +108,7 @@ class Individual {
 	}
 	/**
 	 * Indique si l'identifiant de l'individu est connu.
-	 * 
+	 *
 	 * @since 28/12/2010
 	 * @return bool
 	 */
@@ -117,7 +117,7 @@ class Individual {
 	}
 	/**
 	 * Obtient la date de naissance.
-	 * 
+	 *
 	 * @since 07/01/2006
 	 */
 	public function getBirthDate() {
@@ -125,7 +125,7 @@ class Individual {
 	}
 	/**
 	 * Obtient la date de naissance au timestamp unix.
-	 * 
+	 *
 	 * @since 21/01/2007
 	 */
 	public function getBirthDateTimestamp() {
@@ -138,7 +138,7 @@ class Individual {
 	}
 	/**
 	 * Obtient la date de naissance au format français.
-	 * 
+	 *
 	 * @since 21/01/2007
 	 */
 	public function getBirthDateFr() {
@@ -156,7 +156,7 @@ class Individual {
 	}
 	/**
 	 * Obtient la civilité.
-	 * 
+	 *
 	 * @since 24/09/2006
 	 */
 	public function getSalutation() {
@@ -164,7 +164,7 @@ class Individual {
 	}
 	/**
 	 * Obtient les options pour le champ salutation, au format HTML.
-	 * 
+	 *
 	 * @version 24/05/2006
 	 */
 	public function getSalutationOptionsTags($valueToSelect = NULL) {
@@ -204,7 +204,7 @@ class Individual {
 	}
 	/**
 	 * Obtient le prénom de l'individu.
-	 * 
+	 *
 	 * @return string
 	 * @since 19/11/2005
 	 */
@@ -213,7 +213,7 @@ class Individual {
 	}
 	/**
 	 * Obtient le nom de famille de l'individu.
-	 * 
+	 *
 	 * @return string
 	 * @since 19/11/2005
 	 */
@@ -222,7 +222,7 @@ class Individual {
 	}
 	/**
 	 * Obtenir le nom complet de l'individu, formatté pour l'affichage.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getWholeName() {
@@ -271,7 +271,7 @@ class Individual {
 	/**
 	 * Obtient le n° de tél.
 	 * fixe.
-	 * 
+	 *
 	 * @since 24/09/2006
 	 */
 	public function getPhoneNumber() {
@@ -279,7 +279,7 @@ class Individual {
 	}
 	/**
 	 * Obtient l'adresse e-mail.
-	 * 
+	 *
 	 * @since 24/09/2006
 	 */
 	public function getEmailAddress() {
@@ -298,6 +298,7 @@ class Individual {
 	 * @return string
 	 */
 	public function getPhotoUrl() {
+		global $system;
 		if (isset ( $this->photo_url )) {
 			return $this->photo_url;
 		} else {
@@ -311,8 +312,8 @@ class Individual {
 			// recherche d'un fichier construit à partir de l'id de l'individu.
 			foreach ( $file_extensions as $e ) {
 				$file_name = $this->getId () . '.' . $e;
-				if (is_file ( TROMBINOSCOPE_DIR . '/' . $file_name )) {
-					return $this->photo_url = TROMBINOSCOPE_URL . '/' . $file_name;
+				if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+					return $this->photo_url = $system->getTrombiUrl () . $file_name;
 				}
 			}
 			
@@ -320,8 +321,8 @@ class Individual {
 			$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
 			foreach ( $file_extensions as $e ) {
 				$file_name = $file_basename . '.' . $e;
-				if (is_file ( TROMBINOSCOPE_DIR . '/' . $file_name )) {
-					return $this->photo_url = TROMBINOSCOPE_URL . '/' . $file_name;
+				if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+					return $this->photo_url = $system->getTrombiUrl () . $file_name;
 				}
 			}
 		}
@@ -333,6 +334,7 @@ class Individual {
 	 * @return string
 	 */
 	public function getPhotoFilePath() {
+		global $system;
 		$file_extensions = array (
 				'jpg',
 				'jpeg',
@@ -342,18 +344,18 @@ class Individual {
 		$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
 		foreach ( $file_extensions as $e ) {
 			$file_name = $file_basename . '.' . $e;
-			if (is_file ( TROMBINOSCOPE_DIR . '/' . $file_name )) {
-				return TROMBINOSCOPE_DIR . '/' . $file_name;
+			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name )) {
+				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name;
 			}
 			$file_name = $this->getId () . '.' . $e;
-			if (is_file ( TROMBINOSCOPE_DIR . '/' . $file_name )) {
-				return TROMBINOSCOPE_DIR . '/' . $file_name;
+			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name )) {
+				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name;
 			}
 		}
 	}
 	/**
 	 * Supprime le fichier photo.
-	 * 
+	 *
 	 * @since 02/12/2006
 	 */
 	private function deletePhotoFile() {
@@ -362,14 +364,15 @@ class Individual {
 	/**
 	 *
 	 * @since 07/08/2014
-	 * @param array $uploadedFile  	
+	 * @param array $uploadedFile        	
 	 * @return boolean
 	 */
 	public function filePhoto(array $uploadedFile) {
+		global $system;
 		try {
 			if ($uploadedFile ['size'] > 0) {
 				$ext = end ( explode ( '.', $uploadedFile ['name'] ) );
-				$targetFilePath = TROMBINOSCOPE_DIR . '/' . $this->getId () . '.' . $ext;
+				$targetFilePath = $system->getTrombiDirPath() . DIRECTORY_SEPARATOR . $this->getId () . '.' . $ext;
 				if (is_file ( $targetFilePath )) {
 					unlink ( $targetFilePath );
 				}
@@ -382,7 +385,7 @@ class Individual {
 	}
 	/**
 	 * Indique si une photo est associée à l'individu.
-	 * 
+	 *
 	 * @since 02/12/2006
 	 */
 	private function hasPhoto() {
@@ -394,11 +397,11 @@ class Individual {
 	}
 	/**
 	 * Obtient l'Url du CV la personne.
-	 * 
+	 *
 	 * @return String
-	 * @version 05/05/2006
 	 */
 	public function getCvUrl() {
+		global $system;
 		if (isset ( $this->cv_url )) {
 			return $this->cv_url;
 		} else {
@@ -412,8 +415,8 @@ class Individual {
 			$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
 			foreach ( $file_extensions as $e ) {
 				$file_name = $file_basename . '.' . $e;
-				if (is_file ( CV_DIR . '/' . $file_name )) {
-					return $this->cv_url = CV_URL . '/' . $file_name;
+				if (is_file ( $system->getCvDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+					return $this->cv_url = $system->getCvUrl () . '/' . $file_name;
 				}
 			}
 		}
@@ -455,12 +458,12 @@ class Individual {
 	}
 	/**
 	 * Obtenir les enregistrements des sociétés auxquelles participe l'individu.
-	 * 
+	 *
 	 * @return resource
 	 * @param int $offset
-	 *  	Le numéro de l'enregistrement à partir duquel la sélection commence
+	 *        	Le numéro de l'enregistrement à partir duquel la sélection commence
 	 * @param int $row_count
-	 *  	La taille de la sélection en nombre d'enregistrements
+	 *        	La taille de la sélection en nombre d'enregistrements
 	 * @version 25/06/2006
 	 */
 	public function getMembershipsRowset($criterias = NULL, $sort_key = NULL, $sort_order = NULL, $offset = 0, $row_count = NULL) {
@@ -480,7 +483,7 @@ class Individual {
 	}
 	/**
 	 * Obtient le nombre de participations enregistrées en base de données.
-	 * 
+	 *
 	 * @since 15/08/2006
 	 */
 	public function getMembershipsRowsNb() {
@@ -494,7 +497,7 @@ class Individual {
 	}
 	/**
 	 * Obtient les participations associées à l'individu.
-	 * 
+	 *
 	 * @return array
 	 * @since 21/01/2006
 	 * @version 24/05/2006
@@ -552,7 +555,7 @@ class Individual {
 	}
 	/**
 	 * Efface toutes les participations de cet individu en base de données.
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function deleteMemberships() {
@@ -564,10 +567,10 @@ class Individual {
 	}
 	/**
 	 * Indique si l'individu participe à une société donnée.
-	 * 
+	 *
 	 * @return boolean
 	 * @param int $society_id
-	 *  	L'identifiant de la société
+	 *        	L'identifiant de la société
 	 */
 	public function isMember($society_id) {
 		$sql = 'SELECT * FROM membership';
@@ -577,7 +580,7 @@ class Individual {
 	}
 	/**
 	 * Efface, en base de données, toutes les relations de cet individu aux pistes.
-	 * 
+	 *
 	 * @return boolean
 	 * @since 19/11/2005
 	 * @version 15/08/2006

@@ -1,5 +1,15 @@
 <?php
-require 'config/main.inc.php';
+function __autoload($class_name) {
+	$path = './classes/';
+	if (is_file ( $path . $class_name . '.class.php' )) {
+		include_once $path . $class_name . '.class.php';
+	} elseif ($path . $class_name . '.interface.php') {
+		include_once $path . $class_name . '.interface.php';
+	}
+}
+$system = new System( './config/host.json' );
+
+require 'config/boot.php';
 
 session_start();
 ToolBox::getDBAccess();
@@ -25,18 +35,18 @@ if (empty($_SESSION['user_id'])) {
 	header('Location:index.php');
 	exit;
 }
-$doc_title = APPLI_NAME;
+$doc_title = $system->getAppliName();
 ?>
 <!doctype html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title><?php echo APPLI_NAME.' : identification utilisateur'; ?></title>
+    <title><?php echo ToolBox::toHtml($system->getAppliName()).' : identification utilisateur'; ?></title>
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
     <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
-    <link rel="stylesheet" href="<?php echo SKIN_URL ?>main.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
 <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
 
 <body id="loginDoc" >
@@ -44,7 +54,7 @@ $doc_title = APPLI_NAME;
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<div>
-		<p><strong><?php echo ToolBox::toHtml(APPLI_NAME); ?> </strong> est l'outil de prospection <a href="http://www.usocrate.fr" title="Lien vers maison-mère">Usocrate.fr</a>.</p>
+		<p><strong><?php echo ToolBox::toHtml($system->getAppliName()); ?> </strong> est l'outil de prospection <a href="http://www.usocrate.fr" title="Lien vers maison-mère">Usocrate.fr</a>.</p>
 		<?php foreach ($messages as $m) echo '<p>'.$m.'</p>'; ?>
 	</div>
 	
