@@ -23,7 +23,7 @@ class ToolBox {
 		define ( 'DB_NAME', $system->getDbName () );
 		define ( 'DB_USER', $system->getDbUser () );
 		define ( 'DB_PASSWORD', $system->getDbPassword () );
-		print_r($system);
+		//print_r($system);
 		$connexion = mysql_connect ( DB_HOST, DB_USER, DB_PASSWORD );
 		mysql_select_db ( DB_NAME, $connexion );
 		mysql_query ( 'SET NAMES "utf8"' );

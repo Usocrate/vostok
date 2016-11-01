@@ -1,17 +1,41 @@
 @charset "utf-8";
 
+@import	url("https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css");
+
+/* Jquery UI */
+.ui-widget {
+	font-family: inherit;
+	font-size: 1em;
+}
+
+.ui-widget-content {
+	background: #fff;
+}
+
+.ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em
+	{
+	background-color: #8ea4bc;
+	background-image: none;
+	color: #fff;
+	border: none;
+}
+
+.ui-widget-content .ui-state-focus small {
+	color: #fff;
+}
+
 NAV.navbar {
-	margin-bottom:0;
+	margin-bottom: 0;
 }
 
 SECTION {
-	padding:1em 0;
+	padding: 1em 0;
 }
 
 SPAN.badge>A, SPAN.label>A {
-	color:inherit;
-	font-size:inherit;
-	font-weight:inherit;
+	color: inherit;
+	font-size: inherit;
+	font-weight: inherit;
 }
 
 LABEL {
@@ -19,10 +43,11 @@ LABEL {
 }
 
 H1 SMALL SPAN.glyphicon, H2 SMALL SPAN.glyphicon {
-	color:#ccc;
+	color: #ccc;
 }
+
 H1 SMALL SPAN.glyphicon:hover, H2 SMALL SPAN.glyphicon:hover {
-	color:#999;
+	color: #999;
 }
 
 HR {
@@ -46,9 +71,8 @@ HEADER {
 }
 
 HEADER A {
-	color:inherit;
+	color: inherit;
 }
-
 
 SECTION {
 	margin: .8em 1em;
@@ -116,8 +140,8 @@ DD {
 }
 
 #loginDoc div.container {
-	 max-width:450px;
-	 background-color:#fff;
+	max-width: 450px;
+	background-color: #fff;
 }
 
 #loginDoc FORM {

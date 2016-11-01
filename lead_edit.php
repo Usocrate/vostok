@@ -209,6 +209,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <script type="text/javascript" src="js/controls.js"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body id="leadEditDoc" >
@@ -431,6 +432,40 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 </div>
 
 <script type="text/javascript">
+	$(document).ready(function(){
+	    $('#lead_type_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'lead_types.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).types);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#lead_type_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#lead_type_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+	    };
+	})
+</script>
+
+<script type="text/javascript">
 	YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
 		function optionFormatter(query, results) {
 			return Y.Array.map(results, function (result) {
@@ -438,15 +473,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 			});
 		};
 		
-		Y.one('body').addClass('yui3-skin-sam');
-	
-		Y.one('#lead_type_i').plug(Y.Plugin.AutoComplete, {
-	 	resultHighlighter: 'phraseMatch',
-	 		resultListLocator: 'types',
-	 		resultFormatter: optionFormatter,
-	 		resultTextLocator: 'value',
-	 		source: '<?php echo $system->getAppliUrl() ?>lead_types.json.php?query={query}'
-	 	});
+		//Y.one('body').addClass('yui3-skin-sam');
 	
 		Y.one('#lead_source_i').plug(Y.Plugin.AutoComplete, {
 			resultHighlighter: 'phraseMatch',
@@ -457,10 +484,10 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 		});
 		<?php if (!(isset($society) && $society->hasId())): ?>
 		Y.one('#s_name_i').plug(Y.Plugin.AutoComplete, {
-	 	resultHighlighter: 'phraseMatch',
-	 	resultListLocator: 'names',
-	 	minQueryLength:3,
-	 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
+    	 	resultHighlighter: 'phraseMatch',
+    	 	resultListLocator: 'names',
+    	 	minQueryLength:3,
+   	 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
 	 	});
 		Y.one('#s_parent_name_i').plug(Y.Plugin.AutoComplete, {
 	 	resultHighlighter: 'phraseMatch',
