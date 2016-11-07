@@ -184,7 +184,7 @@ class System {
 	 */
 	public function getPdo() {
 		try {
-			print_r($this);
+			//print_r($this);
 			if (! isset ( $this->pdo )) {
 				$this->pdo = new PDO ( 'mysql:host=' . $this->db_host . ';dbname=' . $this->db_name, $this->db_user, $this->db_password, array (
 						PDO::ATTR_PERSISTENT => true 
