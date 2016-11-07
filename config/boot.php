@@ -13,7 +13,7 @@ define ( 'JQUERY_URI', 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jque
 define ( 'JQUERY_UI_URI', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js' );
 
 // Yahoo! User Interface
-define ('YUI_SEEDFILE_URI', '/outsourcing/yui_3.17.2/yui/yui-min.js');
+define ('YUI_SEEDFILE_URI', '/outsourcing/yui3/build/yui/yui-min.js');
 
 // Bluga.net WebThumb snapping the web
-define('BLUGA_DIR', 'C:/Users/Florent/www/usocrate/outsourcing/Bluga.net-Webthumb-API-for-PHP');
+define('BLUGA_DIR', '/home/ubuntu/workspace/outsourcing/Bluga.net-Webthumb-API-for-PHP');

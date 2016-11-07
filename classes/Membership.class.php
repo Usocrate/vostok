@@ -58,26 +58,26 @@ class Membership {
 	 * @since 27/10/2012
 	 */
 	private static function getKnownTitles($substring = NULL) {
+		global $system;
 		$sql = 'SELECT title AS value, COUNT(*) AS count FROM membership';
 		$sql.= ' WHERE title IS NOT NULL';
 		if (isset($substring)) {
-			$sql.= ' AND title LIKE \'%'. mysql_real_escape_string($substring).'%\'';
+			$sql.= ' AND title LIKE :pattern';
 		}
 		$sql.= ' GROUP BY title ORDER BY count DESC';
-		$rowset = mysql_query($sql);
-		$output = array();
-		while ($row = mysql_fetch_assoc($rowset)) {
-			$output[] = array('value'=>$row['value'], 'count'=>$row['count']);
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset($substring)) {
+			$statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		}
-		mysql_free_result($rowset);
-		return $output;
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 	/**
 	 * @since 27/10/2012
 	 */
 	public static function knownTitlesToJson($substring = NULL){
 		$output = '{"titles":[';
-		$items = self::getKnownDepartments($substring);
+		$items = self::getKnownTitles($substring);
 		for ($i=0; $i<count($items); $i++) {
 			$output.= '{"value":'.json_encode($items[$i]['value']).',"count":'.$items[$i]['count'].'}';
 			if ($i<count($items)-1) {
@@ -123,19 +123,19 @@ class Membership {
 	 * @since 27/10/2012
 	 */
 	private static function getKnownDepartments($substring = NULL) {
+		global $system;
 		$sql = 'SELECT department AS value, COUNT(*) AS count FROM membership';
 		$sql.= ' WHERE department IS NOT NULL';
 		if (isset($substring)) {
-			$sql.= ' AND department LIKE \'%'. mysql_real_escape_string($substring).'%\'';
+			$sql.= ' AND department LIKE :pattern';
 		}
 		$sql.= ' GROUP BY department ORDER BY count DESC';
-		$rowset = mysql_query($sql);
-		$output = array();
-		while ($row = mysql_fetch_assoc($rowset)) {
-			$output[] = array('value'=>$row['value'], 'count'=>$row['count']);
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset($substring)) {
+			$statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		}
-		mysql_free_result($rowset);
-		return $output;
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 	/**
 	 * @since 27/10/2012

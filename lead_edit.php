@@ -206,7 +206,6 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
     <link rel="icon" type="image/x-icon" href="<?php echo $system->getSkinUrl() ?>favicon.ico" />
-    <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <script type="text/javascript" src="js/controls.js"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
@@ -249,22 +248,18 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
             					<label for="l_shortdescription_i">Intitulé <small>(piste)</small></label>
             					<input id="l_shortdescription_i" name="lead_shortdescription" type="text" value="<?php echo ToolBox::toHtml($lead->getShortDescription()); ?>" maxlength="255" class="form-control" /> 
         					</div>
-        					
-        					<div class="form-group">
+         					<div class="form-group">
             					<label for="lead_type_i">Type</label>
             					<input id="lead_type_i" name="lead_type" type="text" value="<?php echo ToolBox::toHtml($lead->getType()) ?>" class="form-control" />
             				</div>
-            				
             				<div class="form-group">
             					<label for="lead_source_i">Origine</label>
             					<input id="lead_source_i" name="lead_source" type="text" value="<?php echo ToolBox::toHtml($lead->getSource()) ?>" size="55" class="form-control" />
             				</div>
-            				
             				<div class="form-group">
             					<label for="l_source_description_ta">Précisions sur l'origine</label>
             					<textarea id="l_source_description_ta" name="lead_source_description" cols="55" rows="3" class="form-control"><?php echo ToolBox::toHtml($lead->getSourceDescription()); ?></textarea>
         					</div>
-        					
         					<div class="form-group">
             					<label for="l_status_i">Etat</label>
             					<select id="l_status_i" name="lead_status" class="form-control"><?php echo $lead->getStatusOptionsTags(); ?></select>
@@ -462,57 +457,156 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
 		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
 	    };
+	    $('#lead_source_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'lead_sources.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).sources);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#lead_source_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#lead_source_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+	    };
+	    <?php if (!(isset($society) && $society->hasId())): ?>
+	    $('#s_name_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_names.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).names);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s_name_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s_name_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    //alert(JSON.stringify(item));
+		    return $( "<li>" ).append(item.label).appendTo( ul );
+	    };
+	    $('#s_parent_name_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_names.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).names);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s_parent_name_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s_parent_name_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    //alert(JSON.stringify(item));
+		    return $( "<li>" ).append(item.label).appendTo( ul );
+	    };	    
+	    <?php endif; ?>
+	    $('#ms_title_i').autocomplete({
+			minLength: 3,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'membership_titles.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).titles);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#ms_title_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#ms_title_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+	    };
+	    $('#ms_department_i').autocomplete({
+			minLength: 3,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'membership_departments.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).departments);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#ms_department_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#ms_department_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+	    };	    
 	})
-</script>
-
-<script type="text/javascript">
-	YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
-		function optionFormatter(query, results) {
-			return Y.Array.map(results, function (result) {
-				return result.highlighted + ' <small>(' + result.raw.count +')</small>';
-			});
-		};
-		
-		//Y.one('body').addClass('yui3-skin-sam');
-	
-		Y.one('#lead_source_i').plug(Y.Plugin.AutoComplete, {
-			resultHighlighter: 'phraseMatch',
-			resultListLocator: 'sources',
-			resultFormatter: optionFormatter,
-			resultTextLocator: 'value',
-			source: '<?php echo $system->getAppliUrl() ?>lead_sources.json.php?query={query}'
-		});
-		<?php if (!(isset($society) && $society->hasId())): ?>
-		Y.one('#s_name_i').plug(Y.Plugin.AutoComplete, {
-    	 	resultHighlighter: 'phraseMatch',
-    	 	resultListLocator: 'names',
-    	 	minQueryLength:3,
-   	 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
-	 	});
-		Y.one('#s_parent_name_i').plug(Y.Plugin.AutoComplete, {
-	 	resultHighlighter: 'phraseMatch',
-	 	resultListLocator: 'names',
-	 	minQueryLength:3,
-	 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
-	 	});
-	 	<?php endif; ?>
-		Y.one('#ms_title_i').plug(Y.Plugin.AutoComplete, {
-	 	resultHighlighter: 'phraseMatch',
-	 	resultListLocator: 'titles',
-	 	resultFormatter: optionFormatter,
-			resultTextLocator: 'value',
-	 	minQueryLength:2,
-	 		source: '<?php echo $system->getAppliUrl() ?>membership_titles.json.php?query={query}'
-	 	});
-		Y.one('#ms_department_i').plug(Y.Plugin.AutoComplete, {
-	 	resultHighlighter: 'phraseMatch',
-	 	resultListLocator: 'departments',
-	 	resultFormatter: optionFormatter,
-			resultTextLocator: 'value',
-	 	minQueryLength:2,
-	 		source: '<?php echo $system->getAppliUrl() ?>membership_departments.json.php?query={query}'
-	 	});
-	});
 </script>
 </body>
 </html>

@@ -68,16 +68,16 @@ class System {
 		return $this->appli_url;
 	}
 	public function getSkinUrl() {
-		return $this->appli_url . '/skin/';
+		return $this->appli_url . 'skin/';
 	}
 	public function getImagesUrl() {
 		return $this->getSkinUrl () . 'images/';
 	}
 	public function getCvUrl() {
-		return $this->appli_url . '/cv/';
+		return $this->appli_url . 'cv/';
 	}
 	public function getTrombiUrl() {
-		return $this->appli_url . '/data/trombinoscope/';
+		return $this->appli_url . 'data/trombinoscope/';
 	}
 	public function setDirPath($input) {
 		$this->dir_path = $input;
