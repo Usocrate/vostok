@@ -123,18 +123,17 @@ class Society {
 	 * @since 27/10/2012
 	 */
 	private static function getKnownNames($substring = NULL) {
-		$sql = 'SELECT society_name FROM society';
-		$sql .= ' WHERE society_name IS NOT NULL';
+	    global $system;
+		$sql = 'SELECT society_name FROM society WHERE society_name IS NOT NULL';
 		if (isset ( $substring )) {
-			$sql .= ' AND society_name LIKE \'%' . mysql_real_escape_string ( $substring ) . '%\'';
+			$sql .= ' AND society_name LIKE :pattern';
 		}
-		$rowset = mysql_query ( $sql );
-		$output = array ();
-		while ( $row = mysql_fetch_assoc ( $rowset ) ) {
-			$output [] = $row ['society_name'];
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset ( $substring )) {
+		    $statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		}
-		mysql_free_result ( $rowset );
-		return $output;
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_COLUMN);
 	}
 	/**
 	 *
