@@ -268,6 +268,24 @@ class Society {
 	public function getCity() {
 		return $this->getAttribute ( 'city' );
 	}
+	private static function getKnownCities($substring = NULL) {
+	    global $system;
+		$sql = 'SELECT society_city AS value, COUNT(*) AS count FROM society WHERE society_city IS NOT NULL';
+		if (isset ( $substring )) {
+			$sql .= ' AND society_city LIKE :pattern';
+		}
+		$sql .= ' GROUP BY society_city ORDER BY society_city ASC';
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset ( $substring )) {
+		    $statement->bindValue(':pattern', $substring.'%', PDO::PARAM_STR);
+		}
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
+	public static function knownCitiesToJson($substring = NULL) {
+		$output = '{"cities":' . json_encode ( self::getKnownCities ( $substring ) ) . '}';
+		return $output;
+	}	
 	/**
 	 * Obtient la chaîne complète de l'adresse de la société
 	 *
@@ -532,36 +550,6 @@ class Society {
 	 */
 	public function getJson() {
 		return json_encode ( $this );
-	}
-	/**
-	 * Obtient la liste des villes envisageables, au format Html.
-	 * 
-	 * @param $valueToSelect la
-	 *        	valeur é sélectionner par défaut
-	 * @version 24/05/2006
-	 */
-	public function getCityOptionsTags($valueToSelect = NULL) {
-		$sql = 'SELECT society_city AS city, COUNT(*) AS nb';
-		$sql .= ' FROM society';
-		$sql .= ' GROUP BY city ASC';
-		
-		$rowset = mysql_query ( $sql );
-		if (is_null ( $valueToSelect ) && isset ( $this->city )) {
-			$valueToSelect = $this->city;
-		}
-		$html = '';
-		$html .= '<option value="-1">-- indifférent --</option>';
-		while ( $row = mysql_fetch_assoc ( $rowset ) ) {
-			$html .= '<option value="' . $row ['city'] . '"';
-			if (isset ( $valueToSelect ) && strcasecmp ( $row ['city'], $valueToSelect ) == 0) {
-				$html .= ' selected="selected"';
-			}
-			$html .= '>';
-			$html .= empty ( $row ['city'] ) ? '-- é déterminer --' : $row ['city'];
-			$html .= ' (' . $row ['nb'] . ')</option>';
-		}
-		mysql_free_result ( $rowset );
-		return $html;
 	}
 	/**
 	 * Obtient l'activité de la société.
