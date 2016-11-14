@@ -268,6 +268,24 @@ class Society {
 	public function getCity() {
 		return $this->getAttribute ( 'city' );
 	}
+	private static function getKnownCities($substring = NULL) {
+	    global $system;
+		$sql = 'SELECT society_city AS value, COUNT(*) AS count FROM society WHERE society_city IS NOT NULL';
+		if (isset ( $substring )) {
+			$sql .= ' AND society_city LIKE :pattern';
+		}
+		$sql .= ' GROUP BY society_city ORDER BY society_city ASC';
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset ( $substring )) {
+		    $statement->bindValue(':pattern', $substring.'%', PDO::PARAM_STR);
+		}
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
+	public static function knownCitiesToJson($substring = NULL) {
+		$output = '{"cities":' . json_encode ( self::getKnownCities ( $substring ) ) . '}';
+		return $output;
+	}	
 	/**
 	 * Obtient la chaîne complète de l'adresse de la société
 	 *

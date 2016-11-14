@@ -85,9 +85,12 @@ if (isset($_POST['task'])) {
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-    <script type="text/javascript" src="js/controls.js"></script>
     <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
-	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+    <link rel="icon" type="image/x-icon" href="<?php echo $system->getSkinUrl() ?>favicon.ico" />    
+    <script type="text/javascript" src="js/controls.js"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -131,7 +134,7 @@ if (isset($_POST['task'])) {
         		
         		<div class="form-group">
         			<label>ville</label>
-        			<input type="text" name="society_city" value="<?php echo ToolBox::toHtml($society->getCity()); ?>" size="35" class="form-control" />
+        			<input type="text" id="society_city_i" name="society_city" value="<?php echo ToolBox::toHtml($society->getCity()); ?>" size="35" class="form-control" />
         		</div>
         		
         		<div class="form-group">
@@ -165,5 +168,38 @@ if (isset($_POST['task'])) {
     	<button name="task" type="submit" value="deletion" class="btn btn-default">Supprimer</button>
     </form>
 </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#society_city_i').autocomplete({
+			minLength: 1,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_cities.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).cities);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#society_city_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#society_city_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+	    };
+	})
+</script>
 </body>
 </html>
