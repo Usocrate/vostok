@@ -552,36 +552,6 @@ class Society {
 		return json_encode ( $this );
 	}
 	/**
-	 * Obtient la liste des villes envisageables, au format Html.
-	 * 
-	 * @param $valueToSelect la
-	 *        	valeur é sélectionner par défaut
-	 * @version 24/05/2006
-	 */
-	public function getCityOptionsTags($valueToSelect = NULL) {
-		$sql = 'SELECT society_city AS city, COUNT(*) AS nb';
-		$sql .= ' FROM society';
-		$sql .= ' GROUP BY city ASC';
-		
-		$rowset = mysql_query ( $sql );
-		if (is_null ( $valueToSelect ) && isset ( $this->city )) {
-			$valueToSelect = $this->city;
-		}
-		$html = '';
-		$html .= '<option value="-1">-- indifférent --</option>';
-		while ( $row = mysql_fetch_assoc ( $rowset ) ) {
-			$html .= '<option value="' . $row ['city'] . '"';
-			if (isset ( $valueToSelect ) && strcasecmp ( $row ['city'], $valueToSelect ) == 0) {
-				$html .= ' selected="selected"';
-			}
-			$html .= '>';
-			$html .= empty ( $row ['city'] ) ? '-- é déterminer --' : $row ['city'];
-			$html .= ' (' . $row ['nb'] . ')</option>';
-		}
-		mysql_free_result ( $rowset );
-		return $html;
-	}
-	/**
 	 * Obtient l'activité de la société.
 	 * 
 	 * @return string
