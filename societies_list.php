@@ -133,7 +133,9 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
     <script type="application/javascript" src="js/controls.js"></script>
-	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>    
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body id="societiesListDoc">
 <?php include 'navbar.inc.php'; ?>
@@ -145,7 +147,6 @@ $doc_title = 'Les sociétés qui m\'intéressent';
         		<label for="s_name_i">nom</label>
         		<input id="s_name_i" name="society_name" type="text" value="<?php echo $search_pattern->getName(); ?>" class="form-control" /> 
     		</div>
-    		
     		<div class="form-group">
         		<label for="s_industry_i">activité</label>
         		<select id="s_industry_i" name="industry_id" class="form-control">
@@ -153,20 +154,11 @@ $doc_title = 'Les sociétés qui m\'intéressent';
         			<?php echo isset($_SESSION['society_search']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION['society_search']['industry_id']) : $system->getIndustryOptionsTags(); ?>
         		</select>
     		</div>
-    		
     		<div class="form-group">
         		<label for="s_city_i">ville</label>
-        		<select id="s_city_i" name="society_city" class="form-control">
-        			<?php echo $search_pattern->getCityOptionsTags(); ?>
-        		</select>
+        		<input id="s_city_i" name="society_city" value="<?php echo $search_pattern->getCity(); ?>" class="form-control"></input>
     		</div>
-    		
-    		<div class="form-group">
-        		<label for="s_pc_i">code postal</label>
-        		<input id="s_pc_i" name="society_postalcode" type="text" size="5" value="<?php echo $search_pattern->getPostalCode(); ?>" class="form-control" />
-    		</div>
-    		
-    		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
+	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
     	</form>
    </section>
    <section>
@@ -232,6 +224,39 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     		?>
     	</div>
     </section>
-</div>	
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#s_city_i').autocomplete({
+			minLength: 1,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_cities.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).cities);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s_city_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s_city_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+	    };
+	})
+</script>
 </body>
 </html>
