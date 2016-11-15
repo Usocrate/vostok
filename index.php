@@ -46,7 +46,8 @@ $doc_title = 'Accueil';
 				<section>
 					<form method="post" action="/societies_list.php">
 						<div class="form-group">
-							<label for="s_name_i">Une société</label> <input id="s_name_i" name="society_name" type="text" class="form-control" placeholder="nom" />
+							<label for="s_name_i">Une société</label>
+							<input id="s_name_i" name="society_name" type="text" class="form-control" placeholder="nom" />
 						</div>
 						<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Chercher</button>
 					</form>
@@ -72,5 +73,39 @@ $doc_title = 'Accueil';
 			</div>
 		</div>
 	</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $('#s_name_i').autocomplete({
+			minLength: 3,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_names.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).names);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s_name_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s_name_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    //alert(JSON.stringify(item));
+		    return $( "<li>" ).append(item.label).appendTo( ul );
+	    };
+	})
+</script>	
 </body>
 </html>

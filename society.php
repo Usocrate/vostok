@@ -191,5 +191,38 @@ $doc_title = $society->getName();
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#s_city_i').autocomplete({
+			minLength: 1,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_cities.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).cities);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#society_city_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#society_city_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+	    };
+	})
+</script>
 </body>
 </html>
