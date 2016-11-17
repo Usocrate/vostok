@@ -76,7 +76,7 @@ $doc_title = 'Accueil';
 <script type="text/javascript">
 	$(document).ready(function(){
 	    $('#s_name_i').autocomplete({
-			minLength: 3,
+			minLength: 2,
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
@@ -106,6 +106,6 @@ $doc_title = 'Accueil';
 		    return $( "<li>" ).append(item.label).appendTo( ul );
 	    };
 	})
-</script>	
+</script>
 </body>
 </html>
