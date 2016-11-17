@@ -605,7 +605,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	        }
 	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
 		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-	    };	    
+	    };
 	})
 </script>
 </body>

@@ -98,10 +98,11 @@ if (isset ( $item0 ) && isset ( $item1 )) {
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-    <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
-    <script type="text/javascript" src="js/controls.js"></script>
     <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
-<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
+    <script type="text/javascript" src="js/controls.js"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
@@ -142,12 +143,12 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 
 			<div class="form-group">
     			<label>Rôle première société</label>
-    			<input name="item0_role" type="text" value="<?php echo $relationship->getItemRole(0); ?>" size="20" class="form-control" />
+    			<input id="s1_role_i" name="item0_role" type="text" value="<?php echo $relationship->getItemRole(0); ?>" size="20" class="form-control" />
 			</div>
 
 			<div class="form-group">
     			<label>Rôle deuxième société</label>
-    			<input name="item1_role" type="text" value="<?php echo $relationship->getItemRole(1); ?>" size="20" class="form-control" />
+    			<input id="s2_role_i" name="item1_role" type="text" value="<?php echo $relationship->getItemRole(1); ?>" size="20" class="form-control" />
 			</div>
 			
 			<div class="form-group">
@@ -179,27 +180,124 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	</section>
 </div>
 <script type="text/javascript">
-	YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
-		Y.on('domready', function () {
-			Y.one('body').addClass('yui3-skin-sam');
-
-			if(Y.one('#s1_name_i')!==null) {
-				Y.one('#s1_name_i').plug(Y.Plugin.AutoComplete, {
-			 	resultHighlighter: 'phraseMatch',
-			 	resultListLocator: 'names',
-			 	minQueryLength:3,
-			 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
-			 	});
-			}
-		 	
-			Y.one('#s2_name_i').plug(Y.Plugin.AutoComplete, {
-		 	resultHighlighter: 'phraseMatch',
-		 	resultListLocator: 'names',
-		 	minQueryLength:3,
-		 		source: '<?php echo $system->getAppliUrl() ?>society_names.json.php?query={query}'
-		 	}); 	
-		});
-	});
+	$(document).ready(function(){
+	    $('#s1_name_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_names.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).names);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s1_name_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s1_name_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.label).appendTo( ul );
+	    };
+	    $('#s2_name_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'society_names.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).names);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s2_name_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s2_name_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.label).appendTo( ul );
+	    };	    
+	    $('#s1_role_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'relationship_roles.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).roles);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s1_role_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s1_role_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.label).appendTo( ul );
+	    };
+	    $('#s2_role_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'relationship_roles.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).roles);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		},
+	        focus: function( event, ui ) {
+				$('#s2_role_i').val( ui.item.value );
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+				$('#s2_role_i').val( ui.item.value );
+	        	return false;
+	        }
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		    return $( "<li>" ).append(item.label).appendTo( ul );
+	    };	    
+	})
 </script>
 </body>
 </html>

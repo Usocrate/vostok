@@ -102,6 +102,26 @@ class Relationship {
 	{
 		return isset($this->items[$rang]) ? $this->items[$rang] : NULL;
 	}
+	public static function knownRoles($substring = NULL)
+	{
+		global $system;
+		if (isset ( $substring )) {
+			$sql = 'SELECT DISTINCT(role) FROM (SELECT item0_role AS role FROM relationship WHERE item0_role LIKE :item0_role_pattern UNION SELECT item1_role AS role FROM relationship WHERE item1_role LIKE :item1_role_pattern) AS t ORDER BY role';
+		} else {
+			$sql = 'SELECT DISTINCT(role) FROM (SELECT item0_role AS role FROM relationship UNION SELECT item1_role AS role FROM relationship) AS t ORDER BY role';
+		}
+		$statement = $system->getPDO()->prepare($sql);
+		if (isset ( $substring )) {
+		    $statement->bindValue(':item0_role_pattern', '%'.$substring.'%', PDO::PARAM_STR);
+		    $statement->bindValue(':item1_role_pattern', '%'.$substring.'%', PDO::PARAM_STR);
+		}
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_COLUMN);
+	}
+	public static function knownRolesToJson($substring = NULL) {
+		$output = '{"roles":' . json_encode ( self::knownRoles ( $substring ) ) . '}';
+		return $output;
+	}	
 	/**
 	 * Obtient l'Url décrivant la relation.
 	 * @since 30/03/2006
@@ -147,15 +167,14 @@ class Relationship {
 	 * Supprime la relation en base de données.
 	 * @return boolean
 	 * @since 30/03/2006
-	 * @version 15/08/2006
 	 */
 	public function delete()
 	{
+		global $system;
 		if (empty($this->id)) return false;
-		$sql = 'DELETE FROM relationship';
-		$sql.= ' WHERE relationship_id='.$this->id;
-		
-		return mysql_query($sql);	
+		$statement = $system->getPDO()->prepare('DELETE FROM relationship WHERE relationship_id=:id');
+		$statement->bindValue(':id', $this->id, PDO_PARAM_STR);
+		return $statement->execute();
 	}
 	/**
 	 * Fixe les valeurs des attributs de la relation à partir d'un tableau dont les clefs sont normalisées.

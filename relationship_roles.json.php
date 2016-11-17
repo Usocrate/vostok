@@ -16,6 +16,5 @@ session_start();
 if (empty($_SESSION['user_id'])) {
 	exit;
 }
-
-echo empty($_REQUEST['query']) ? Society::knownNamesToJson() : Society::knownNamesToJson($_REQUEST['query']);
+echo empty($_REQUEST['query']) ? Relationship::knownRolesToJson() : Relationship::knownRolesToJson($_REQUEST['query']);
 ?>

@@ -45,10 +45,10 @@ $doc_title = $system->getAppliName();
     <title><?php echo ToolBox::toHtml($system->getAppliName()).' : identification utilisateur'; ?></title>
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-    <script type="text/javascript" src="<?php echo YUI_SEEDFILE_URI ?>"></script>
     <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
-<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
-
+	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+</head>
 <body id="loginDoc" >
 <div class="container">	
 	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
@@ -71,14 +71,11 @@ $doc_title = $system->getAppliName();
 	</form>
 	
 	<footer><q>Reçu. Sens bien, excellent état d'esprit, prêt à y aller</q><br /> <cite>Youri Gagarine, 12 avril 1961</cite></footer>
-	
-	<script type="text/javascript">
-    	YUI().use("node", function (Y) {
-    		Y.on('domready', function () {
-    			Y.one('#user_name_i').focus();
-    		});
-    	});
-	</script>
 </div>
+<script>
+	$(document).ready(function() {
+		$('#user_name_i').focus();
+	});
+</script>
 </body>
 </html>
