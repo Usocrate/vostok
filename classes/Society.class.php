@@ -340,76 +340,50 @@ class Society {
 		if (count ( $elements ) > 0)
 			return implode ( ',', $elements );
 	}
+	public function getGoogleGeocodeAsJson($input = NULL) {
+		global $system;
+		$param['address'] = isset ( $input ) ? $input : $this->getAddress ();
+		$param['key'] = $system->getGoogleMapsApiKey();
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($param['address']).'&key='.urlencode($param['key']);
+		$json = file_get_contents ( $url );
+		return $json;
+	}
 	/**
 	 * Obtient les informations de localisation auprès de Google map et complète celles-ci si nécessaire
 	 *
 	 * @since 23/06/2007
-	 * @todo optimisation : utilisation de xpath - attention les tentatives d'utilisation de xpath ont posé problème
-	 * @todo optimisation : récupération exhaustive des données fournies par Google
+	 * @version 18/11/2016
 	 */
 	public function getAddressFromGoogle($input = NULL) {
-		try {
-			$adresse = isset ( $input ) ? $input : $this->getAddress ();
-			if (empty ( $adresse )) {
-				return NULL;
+		$json = $this->getGoogleGeocodeAsJson($input);
+		$data = json_decode($json);
+		$street = array();
+		foreach ($data->{'results'}[0]->{'address_components'} as $c) {
+			if (in_array('street_number', $c->types)) {
+				$street['number'] = $c->long_name;
 			}
-			$url = "http://maps.google.com/maps/geo?q=" . urlencode ( $adresse ) . '&key=' . GOOGLE_MAPS_API_KEY . '&output=xml';
-			
-			/**
-			 *
-			 * @todo A surveiller car ici je suis obligé de forcer l'encodage UTF8 alors que la page est déjà encodée en UTF8 (problème avec fonction file_get_contents ?)
-			 */
-			$page = file_get_contents ( $url );
-			$page = utf8_encode ( $page );
-			$xml = simplexml_load_string ( $page );
-			
-			/*
-			 * $placemarks = $xml->xpath('/Response/Placemark');
-			 * if (!is_array($placemarks)) {
-			 * throw New Exception('échec de la récupération des placemarks sous forme de tableau');
-			 * }
-			 * if (!is_object($placemarks[0])) {
-			 * throw New Exception('le premier placemark doit être un objet');
-			 * }
-			 * $p =& $placemarks[0];
-			 */
-			
-			$p = $xml->Response [0]->Placemark [0];
-			
-			// traitement coordonnées géographiques
-			$c = $p->Point->coordinates;
-			if (isset ( $c )) {
-				$c = explode ( ',', $c );
-				$this->setCoordinates ( $c [0], $c [1], $c [2] );
+			if (in_array('route', $c->types)) {
+				$street['route'] = $c->long_name;
 			}
-			
-			// traitement addressDetails
-			
-			$c = & $p->AddressDetails->Country;
-			if (isset ( $c->CountryNameCode )) {
-				$this->countryNameCode = ( string ) $c->CountryNameCode;
+			if (in_array('locality', $c->types)) {
+				$this->city = $c->long_name;
 			}
-			$aa = & $c->AdministrativeArea;
-			if (! empty ( $aa->AdministrativeAreaName )) {
-				$this->administrativeAreaName = ( string ) $aa->AdministrativeAreaName;
+			if (in_array('postal_code', $c->types)) {
+				$this->postalcode = $c->long_name;
 			}
-			$saa = & $aa->SubAdministrativeArea;
-			if (! empty ( $saa->SubAdministrativeAreaName )) {
-				$this->subAdministrativeAreaName = ( string ) $saa->SubAdministrativeAreaName;
+			if (in_array('administrative_area_level_1', $c->types)) {
+				$this->administrativeAreaName = $c->long_name;
 			}
-			if (! empty ( $saa->Locality->LocalityName )) {
-				$this->city = ( string ) $saa->Locality->LocalityName;
-				if (isset ( $saa->Locality->DependentLocality )) {
-					$l = & $saa->Locality->DependentLocality;
-				} else {
-					$l = & $saa->Locality;
-				}
-				$this->street = ( string ) $l->Thoroughfare->ThoroughfareName;
-				$this->postalcode = ( string ) $l->PostalCode->PostalCodeNumber;
+			if (in_array('administrative_area_level_2', $c->types)) {
+				$this->subAdministrativeAreaName = $c->long_name;
 			}
-		} catch ( Exception $e ) {
-			echo $e->getMessage ();
+			if (in_array('country', $c->types)) {
+				$this->countryNameCode = $c->short_name;
+			}			
 		}
+		$this->street = $street['number'].' '.$street['route'];
+		$this->latitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+		$this->longitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 	}
 	public function setType($type) {
 		if (! empty ( $type ))
