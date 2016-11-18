@@ -1088,66 +1088,124 @@ class Society {
 	/**
 	 * Enregistre les données de l'objet en base de données.
 	 *
-	 * @version 23/06/2007
+	 * @version 18/11/2016
 	 */
 	public function toDB() {
+		global $system;
+		
 		$new = ! isset ( $this->id ) || empty ( $this->id );
 		
 		$settings = array ();
 		if (isset ( $this->name )) {
-			$settings [] = empty ( $this->name ) ? 'society_name=NULL' : 'society_name="' . mysql_real_escape_string ( $this->name ) . '"';
+			$settings [] = 'society_name=:name';
 		}
 		if (isset ( $this->description )) {
-			$settings [] = empty ( $this->description ) ? 'society_description=NULL' : 'society_description="' . mysql_real_escape_string ( $this->description ) . '"';
+			$settings [] = 'society_description=:description';
 		}
 		if (isset ( $this->phone )) {
-			$settings [] = empty ( $this->phone ) ? 'society_phone=NULL' : 'society_phone="' . mysql_real_escape_string ( $this->phone ) . '"';
+			$settings [] = 'society_phone=:phone';
 		}
 		if (isset ( $this->street )) {
-			$settings [] = empty ( $this->street ) ? 'society_street=NULL' : 'society_street="' . mysql_real_escape_string ( $this->street ) . '"';
+			$settings [] = 'society_street=:street';
 		}
 		if (isset ( $this->postalcode )) {
-			$settings [] = empty ( $this->postalcode ) ? 'society_postalcode=NULL' : 'society_postalcode="' . mysql_real_escape_string ( $this->postalcode ) . '"';
+			$settings [] = 'society_postalcode=:postalcode';
 		}
 		if (isset ( $this->city )) {
-			$settings [] = empty ( $this->city ) ? 'society_city=NULL' : 'society_city="' . mysql_real_escape_string ( $this->city ) . '"';
-		}
-		if (isset ( $this->url )) {
-			// @todo Enregistrement si syntaxe conforme
-			$settings [] = empty ( $this->url ) ? 'society_url=NULL' : 'society_url="' . mysql_real_escape_string ( $this->getUrl () ) . '"';
-		}
-		if (isset ( $this->longitude ) && isset ( $this->latitude ) && isset ( $this->altitude )) {
-			$settings [] = 'society_longitude=' . $this->longitude;
-			$settings [] = 'society_latitude=' . $this->latitude;
-			$settings [] = 'society_altitude=' . $this->altitude;
+			$settings [] = 'society_city=:city';
 		}
 		if (isset ( $this->countryNameCode )) {
-			$settings [] = 'society_countryNameCode="' . mysql_real_escape_string ( $this->countryNameCode ) . '"';
+			$settings [] = 'society_countryNameCode=:countryNameCode';
 		}
 		if (isset ( $this->administrativeAreaName )) {
-			$settings [] = 'society_administrativeAreaName="' . mysql_real_escape_string ( $this->administrativeAreaName ) . '"';
+			$settings [] = 'society_administrativeAreaName=:administrativeAreaName';
 		}
 		if (isset ( $this->subAdministrativeAreaName )) {
-			$settings [] = 'society_subAdministrativeAreaName="' . mysql_real_escape_string ( $this->subAdministrativeAreaName ) . '"';
+			$settings [] = 'society_subAdministrativeAreaName=:subAdministrativeAreaName';
 		}
-		
+		if (isset ( $this->url )) {
+			$settings [] = 'society_url=:url';
+		}
+		if (isset ( $this->longitude ) && isset ( $this->latitude )) {
+			$settings [] = 'society_longitude=:longitude';
+			$settings [] = 'society_latitude=:latitude';
+		}
+		if (isset ( $this->altitude )) {
+			$settings [] = 'society_altitude=:altitude';
+		}
+
 		if ($new) {
 			$settings [] = 'society_creation_date=NOW()';
-			if (isset ( $_SESSION ['user_id'] ))
-				$settings [] = 'society_creation_user_id=' . $_SESSION ['user_id'];
+			if (isset ( $_SESSION ['user_id'] )) {
+				$settings [] = 'society_creation_user_id=:user_id';
+			}
 		} else {
-			if (isset ( $_SESSION ['user_id'] ))
-				$settings [] = 'society_lastModification_user_id=' . $_SESSION ['user_id'];
+			if (isset ( $_SESSION ['user_id'] )) {
+				$settings [] = 'society_lastModification_user_id=:user_id';
+			}
 		}
+		
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql .= ' society SET ';
 		$sql .= implode ( ', ', $settings );
-		if (! $new)
-			$sql .= ' WHERE society_id=' . $this->id;
+		if (! $new)	{
+			$sql .= ' WHERE society_id=:id';
+		}
 		
-		$result = mysql_query ( $sql );
-		if ($new)
-			$this->id = mysql_insert_id ();
+		$statement = $system->getPDO()->prepare($sql);
+		
+		if (isset ( $this->name )) {
+			$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
+		}
+		if (isset ( $this->description )) {
+			$statement->bindValue(':description', $this->description, PDO::PARAM_STR);
+		}
+		if (isset ( $this->phone )) {
+			$statement->bindValue(':phone', $this->phone, PDO::PARAM_STR);
+		}
+		if (isset ( $this->street )) {
+			$statement->bindValue(':street', $this->street, PDO::PARAM_STR);
+		}
+		if (isset ( $this->postalcode )) {
+			$statement->bindValue(':postalcode', $this->postalcode, PDO::PARAM_INT);
+		}
+		if (isset ( $this->city )) {
+			$statement->bindValue(':city', $this->city, PDO::PARAM_STR);
+		}
+		if (isset ( $this->administrativeAreaName )) {
+			$statement->bindValue(':administrativeAreaName', $this->administrativeAreaName, PDO::PARAM_STR);
+		}
+		if (isset ( $this->subAdministrativeAreaName )) {
+			$statement->bindValue(':subAdministrativeAreaName', $this->subAdministrativeAreaName, PDO::PARAM_STR);
+		}
+		if (isset ( $this->countryNameCode )) {
+			$statement->bindValue(':countryNameCode', $this->countryNameCode, PDO::PARAM_STR);
+		}		
+		if (isset ( $this->url )) {
+			$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
+		}
+		if (isset ( $this->longitude ) && isset ( $this->latitude )) {
+			$statement->bindValue(':longitude', $this->longitude, PDO::PARAM_STR);
+			$statement->bindValue(':latitude', $this->latitude, PDO::PARAM_STR);
+		}
+		if (isset ( $this->altitude )) {
+			$statement->bindValue(':altitude', $this->altitude, PDO::PARAM_STR);
+		}
+
+		if (isset ( $_SESSION ['user_id'] )) {
+			$statement->bindValue(':user_id', $_SESSION ['user_id'], PDO::PARAM_INT);
+		}
+
+		if (! $new)	{
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		}
+		
+		$result = $statement->execute();
+		
+		if ($result && ! isset($this->id)) {
+            $this->id = $system->getPdo()->lastInsertId();
+        }
+		
 		return $result;
 	}
 	/**
