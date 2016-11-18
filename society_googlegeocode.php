@@ -25,14 +25,9 @@ if (isset($_REQUEST['society_id'])) {
 }
 $society->initFromDB();
 
-$adresse = $society->getAddress();
-if (!empty($adresse)) {
-	$url = "http://maps.google.com/maps/geo?q=".urlencode($adresse).'&key='.GOOGLE_MAPS_API_KEY.'&output=xml';
-	$page = file_get_contents($url);
-	$page = utf8_encode($page);
-	$xml = simplexml_load_string($page);
-	// $placemarks = $xml->xpath('/kml/Response/Placemark');
-	echo $page;
-	//var_dump($xml);
+$address = $society->getAddress();
+if (!empty($address)) {
+	//echo print_r(json_decode($society->getGoogleGeocodeAsJson()));
+	echo $society->getGoogleGeocodeAsJson();
 }
 ?>
