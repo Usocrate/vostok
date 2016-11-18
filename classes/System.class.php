@@ -11,6 +11,7 @@ class System {
 	private $appli_name;
 	private $appli_description;
 	private $appli_url;
+	private $googlemaps_api_key;
 	private $dir_path;
 	private $pdo;
 	
@@ -66,6 +67,12 @@ class System {
 	}
 	public function getAppliUrl() {
 		return $this->appli_url;
+	}
+	public function setGoogleMapsApiKey($input) {
+		$this->googlemaps_api_key = $input;
+	}
+	public function getGoogleMapsApiKey() {
+		return $this->googlemaps_api_key;
 	}
 	public function getSkinUrl() {
 		return $this->appli_url . 'skin/';
@@ -139,6 +146,9 @@ class System {
 						case 'appli_url' :
 							$this->appli_url = $value;
 							break;
+						case 'googlemaps_api_key' :
+							$this->googlemaps_api_key = $value;
+							break;							
 						case 'dir_path' :
 							$this->dir_path = $value;
 							break;
@@ -167,6 +177,7 @@ class System {
 					'appli_name' => $this->appli_name,
 					'appli_description' => $this->appli_description,
 					'appli_url' => $this->appli_url,
+					'googlemaps_api_key' => $this->googlemaps_api_key,
 					'dir_path' => $this->dir_path 
 			);
 			return file_put_contents ( $this->config_file_path, json_encode ( $a ) );
