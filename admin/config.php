@@ -53,6 +53,9 @@ if (isset ( $_POST ['task_id'] )) {
 			if (isset ( $_POST ['appli_description'] )) {
 				$system->setAppliDescription ( $_POST ['appli_description'] );
 			}
+			if (isset ( $_POST ['googlemaps_api_key'] )) {
+				$system->setGoogleMapsApiKey( $_POST ['googlemaps_api_key'] );
+			}			
 			if (isset ( $_POST ['dir_path'] )) {
 				$system->setDirPath ( $_POST ['dir_path'] );
 			}
@@ -117,6 +120,12 @@ header ( 'charset=utf-8' );
 						<label for="dir_path_i">Répertoire où l'application est installée</label><input id="dir_path_i" type="text" name="dir_path" class="form-control" value="<?php echo ToolBox::toHtml($system->getDirPath()); ?>" />
 					</div>
 				</fieldset>
+				<fieldset>
+					<legend>Google Maps</legend>
+					<div class="form-group">
+						<label for="googlemaps_api_key_i">Clé</label><input id="googlemaps_api_key_i" type="text" name="googlemaps_api_key" class="form-control" value="<?php echo ToolBox::toHtml($system->getGoogleMapsApiKey()); ?>" />
+					</div>
+				</fieldset>				
 				<fieldset>
 					<legend>Projet</legend>
 					<div class="form-group">
