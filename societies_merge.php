@@ -14,6 +14,8 @@ require_once 'config/boot.php';
 session_start();
 ToolBox::getDBAccess();
 
+//print_r($_REQUEST);
+
 if (empty($_SESSION['user_id'])) {
     header('Location:login.php');
     exit();
@@ -22,31 +24,18 @@ if (empty($_SESSION['user_id'])) {
     $user->feed();
 }
 
+
 $messages = array();
 
-//
-// récupération des Societies à fusionner
-//
+// première société
+$s1 = new Society($_REQUEST['society_id'][0]);
+$s1->feed();
 
-$societies_ids = array_slice($_REQUEST['society_id'], 0, 2);
-sort($societies_ids);
+// deuxième société
+$s2 = new Society($_REQUEST['society_id'][1]);
+$s2->feed();
 
-// requête SQL
-$criterias = array();
-$criterias[] = 's.society_id IN (' . implode(',', $societies_ids) . ')';
-$rowset = $system->getSocietiesRowset($criterias);
-
-// première Society
-$row = mysql_fetch_assoc($rowset);
-$s1 = new Society();
-$s1->feed($row);
-
-// deuxième Society
-$row = mysql_fetch_assoc($rowset);
-$s2 = new Society();
-$s2->feed($row);
-
-// la Society référence (celle qu'on va mettre à jour) est la plus anciennement créée
+// la société de référence (celle qu'on va mettre à jour) est la plus anciennement créée
 // NB : on ne dispose pas toujours de la date de création
 $cond1 = $s2->getCreationDate() > $s1->getCreationDate();
 $cond2 = ! $s2->getCreationDate() && $s1->getCreationDate();
@@ -63,11 +52,14 @@ if ($cond1 || $cond2) {
 //
 if (isset($_POST['fusion_submission'])) {
     if (isset($_POST['society_correctvalues_id']) && is_array($_POST['society_correctvalues_id'])) {
+        /*
+         * c'est la société dont l'enregistrement est le plus ancien qui sera conservée, modifications faites
+         */
         foreach ($_POST['society_correctvalues_id'] as $key => $value) {
-            // $value contient l'identifiant de la Society
-            // dont la donnée doit prévaloir
-            if ($value == $oldest->getId())
-                continue;
+            /*
+             * $value contient l'identifiant de la société dont la donnée doit prévaloir
+             */
+            if ( strcmp( $value, $oldest->getId() ) == 0 ) continue;
             switch ($key) {
                 case 'name':
                     $oldest->setName($newest->getName());
@@ -95,11 +87,13 @@ if (isset($_POST['fusion_submission'])) {
         }
         $oldest->toDB();
     }
+    
     // transfert des entités rattachées à la société la plus récente vers la société la plus ancienne
     echo $newest->transferMemberships($oldest) ? '' : 'participations non transférées';
     echo $newest->transferRelationships($oldest) ? '' : 'relations non transférées';
     echo $newest->transferLeads($oldest) ? '' : 'pistes non transférées';
     echo $newest->transferIndustries($oldest) ? '' : 'activités non transférées';
+    
     // suppression du doublon
     echo $newest->delete() ? '' : 'no deletion';
     header('location:society.php?society_id=' . $oldest->getId());

@@ -1074,18 +1074,15 @@ class Society {
 	/**
 	 * Fixe les attributs de la société à partir de son enregistrement en base de données.
 	 * 
-	 * @version 10/2005
+	 * @version 23/11/2016
 	 */
 	public function initFromDB() {
+		global $system;
 		if ($this->getId ()) {
-			$sql = 'SELECT * FROM society WHERE society_id=' . $this->id;
-			
-			$rowset = mysql_query ( $sql );
-			$row = mysql_fetch_assoc ( $rowset );
-			mysql_free_result ( $rowset );
-			if (! $row)
-				return false;
-			return $this->feed ( $row );
+			$statement = $system->getPdo()->prepare('SELECT * FROM society WHERE society_id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			return $this->feed ( $statement->fetch(PDO::FETCH_ASSOC) );
 		}
 		return false;
 	}
