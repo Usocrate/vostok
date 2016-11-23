@@ -27,76 +27,29 @@ $page_items_nb = 14;
 
 // si ordre d'effectuer une nouvelle recherche,
 // les données propres à la sélection de societies courante sont réinitialisées
-if (isset ( $_REQUEST ['society_newsearch'] ) || empty ( $_SESSION ['society_search'] )) {
+if (isset ( $_REQUEST ['society_newsearch'] ) || ! isset( $_SESSION ['society_search'] )) {
 	$_SESSION ['society_search'] = array ();
-	if (isset ( $_REQUEST ['society_name'] )) {
-		$_SESSION ['society_search'] ['name'] = $_REQUEST ['society_name'];
+	$_SESSION ['society_search']['criteria'] = array ();
+
+	if (isset ( $_REQUEST ['society_name'] ) && ! empty($_REQUEST ['society_name']) ) {
+		$_SESSION ['society_search']['criteria']['name'] = $_REQUEST ['society_name'];
 	}
-	if (isset ( $_REQUEST ['industry_id'] ) && strcmp ( $_REQUEST ['industry_id'], '-1' ) != 0) {
-		$_SESSION ['society_search'] ['industry_id'] = $_REQUEST ['industry_id'];
+	
+	if (isset ( $_REQUEST ['industry_id'] ) && ! empty ( $_REQUEST ['industry_id']) ) {
+		$_SESSION ['society_search']['criteria']['industry_id'] = $_REQUEST ['industry_id'];
 	}
-	if (isset ( $_REQUEST ['society_city'] ) && strcmp ( $_REQUEST ['society_city'], '-1' ) != 0) {
-		$_SESSION ['society_search'] ['city'] = $_REQUEST ['society_city'];
+	
+	if (isset ( $_REQUEST ['society_city'] ) && ! empty($_REQUEST ['society_city']) ) {
+		$_SESSION ['society_search']['criteria']['city'] = $_REQUEST ['society_city'];
 	}
-	if (isset ( $_REQUEST ['society_postalcode'] )) {
-		$_SESSION ['society_search'] ['postalcode'] = $_REQUEST ['society_postalcode'];
-	}
+	
 	$_SESSION ['society_search'] ['page_index'] = 1;
 	$_SESSION ['society_search'] ['sort_key'] = 'society_name';
 	$_SESSION ['society_search'] ['sort_order'] = 'ASC';
 }
-if (! isset ( $_SESSION ['society_search'] ))
-	$_SESSION ['society_search'] = array ();
-
-/**
- * critères de filtrage.
- */
-$criterias = array ();
-
-// idée : un objet Society est utilisé comme pattern de recherche.
-// mise en place inachevée ...
-$search_pattern = new Society ();
-
-if (! empty ( $_SESSION ['society_search'] ['name'] )) {
-	$search_pattern->setName ( $_SESSION ['society_search'] ['name'] );
-	$criterias [] = 'society_name LIKE "' . $search_pattern->getName () . '%"';
-	// $criterias[] = 'society_name LIKE "'.$_SESSION['society_search']['name'].'%"';
-}
-//
-// critère 'activité'
-//
-if (isset ( $_SESSION ['society_search'] ['industry_id'] )) {
-	if (empty ( $_SESSION ['society_search'] ['industry_id'] )) {
-		//$criterias [] = 'industry_id IS NULL';
-	} else {
-		$criterias [] = 'industry_id = "' . $_SESSION ['society_search'] ['industry_id'] . '"';
-	}
-}
-
-// critère 'ville'
-if (isset ( $_SESSION ['society_search'] ['city'] )) {
-	$search_pattern->setCity ( $_SESSION ['society_search'] ['city'] );
-	if (empty ( $_SESSION ['society_search'] ['city'] )) {
-		//$criterias [] = '(society_city = "" OR society_city IS NULL)';
-		// $criterias[] = 'society_city IS NULL';
-	} else {
-		$criterias [] = 'society_city = "' . $search_pattern->getCity () . '"';
-		// $criterias[] = 'society_city = "'.$_SESSION['society_search']['city'].'"';
-	}
-}
-
-// critère 'code postal'
-if (isset ( $_SESSION ['society_search'] ['postalcode'] )) {
-	$search_pattern->setPostalCode ( $_SESSION ['society_search'] ['postalcode'] );
-	if (empty ( $_SESSION ['society_search'] ['postalcode'] )) {
-		//$criterias [] = '(society_postalcode = "" OR society_postalcode IS NULL)';
-	} else {
-		$criterias [] = 'society_postalcode LIKE "' . $search_pattern->getPostalCode () . '%"';
-	}
-}
 
 // nb de comptes correspondant aux critères
-$items_nb = $system->getSocietiesNb ( $criterias );
+$items_nb = $system->getSocietiesNb ( $_SESSION ['society_search']['criteria'] );
 $pages_nb = ceil ( $items_nb / $page_items_nb );
 
 // changement de page
@@ -106,11 +59,11 @@ if (isset ( $_REQUEST ['society_search_page_index'] )) {
 
 // sélection de sociétés correspondant aux critères (dont le nombre dépend de la variable $page_items_nb)
 $page_debut = ($_SESSION ['society_search'] ['page_index'] - 1) * $page_items_nb;
-$page_rowset = $system->getSocietiesRowset ( $criterias, $_SESSION ['society_search'] ['sort_key'], $_SESSION ['society_search'] ['sort_order'], $page_debut, $page_items_nb );
+$page_rowset = $system->getSocietiesRowset ( $_SESSION ['society_search']['criteria'], $_SESSION ['society_search'] ['sort_key'], $_SESSION ['society_search'] ['sort_order'], $page_debut, $page_items_nb );
 
 // la sélection de sociétés
 $societies = array ();
-while ( $row = mysql_fetch_assoc ( $page_rowset ) ) {
+foreach ($page_rowset as $row) {
 	$s = new Society ();
 	$s->feed ( $row );
 	$societies [] = $s;
@@ -121,6 +74,13 @@ if (count ( $societies ) == 1) {
 	header ( 'Location:society.php?society_id=' . $societies [0]->getId () );
 	exit ();
 }
+
+// redirection vers création de fiche société.
+if (count ( $societies ) == 0 && isset($_SESSION ['society_search']['criteria']['name'])) {
+	header ( 'Location:society_edit.php?society_name=' . $_SESSION ['society_search']['criteria']['name'] );
+	exit ();
+}
+
 $doc_title = 'Les sociétés qui m\'intéressent';
 ?>
 <!doctype html>
@@ -145,18 +105,18 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group">
         		<label for="s_name_i">nom</label>
-        		<input id="s_name_i" name="society_name" type="text" value="<?php echo $search_pattern->getName(); ?>" class="form-control" /> 
+        		<input id="s_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION ['society_search']['criteria']['name'])) echo $_SESSION ['society_search']['criteria']['name']; ?>" class="form-control" /> 
     		</div>
     		<div class="form-group">
         		<label for="s_industry_i">activité</label>
         		<select id="s_industry_i" name="industry_id" class="form-control">
-        			<option id="s_industry_i" value="">-- choisir --</option>
-        			<?php echo isset($_SESSION['society_search']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION['society_search']['industry_id']) : $system->getIndustryOptionsTags(); ?>
+        			<option value="">-- choisir --</option>
+        			<?php echo isset($_SESSION['society_search']['criteria']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION['society_search']['criteria']['industry_id']) : $system->getIndustryOptionsTags(); ?>
         		</select>
     		</div>
     		<div class="form-group">
         		<label for="s_city_i">ville</label>
-        		<input id="s_city_i" name="society_city" value="<?php echo $search_pattern->getCity(); ?>" class="form-control"></input>
+        		<input id="s_city_i" name="society_city" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
     		</div>
 	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
     	</form>

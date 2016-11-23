@@ -431,39 +431,97 @@ class System {
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
 	 *
-	 * @return resource
+	 * @version 23/11/2016
 	 */
-	public function getSocietiesRowset($criterias = NULL, $sort_key = 'society_name', $sort_order = 'ASC', $offset = 0, $nb = NULL) {
-		$sql = 'SELECT s.*';
-		$sql .= ' ,DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") AS society_creation_date_fr';
-		$sql .= ' ,UNIX_TIMESTAMP(s.society_creation_date) AS society_creation_timestamp';
-		$sql .= ' FROM society AS s LEFT OUTER JOIN society_industry AS si ON(si.society_id=s.society_id)';
-		if (count ( $criterias ) > 0) {
-			$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
+	public function getSocietiesRowset($criteria = NULL, $sort_key = 'society_name', $sort_order = 'ASC', $offset = 0, $nb = NULL) {
+		global $system;
+		
+		$sql = 'SELECT s.*, DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") AS society_creation_date_fr, UNIX_TIMESTAMP(s.society_creation_date) AS society_creation_timestamp';
+		$sql.= ' FROM society AS s LEFT OUTER JOIN society_industry AS si ON(si.society_id=s.society_id)';
+		if (isset ($criteria) && count ( $criteria ) > 0) {
+			$sql_criteria = array();
+			if (isset ($criteria['name']) ) {
+				$sql_criteria[] = 's.society_name LIKE :name';
+			}
+			if (isset ($criteria['city']) ) {
+				$sql_criteria[] = 's.society_city = :city';
+			}
+			if (isset ($criteria['industry_id']) ) {
+				$sql_criteria[] = 'si.industry_id = :industry_id';
+			}
+			$sql .= ' WHERE '.implode(' AND ', $sql_criteria);
 		}
 		$sql .= ' GROUP BY s.society_id';
-		$sql .= ' ORDER BY ' . $sort_key . ' ' . $sort_order;
-		if (isset ( $nb ))
-			$sql .= ' LIMIT ' . $offset . ',' . $nb;
+		$sql .= ' ORDER BY :sort_key :sort_order';
 		
-		return mysql_query ( $sql );
+		if (isset ( $nb )) {
+			$sql .= ' LIMIT :offset, :nb';
+		}
+		$statement = $system->getPdo()->prepare($sql);
+		
+		if (isset ($criteria) && count ( $criteria ) > 0) {
+			if (isset ($criteria['name']) ) {
+				$statement->bindValue(':name', $criteria['name'].'%', PDO::PARAM_STR);
+			}
+			if (isset ($criteria['city']) ) {
+				$statement->bindValue(':city', $criteria['city'], PDO::PARAM_STR);
+			}
+			if (isset ($criteria['industry_id']) ) {
+				$statement->bindValue(':industry_id', $criteria['industry_id'], PDO::PARAM_INT);
+			}
+		}
+		
+		$statement->bindValue(':sort_key', $sort_key, PDO::PARAM_STR);
+		$statement->bindValue(':sort_order', $sort_order, PDO::PARAM_STR);
+		
+		if (isset ( $nb )) {
+			$statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+			$statement->bindValue(':nb', $nb, PDO::PARAM_INT);
+		}
+		
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 	/**
 	 * Renvoie le nombre de sociétés (avec critères éventuels)
 	 *
 	 * @return int
-	 * @version 10/2005
+	 * @version 23/11/2016
 	 */
-	public function getSocietiesNb($criterias = NULL) {
-		$sql = 'SELECT COUNT(DISTINCT s.society_id)';
-		$sql .= ' FROM society AS s LEFT OUTER JOIN society_industry AS si ON(si.society_id=s.society_id)';
-		if (count ( $criterias ) > 0) {
-			$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
+	public function getSocietiesNb($criteria = NULL) {
+		global $system;
+
+		$sql = 'SELECT COUNT(DISTINCT s.society_id) FROM society AS s LEFT OUTER JOIN society_industry AS si ON(si.society_id=s.society_id)';
+
+		if (isset ($criteria) && count ( $criteria ) > 0) {
+			$sql_criteria = array();
+			if (isset ($criteria['name']) ) {
+				$sql_criteria[] = 's.society_name LIKE :name';
+			}
+			if (isset ($criteria['city']) ) {
+				$sql_criteria[] = 's.society_city = :city';
+			}
+			if (isset ($criteria['industry_id']) ) {
+				$sql_criteria[] = 'si.industry_id = :industry_id';
+			}
+			$sql .= ' WHERE '.implode(' AND ', $sql_criteria);
 		}
-		// echo $sql;
-		$rowset = mysql_query ( $sql );
-		$row = mysql_fetch_row ( $rowset );
-		return $row [0];
+
+		$statement = $system->getPdo()->prepare($sql);
+		
+		if (isset ($criteria) && count ( $criteria ) > 0) {
+			if (isset ($criteria['name']) ) {
+				$statement->bindValue(':name', $criteria['name'].'%', PDO::PARAM_STR);
+			}
+			if (isset ($criteria['city']) ) {
+				$statement->bindValue(':city', $criteria['city'], PDO::PARAM_STR);
+			}
+			if (isset ($criteria['industry_id']) ) {
+				$statement->bindValue(':industry_id', $criteria['industry_id'], PDO::PARAM_INT);
+			}
+		}		
+		$statement->execute();
+		return $statement->fetchColumn();
 	}
 	public function getSocieties() {
 		if (! isset ( $this->societies )) {

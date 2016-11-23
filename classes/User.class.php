@@ -11,6 +11,7 @@ class User {
 		$this->id = $id;
 	}
 	public function feed($row = NULL) {
+		global $system;
 		if (is_array ( $row )) {
 			// les données de l'initialisation sont transmises
 			$this->id = $row ['user_id'];
@@ -18,65 +19,80 @@ class User {
 			$this->password = $row ['password'];
 			return true;
 		} elseif ($this->id) {
-			// on ne transmet pas les données de l'initialisation
-			// mais on connaît l'identifiant de l'utilisateur
-			$sql = 'SELECT * FROM user WHERE user_id=' . $this->id;
-			$rowset = mysql_query ( $sql );
-			$row = mysql_fetch_array ( $rowset );
-			mysql_free_result ( $rowset );
-			if (! $row)
-				return false;
+			// on ne transmet pas les données de l'initialisation mais on connaît l'identifiant de l'utilisateur
+			$sql = 'SELECT * FROM user WHERE user_id=:id';
+			$statement = $system->getPdo()->prepare($sql);
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			$row = $statement->fetch(PDO::FETCH_ASSOC);
+			if (! $row)	return false;
 			return $this->feed ( $row );
 		}
 		return false;
 	}
+	/**
+	 * @version 23/11/2016 
+	 */
 	public function toDB() {
-		// si l'utilisateur ne possède pas d'id il est considéré comme nouveau
+		global $system;
+
 		$settings = array ();
-		if ($this->name)
-			$settings [] = 'username=\'' . mysql_real_escape_string ( $this->name ) . '\'';
-		if ($this->password)
-			$settings [] = 'password=\'' . mysql_real_escape_string ( $this->password ) . '\'';
-		
+		if ($this->name) {
+			$settings [] = 'username = :name';
+		}
+		if ($this->password) {
+			$settings [] = 'password = :password';
+		}
 		$sql = ($this->id) ? 'UPDATE' : 'INSERT INTO';
-		$sql .= ' user SET ';
-		$sql .= implode ( ', ', $settings );
-		if ($this->id)
-			$sql .= ' WHERE user_id=' . $this->id;
-			// echo '<p>'.$sql.'< /p>';
-		$result = mysql_query ( $sql );
-		if (! $this->id)
-			$this->id = mysql_insert_id ();
+		$sql .= ' user SET '. implode ( ', ', $settings );
+		
+		if ($this->id) {
+			$sql .= ' WHERE user_id = :id';
+		}
+		
+		$statement = $system->getPdo()->prepare($sql);
+		
+		if ($this->name) {
+			$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
+		}
+		if ($this->password) {
+			$statement->bindValue(':password', $this->password, PDO::PARAM_STR);
+		}
+		if ($this->id) {
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		}
+		
+		$result =  $statement->execute();
+
+		if (! $this->id) {
+			$this->id = $system->getPdo()->lastInsertId();
+		}
+		
 		return $result;
 	}
 	/**
 	 * Obtient le pseudonyme de l'utilisateur.
 	 *
-	 * @version 26/02/2006
+	 * @version 23/11/2016
 	 */
 	public function getName() {
+		global $system;
 		if (! isset ( $this->name )) {
-			$sql = 'SELECT username FROM user WHERE user_id =' . $this->id;
-			$rowset = mysql_query ( $sql );
-			$row = mysql_fetch_assoc ( $rowset );
-			return $row ['username'];
+			$statement = $system->getPdo()->prepare('SELECT username FROM user WHERE user_id = :id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			$this->name = $statement->fetchColumn();
 		}
 		return $this->name;
 	}
 	public function identification($name, $password) {
 		global $system;
-		
-		$sql = "SELECT * FROM user WHERE username=:name AND password=:password";
-		
-		$statement = $system->getPdo ()->prepare ( $sql );
-		
+		$statement = $system->getPdo ()->prepare ( 'SELECT * FROM user WHERE username = :name AND password = :password' );
 		$statement->bindValue ( ':name', $name, PDO::PARAM_STR );
 		$statement->bindValue ( ':password', $password, PDO::PARAM_STR );
 		$statement->setFetchMode ( PDO::FETCH_ASSOC );
-		
 		$statement->execute();
 		$this->feed ($statement->fetch());
-		
 		return $this->id;
 	}
 	/**

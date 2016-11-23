@@ -146,12 +146,13 @@ class Society {
 	/**
 	 * Obtient de la base de données les valeurs des champs demandés.
 	 *
-	 * @since 2009-01-19
-	 * @param
-	 *        	$fields
+	 * @since 19/01/2009
+	 * @version 23/11/2016
+	 * @param $fields
 	 * @return array
 	 */
 	private function getDataFromBase($fields = NULL) {
+		global $system;
 		try {
 			if (is_null ( $this->id )) {
 				throw new Exception ( __METHOD__ . ' : l\'instance doit être identifiée.' );
@@ -161,9 +162,11 @@ class Society {
 						'*' 
 				);
 			}
-			$sql = 'SELECT ' . implode ( ',', $fields ) . ' FROM society WHERE society_id=' . $this->id;
-			$result = mysql_query ( $sql );
-			return mysql_fetch_assoc ( $result );
+			$sql = 'SELECT ' . implode ( ',', $fields ) . ' FROM society WHERE society_id=:id';
+			$statement = $system->getPdo()->prepare($sql);
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			return $statement->fetch(PDO::FETCH_ASSOC);
 		} catch ( Exception $e ) {
 			echo $e->getMessage ();
 		}
@@ -419,9 +422,10 @@ class Society {
 	 * Obtient un lien HTML vers le site web de la société.
 	 * 
 	 * @since 24/11/2006
+	 * @version 23/11/2016
 	 */
 	public function getWebHtmlLink() {
-		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" title="' . $this->getUrl () . '">[web]</a>' : NULL;
+		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" title="' . $this->getUrl () . '"><span class="glyphicon glyphicon-link"></span></a>' : NULL;
 	}
 	/**
 	 * Indique si la miniature du site web de la société a déjà été enregistré.
