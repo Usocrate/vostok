@@ -368,17 +368,17 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
         						</div>
         												
         						<input name="individual_submission" type="hidden" value="1" />
-        
-        						<div class="checkbox">
-        							<label for="ms_submission_i"><input id="ms_submission_i" type="checkbox" name="membership_submission" value="1" /> fait partie de la société ?</label>
-        						</div>
            					</div>
         				</section>                		
             		</div>
             		<div class="col-md-6">
 						<section id="membership_fieldset">
 							<p>Quelle implication ?</p>
-							
+						
+    						<div class="checkbox">
+    							<label for="ms_submission_i"><input id="ms_submission_i" type="checkbox" name="membership_submission" value="1" checked /> fait partie de la société ?</label>
+    						</div>
+    						
 							<div class="form-group">
     							<label for="ms_department_i">service</label> 
     							<input id="ms_department_i" name="membership_department" type="text" size="35" class="form-control" />
