@@ -27,7 +27,11 @@ if (isset($_REQUEST['society_id'])) {
 	$society->setId($_REQUEST['society_id']);
 	$society->feed();
 }
-$doc_title = $society->hasId() ? $society->getName() : 'Une société';
+elseif (isset($_REQUEST['society_name'])) {
+	$society->setName($_REQUEST['society_name']);
+}
+
+$doc_title = $society->hasId() ? $society->getName() : 'Une nouvelle société';
 
 if (isset($_POST['task'])) {
 	switch ($_POST['task']) {
