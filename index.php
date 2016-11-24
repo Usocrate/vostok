@@ -44,7 +44,7 @@ $doc_title = 'Accueil';
 		<div class="row">
 			<div class="col-md-6">
 				<section>
-					<form method="post" action="/societies_list.php">
+					<form method="post" action="societies_list.php">
 						<div class="form-group">
 							<label for="s_name_i">Une société</label>
 							<input id="s_name_i" name="society_name" type="text" class="form-control" placeholder="nom" />
@@ -53,7 +53,7 @@ $doc_title = 'Accueil';
 					</form>
 				</section>
 				<section>
-				<form method="post" action="/individuals.php">
+				<form method="post" action="individuals.php">
 					<div class="form-group">
 						<label for="individual_lastName_i">Un individu</label> <input id="individual_lastName_i" name="individual_lastName" type="text" placeholder="nom de famille" class="form-control" />
 					</div>
