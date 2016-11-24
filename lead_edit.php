@@ -214,7 +214,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 <body id="leadEditDoc" >
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo isset($society) && $society->hasId() ? 'Une piste chez <a href="/society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>' : 'Une piste à suivre'; ?>	</h1>
+	<h1><?php echo isset($society) && $society->hasId() ? 'Une piste chez <a href="society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>' : 'Une piste à suivre'; ?></h1>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<input name="lead_id" type="hidden" value="<?php if ($lead->getId()) echo $lead->getId(); ?>" />
 		<?php
@@ -368,17 +368,17 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
         						</div>
         												
         						<input name="individual_submission" type="hidden" value="1" />
-        
-        						<div class="checkbox">
-        							<label for="ms_submission_i"><input id="ms_submission_i" type="checkbox" name="membership_submission" value="1" /> fait partie de la société ?</label>
-        						</div>
            					</div>
         				</section>                		
             		</div>
             		<div class="col-md-6">
 						<section id="membership_fieldset">
 							<p>Quelle implication ?</p>
-							
+						
+    						<div class="checkbox">
+    							<label for="ms_submission_i"><input id="ms_submission_i" type="checkbox" name="membership_submission" value="1" checked /> fait partie de la société ?</label>
+    						</div>
+    						
 							<div class="form-group">
     							<label for="ms_department_i">service</label> 
     							<input id="ms_department_i" name="membership_department" type="text" size="35" class="form-control" />
