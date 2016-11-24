@@ -629,9 +629,11 @@ class System {
 	 * @since 16/01/2006
 	 */
 	public function mergeLeadTypes($type1, $type2) {
-		$sql = 'UPDATE lead SET lead_type="' . mysql_real_escape_string ( $type1 ) . '" WHERE lead_type="' . mysql_real_escape_string ( $type2 ) . '"';
-		
-		return mysql_query ( $sql );
+		global $system;
+		$statement = $system->getPdo()->prepare('UPDATE lead SET lead_type = :t1 WHERE lead_type = :t2');
+		$statement->bindValue(':t1', $type1, PDO::PARAM_INT);
+		$statement->bindValue(':t2', $type2, PDO::PARAM_INT);
+		return $statement->execute();
 	}
 	/**
 	 * Obtient les enregistrements des activités.

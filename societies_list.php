@@ -59,7 +59,7 @@ if (isset ( $_REQUEST ['society_search_page_index'] )) {
 
 // sélection de sociétés correspondant aux critères (dont le nombre dépend de la variable $page_items_nb)
 $page_debut = ($_SESSION ['society_search'] ['page_index'] - 1) * $page_items_nb;
-$page_rowset = $system->getSocietiesRowset ( $_SESSION ['society_search']['criteria'], $_SESSION ['society_search'] ['sort_key'], $_SESSION ['society_search'] ['sort_order'], $page_debut, $page_items_nb );
+$page_rowset = $system->getSocietiesRowset( $_SESSION ['society_search']['criteria'], $_SESSION ['society_search'] ['sort_key'], $_SESSION ['society_search'] ['sort_order'], $page_debut, $page_items_nb );
 
 // la sélection de sociétés
 $societies = array ();
@@ -129,6 +129,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     					<th></th>
     					<th>Nom</th>
     					<th>Description</th>
+    					<th>Ville</th>
     					<th>Enregistrement</th>
     					<th>Web</th>
     				</tr>
@@ -162,6 +163,9 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     					echo '</td>';
     					echo '<td>';
     					echo $s->getDescription () ? $s->getDescription () : '<small>aucune</small>';
+    					echo '</td>';
+    					echo '<td>';
+    					echo $s->getCity () ? $s->getCity() : '<small>?</small>';
     					echo '</td>';
     					echo '<td style="text-align:center">';
     					echo $s->getCreationDate () ? $s->getCreationDateFr () : '<small>à déterminer</small>';
