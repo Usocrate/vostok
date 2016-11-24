@@ -65,7 +65,7 @@ $doc_title = 'Un évènement survient chez ' . $society->getName();
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1>Un évènement survient chez <?php echo '<a href="/society.php?society_id='.$society->getId().'">'.ToolBox::toHtml($society->getName()).'</a>'; ?></h1>
+	<h1>Un évènement survient chez <?php echo '<a href="society.php?society_id='.$society->getId().'">'.ToolBox::toHtml($society->getName()).'</a>'; ?></h1>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<input name="task_id" type="hidden" value="save" />
 

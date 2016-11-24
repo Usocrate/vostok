@@ -113,9 +113,9 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 	<?php 
 		if (isset($individual)&& $individual->getId()) {
 			if (isset($society)&& $society->getId()) {
-				$h1 = '<a href="/individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a> chez <a href="/society.php?society_id='.$society->getId().'">'.ToolBox::toHtml($society->getName()).'</a>';
+				$h1 = '<a href="individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a> chez <a href="society.php?society_id='.$society->getId().'">'.ToolBox::toHtml($society->getName()).'</a>';
 			} else {
-				$h1 = 'Une participation de <a href="/individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a>';
+				$h1 = 'Une participation de <a href="individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a>';
 			}
 		} else {
 			$h1 = 'Une participation';
