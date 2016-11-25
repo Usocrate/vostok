@@ -251,7 +251,7 @@ class Lead
             }
             $html .= '>';
             $html .= ToolBox::toHtml(ucfirst($item['value']));
-            $html .= '(' . $item['count'] . ')';
+            $html .= ' (' . $item['count'] . ')';
             $html .= '</option>';
         }
         return $html;

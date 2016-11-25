@@ -12,8 +12,7 @@
 	background: #fff;
 }
 
-.ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em
-	{
+.ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em {
 	background-color: #8ea4bc;
 	background-image: none;
 	color: #fff;
@@ -96,47 +95,8 @@ DD {
 	padding: .3em;
 }
 
-.yui-ac {
-	position: relative;
-}
-
-.yui-ac DIV {
-	margin: 0;
-	padding: 0;
-}
-
-.yui-ac-container {
-	position: absolute;
-}
-
-.yui-ac-content {
-	border: 1px solid #000;
-	background: #fff;
-	color: #555555;
-	overflow: hidden;
-	z-index: 9050;
-}
-
-.yui-ac-content ul {
-	margin: 0;
-	padding: 0;
-	width: 100%;
-}
-
-.yui-ac-content li {
-	margin: 0;
-	padding: .3em .6em;
-	cursor: default;
-	white-space: nowrap;
-	list-style-image: none;
-}
-
-.yui-ac-content li.yui-ac-highlight {
-	background: #99FFFF;
-}
-
 #loginDoc {
-	background-image: url("/skin/images/bg.gif");
+	background-image: url("./images/bg.gif");
 }
 
 #loginDoc div.container {
@@ -145,7 +105,7 @@ DD {
 }
 
 #loginDoc FORM {
-	background-image: url(/skin/images/vostok.gif);
+	background-image: url("./images/vostok.gif");
 	background-position: top center;
 	background-repeat: no-repeat;
 	margin: auto;
@@ -154,7 +114,7 @@ DD {
 
 #loginDoc FOOTER {
 	margin: 20px auto 10px auto;
-	background-image: url(/skin/images/gagarinecasque.gif);
+	background-image: url("./images/gagarinecasque.gif");
 	background-position: bottom left;
 	background-repeat: no-repeat;
 	padding-left: 90px;

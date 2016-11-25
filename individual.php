@@ -32,32 +32,36 @@ $doc_title = $individual->getWholeName();
 <!doctype html>
 <html lang="fr">
 <head>
-<title><?php echo $doc_title ?></title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-<script language="javascript" type="application/javascript">
-	<!-- <![CDATA[
-	function SocietyLink(society_id, department, title, individual_phone, individual_email, description){
-		this.society_id = society_id;
-		this.department = department;
-		this.title = title;
-		this.individual_phone = individual_phone;
-		this.individual_email = individual_email;
-		this.description = description;
-	}
-	
-	Society.prototype.setSocietyId = new Function(id){
-		this.society_id = id;
-	}
-	
-	function fillSocietyLinkForm(society_id){
-		form = document.getElementById('societyLink_form');
-	}
-	]]>-->
+	<title><?php echo $doc_title ?></title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
+	<script language="javascript" type="application/javascript">
+		<!-- <![CDATA[
+			function SocietyLink(society_id, department, title, individual_phone, individual_email, description){
+				this.society_id = society_id;
+				this.department = department;
+				this.title = title;
+				this.individual_phone = individual_phone;
+				this.individual_email = individual_email;
+				this.description = description;
+			}
+			
+			Society.prototype.setSocietyId = new Function(id){
+				this.society_id = id;
+			}
+			
+			function fillSocietyLinkForm(society_id){
+				form = document.getElementById('societyLink_form');
+			}
+		]]>-->
 	</script>
-<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css"><script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
+	<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+</head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
