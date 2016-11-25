@@ -116,13 +116,17 @@ $doc_title = 'Une piste';
 <!doctype html>
 <html lang="fr">
 <head>
-<title>Une des pistes (sa fiche détaillées)</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-<script type="text/javascript" src="js/controls.js"></script>
-<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css"><script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
+	<title>Une des pistes (sa fiche détaillées)</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
+	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
+	<script type="text/javascript" src="js/controls.js"></script>
+	<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+</head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">

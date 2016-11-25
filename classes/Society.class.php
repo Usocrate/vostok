@@ -1024,27 +1024,28 @@ class Society {
 	/**
 	 * Transfére les pistes liées à la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
 	 * 
-	 * @version 23/10/2005
+	 * @version 24/11/2016
 	 */
 	public function transferLeads($society) {
-		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id ))
-			return false;
-		$sql = 'UPDATE lead SET society_id=' . $society->getId ();
-		$sql .= ' WHERE society_id=' . $this->id;
-		
-		return mysql_query ( $sql );
+		global $system;
+		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id )) return false;
+		$statement = $system->getPdo()->prepare('UPDATE lead SET society_id = :target_id WHERE society_id = :id');
+		$statement->bindValue(':target_id', $society->getId (), PDO::PARAM_INT);
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		return $statement->execute();
 	}
 	/**
 	 * Supprime de la base de données toutes les pistes rattachées à la société.
 	 * 
 	 * @since 15/08/2006
+	 * @version 24/11/2016
 	 */
 	public function deleteLeads() {
-		if (empty ( $this->id ))
-			return false;
-		$sql = 'DELETE FROM lead WHERE society_id=' . $this->id;
-		
-		return mysql_query ( $sql );
+		global $system;
+		if (empty ( $this->id )) return false;
+		$statement = $system->getPdo()->prepare('DELETE FROM lead WHERE society_id = :id');
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		return $statement->execute();
 	}
 	/**
 	 * Fixe les attributs de la société à partir d'un tableau aux clefs normalisées
@@ -1216,12 +1217,11 @@ class Society {
 	 * @version 15/08/2006
 	 */
 	protected function deleteRow() {
-		if (empty ( $this->id ))
-			return false;
-		$sql = 'DELETE FROM society';
-		$sql .= ' WHERE society_id=' . $this->id;
-		
-		return mysql_query ( $sql );
+		global $system;
+		if (empty ( $this->id )) return false;
+		$statement = $system->getPdo()->prepare('DELETE FROM society WHERE society_id = :id');
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		return $statement->execute();
 	}
 	/**
 	 * Supprime la société de la base de données ainsi que toutes les données associées (pistes, participations, etc).
