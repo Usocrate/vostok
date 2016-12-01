@@ -71,13 +71,18 @@ foreach ($page_rowset as $row) {
 
 // si une seule société redirection vers fiche individuelle.
 if (count ( $societies ) == 1) {
+    // on considère que la recherche est arrivée à son terme
+    unset($_SESSION['society_search']);
 	header ( 'Location:society.php?society_id=' . $societies [0]->getId () );
 	exit ();
 }
 
 // redirection vers création de fiche société.
 if (count ( $societies ) == 0 && isset($_SESSION ['society_search']['criteria']['name'])) {
-	header ( 'Location:society_edit.php?society_name=' . $_SESSION ['society_search']['criteria']['name'] );
+    $name = $_SESSION ['society_search']['criteria']['name'];
+    // on considère que la recherche est arrivée à son terme
+    unset($_SESSION['society_search']);
+	header ( 'Location:society_edit.php?society_name=' . $name );
 	exit ();
 }
 
