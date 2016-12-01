@@ -136,7 +136,7 @@ if (isset($_POST['deletion_order'])) {
 					<legend>infos complémentaires</legend>
 					<div class="form-group">
     					<label for="individual_description_i">description</label>
-    					<textarea id="individual_description_i" cols="51" rows="5" name="individual_description" class="form-control"><?php echo ToolBox::toHtml($individual->getDescription()); ?></textarea>
+    					<textarea id="individual_description_i" cols="51" rows="5" name="individual_description" class="form-control"><?php echo $individual->getDescription(); ?></textarea>
 					</div>
 					
 					<div class="form-group">

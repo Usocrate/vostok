@@ -107,7 +107,7 @@ $doc_title = 'Un évènement survient chez ' . $society->getName();
 		</div>
 		<div class="form-group">
 			<label>Commentaire</label>
-			<textarea name="comment" cols="55" rows="10" class="form-control"><?php echo ToolBox::toHtml($event->getComment()) ?></textarea>
+			<textarea name="comment" cols="55" rows="10" class="form-control"><?php echo $event->getComment() ?></textarea>
 		</div>
 
 		<button type="submit" class="btn btn-primary">Enregistrer</button>
