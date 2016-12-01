@@ -258,7 +258,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
             				</div>
             				<div class="form-group">
             					<label for="l_source_description_ta">Précisions sur l'origine</label>
-            					<textarea id="l_source_description_ta" name="lead_source_description" cols="55" rows="3" class="form-control"><?php echo ToolBox::toHtml($lead->getSourceDescription()); ?></textarea>
+            					<textarea id="l_source_description_ta" name="lead_source_description" cols="55" rows="3" class="form-control"><?php echo $lead->getSourceDescription(); ?></textarea>
         					</div>
         					<div class="form-group">
             					<label for="l_status_i">Etat</label>
