@@ -5,8 +5,16 @@
  */
 class Individual {
 	protected $id;
+	
 	protected $firstName;
 	protected $lastName;
+	
+	protected $street;
+	protected $city;
+	protected $postalcode;
+	protected $state;
+	protected $country;
+	
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
@@ -285,6 +293,23 @@ class Individual {
 	public function getEmailAddress() {
 		return $this->getAttribute ( 'email' );
 	}
+	
+	public function getAddress() {
+		$elements = array ();
+		if ($this->getStreet ()) {
+			$elements [] = $this->getStreet ();
+		}
+		if ($this->getPostalCode ()) {
+			$elements [] = $this->getPostalCode ();
+		}
+		if ($this->getCity ()) {
+			$elements [] = $this->getCity ();
+		}
+		if (count ( $elements ) > 0) {
+			return implode ( ' ', $elements );
+		}
+	}
+	
 	/**
 	 * Obtient le lien 'mailTo:' de la personne.
 	 */
@@ -456,6 +481,34 @@ class Individual {
 			return NULL;
 		}
 	}
+	public function getAddressFromGoogle($input = NULL) {
+		global $system;
+		if ( empty($input) ) $input = $this->getAddress();
+		$json = $system->getGoogleGeocodeAsJson($input);
+		$data = json_decode($json);
+		$street = array();
+		foreach ($data->{'results'}[0]->{'address_components'} as $c) {
+			if (in_array('street_number', $c->types)) {
+				$street['number'] = $c->long_name;
+			}
+			if (in_array('route', $c->types)) {
+				$street['route'] = $c->long_name;
+			}
+			if (in_array('locality', $c->types)) {
+				$this->city = $c->long_name;
+			}
+			if (in_array('postal_code', $c->types)) {
+				$this->postalCode = $c->long_name;
+			}
+			if (in_array('administrative_area_level_1', $c->types)) {
+				$this->state = $c->long_name;
+			}
+			if (in_array('country', $c->types)) {
+				$this->country = $c->short_name;
+			}			
+		}
+		$this->street = $street['number'].' '.$street['route'];
+	}
 	/**
 	 * Obtenir les enregistrements des sociétés auxquelles participe l'individu.
 	 *
@@ -596,117 +649,171 @@ class Individual {
 	 * Enregistre les données de l'individu en base de données.
 	 */
 	public function toDB() {
+		global $system;
+		
 		$new = empty ( $this->id );
+		
 		$settings = array ();
 		
 		if (isset ( $this->salutation )) {
-			if (empty ( $this->salutation )) {
-				$settings [] = 'individual_salutation=NULL';
-			} else {
-				$settings [] = 'individual_salutation="' . mysql_real_escape_string ( $this->salutation ) . '"';
-			}
+			$settings [] = 'individual_salutation=:salutation';
 		}
 		if (isset ( $this->firstName )) {
-			if (empty ( $this->firstName )) {
-				$settings [] = 'individual_firstName=NULL';
-			} else {
-				$settings [] = 'individual_firstName="' . mysql_real_escape_string ( $this->firstName ) . '"';
-			}
+			$settings [] = 'individual_firstName=:firstName';
 		}
 		if (isset ( $this->lastName )) {
-			if (empty ( $this->lastName )) {
-				$settings [] = 'individual_lastName=NULL';
-			} else {
-				$settings [] = 'individual_lastName="' . mysql_real_escape_string ( $this->lastName ) . '"';
-			}
+			$settings [] = 'individual_lastName=:lastName';
 		}
 		if (isset ( $this->birth_date )) {
-			if (empty ( $this->birth_date )) {
-				$settings [] = 'individual_birth_date=NULL';
-			} else {
-				$settings [] = 'individual_birth_date="' . mysql_real_escape_string ( $this->birth_date ) . '"';
-			}
+			$settings [] = 'individual_birth_date=:birth_date';
 		}
 		if (isset ( $this->description )) {
-			if (empty ( $this->description )) {
-				$settings [] = 'individual_description=NULL';
-			} else {
-				$settings [] = 'individual_description="' . mysql_real_escape_string ( $this->description ) . '"';
-			}
+			$settings [] = 'individual_description=:description';
 		}
 		if (isset ( $this->mobile )) {
-			$settings [] = 'individual_mobile="' . mysql_real_escape_string ( $this->mobile ) . '"';
+			$settings [] = 'individual_mobile=:mobile';
 		}
 		if (isset ( $this->phone )) {
-			$settings [] = 'individual_phone="' . mysql_real_escape_string ( $this->phone ) . '"';
+			$settings [] = 'individual_phone=:phone';
 		}
 		if (isset ( $this->email )) {
-			$settings [] = 'individual_email="' . mysql_real_escape_string ( $this->email ) . '"';
+			$settings [] = 'individual_email=:email';
 		}
 		if (isset ( $this->web )) {
-			$settings [] = 'individual_web="' . mysql_real_escape_string ( $this->web ) . '"';
-		}
-		if (isset ( $this->street )) {
-			$settings [] = 'individual_street="' . mysql_real_escape_string ( $this->street ) . '"';
-		}
-		if (isset ( $this->city )) {
-			$settings [] = 'individual_city="' . mysql_real_escape_string ( $this->city ) . '"';
-		}
-		if (isset ( $this->postalCode )) {
-			$settings [] = 'individual_postalCode="' . mysql_real_escape_string ( $this->postalCode ) . '"';
+			$settings [] = 'individual_web=:web';
 		}
 		if (isset ( $this->country )) {
-			$settings [] = 'individual_country="' . mysql_real_escape_string ( $this->country ) . '"';
+			$settings [] = 'individual_country=:country';
 		}
-		
+		if (isset ( $this->street )) {
+			$settings [] = 'individual_street=:street';
+		}
+		if (isset ( $this->city )) {
+			$settings [] = 'individual_city=:city';
+		}
+		if (isset ( $this->postalCode )) {
+			$settings [] = 'individual_postalCode=:postalCode';
+		}
+		if (isset ( $this->state )) {
+			$settings [] = 'individual_state=:state';
+		}
+		if (isset ( $this->country )) {
+			$settings [] = 'individual_country=:country';
+		}
+
 		if ($new) {
 			$settings [] = 'individual_creation_date=NOW()';
-			$settings [] = 'individual_creation_user_id=' . $_SESSION ['user_id'];
+			if (isset ( $_SESSION ['user_id'] )) {
+				$settings [] = 'individual_creation_user_id=:user_id';
+			}
 		}
+
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql .= ' individual SET ';
 		$sql .= implode ( ', ', $settings );
 		if (! $new)
-			$sql .= ' WHERE individual_id=' . $this->id;
-			// echo '<p>'.$sql.'< /p>';
-		$result = mysql_query ( $sql );
-		if ($new) {
-			$this->id = mysql_insert_id ();
+			$sql .= ' WHERE individual_id=:id';
+			
+	
+		$statement = $system->getPdo()->prepare($sql);
+		
+		if (isset ( $this->salutation )) {
+			$statement->bindValue(':salutation', $this->salutation, PDO::PARAM_STR);
 		}
+		if (isset ( $this->firstName )) {
+			$statement->bindValue(':firstName', $this->firstName, PDO::PARAM_STR);
+		}
+		if (isset ( $this->lastName )) {
+			$statement->bindValue(':lastName', $this->lastName, PDO::PARAM_STR);
+		}
+		if (isset ( $this->birth_date )) {
+			$statement->bindValue(':birth_date', $this->birth_date, PDO::PARAM_STR);
+		}
+		if (isset ( $this->description )) {
+			$statement->bindValue(':description', $this->description, PDO::PARAM_STR);
+		}
+		if (isset ( $this->mobile )) {
+			$statement->bindValue(':mobile', $this->mobile, PDO::PARAM_STR);
+		}
+		if (isset ( $this->phone )) {
+			$statement->bindValue(':phone', $this->phone, PDO::PARAM_STR);
+		}
+		if (isset ( $this->email )) {
+			$statement->bindValue(':email', $this->email, PDO::PARAM_STR);
+		}
+		if (isset ( $this->web )) {
+			$statement->bindValue(':web', $this->web, PDO::PARAM_STR);
+		}
+		if (isset ( $this->country )) {
+			$statement->bindValue(':country', $this->country, PDO::PARAM_STR);
+		}
+		if (isset ( $this->street )) {
+			$statement->bindValue(':street', $this->street, PDO::PARAM_STR);
+		}
+		if (isset ( $this->city )) {
+			$statement->bindValue(':city', $this->city, PDO::PARAM_STR);
+		}
+		if (isset ( $this->postalCode )) {
+			$statement->bindValue(':postalCode', $this->postalCode, PDO::PARAM_INT);
+		}
+		if (isset ( $this->state )) {
+			$statement->bindValue(':state', $this->state, PDO::PARAM_STR);
+		}
+		if (isset ( $this->country )) {
+			$statement->bindValue(':country', $this->country, PDO::PARAM_STR);
+		}
+		
+		if (! $new)	{
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		}
+		
+		if ($new) {
+			if (isset ( $_SESSION ['user_id'] )) {
+				$statement->bindValue(':user_id', $_SESSION ['user_id'], PDO::PARAM_INT);
+			}
+		}
+		
+		$result = $statement->execute();
+		
+		if ($result && ! isset($this->id)) {
+            $this->id = $system->getPdo()->lastInsertId();
+        }
+		
 		return $result;
 	}
 	public function delete() {
+		global $system;
 		if (! empty ( $this->id )) {
+			
 			// effacement des liens avec Comptes
-			$sql = 'DELETE FROM membership';
-			$sql .= ' WHERE individual_id=' . $this->id;
-			if (mysql_query ( $sql )) {
-				if ($this->hasPhoto ())
-					$this->deletePhotoFile ();
-					// effacement du Individual proprement dit
-				$sql = 'DELETE FROM individual';
-				$sql .= ' WHERE individual_id=' . $this->id;
-				return mysql_query ( $sql );
+			$statement = $system->getPdo()->prepare('DELETE FROM membership WHERE individual_id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			
+			if ( $statement->execute() ) {
+				if ($this->hasPhoto())	$this->deletePhotoFile ();
+					
+				// effacement du Individual proprement dit
+				$statement = $system->getPdo()->prepare('DELETE FROM individual WHERE individual_id=:id');
+				$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+				return $statement->execute();
 			}
 		}
 		return false;
 	}
 	private function getDataFromBase($fields = NULL) {
-		try {
-			if (is_null ( $this->id )) {
-				throw new Exception ( 'l\'instance doit être identifiée.' );
-			}
-			if (is_null ( $fields )) {
-				$fields = array (
-						'*' 
-				);
-			}
-			$sql = 'SELECT ' . implode ( ',', $fields ) . ' FROM individual WHERE individual_id=' . $this->id;
-			$result = mysql_query ( $sql );
-			return mysql_fetch_assoc ( $result );
-		} catch ( Exception $e ) {
-			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
+		global $system;
+		if (is_null ( $this->id )) {
+			throw new Exception ( 'l\'instance doit être identifiée.' );
 		}
+		if (is_null ( $fields )) {
+			$fields = array (
+					'*' 
+			);
+		}
+		$statement = $system->getPdo()->prepare('SELECT ' . implode ( ',', $fields ) . ' FROM individual WHERE individual_id=:id');
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		$statement->execute();
+		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
 	public function feed($array = NULL) {
 		if (is_array ( $array )) {
@@ -729,13 +836,7 @@ class Individual {
 		} elseif (! empty ( $this->id )) {
 			// on ne transmet pas les données de l'initialisation
 			// mais on connaît l'identifiant de la personne
-			$sql = 'SELECT * FROM individual WHERE individual_id=' . $this->id;
-			// echo $sql.'<br/>';
-			$rowset = mysql_query ( $sql );
-			$row = mysql_fetch_assoc ( $rowset );
-			mysql_free_result ( $rowset );
-			if (! $row)
-				return false;
+			$row = $this->getDataFromBase();
 			return $this->feed ( $row );
 		}
 		return false;

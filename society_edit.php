@@ -43,7 +43,9 @@ if (isset($_POST['task'])) {
 		case 'registration':
 			ToolBox::formatUserPost($_POST);
 			$society->feed($_POST);
-			$society->getAddressFromGoogle();
+			if (! empty ( $_POST['society_address'] ) ) {
+    			$society->getAddressFromGoogle($_POST['society_address']);
+    		}
 			$society->toDB();
 
 			//
@@ -111,50 +113,40 @@ if (isset($_POST['task'])) {
     	<div class="row">
     		<div class="col-md-6">
             	<div class="form-group">
-        	    	<label>nom</label>
+        	    	<label>Nom</label>
         	    	<input type="text" name="society_name" value="<?php echo ToolBox::toHtml($society->getName()) ?>" size="35" class="form-control" />
         		</div>
         		
         		<div class="form-group">
             		<label>Société mère</label>
                 	<?php
-                	$parentSociety = $society->getParentSociety();
-                	$value = $parentSociety ? $parentSociety->getName() : '';
+	                	$parentSociety = $society->getParentSociety();
+	                	$value = $parentSociety ? $parentSociety->getName() : '';
                 	?>
                 	<input type="text" id ="s_parent_name_i" name="society_parent_name" value="<?php echo ToolBox::toHtml($value); ?>" size="35" class="form-control" />
                 	<input type="hidden" name="society_lastparent_name" value="<?php echo ToolBox::toHtml($value); ?>" />
             	</div>
         		
         		<div class="form-group">
-        			<label for="society_url">url</label>
+        			<label for="society_url">URL</label>
         			<input type="url" id="society_web_input" name="society_url" value="<?php echo ToolBox::toHtml($society->getUrl()); ?>" size="55" class="form-control" onchange="javascript:checkUrlInput('society_web_input', 'society_web_link');" /> 
         			<a id="society_web_link" href="#" style="display: none">[voir]</a>
         		</div>
         		
         		<div class="form-group">
-        			<label>rue <small>(adresse de facturation)</small></label>
-        			<input type="text" name="society_street" value="<?php echo ToolBox::toHtml($society->getStreet()); ?>" size="55" class="form-control" />
+        			<label>Adresse</small></label>
+        			<input type="text" name="society_address" value="<?php echo ToolBox::toHtml($society->getAddress()); ?>" size="55" class="form-control" />
         		</div>
-        		
+
         		<div class="form-group">
-        			<label>ville</label>
-        			<input type="text" id="society_city_i" name="society_city" value="<?php echo ToolBox::toHtml($society->getCity()); ?>" size="35" class="form-control" />
-        		</div>
-        		
-        		<div class="form-group">
-        			<label>code postal</label>
-        			<input type="text" name="society_postalcode" value="<?php echo ToolBox::toHtml($society->getPostalCode()); ?>" size="15" class="form-control" />
-        		</div>
-        		
-        		<div class="form-group">
-        			<label>téléphone</label>
+        			<label>Téléphone</label>
         			<input type="tel"	name="society_phone" value="<?php echo ToolBox::toHtml($society->getPhone()); ?>" size="20" class="form-control" />
         		</div>
     		</div>
     		
     		<div class="col-md-6">
         		<div class="form-group">
-        			<label>activité</label>
+        			<label>Activité</label>
         			<select name="industries_ids[]" multiple="multiple" size="9"  class="form-control">
         	    		<option value="">-- choisir --</option>
             			<?php echo $system->getIndustryOptionsTags($society->getIndustriesIds()) ?>
@@ -162,7 +154,7 @@ if (isset($_POST['task'])) {
         		</div>
         		
         		<div class="form-group">
-        			<label>description</label>
+        			<label>Description</label>
             		<textarea name="society_description" cols="51" rows="10" class="form-control"><?php echo ToolBox::toHtml($society->getDescription()); ?></textarea>
             	</div>
     		</div>
@@ -174,35 +166,6 @@ if (isset($_POST['task'])) {
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#society_city_i').autocomplete({
-			minLength: 1,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'society_cities.json.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).cities);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#society_city_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#society_city_i').val( ui.item.value );
-	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-	    };
 	    $('#s_parent_name_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {

@@ -39,6 +39,9 @@ if (isset($_POST['deletion_order'])) {
     ToolBox::formatUserPost($_POST);
     // enregistrement des données de l'individu
     $individual->feed($_POST);
+    if (! empty ( $_POST['individual_address'] ) ) {
+    	$individual->getAddressFromGoogle($_POST['individual_address']);
+    }
     $individual->toDB();
     // rattachement éventuel à une première société
     if ($_POST['society_id']) {
@@ -95,7 +98,7 @@ if (isset($_POST['deletion_order'])) {
 					<legend>identité</legend>
 					
 					<div class="form-group">
-						<label for="individual_salutation_i">civilité</label>
+						<label for="individual_salutation_i">Civilité</label>
 						<select id="individual_salutation_i" name="individual_salutation" class="form-control">
 							<option value="">-- choisir --</option>
 							<?php echo $individual->getSalutationOptionsTags($individual->getSalutation()); ?>
@@ -103,17 +106,17 @@ if (isset($_POST['deletion_order'])) {
 					</div>
 					
 					<div class="form-group">
-						<label for="individual_firstname_i">prénom</label>
+						<label for="individual_firstname_i">Prénom</label>
 						<input id="individual_firstname_i" type="text" name="individual_firstName" value="<?php echo ToolBox::toHtml($individual->getFirstName()) ?>" size="25" class="form-control" /> 
 					</div>
 				
 					<div class="form-group">
-						<label for="individual_lastname_i">nom</label>
+						<label for="individual_lastname_i">Nom</label>
 						<input id="individual_lastname_i" type="text" name="individual_lastName" value="<?php echo ToolBox::toHtml($individual->getLastName()) ?>" size="25"  class="form-control" />
 					</div>
 					
 					<div class="form-group">	
-						<label for="individual_birth_date_i">date de naissance</label>
+						<label for="individual_birth_date_i">Date de naissance</label>
 						<input id="individual_birth_date_i" type="text" name="individual_birth_date" value="<?php echo ToolBox::toHtml($individual->getBirthDate()) ?>" size="10" class="form-control" />
 					</div>
 					
@@ -122,25 +125,28 @@ if (isset($_POST['deletion_order'])) {
 						<input id="individual_photo_file_i" type="file" name="individual_photo_file" size="55" class="form-control"></input>
 					</div>
 					
+					<ul>
 					<?php if ($individual->getGoogleQueryUrl()) : ?>
-						<p><a href="<?php echo $individual->getGoogleQueryUrl() ?>"><?php echo $individual->getWholeName() ?> dans Google</a></p>
+						<li><a href="<?php echo $individual->getGoogleQueryUrl() ?>"><?php echo $individual->getWholeName() ?> dans Google</a></li>
 					<?php endif; ?>
 					
 					<?php if ($individual->getGoogleQueryUrl('images')) : ?>
-						<p><a href="<?php echo $individual->getGoogleQueryUrl('images') ?>">La photo de <?php echo $individual->getWholeName() ?> dans Google ?</a></p>
+						<li><a href="<?php echo $individual->getGoogleQueryUrl('images') ?>">La photo de <?php echo $individual->getWholeName() ?> dans Google ?</a></li>
 					<?php endif; ?>
+					</ul>
+					
 					</fieldset>
 			</div>
 			<div class="col-md-4">
 				<fieldset>
-					<legend>infos complémentaires</legend>
+					<legend>Infos complémentaires</legend>
 					<div class="form-group">
-    					<label for="individual_description_i">description</label>
+    					<label for="individual_description_i">Description</label>
     					<textarea id="individual_description_i" cols="51" rows="5" name="individual_description" class="form-control"><?php echo $individual->getDescription(); ?></textarea>
 					</div>
 					
 					<div class="form-group">
-						<label for="individual_web_input">page web</label>
+						<label for="individual_web_input">Page web</label>
 						<input type="text" id="individual_web_input" name="individual_web" value="<?php echo $individual->getWeb(); ?>" size="55" maxlength="255" class="form-control" onchange="checkUrlInput('individual_web_input', 'individual_web_link');" /> 
 						<a id="individual_web_link" href="#" style="display: none">[voir]</a>
 					</div>
@@ -149,40 +155,27 @@ if (isset($_POST['deletion_order'])) {
 			</div>
 			<div class="col-md-4">
 				<fieldset>
-					<legend>coordonnées (perso)</legend>
+					<legend>Coordonnées (perso)</legend>
 					<div class="form-group">
-    					<label>tél. mobile</label>
+    					<label>Tél. mobile</label>
     					<input type="tel" name="individual_mobile" value="<?php echo ToolBox::toHtml($individual->getMobilePhoneNumber()) ?>" size="15" class="form-control"/>
 					</div>
 					
 					<div class="form-group">
-						<label>téléphone</label>
+						<label>Téléphone</label>
 						<input type="tel" name="individual_phone" value="<?php echo ToolBox::toHtml($individual->getPhoneNumber()) ?>" size="15" class="form-control" />
     				</div>
+    				
     				<div class="form-group">
-    					<label>email</label>
+    					<label>Email</label>
     					<input type="email" name="individual_email" value="<?php echo ToolBox::toHtml($individual->getEmailAddress()) ?>" size="55" class="form-control" />
 					</div>
 					
 					<div class="form-group">
-						<label>adresse</label>
-						<input type="text" name="individual_street" value="<?php echo ToolBox::toHtml($individual->getstreet()) ?>" size="55" class="form-control" />
+						<label>Adresse</label>
+						<input type="text" name="individual_address" value="<?php echo ToolBox::toHtml($individual->getAddress()) ?>" size="55" class="form-control" />
 					</div>
-					
-					<div class="form-group">
-						<label>ville</label>
-						<input type="text" name="individual_city" value="<?php echo ToolBox::toHtml($individual->getCity()) ?>" size="35" class="form-control" />
-					</div>
-					
-					<div class="form-group">
-						<label>code postal</label>
-						<input type="text" name="individual_postalCode" value="<?php echo ToolBox::toHtml($individual->getPostalCode()) ?>" size="15" class="form-control" />
-					</div>
-					
-					<div class="form-group">
-						<label>pays</label>
-						<input type="text" name="individual_country" value="<?php echo ToolBox::toHtml($individual->getCountry()) ?>" size="35" class="form-control" />
-					</div>
+				
 				</fieldset>
 			</div>
 		</div>

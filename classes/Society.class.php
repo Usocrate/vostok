@@ -5,9 +5,13 @@
  */
 class Society {
 	public $id;
-	protected $countryNameCode;
-	protected $administrativeAreaName;
+	
+	protected $street;
+	protected $city;
+	protected $postalcode;
 	protected $subAdministrativeAreaName;
+	protected $administrativeAreaName;
+	protected $countryNameCode;
 	
 	/**
 	 * les coordonnées géographiques telles que récupérées par l'API Google
@@ -343,14 +347,6 @@ class Society {
 		if (count ( $elements ) > 0)
 			return implode ( ',', $elements );
 	}
-	public function getGoogleGeocodeAsJson($input = NULL) {
-		global $system;
-		$param['address'] = isset ( $input ) ? $input : $this->getAddress ();
-		$param['key'] = $system->getGoogleMapsApiKey();
-		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($param['address']).'&key='.urlencode($param['key']);
-		$json = file_get_contents ( $url );
-		return $json;
-	}
 	/**
 	 * Obtient les informations de localisation auprès de Google map et complète celles-ci si nécessaire
 	 *
@@ -358,7 +354,9 @@ class Society {
 	 * @version 18/11/2016
 	 */
 	public function getAddressFromGoogle($input = NULL) {
-		$json = $this->getGoogleGeocodeAsJson($input);
+		global $system;
+		if ( empty($input) ) $input = $this->getAddress();
+		$json = $system->getGoogleGeocodeAsJson($input);
 		$data = json_decode($json);
 		$street = array();
 		foreach ($data->{'results'}[0]->{'address_components'} as $c) {
@@ -1095,7 +1093,7 @@ class Society {
 	public function toDB() {
 		global $system;
 		
-		$new = ! isset ( $this->id ) || empty ( $this->id );
+		$new = empty ( $this->id );
 		
 		$settings = array ();
 		if (isset ( $this->name )) {
@@ -1110,20 +1108,20 @@ class Society {
 		if (isset ( $this->street )) {
 			$settings [] = 'society_street=:street';
 		}
-		if (isset ( $this->postalcode )) {
-			$settings [] = 'society_postalcode=:postalcode';
-		}
 		if (isset ( $this->city )) {
 			$settings [] = 'society_city=:city';
 		}
-		if (isset ( $this->countryNameCode )) {
-			$settings [] = 'society_countryNameCode=:countryNameCode';
+		if (isset ( $this->postalcode )) {
+			$settings [] = 'society_postalcode=:postalcode';
+		}
+		if (isset ( $this->subAdministrativeAreaName )) {
+			$settings [] = 'society_subAdministrativeAreaName=:subAdministrativeAreaName';
 		}
 		if (isset ( $this->administrativeAreaName )) {
 			$settings [] = 'society_administrativeAreaName=:administrativeAreaName';
 		}
-		if (isset ( $this->subAdministrativeAreaName )) {
-			$settings [] = 'society_subAdministrativeAreaName=:subAdministrativeAreaName';
+		if (isset ( $this->countryNameCode )) {
+			$settings [] = 'society_countryNameCode=:countryNameCode';
 		}
 		if (isset ( $this->url )) {
 			$settings [] = 'society_url=:url';

@@ -74,6 +74,13 @@ class System {
 	public function getGoogleMapsApiKey() {
 		return $this->googlemaps_api_key;
 	}
+	public function getGoogleGeocodeAsJson($input) {
+		$param['address'] = $input;
+		$param['key'] = $this->getGoogleMapsApiKey();
+		$url = 'https://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($param['address']).'&key='.urlencode($param['key']);
+		$json = file_get_contents ( $url );
+		return $json;
+	}	
 	public function getSkinUrl() {
 		return $this->appli_url . 'skin/';
 	}
