@@ -37,10 +37,6 @@ SPAN.badge>A, SPAN.label>A {
 	font-weight: inherit;
 }
 
-LABEL {
-	text-transform: capitalize;
-}
-
 H1 SMALL SPAN.glyphicon, H2 SMALL SPAN.glyphicon {
 	color: #ccc;
 }

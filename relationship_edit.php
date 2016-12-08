@@ -115,42 +115,46 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			<?php
 			if ($relationship->getId ())
 				echo '<input name="relationship_id" type="hidden" value="' . $relationship->getId () . '" />';
-			?>
 
-			<?php
 			if (! isset ( $item0 ) || ! $item0->getId ()) {
+				// la première société est à définir
 				echo '<div class="form-group">';
 			    echo '<label for="s1_name_i">Nom de la première société</label>';
 				echo '<input id="s1_name_i" name="item0_name" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
+				echo '<div class="form-group">';
+    			echo '<label>Son rôle</label>';
+    			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+				echo '</div>';
 			} else {
-				echo '<small>Première Société : </small>';
-				echo '<a href="society.php?society_id=' . $item0->getId () . '">' . $item0->getName () . '</a>';
+				// la première société est définie
+				echo '<div class="form-group">';
 				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
+    			echo '<label>Rôle <a href="society.php?society_id=' . $item0->getId () . '">' . $item0->getName () . '</a></label>';
+    			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+				echo '</div>';
 			}
 			if (! isset ( $item1 )) {
+				// la deuxième société est à définir
 				$item1 = new Society ();
 				echo '<div class="form-group">';
 				echo '<label for="s2_name_i">Nom de la deuxième société</label>';
 				echo '<input id="s2_name_i" name="item1_name" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
+				echo '<div class="form-group">';
+    			echo '<label>Son rôle</label>';
+    			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+				echo '</div>';				
 			} else {
-				echo '<small>Deuxième Société : </small>';
-				echo '<a href="society.php?society_id=' . $item1->getId () . '">' . $item1->getName () . '</a>';
+				// la deuxième société est définie
+				echo '<div class="form-group">';
 				echo '<input name="item1_id" type="hidden" value="' . $item1->getId () . '"/>';
+    			echo '<label>Rôle <a href="society.php?society_id=' . $item1->getId () . '">' . $item1->getName () . '</a></label>';
+    			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+				echo '</div>';
 			}
 			?>
 
-			<div class="form-group">
-    			<label>Rôle première société</label>
-    			<input id="s1_role_i" name="item0_role" type="text" value="<?php echo $relationship->getItemRole(0); ?>" size="20" class="form-control" />
-			</div>
-
-			<div class="form-group">
-    			<label>Rôle deuxième société</label>
-    			<input id="s2_role_i" name="item1_role" type="text" value="<?php echo $relationship->getItemRole(1); ?>" size="20" class="form-control" />
-			</div>
-			
 			<div class="form-group">
     			<label>Début</label>
     			<input name="init_date" type="text" value="<?php echo $relationship->getAttribute('init_date'); ?>" size="20" class="form-control" />

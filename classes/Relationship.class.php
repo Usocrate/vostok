@@ -102,7 +102,7 @@ class Relationship {
 	{
 		return isset($this->items[$rang]) ? $this->items[$rang] : NULL;
 	}
-	public static function knownRoles($substring = NULL)
+	public static function getKnownRoles($substring = NULL)
 	{
 		global $system;
 		if (isset ( $substring )) {
@@ -119,7 +119,7 @@ class Relationship {
 		return $statement->fetchAll(PDO::FETCH_COLUMN);
 	}
 	public static function knownRolesToJson($substring = NULL) {
-		$output = '{"roles":' . json_encode ( self::knownRoles ( $substring ) ) . '}';
+		$output = '{"roles":' . json_encode ( self::getKnownRoles ( $substring ) ) . '}';
 		return $output;
 	}	
 	/**
