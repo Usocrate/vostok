@@ -114,10 +114,12 @@ $doc_title = $society->getName();
 					<?php
 					foreach ($leads as $l) {
 						echo '<li class="list-group-item">';
+						echo '<h3>';
 						echo '<a href="lead_edit.php?lead_id='.$l->getId().'">';
 						echo $l->getShortDescription() ? ToolBox::toHtml($l->getShortDescription()) : 'Piste n°'.$l->getId();
 						echo '</a>';
 						if ($l->getCreationDate()) echo ' <small>('.ToolBox::toHtml($l->getCreationDateFr()).')</small>';
+						echo '</h3>';
 						echo '</li>';
 					}
 					?>
@@ -130,9 +132,11 @@ $doc_title = $society->getName();
 					<?php
 					foreach ($events as $e) {
 						echo '<li class="list-group-item">';
+						echo '<h3>';
 						echo '<a href="society_event_edit.php?event_id='.$e->getId().'">';
 						echo ToolBox::toHtml($e->getLabel());
 						echo '</a>';
+						echo '</h3>';
 						echo '<p>'.nl2br(ToolBox::toHtml($e->getComment())).'</p>';
 						echo '</li>';
 					}
@@ -148,6 +152,7 @@ $doc_title = $society->getName();
 					foreach ($memberships as $ms) {
 						$i = $ms->getIndividual();
 						echo '<li class="list-group-item">';
+						echo '<h3>';
 						echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
 						$smallTag_elt = array();
 						if ($ms->getDepartment()) $smallTag_elt[] = ToolBox::toHtml($ms->getDepartment());
@@ -155,6 +160,7 @@ $doc_title = $society->getName();
 						if (count($smallTag_elt)>0) {
 							echo '<div><small>'.implode(' / ', $smallTag_elt).'</small></div>';
 						}
+						echo '</h3>';
 						echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></div>';
 						echo '</li>';
 					}
@@ -171,12 +177,14 @@ $doc_title = $society->getName();
 						echo '<li class="list-group-item">';
 						$s = new Society();
 						$s->feed($row);
+						echo '<h3>';
 						echo '<a href="society.php?society_id='.$s->getId().'">'.$s->getNameForHtmlDisplay().'</a>';
 						echo ' <small>(';
 						echo '<a href="relationship_edit.php?relationship_id='.$row['relationship_id'].'">';
 						echo empty($row['relatedsociety_role']) ? '?' : ToolBox::toHtml($row['relatedsociety_role']);
 						echo '</a>';
 						echo ')</small>';
+						echo '</h3>';
 						if (!empty($row['description'])) {
 							echo '<p>';
 							echo ToolBox::toHtml($row['description']);

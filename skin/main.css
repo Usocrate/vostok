@@ -27,10 +27,6 @@ NAV.navbar {
 	margin-bottom: 0;
 }
 
-SECTION {
-	padding: 1em 0;
-}
-
 SPAN.badge>A, SPAN.label>A {
 	color: inherit;
 	font-size: inherit;
@@ -67,17 +63,6 @@ HEADER {
 
 HEADER A {
 	color: inherit;
-}
-
-SECTION {
-	margin: .8em 1em;
-}
-
-SECTION.flat * {
-	display: inline-block;
-	font-size: 1em;
-	margin: 0;
-	Padding: 0;
 }
 
 DIV.card DIV.photo {

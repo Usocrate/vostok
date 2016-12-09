@@ -243,9 +243,11 @@ class Individual {
 			$this->feed ( $dataset );
 		}
 		$pieces = array ();
+		/*
 		if (! empty ( $this->salutation )) {
 			$pieces [] = ucfirst ( $this->salutation );
 		}
+		*/
 		if (! empty ( $this->firstName )) {
 			$pieces [] = ucfirst ( $this->firstName );
 		}
