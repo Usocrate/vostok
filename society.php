@@ -231,6 +231,5 @@ $doc_title = $society->getName();
 	    };
 	})
 </script>
-<script type="text/javascript" src="js/navbar.js"></script>
 </body>
 </html>
