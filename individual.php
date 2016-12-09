@@ -123,7 +123,7 @@ $doc_title = $individual->getWholeName();
     					echo '<a href="society.php?society_id='.$s->getId().'">'.$s->getName().'</a>';
     					if ($ms->getDepartment()) echo ' ('.$ms->getDepartment().')';
     					if ($ms->getTitle()) echo '<br \><small>'.$ms->getTitle().'</small>';
-    					if ($ms->getUrl()) echo ' '.$ms->getWebHtmlLink();
+    					if ($ms->getUrl()) echo ' '.$ms->getHtmlLinkToWeb();
     					echo '</p>';
     					$data = array();
     					if ($ms->getPhone()) $data[] = $ms->getPhone();

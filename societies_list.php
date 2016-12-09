@@ -177,7 +177,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     					echo $s->getCreationDate () ? $s->getCreationDateFr () : '<small>à déterminer</small>';
     					echo '</td>';
     					echo '<td>';
-    					echo $s->getWebHtmlLink ();
+    					echo $s->getHtmlLinkToWeb ();
     					echo '</td>';
     					echo '</tr>';
     				}

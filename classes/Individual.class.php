@@ -258,6 +258,15 @@ class Individual {
 		return implode ( ' ', $pieces );
 	}
 	/**
+	 * Obtenir le lien vers l'écran dédié à l'individu.
+	 *
+	 * @return string
+	 * @since 09/12/2016
+	 */
+	public function getHtmlLinkToIndividual() {
+		return '<a href="individual.php?individual_id='.$this->getId().'">'.ToolBox::toHtml($this->getWholeName()).'</a>';
+	}
+	/**
 	 * Obtient le commentaire.
 	 */
 	public function getDescription() {

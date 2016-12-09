@@ -214,7 +214,7 @@ class Membership {
 	 * Obtient un lien HTML vers un contenu web décrivant la participation. 
 	 * @since 07/12/2006
 	 */
-	public function getWebHtmlLink()
+	public function getHtmlLinkToWeb()
 	{
 		return $this->getUrl() ? '<a href="'.$this->getUrl().'" title="'.$this->getUrl().'">[web]</a>' : NULL;	
 	}	
