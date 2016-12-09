@@ -85,15 +85,15 @@ if (isset ( $_POST ['relationship_submission'] )) {
 	}
 }
 if (isset ( $item0 ) && isset ( $item1 )) {
-	$doc_title = 'Une relation entre ' . $item0->getName () . ' et ' . $item1->getName ();
+	$h1_content = 'Une relation entre ' . $item0->getHtmlLinkToSociety() . ' et ' . $item1->getHtmlLinkToSociety();
 } else {
-	$doc_title = isset ( $item0 ) && $item0->getId () ? 'Une relation de ' . $item0->getName () : 'Une relation';
+	$h1_content = isset ( $item0 ) && $item0->getId() ? 'Une relation de ' . $item0->getHtmlLinkToSociety() : 'Une relation';
 }
 ?>
 <!doctype html>
 <html lang="fr">
 <head>
-    <title><?php echo $doc_title ?></title>
+    <title><?php echo strip_tags($h1_content) ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
@@ -106,8 +106,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
-	
+	<h1><?php echo $h1_content ?></h1>
 	<section>
 		<form id="relationship_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 			<input name="item0_class" type="hidden" value="Society" />
@@ -130,7 +129,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 				// la première société est définie
 				echo '<div class="form-group">';
 				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
-    			echo '<label>Rôle <a href="society.php?society_id=' . $item0->getId () . '">' . $item0->getName () . '</a></label>';
+    			echo '<label>Rôle '. $item0->getHtmlLinkToSociety() . '</label>';
     			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
@@ -149,7 +148,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 				// la deuxième société est définie
 				echo '<div class="form-group">';
 				echo '<input name="item1_id" type="hidden" value="' . $item1->getId () . '"/>';
-    			echo '<label>Rôle <a href="society.php?society_id=' . $item1->getId () . '">' . $item1->getName () . '</a></label>';
+    			echo '<label>Rôle '. $item1->getHtmlLinkToSociety() . '</label>';
     			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 			}

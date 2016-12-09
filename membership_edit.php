@@ -92,12 +92,23 @@ if (isset($_POST['task']) && strcmp($_POST['task'], 'membership_submission')==0)
 		exit;
 	}
 }
-$doc_title = isset($individual) && $individual->getId() ? 'Une participation de '.$individual->getWholeName() : 'Une participation';
+if (isset($individual) && isset($society) && $individual->getId() && $society->getId()) {
+	$h1_content = $individual->getHtmlLinkToIndividual(). ' <small>chez '.$society->getHtmlLinkToSociety().'</small>';
+} 
+elseif (isset($individual) && $individual->getId()) {
+	$h1_content = 'Une participation de '.$individual->getHtmlLinkToIndividual();
+} 
+elseif (isset($society) && $society->getId()) {
+	$h1_content = 'Une participation à '.$society->getHtmlLinkToSociety();
+} 
+else {
+	$h1_content = 'Une participation';
+}
 ?>
 <!doctype html>
 <html lang="fr">
 <head>
-    <title><?php echo $doc_title ?></title>
+    <title><?php echo strip_tags($h1_content); ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
@@ -110,18 +121,7 @@ $doc_title = isset($individual) && $individual->getId() ? 'Une participation de 
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<?php 
-		if (isset($individual)&& $individual->getId()) {
-			if (isset($society)&& $society->getId()) {
-				$h1 = '<a href="individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a> chez <a href="society.php?society_id='.$society->getId().'">'.ToolBox::toHtml($society->getName()).'</a>';
-			} else {
-				$h1 = 'Une participation de <a href="individual.php?individual_id='.$individual->getId().'">'.ToolBox::toHtml($individual->getWholeName()).'</a>';
-			}
-		} else {
-			$h1 = 'Une participation';
-		}
-	?>
-	<h1><?php echo $h1 ?></h1>
+	<h1><?php echo $h1_content ?></h1>
 	<section>
     	<form id="membership_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     		<?php

@@ -159,7 +159,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 					echo $l->society->getNameForHtmlDisplay();
 					echo '</a>';
 					if ($l->society->getUrl()) {
-						echo ' '.$l->society->getWebHtmlLink();
+						echo ' '.$l->society->getHtmlLinkToWeb();
 					}
 					echo '<br/>';
 		
