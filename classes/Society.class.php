@@ -422,8 +422,17 @@ class Society {
 	 * @since 24/11/2006
 	 * @version 23/11/2016
 	 */
-	public function getWebHtmlLink() {
+	public function getHtmlLinkToWeb() {
 		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" title="' . $this->getUrl () . '"><span class="glyphicon glyphicon-link"></span></a>' : NULL;
+	}
+	/**
+	 * Obtenir le lien vers l'écran dédié à la société.
+	 *
+	 * @return string
+	 * @since 09/12/2016
+	 */
+	public function getHtmlLinkToSociety() {
+		return '<a href="society.php?society_id='.$this->getId().'">'.$this->getNameForHtmlDisplay().'</a>';
 	}
 	/**
 	 * Indique si la miniature du site web de la société a déjà été enregistré.
