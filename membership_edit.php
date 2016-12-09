@@ -92,6 +92,18 @@ if (isset($_POST['task']) && strcmp($_POST['task'], 'membership_submission')==0)
 		exit;
 	}
 }
+<<<<<<< HEAD
+if (isset($individual) && isset($society) && $individual->getId() && $society->getId()) {
+	$h1_content = $individual->getHtmlLinkToIndividual(). ' <small>chez '.$society->getHtmlLinkToSociety().'</small>';
+} 
+elseif (isset($individual) && $individual->getId()) {
+	$h1_content = 'Une participation de '.$individual->getHtmlLinkToIndividual();
+} 
+elseif (isset($society) && $society->getId()) {
+	$h1_content = 'Une participation à '.$society->getHtmlLinkToSociety();
+} 
+else {
+=======
 $doc_title = isset($individual) && $individual->getId() ? 'Une participation de '.$individual->getWholeName() : 'Une participation';
 
 if ($individual->getId() && $society->getId()) {
@@ -101,6 +113,7 @@ if ($individual->getId() && $society->getId()) {
 } elseif ($society->getId()) {
 	$h1_content = 'Une participation à '.$society->getHtmlLinkToSociety();
 } else {
+>>>>>>> e2174ee10402539d8e9cf0980699ffaa9fe8b469
 	$h1_content = 'Une participation';
 }
 ?>
