@@ -43,9 +43,8 @@ if (isset ( $_REQUEST ['society_newsearch'] ) || ! isset( $_SESSION ['society_se
 		$_SESSION ['society_search']['criteria']['city'] = $_REQUEST ['society_city'];
 	}
 	
-	$_SESSION ['society_search'] ['page_index'] = 1;
-	$_SESSION ['society_search'] ['sort_key'] = 'society_name';
-	$_SESSION ['society_search'] ['sort_order'] = 'ASC';
+	$_SESSION ['society_search']['page_index'] = 1;
+	$_SESSION ['society_search']['sort'] = 'Last created first';
 }
 
 // nb de comptes correspondant aux critères
@@ -59,15 +58,7 @@ if (isset ( $_REQUEST ['society_search_page_index'] )) {
 
 // sélection de sociétés correspondant aux critères (dont le nombre dépend de la variable $page_items_nb)
 $page_debut = ($_SESSION ['society_search'] ['page_index'] - 1) * $page_items_nb;
-$page_rowset = $system->getSocietiesRowset( $_SESSION ['society_search']['criteria'], $_SESSION ['society_search'] ['sort_key'], $_SESSION ['society_search'] ['sort_order'], $page_debut, $page_items_nb );
-
-// la sélection de sociétés
-$societies = array ();
-foreach ($page_rowset as $row) {
-	$s = new Society ();
-	$s->feed ( $row );
-	$societies [] = $s;
-}
+$societies = $system->getSocieties( $_SESSION ['society_search']['criteria'], $_SESSION ['society_search']['sort'], $page_debut, $page_items_nb );
 
 // si une seule société redirection vers fiche individuelle.
 if (count ( $societies ) == 1) {

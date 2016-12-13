@@ -438,9 +438,9 @@ class System {
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
 	 *
-	 * @version 23/11/2016
+	 * @version 13/12/2016
 	 */
-	public function getSocietiesRowset($criteria = NULL, $sort_key = 'society_name', $sort_order = 'ASC', $offset = 0, $nb = NULL) {
+	private function getSocietiesData($criteria = NULL, $sort = 'Last created first', $offset = 0, $nb = NULL) {
 		global $system;
 		
 		$sql = 'SELECT s.*, DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") AS society_creation_date_fr, UNIX_TIMESTAMP(s.society_creation_date) AS society_creation_timestamp';
@@ -459,11 +459,19 @@ class System {
 			$sql .= ' WHERE '.implode(' AND ', $sql_criteria);
 		}
 		$sql .= ' GROUP BY s.society_id';
-		$sql .= ' ORDER BY :sort_key :sort_order';
 		
+		switch ($sort) {
+			case 'Last created first' :
+				$sql .= ' ORDER BY society_creation_timestamp DESC';
+				break;
+			default :
+				$sql .= ' ORDER BY s.society_name ASC';
+		}
+
 		if (isset ( $nb )) {
 			$sql .= ' LIMIT :offset, :nb';
 		}
+		//echo $sql;
 		$statement = $system->getPdo()->prepare($sql);
 		
 		if (isset ($criteria) && count ( $criteria ) > 0) {
@@ -477,10 +485,7 @@ class System {
 				$statement->bindValue(':industry_id', $criteria['industry_id'], PDO::PARAM_INT);
 			}
 		}
-		
-		$statement->bindValue(':sort_key', $sort_key, PDO::PARAM_STR);
-		$statement->bindValue(':sort_order', $sort_order, PDO::PARAM_STR);
-		
+
 		if (isset ( $nb )) {
 			$statement->bindValue(':offset', $offset, PDO::PARAM_INT);
 			$statement->bindValue(':nb', $nb, PDO::PARAM_INT);
@@ -530,28 +535,18 @@ class System {
 		$statement->execute();
 		return $statement->fetchColumn();
 	}
-	public function getSocieties() {
-		if (! isset ( $this->societies )) {
-			$this->societies = array ();
-			$rowset = $this->getSocietiesRowset ();
-			while ( $row = mysql_fetch_assoc ( $rowset ) ) {
-				$society = new Society ();
-				$society->feed ( $row );
-				$this->societies [] = $society;
-			}
+	
+	public function getSocieties($criteria = NULL, $sort = 'Last created first', $offset = 0, $nb = NULL) {
+		
+		$output = array();
+		
+		foreach ( $this->getSocietiesData($criteria, $sort, $offset, $nb) as $data ) {
+			$s = new Society ();
+			$s->feed ( $data );
+			$output[] = $s;
 		}
-		return $this->societies;
-	}
-	public function getSocietiesOptionsTags($selectedValue = NULL) {
-		$this->getSocieties ();
-		$html = '';
-		foreach ( $this->societies as $society ) {
-			$html .= '<option value="' . $society->getId () . '"';
-			if (strcmp ( $society->getId (), $selectedValue ) == 0)
-				$html .= ' selected="selected"';
-			$html .= '>' . $society->name . '</option>';
-		}
-		return $html;
+
+		return $output;
 	}
 	/**
 	 * Retourne le nombre de sociétés groupées par ville.
