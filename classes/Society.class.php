@@ -702,7 +702,7 @@ class Society {
 				$html .= ' selected="selected"';
 			}
 			$html .= '>';
-			$html .= empty ( $row ['industry'] ) ? '-- é déterminer --' : $row ['industry'];
+			$html .= empty ( $row ['industry'] ) ? '-- à déterminer --' : $row ['industry'];
 			$html .= ' (' . $row ['nb'] . ')</option>';
 		}
 		mysql_free_result ( $rowset );
