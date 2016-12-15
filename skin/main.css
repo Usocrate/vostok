@@ -41,6 +41,10 @@ H1 SMALL SPAN.glyphicon:hover, H2 SMALL SPAN.glyphicon:hover {
 	color: #999;
 }
 
+.list-group-item > H3 {
+	margin-top: 10px;
+}
+
 HR {
 	clear: both;
 	visibility: hidden;

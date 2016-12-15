@@ -66,84 +66,88 @@ $doc_title = $individual->getWholeName();
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a></small></h1>
-	<div class="row">
-		<div class="col-md-8">
-			<section>
-			<div class="card">	
-				<?php
-				if ($individual->getPhotoUrl()) {
-					echo '<div class="photo">';
-					echo $individual->getPhotoHtml();
-					echo '</div>';
+	<section>
+	<div class="card">	
+		<?php
+		if ($individual->getPhotoUrl()) {
+			echo '<div class="photo">';
+			echo $individual->getPhotoHtml();
+			echo '</div>';
+		}
+		?>
+		<div class="data">
+			<?php
+				$contact_data = array();
+				if ($individual->getPhoneNumber()) {
+					$contact_data['phone'] = $individual->getPhoneNumber();
 				}
-				?>
-				<div class="data">
-					<small>naissance : </small>
-					<?php echo $individual->getBirthDate() ? $individual->getBirthDate() : 'n.c.'; ?>
-					<br /> <small>description : </small>
-					<?php echo $individual->getAttribute('description') ? $individual->getAttribute('description') : 'n.c.' ?>
-					<br /> <small>autre tél. : </small>
-					<?php echo $individual->getAttribute('phone') ? $individual->getAttribute('phone') : 'n.c.' ?>
-					<br /> <small>mobile : </small>
-					<?php echo $individual->getAttribute('mobile') ? $individual->getAttribute('mobile') : 'n.c.' ?>
-					<br /> <small>email : </small>
-					<?php echo $individual->getEmailHtml() ? $individual->getEmailHtml() : 'n.c.' ?>
-					<br /> <small>web : </small>
-					<?php echo $individual->getAttribute('web') ? '<a href="'.$individual->getAttribute('web').'" target="_blank">'.$individual->getAttribute('web').'</a>' : 'n.c.'; ?>
-					<br /> <small>adresse : </small>
-					<?php echo $individual->getAttribute('street') ? $individual->getAttribute('street') : 'n.c.' ?>
-					<br /> <small>ville : </small>
-					<?php echo $individual->getAttribute('city') ? $individual->getAttribute('city') : 'n.c.' ?>
-					<br /> <small>cp : </small>
-					<?php echo $individual->getAttribute('postalCode') ? $individual->getAttribute('postalCode') : 'n.c.' ?>
-					<br /> <small>pays : </small>
-					<?php echo $individual->getAttribute('country') ? $individual->getAttribute('country') : 'n.c.' ?>
-					<?php
-					if ($individual->getCvUrl()) {
-						echo '<p><a href="'.$individual->getCvUrl().'">cv</a></p>';
-					}
-					if ($individual->getGoogleQueryUrl()) {
-						echo '<p><a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.$individual->getWholeName().' dans Google</a></p>';
-					}
-					?>
-				</div>
-			</div>
-			</section>
-		</div>
-		<div id="participations_div" class="col-md-4">
-			<section>
-    			<h2>Participations</h2>
-    			<?php
-    			if (isset($memberships)){
-    				echo '<ul>';
-    				foreach ($memberships as $ms) {
-    					$s = $ms->getSociety();
-    					echo '<li>';
-    					echo '<p>';
-    					echo '<a href="society.php?society_id='.$s->getId().'">'.$s->getName().'</a>';
-    					if ($ms->getDepartment()) echo ' ('.$ms->getDepartment().')';
-    					if ($ms->getTitle()) echo '<br \><small>'.$ms->getTitle().'</small>';
-    					if ($ms->getUrl()) echo ' '.$ms->getHtmlLinkToWeb();
-    					echo '</p>';
-    					$data = array();
-    					if ($ms->getPhone()) $data[] = $ms->getPhone();
-    					if ($ms->getEmail()) {
-    						$data[] = '<a href="mailto:'.ToolBox::toHtml($individual->getFirstName()).'%20'.ToolBox::toHtml($individual->getLastName()).'%20<'.$ms->getEmail().'>">'.$ms->getEmail().'</a>';
-    					}
-    					if (count($data)>0) {
-    						echo '<p><small>'.implode(' - ', $data).'</small></p>';
-    					}
-    					if ($ms->getDescription()) echo '<p>'.$ms->getDescription().'</p>';
-    					echo '<a href="membership_edit.php?membership_id='.$ms->getId().'"><span class="glyphicon glyphicon-edit"></span> édition</a>';
-    					echo '</li>';
-    				}
-    				echo '<li><a href="membership_edit.php?individual_id='.$individual->getId().'">nouvelle participation</a></li>';
-    				echo '</ul><br/>';
-    			}
-    			?>
-			</section>
+				if ($individual->getMobilePhoneNumber()) {
+					$contact_data['mobile'] = $individual->getMobilePhoneNumber();
+				}
+				if ($individual->getEmailAddress()) {
+					$contact_data['email'] = $individual->getEmailHtml();
+				}
+				
+				
+				if ($individual->getDescription()) {
+					echo '<p>naissance : </small>'.$individual->getDescription().'</p>';
+				}
+				if ($individual->getWeb()) {
+					echo '<p>'.$individual->getHtmlLinkToWeb().'</p>';
+				}
+				if (count($contact_data) >0) {
+					echo '<p>'.implode('<span> | </span>', $contact_data).'</p>';
+				}
+				if ($individual->getBirthDate()) {
+					echo '<p>naissance : </small>'.$individual->getBirthDate().'</p>';
+				}
+				if ($individual->getAddress()) {
+					echo '<p>'.$individual->getAddress().'</p>';
+				}
+				if ($individual->getCvUrl()) {
+					echo '<p><a href="'.$individual->getCvUrl().'">cv</a></p>';
+				}
+				if ($individual->getGoogleQueryUrl()) {
+					echo '<p><a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.$individual->getWholeName().' dans Google</a></p>';
+				}
+			?>
 		</div>
 	</div>
+	</section>
+	<section>
+		<h2>Participations <small><a href="membership_edit.php?individual_id='.$individual->getId().'"><span class="glyphicon glyphicon-plus"></span></a></small></h2>
+		<?php
+		if (isset($memberships)){
+			echo '<ul class="list-group">';
+			foreach ($memberships as $ms) {
+				$s = $ms->getSociety();
+				echo '<li class="list-group-item">';
+				echo '<h3>';
+				echo $s->getHtmlLinkToSociety();
+				if ($ms->getDepartment()) echo ' <small> ('.$ms->getDepartment().')</small>';
+				echo '</h3>';
+				if ($ms->getTitle()) {
+					echo '<p>'.$ms->getTitle().'</p>';
+				}
+				if ($ms->getUrl()) {
+					echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
+				}
+				$data = array();
+				if ($ms->getPhone()) $data[] = $ms->getPhone();
+				if ($ms->getEmail()) {
+					$data[] = '<a href="mailto:'.ToolBox::toHtml($individual->getFirstName()).'%20'.ToolBox::toHtml($individual->getLastName()).'%20<'.$ms->getEmail().'>">'.$ms->getEmail().'</a>';
+				}
+				if (count($data)>0) {
+					echo '<p>'.implode('<span> | </span>', $data).'</p>';
+				}
+				if ($ms->getDescription()) echo '<p>'.$ms->getDescription().'</p>';
+				echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
+				echo '</li>';
+			}
+			echo '</ul>';
+		}
+		?>
+	</section>
 </div>	
 </body>
 </html>

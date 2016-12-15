@@ -99,10 +99,13 @@ Class EventCollection extends Collection {
 			$html = '<ul class="list-group">';
 			while ($i->current()) {
 				$html.= '<li class="list-group-item">';
-				$html.= '<h3><a href="society_event_edit.php?event_id='.$i->current()->getId().'">';
-				$html.= ToolBox::toHtml($i->current()->getName());
-				$html.= '</a></h3>';
-				$html.= ' <small>(<a href="society.php?society_id='.$i->current()->getSociety()->getId().'">'.ToolBox::toHtml($i->current()->getSociety()->getName()).'</a>)</small>';
+				$html.=  '<h3>';
+				$html.= '<div><small>'.$i->current()->getSociety()->getHtmlLinkToSociety().'</small></div>';
+				$html.=  '<a href="society_event_edit.php?event_id='.$i->current()->getId().'">';
+				$html.=  date("d/m/Y", ToolBox::mktimeFromMySqlDatetime($i->current()->getDatetime()));
+				$html.=  ' <small>('.ToolBox::toHtml(ucfirst($i->current()->getType())).')</small>';
+				$html.=  '</a>';
+				$html.=  '</h3>';
 				$html.= '<p>'.ToolBox::toHtml($i->current()->getComment()).'</p>';
 				$html.= '</li>';
 				$i->next();

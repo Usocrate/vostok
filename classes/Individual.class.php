@@ -280,6 +280,9 @@ class Individual {
 	public function getWeb() {
 		return $this->getAttribute ( 'web' );
 	}
+	public function getHtmlLinkToWeb() {
+		if ( ! empty($this->web) ) return '<a href="'.$this->web.'">'.$this->web.'</a>';
+	}
 	/**
 	 * Obtient le n° de tél.
 	 * portable.

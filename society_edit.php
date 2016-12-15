@@ -31,7 +31,7 @@ elseif (isset($_REQUEST['society_name'])) {
 	$society->setName($_REQUEST['society_name']);
 }
 
-$doc_title = $society->hasId() ? $society->getName() : 'Une nouvelle société';
+$h1_content = $society->hasId() ? $society->getHtmlLinkToSociety() : 'Une nouvelle société';
 
 if (isset($_POST['task'])) {
 	switch ($_POST['task']) {
@@ -86,7 +86,7 @@ if (isset($_POST['task'])) {
 <!doctype html>
 <html lang="fr">
 <head>
-    <title><?php ToolBox::toHtml($doc_title) ?></title>
+    <title><?php strip_tags($h1_content) ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
@@ -101,7 +101,7 @@ if (isset($_POST['task'])) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-    <h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+    <h1><?php echo $h1_content ?></h1>
     
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     	<?php
@@ -155,13 +155,14 @@ if (isset($_POST['task'])) {
         		
         		<div class="form-group">
         			<label>Description</label>
-            		<textarea name="society_description" cols="51" rows="10" class="form-control"><?php echo ToolBox::toHtml($society->getDescription()); ?></textarea>
+            		<textarea name="society_description" cols="51" rows="10" class="form-control"><?php echo $society->getDescription(); ?></textarea>
             	</div>
     		</div>
     	</div>
    	
     	<button name="task" type="submit" value="registration" class="btn btn-primary">Enregistrer</button>
     	<button name="task" type="submit" value="deletion" class="btn btn-default">Supprimer</button>
+    	<a href="society.php?society_id=<?php echo $society->getId() ?>">Annuler</a>
     </form>
 </div>
 <script type="text/javascript">
