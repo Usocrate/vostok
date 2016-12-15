@@ -115,7 +115,7 @@ $doc_title = $individual->getWholeName();
 	</div>
 	</section>
 	<section>
-		<h2>Participations <small><a href="membership_edit.php?individual_id='.$individual->getId().'"><span class="glyphicon glyphicon-plus"></span></a></small></h2>
+		<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><span class="glyphicon glyphicon-plus"></span></a></small></h2>
 		<?php
 		if (isset($memberships)){
 			echo '<ul class="list-group">';
