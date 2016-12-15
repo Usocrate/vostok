@@ -12,7 +12,7 @@ class ToolBox
      */
     public static function toHtml($input)
     {
-        return htmlentities($input, ENT_HTML5, 'UTF-8');
+        return nl2br( htmlentities($input, ENT_HTML5, 'UTF-8') );
     }
 
     public static function getDBAccess()
