@@ -173,7 +173,7 @@ class Relationship {
 		global $system;
 		if (empty($this->id)) return false;
 		$statement = $system->getPDO()->prepare('DELETE FROM relationship WHERE relationship_id=:id');
-		$statement->bindValue(':id', $this->id, PDO_PARAM_STR);
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 		return $statement->execute();
 	}
 	/**

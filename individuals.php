@@ -58,8 +58,7 @@ if (isset($_REQUEST['individual_newsearch']) || empty($_SESSION['individual_sear
         $_SESSION['individual_search']['toCheck'] = $_REQUEST['individual_toCheck'];
     }
     $_SESSION['individual_search']['page_index'] = 1;
-    $_SESSION['individual_search']['sort_key'] = 'individual_lastName';
-    $_SESSION['individual_search']['sort_order'] = 'ASC';
+    $_SESSION['individual_search']['sort'] = 'Name';
 }
 if (! isset($_SESSION['individual_search'])) {
     $_SESSION['individual_search'] = array();
@@ -84,9 +83,9 @@ if (isset($_REQUEST['individual_search_page_index']))
 $page_debut = ($_SESSION['individual_search']['page_index'] - 1) * $page_items_nb;
 
 if (empty($_SESSION['individual_search']['toCheck'])) {
-    $statement = $system->getIndividualCollectionStatement($criteria, $_SESSION['individual_search']['sort_key'], $_SESSION['individual_search']['sort_order'], $page_debut, $page_items_nb);
+    $statement = $system->getIndividualCollectionStatement($criteria, $_SESSION['individual_search']['sort'], $page_debut, $page_items_nb);
 } else {
-    $statement = $system->getAloneIndividualCollectionStatement($criteria, $_SESSION['individual_search']['sort_key'], $_SESSION['individual_search']['sort_order'], $page_debut, $page_items_nb);
+    $statement = $system->getAloneIndividualCollectionStatement($criteria, $_SESSION['individual_search']['sort'], $page_debut, $page_items_nb);
 }
 
 // la collection d'individus à afficher
@@ -138,8 +137,9 @@ $doc_title = 'Les gens';
             <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> /> Sans société</label>
  		</div>
 		<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
+		<?php if( count($_SESSION['individual_search']['criteria']) > 0) echo ' <a href="individuals.php?individual_newsearch=1">Tous les gens</a>'  ?>
 	</form>
-	
+
 	<section>
     	<?php
         if ($individuals->getSize() > 0) {

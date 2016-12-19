@@ -12,7 +12,7 @@
 				<li><a href="lead_edit.php">Nouvelle piste</a></li>
 				<li><a href="leads.php?lead_newsearch_order=1">Les pistes</a></li>
 				<li><a href="societies_list.php">Les sociétés</a></li>
-				<li><a href="individuals.php?individual_newsearch=1">Les gens</a></li>	
+				<li><a href="individuals.php">Les gens</a></li>	
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus <span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li class="dropdown-header">Les sociétés</li>

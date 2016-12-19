@@ -270,7 +270,7 @@ class Lead
         $output = '{"types":[';
         $items = self::getKnownTypes($label_substring);
         for ($i = 0; $i < count($items); $i ++) {
-            $output .= '{"value":' . json_encode($items[$i]['value']) . ',"count":' . $items[$i]['count'] . '}';
+            $output .= '{"value":' . ucfirst(json_encode($items[$i]['value'])) . ',"count":' . $items[$i]['count'] . '}';
             if ($i < count($items) - 1) {
                 $output .= ',';
             }

@@ -259,7 +259,7 @@ class System {
 	 *
 	 * @since 04/08/2014
 	 */
-	public static function getIndividualCollectionStatement($criteria = NULL, $sort_key = 'individual_lastName', $sort_order = 'ASC', $offset = 0, $count = NULL) {
+	public static function getIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
 		global $system;
 		try {
 			
@@ -285,8 +285,12 @@ class System {
 				$sql .= ' WHERE ' . implode ( ' AND ', $where );
 			}
 			
-			$sql .= ' ORDER BY ' . $sort_key . ' ' . $sort_order;
-			
+			switch ($sort) {
+				case 'Name' : 
+					$sql .= ' ORDER BY individual_lastName ASC';
+					break;
+			}
+
 			// LIMIT
 			if (isset ( $count )) {
 				$sql .= isset ( $offset ) ? ' LIMIT :offset,:count' : ' LIMIT :count';
@@ -324,8 +328,9 @@ class System {
 	/**
 	 *
 	 * @since 04/08/2014
+	 * @version 15/12/2016
 	 */
-	public static function getAloneIndividualCollectionStatement($criteria = NULL, $sort_key = 'individual_lastName', $sort_order = 'ASC', $offset = 0, $count = NULL) {
+	public static function getAloneIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
 		global $system;
 		try {
 			$sql = 'SELECT i.*, DATE_FORMAT(individual_creation_date, "%d/%m/%Y") AS individual_creation_date_fr';
@@ -343,7 +348,14 @@ class System {
 			}
 			$sql .= ' GROUP BY i.individual_id';
 			$sql .= ' HAVING COUNT(membership_id)=0';
-			$sql .= ' ORDER BY ' . $sort_key . ' ' . $sort_order;
+			
+			// ORDER BY
+			switch ($sort) {
+				case 'Name' :
+					$sql .= ' ORDER BY individual_lastName ASC';
+					break;
+			}
+			
 			
 			// LIMIT
 			if (isset ( $count )) {

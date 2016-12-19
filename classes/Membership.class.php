@@ -79,7 +79,7 @@ class Membership {
 		$output = '{"titles":[';
 		$items = self::getKnownTitles($substring);
 		for ($i=0; $i<count($items); $i++) {
-			$output.= '{"value":'.json_encode($items[$i]['value']).',"count":'.$items[$i]['count'].'}';
+			$output.= '{"value":'.ucfirst(json_encode($items[$i]['value'])).',"count":'.$items[$i]['count'].'}';
 			if ($i<count($items)-1) {
 				$output.= ',';
 			}
@@ -144,7 +144,7 @@ class Membership {
 		$output = '{"departments":[';
 		$items = self::getKnownDepartments($substring);
 		for ($i=0; $i<count($items); $i++) {
-			$output.= '{"value":'.json_encode($items[$i]['value']).',"count":'.$items[$i]['count'].'}';
+			$output.= '{"value":'.ucfirst(json_encode($items[$i]['value'])).',"count":'.$items[$i]['count'].'}';
 			if ($i<count($items)-1) {
 				$output.= ',';
 			}
