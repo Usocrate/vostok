@@ -70,9 +70,9 @@ if (isset($_POST['task'])) {
 				}
 				$relationship = new Relationship();
 				$relationship->setItem($society, 0);
-				$relationship->setItemRole('filiale', 0);
+				$relationship->setItemRole('Filiale', 0);
 				$relationship->setItem($parent, 1);
-				$relationship->setItemRole('maison-mère', 1);
+				$relationship->setItemRole('Maison-mère', 1);
 				$relationship->toDB();
 			}
 			header('Location:society.php?society_id='.$society->getId());

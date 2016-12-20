@@ -99,9 +99,9 @@ if (isset($_REQUEST['society_id']) && is_numeric($_REQUEST['society_id'])) {
 			}
 			$relationship = new Relationship();
 			$relationship->setItem($society, 0);
-			$relationship->setItemRole('filiale', 0);
+			$relationship->setItemRole('Filiale', 0);
 			$relationship->setItem($society_parent, 1);
-			$relationship->setItemRole('maison-mère', 1);
+			$relationship->setItemRole('Maison-mère', 1);
 		}
 		$society->toDB();
 		if (isset($relationship)) $relationship->toDB();

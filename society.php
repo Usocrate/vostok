@@ -110,6 +110,7 @@ $doc_title = $society->getName();
 		<div class="col-md-8">
 			<section>
 				<h2>Les pistes<small><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
+				<?php if ($leads): ?>
 				<ul class="list-group">
 					<?php
 					foreach ($leads as $l) {
@@ -124,10 +125,12 @@ $doc_title = $society->getName();
 					}
 					?>
 				</ul>
+				<?php endif; ?>
 			</section>
 
 			<section>
 				<h2>Évènements<small><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
+				<?php if ($events): ?>
 				<ul class="list-group">
 					<?php
 					foreach ($events as $e) {
@@ -143,11 +146,13 @@ $doc_title = $society->getName();
 					}
 					?>
 				</ul>
+				<?php endif; ?>
 			</section>
 		</div>
 		<div class="col-md-4">
 			<section>
 				<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
+				<?php if ($memberships): ?>
 				<ul class="list-group">
 					<?php
 					foreach ($memberships as $ms) {
@@ -167,10 +172,12 @@ $doc_title = $society->getName();
 					}
 					?>
 				</ul>
+				<?php endif; ?>
 			</section>
 
 			<section>
 				<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
+				<?php if (isset($relatedSocieties)): ?>
 				<ul class="list-group">
 					<?php
 					foreach ($relatedSocieties as $item) {
@@ -196,6 +203,7 @@ $doc_title = $society->getName();
 					}
 					?>
 				</ul>
+				<?php endif; ?>
 			</section>
 		</div>
 	</div>

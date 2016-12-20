@@ -86,24 +86,20 @@ class Relationship {
 	 * @param string $input
 	 * @since 09/04/2006	 
 	 */	
-	public function setItemRole($input, $rang)
-	{
+	public function setItemRole($input, $rang) {
 		$this->items_roles[$rang] = $input;
 	}	
 	/**
 	 * Obtient le role d'un item.
 	 * @since 09/04/2006
 	 */	
-	public function getItemRole($rang)
-	{
+	public function getItemRole($rang) {
 		return isset($this->items_roles[$rang]) ? $this->items_roles[$rang] : NULL;
 	}
-	public function getItem($rang)
-	{
+	public function getItem($rang) {
 		return isset($this->items[$rang]) ? $this->items[$rang] : NULL;
 	}
-	public static function getKnownRoles($substring = NULL)
-	{
+	public static function getKnownRoles($substring = NULL)	{
 		global $system;
 		if (isset ( $substring )) {
 			$sql = 'SELECT DISTINCT(role) FROM (SELECT item0_role AS role FROM relationship WHERE item0_role LIKE :item0_role_pattern UNION SELECT item1_role AS role FROM relationship WHERE item1_role LIKE :item1_role_pattern) AS t ORDER BY role';
@@ -126,50 +122,90 @@ class Relationship {
 	 * Obtient l'Url décrivant la relation.
 	 * @since 30/03/2006
 	 */
-	public function getUrl()
-	{
+	public function getUrl() {
 		return isset($this->url) ? $this->url : NULL;
 	}
 	/**
 	 * Enregistre en base de données les valeurs des attributs de la relation.
-	 * @since 30/03/2006	 
+	 * @since 30/03/2006
+	 * @version 20/12/2016
 	 */
-	public function toDB()
-	{
-		//print_r($this);
-		$new = empty ($this->id);
+	public function toDB() {
+		global $system;
 		
-		// settings
-		$settings = array ();
-		
-		for ($i=0; $i<count($this->items); $i++) {
-			$settings[] = 'item'.$i.'_class="'.get_class($this->items[$i]).'"';
-			if ($this->items[$i]->getId()) $settings[] = 'item'.$i.'_id='.$this->items[$i]->getId();
-			if (isset($this->items_roles[$i])) $settings[] = 'item'.$i.'_role="'.$this->items_roles[$i].'"';
+		try {
+			$new = empty ($this->id);
+			
+			if (empty($this->items) && empty($this->items_roles)) {
+				throw new Exception(__METHOD__.' : Les 2 termes de la relation doivent être connus.');
+			}
+			
+			$settings = array ();
+			
+			$settings[] = 'item0_id=:item0_id';
+			$settings[] = 'item0_class=:item0_class';
+			$settings[] = 'item0_role=:item0_role';
+			$settings[] = 'item1_id=:item1_id';
+			$settings[] = 'item1_class=:item1_class';
+			$settings[] = 'item1_role=:item1_role';
+
+			if (isset($this->description)) {
+				$settings[] = 'description=:description';
+			}
+			if (isset($this->url)) {
+				$settings[] = 'url=:url';
+			}
+			if (isset($this->init_date)) {
+				$settings[] = 'init_date=:init_date';
+			}
+			if (isset($this->end_date)) {
+				$settings[] = 'end_date=:end_date';
+			}
+			
+			$sql = $new ? 'INSERT INTO' : 'UPDATE';
+			$sql.= ' relationship SET ';
+			$sql.= implode(', ', $settings);
+			if (!$new) {
+				$sql .= ' WHERE relationship_id=:id';
+			}
+			$statement = $system->getPdo()->prepare($sql);			
+			$statement->bindValue(':item0_id', $this->items[0]->getId(), PDO::PARAM_INT);
+			$statement->bindValue(':item0_class', get_class($this->items[0]), PDO::PARAM_STR);
+			$statement->bindValue(':item0_role', $this->items_roles[0], PDO::PARAM_STR);
+			$statement->bindValue(':item1_id', $this->items[1]->getId(), PDO::PARAM_INT);
+			$statement->bindValue(':item1_class', get_class($this->items[1]), PDO::PARAM_STR);
+			$statement->bindValue(':item1_role', $this->items_roles[1], PDO::PARAM_STR);
+			if (isset($this->description)) {
+				$statement->bindValue(':description', $this->description, PDO::PARAM_STR);
+			}
+			if (isset($this->url)) {
+				$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
+			}
+			if (isset($this->init_date)) {
+				$statement->bindValue(':init_date', $this->init_date, PDO::PARAM_STR);
+			}
+			if (isset($this->end_date)) {
+				$statement->bindValue(':end_date', $this->init_date, PDO::PARAM_STR);
+			}
+			if (!$new) {
+				$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			}
+			$result = $statement->execute();
+			if ($new) {
+				$this->id = $system->getPdo()->lastInsertId();
+			}
+			return $result;			
 		}
-		
-		if (isset($this->description)) $settings[] = 'description="'.mysql_real_escape_string($this->description).'"';
-		if (isset($this->url)) $settings[] = 'url="'.mysql_real_escape_string($this->url).'"';
-		if (isset($this->init_date)) $settings[] = 'init_date="'.mysql_real_escape_string($this->init_date).'"';
-		if (isset($this->end_date)) $settings[] = 'end_date="'.mysql_real_escape_string($this->end_date).'"';
-		
-		//	INSERT or UPDATE ?
-		$sql = $new ? 'INSERT INTO' : 'UPDATE';
-		$sql.= ' relationship SET ';
-		$sql.= implode(', ', $settings);
-		if (!$new) $sql .= ' WHERE relationship_id='.$this->id;
-		
-		$result = mysql_query($sql);
-		if ($new) $this->id = mysql_insert_id();
-		return $result;
+		catch (Exception $e) {
+			System::reportException($e);
+		}
 	}
 	/**
 	 * Supprime la relation en base de données.
 	 * @return boolean
 	 * @since 30/03/2006
 	 */
-	public function delete()
-	{
+	public function delete() {
 		global $system;
 		if (empty($this->id)) return false;
 		$statement = $system->getPDO()->prepare('DELETE FROM relationship WHERE relationship_id=:id');
@@ -178,11 +214,12 @@ class Relationship {
 	}
 	/**
 	 * Fixe les valeurs des attributs de la relation à partir d'un tableau dont les clefs sont normalisées.
-	 * @since 30/03/2006	 
+	 * @since 30/03/2006
+	 * @version 20/12/2016
 	 */
-	public function feed($array=NULL)
-	{
-		//print_r($array);
+	public function feed($array = NULL) {
+		global $system;
+
 		if (is_array($array)) {
 			//	les données de l'initialisation sont transmises
 			$keys = array_keys($array);
@@ -209,14 +246,6 @@ class Relationship {
 			}
 			foreach ($array as $key=>$value) {
 				if (is_null($value)) continue;
-				/*
-				if (isset($prefix)) {
-					//	on ne traite que les clés avec le préfixe spécifié
-					if (strcmp(iconv_substr($key, 0, iconv_strlen($prefix)), $prefix)!=0) continue;
-					//	on retire le préfixe
-					$key = iconv_substr($key, iconv_strlen($prefix));
-				}
-				*/				
 				switch ($key) {
 					case 'relationship_id': $this->setId($value); break;
 					case 'description': $this->setAttribute('description', $value); break;
@@ -225,18 +254,15 @@ class Relationship {
 					case 'end_date': $this->setAttribute('end_date', $value); break;
 				}
 			}
-			//print_r($this);
 			return true;
 		} elseif (isset($this->id)) {
-			//	on ne transmet pas les données de l'initialisation
-			//	mais on connaît l'identifiant de la relation
-			$sql = 'SELECT * FROM relationship WHERE relationship_id='.$this->id;
-			//echo $sql.'<br/>';
-			$rowset = mysql_query($sql);
-			$row = mysql_fetch_array($rowset);
-			mysql_free_result($rowset);
-			if (!$row) return false;
-			return $this->feed($row);
+			//	on ne transmet pas les données de l'initialisation mais on connaît l'identifiant de la relation
+			$statement = $system->getPdo()->prepare('SELECT * FROM relationship WHERE relationship_id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			$data = $statement->fetch(PDO::FETCH_ASSOC);
+			if (!$data) return false;
+			return $this->feed($data);
 		}
 		return false;
 	}

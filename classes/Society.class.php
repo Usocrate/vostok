@@ -6,6 +6,8 @@
 class Society {
 	public $id;
 	
+	protected $industries;
+	
 	protected $street;
 	protected $city;
 	protected $postalcode;
@@ -20,6 +22,7 @@ class Society {
 	protected $latitude;
 	protected $altitude;
 	protected $parent;
+	
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
@@ -27,17 +30,15 @@ class Society {
 	 * Tente d'indentifier la société par son nom.
 	 * 
 	 * @return boolean
-	 * @version 14/01/2006
+	 * @version 20/12/2016
 	 */
 	public function identifyFromName() {
-		$sql = 'SELECT society_id FROM society WHERE society_name="' . mysql_real_escape_string ( $this->name ) . '"';
-		$rowset = mysql_query ( $sql );
-		$row = mysql_fetch_assoc ( $rowset );
-		if ($row) {
-			$this->id = $row ['society_id'];
-			return true;
-		}
-		return false;
+		global $system;
+		$statement = $system->getPdo()->prepare('SELECT society_id FROM society WHERE society_name=:name');
+		$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
+		$statement->execute();
+		$this->id = $statement->fetch(PDO::FETCH_COLUMN);
+		return ! empty($this->id);
 	}
 	/**
 	 * Obtient la valeur d'un attribut.
@@ -60,7 +61,7 @@ class Society {
 	/**
 	 * Obtient la longitude
 	 *
-	 * @sicne 23/06/2007
+	 * @since 23/06/2007
 	 */
 	public function getLongitude() {
 		return $this->getAttribute ( 'longitude' );
@@ -183,15 +184,6 @@ class Society {
 	 */
 	public function getNameForHtmlDisplay() {
 		return $this->hasName () ? ToolBox::toHtml ( $this->name ) : 'XXX';
-	}
-	/**
-	 * Obtient la liste des sociétés portant le même nom
-	 *
-	 * @since 13/05/2007
-	 * @return Array
-	 * @todo à écrire
-	 */
-	public function getHomonyms() {
 	}
 	/**
 	 * Obtient la date d'enregistrement de la société.
@@ -544,44 +536,31 @@ class Society {
 		return json_encode ( $this );
 	}
 	/**
-	 * Obtient l'activité de la société.
-	 * 
-	 * @return string
-	 */
-	public function getIndustry() {
-		return $this->getAttribute ( 'industry' );
-	}
-	/**
-	 * Obtient la liste des activités enregistrées pour la société.
-	 * 
-	 * @since 16/07/2006
-	 * @todo substituer é getIndustry()
-	 */
-	protected function getIndustriesRowset() {
-		if (empty ( $this->id ))
-			return NULL;
-		$sql = 'SELECT i.*';
-		$sql .= ' FROM society_industry AS si INNER JOIN industry AS i ON (i.industry_id=si.industry_id)';
-		$sql .= ' WHERE si.society_id=' . $this->id;
-		return mysql_query ( $sql );
-	}
-	/**
 	 * Obtient la liste des activités auxquelles est associée la société.
 	 * 
 	 * @return array
 	 * @since 16/07/2006
-	 * @todo substituer à getIndustry()
+	 * @version 20/12/2016
 	 */
 	public function getIndustries() {
+		global $system;
 		if (! isset ( $this->industries )) {
+			
 			$this->industries = array ();
-			$rowset = $this->getIndustriesRowset ();
-			while ( $row = mysql_fetch_array ( $rowset ) ) {
+			
+			if (empty ( $this->id )) return NULL;
+			
+			$sql = 'SELECT i.* FROM society_industry AS si INNER JOIN industry AS i ON (i.industry_id=si.industry_id)';
+			$sql .= ' WHERE si.society_id=:id';
+			$statement = $system->getPdo()->prepare($sql);
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			$data = $statement->fetchAll(PDO::FETCH_ASSOC);
+			foreach ( $data as $row ) {
 				$i = new Industry ();
 				$i->feed ( $row );
 				array_push ( $this->industries, $i );
 			}
-			mysql_free_result ( $rowset );
 		}
 		return $this->industries;
 	}
@@ -671,13 +650,14 @@ class Society {
 	 * Supprime de la base de données la liste des activités déclarées de la société.
 	 * 
 	 * @since 15/08/2006
+	 * @version 20/12/2016
 	 */
 	public function deleteIndustries() {
-		if (empty ( $this->id ))
-			return false;
-		$sql = 'DELETE FROM society_industry WHERE society_id=' . $this->id;
-		
-		return mysql_query ( $sql );
+		global $system;
+		if (empty ( $this->id )) return false;
+		$statement = $system->getPdo()->prepare('DELETE FROM society_industry WHERE society_id=:id');
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		return $statement->execute();
 	}
 	/**
 	 * Fixe l'activité de la société.
@@ -688,8 +668,7 @@ class Society {
 	/**
 	 * Obtient la liste des activités envisageables.
 	 * 
-	 * @param $valueToSelect La
-	 *        	valeur é sélectionner
+	 * @param $valueToSelect La valeur é sélectionner
 	 * @version 24/05/2006
 	 */
 	public function getIndustryOptionsTags($valueToSelect = NULL) {
@@ -873,9 +852,13 @@ class Society {
 	 */
 	public function getRelatedSocieties() {
 		global $system;
+		
 		if (empty ( $this->id )) {
 			return NULL;
 		}
+		
+		$output = array();
+		
 		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_date, r.end_date';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
 		$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
