@@ -354,37 +354,44 @@ class Society {
 	 * @version 18/11/2016
 	 */
 	public function getAddressFromGoogle($input = NULL) {
-		global $system;
-		if ( empty($input) ) $input = $this->getAddress();
-		$json = $system->getGoogleGeocodeAsJson($input);
-		$data = json_decode($json);
-		$street = array();
-		foreach ($data->{'results'}[0]->{'address_components'} as $c) {
-			if (in_array('street_number', $c->types)) {
-				$street['number'] = $c->long_name;
+		try {
+			global $system;
+			if ( empty($input) ) $input = $this->getAddress();
+			$json = $system->getGoogleGeocodeAsJson($input);
+			$data = json_decode($json);
+			if (empty($data->{'results'}[0])) {
+				throw new Exception ('Pas de résultat GoogleGeocode : '.$json);
 			}
-			if (in_array('route', $c->types)) {
-				$street['route'] = $c->long_name;
+			$street = array();
+			foreach ($data->{'results'}[0]->{'address_components'} as $c) {
+				if (in_array('street_number', $c->types)) {
+					$street['number'] = $c->long_name;
+				}
+				if (in_array('route', $c->types)) {
+					$street['route'] = $c->long_name;
+				}
+				if (in_array('locality', $c->types)) {
+					$this->city = $c->long_name;
+				}
+				if (in_array('postal_code', $c->types)) {
+					$this->postalcode = $c->long_name;
+				}
+				if (in_array('administrative_area_level_1', $c->types)) {
+					$this->administrativeAreaName = $c->long_name;
+				}
+				if (in_array('administrative_area_level_2', $c->types)) {
+					$this->subAdministrativeAreaName = $c->long_name;
+				}
+				if (in_array('country', $c->types)) {
+					$this->countryNameCode = $c->short_name;
+				}			
 			}
-			if (in_array('locality', $c->types)) {
-				$this->city = $c->long_name;
-			}
-			if (in_array('postal_code', $c->types)) {
-				$this->postalcode = $c->long_name;
-			}
-			if (in_array('administrative_area_level_1', $c->types)) {
-				$this->administrativeAreaName = $c->long_name;
-			}
-			if (in_array('administrative_area_level_2', $c->types)) {
-				$this->subAdministrativeAreaName = $c->long_name;
-			}
-			if (in_array('country', $c->types)) {
-				$this->countryNameCode = $c->short_name;
-			}			
+			$this->street = $street['number'].' '.$street['route'];
+			$this->latitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
+			$this->longitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
+		} catch (Exception $e) {
+			System::reportException($e);
 		}
-		$this->street = $street['number'].' '.$street['route'];
-		$this->latitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
-		$this->longitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 	}
 	public function setType($type) {
 		if (! empty ( $type ))
@@ -813,34 +820,26 @@ class Society {
 		return $html;
 	}
 	/**
-	 * Obtient les enregistrement des éléments en relation avec la société.
-	 * 
-	 * @return resource
-	 * @since 03/2006
-	 */
-	public function getRelationshipsRowset() {
-		$sql = 'SELECT *';
-		// FROM
-		$sql .= ' FROM relationship AS rs';
-		// WHERE
-		$criterias = array ();
-		$criterias [] = '(rs.item0_id=' . $this->id . ' AND rs.item0_class="' . get_class ( $this ) . '")';
-		$criterias [] = '(rs.item1_id=' . $this->id . ' AND rs.item1_class="' . get_class ( $this ) . '")';
-		$sql .= ' WHERE ' . implode ( ' OR ', $criterias );
-		
-		return mysql_query ( $sql );
-	}
-	/**
 	 * Obtient les éléments en relation avec la société.
 	 * 
 	 * @return array
 	 * @since 03/2006
+	 * @version 20/12/2016
 	 */
 	public function getRelationships() {
+		global $system;
 		if (! isset ( $this->relationships )) {
 			$this->relationships = array ();
-			$rowset = $this->getRelationshipsRowset ();
-			while ( $row = mysql_fetch_assoc ( $rowset ) ) {
+			$sql = 'SELECT * FROM relationship AS rs ';
+			$sql.= ' WHERE (rs.item0_id=:item0_id AND rs.item0_class=:item0_class) OR (rs.item1_id=:item1_id AND rs.item1_class=:item1_class)';
+			$statement = $system->getPdo()->prepare($sql);
+			$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
+			$statement->bindValue(':item0_class', get_class ( $this ), PDO::PARAM_STR);
+			$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
+			$statement->bindValue(':item1_class', get_class ( $this ), PDO::PARAM_STR);
+			$statement->execute();
+			$rowset =  $statement->fetchAll(PDO::FETCH_ASSOC);
+			foreach ( $rowset as $row ) {
 				$rs = new Relationship ();
 				$rs->feed ( $row );
 				$this->relationships [] = $rs;
@@ -849,42 +848,18 @@ class Society {
 		return $this->relationships;
 	}
 	/**
-	 * Obtient les enregistrements des relations entre la société et une autre société.
-	 *
-	 * @return resource
-	 * @since 25/06/2006
-	 * @version 23/06/2007
-	 */
-	public function getRelationshipsWithSocietyRowset() {
-		if (empty ( $this->id )) {
-			return NULL;
-		}
-		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_date, r.end_date';
-		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
-		$sql .= ' WHERE item0_class="society" AND item0_id=' . $this->id . ' AND item1_class="society"';
-		$sql .= ' UNION';
-		$sql .= ' SELECT s.*, r.relationship_id, r.item0_role AS relatedsociety_role, r.description, r.init_date, r.end_date';
-		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
-		$sql .= ' WHERE item1_class="society" AND item1_id=' . $this->id . ' AND item0_class="society"';
-		$sql .= ' ORDER BY society_name ASC';
-		
-		return mysql_query ( $sql );
-	}
-	/**
 	 * Obtient la société-mère si elle existe
 	 *
 	 * @since 23/09/2006
-	 * @version 29/07/2007
+	 * @version 20/12/2016
 	 */
 	public function getParentSociety() {
-		$rowset = $this->getRelationshipsWithSocietyRowset ();
-		if ($rowset) {
-			while ( $row = mysql_fetch_array ( $rowset ) ) {
-				if (isset ( $row ['relatedsociety_role'] ) && strcmp ( $row ['relatedsociety_role'], 'maison-mère' ) == 0) {
-					$s = new Society ();
-					$s->feed ( $row );
-					return $s;
-				}
+		$data = $this->getRelatedSocieties();
+		foreach ($data as $item) {
+			$role = $item[2];
+			$society = $item[0];
+			if (isset ( $role ) && strcasecmp ( $role , 'Maison-mère' ) == 0) {
+				return $society;
 			}
 		}
 		return NULL;
@@ -894,17 +869,33 @@ class Society {
 	 * 
 	 * @return array
 	 * @since 27/08/2006
+	 * @version 20/12/2016
 	 */
 	public function getRelatedSocieties() {
-		$output = array ();
-		$rowset = $this->getRelationshipsWithSocietyRowset ();
-		while ( $row = mysql_fetch_array ( $rowset ) ) {
+		global $system;
+		if (empty ( $this->id )) {
+			return NULL;
+		}
+		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_date, r.end_date';
+		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
+		$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT s.*, r.relationship_id, r.item0_role AS relatedsociety_role, r.description, r.init_date, r.end_date';
+		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
+		$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
+		$sql .= ' ORDER BY society_name ASC';
+		
+		$statement = $system->getPdo()->prepare($sql);
+		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
+		$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
+		$statement->execute();
+		$data = $statement->fetchAll(PDO::FETCH_ASSOC);
+		
+		foreach ( $data as $row ) {
 			$s = new Society ();
 			$s->feed ( $row );
-			$output [] = $s;
+			$output [] = array($s, $row['relationship_id'], $row['relatedsociety_role'], $row['description']);
 		}
-		if ($rowset)
-			mysql_free_result ( $rowset );
 		return $output;
 	}
 	/**
@@ -915,13 +906,14 @@ class Society {
 	 */
 	public function getRelatedSocietiesOptionsTags($valueToSelect = NULL) {
 		$html = '';
-		foreach ( $this->getRelatedSocieties () as $s ) {
-			$html .= '<option value="' . $s->getId () . '"';
-			if (isset ( $valueToSelect ) && strcasecmp ( $s->getId (), $valueToSelect ) == 0) {
+		foreach ( $this->getRelatedSocieties () as $item ) {
+			$society = $item[0];
+			$html .= '<option value="' . $society->getId() . '"';
+			if (isset ( $valueToSelect ) && strcasecmp ( $society->getId (), $valueToSelect ) == 0) {
 				$html .= ' selected="selected"';
 			}
 			$html .= '>';
-			$html .= $s->getName ();
+			$html .= $society->getName ();
 			$html .= '</option>';
 		}
 		return $html;

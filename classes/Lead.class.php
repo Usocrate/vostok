@@ -553,10 +553,10 @@ class Lead
 
     /**
      *
-     * @version 09/08/2007
+     * @version 19/12/2016
      */
-    public function feed($array = NULL)
-    {
+    public function feed($array = NULL) {
+        global $system;
         if (is_array($array)) {
             // compte
             $this->society = new Society();
@@ -582,16 +582,15 @@ class Lead
             // print_r($this);
             return true;
         } elseif (! empty($this->id)) {
-            $sql = 'SELECT *';
-            $sql .= ' FROM lead AS l';
+            $sql = 'SELECT * FROM lead AS l';
             $sql .= ' LEFT JOIN individual AS c ON l.individual_id=c.individual_id';
             $sql .= ' LEFT JOIN society AS a ON l.society_id=a.society_id';
-            $sql .= ' WHERE lead_id=' . $this->id;
+            $sql .= ' WHERE lead_id=:id';
             // echo $sql.'<br/>';
-            $rowset = mysql_query($sql);
-            $row = mysql_fetch_assoc($rowset);
-            mysql_free_result($rowset);
-            return empty($row) ? false : $this->feed($row);
+            $statement = $system->getPdo()->prepare($sql);
+            $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+            $data = $statement->fetch(PDO::FETCH_ASSOC);
+            return is_array($data) ? false : $this->feed($data);
         }
         return false;
     }

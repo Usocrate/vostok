@@ -32,7 +32,7 @@ $society->initFromDB();
 $memberships = $society->getMemberships();
 
 // participations
-$relationships = $society->getRelationships();
+$relatedSocieties = $society->getRelatedSocieties();
 
 // pistes
 $leads = $society->getLeads();
@@ -173,22 +173,23 @@ $doc_title = $society->getName();
 				<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
 				<ul class="list-group">
 					<?php
-					$rowset = $society->getRelationshipsWithSocietyRowset();
-					while ($row = mysql_fetch_array($rowset)) {
+					foreach ($relatedSocieties as $item) {
+						$society = $item[0];
+						$relationship_id = $item[1];
+						$role = $item[2];
+						$description = $item[3];
 						echo '<li class="list-group-item">';
-						$s = new Society();
-						$s->feed($row);
 						echo '<h3>';
-						echo '<a href="society.php?society_id='.$s->getId().'">'.$s->getNameForHtmlDisplay().'</a>';
+						echo '<a href="society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>';
 						echo ' <small>(';
-						echo '<a href="relationship_edit.php?relationship_id='.$row['relationship_id'].'">';
-						echo empty($row['relatedsociety_role']) ? '?' : ToolBox::toHtml($row['relatedsociety_role']);
+						echo '<a href="relationship_edit.php?relationship_id='.$relationship_id.'">';
+						echo empty($role) ? '?' : ToolBox::toHtml($role);
 						echo '</a>';
 						echo ')</small>';
 						echo '</h3>';
-						if (!empty($row['description'])) {
+						if (!empty($description)) {
 							echo '<p>';
-							echo ToolBox::toHtml($row['description']);
+							echo ToolBox::toHtml($description);
 							echo '</p>';
 						}
 						echo '</li>';

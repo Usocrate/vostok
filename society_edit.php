@@ -118,7 +118,7 @@ if (isset($_POST['task'])) {
         		</div>
         		
         		<div class="form-group">
-            		<label>Société mère</label>
+            		<label>Maison-mère</label>
                 	<?php
 	                	$parentSociety = $society->getParentSociety();
 	                	$value = $parentSociety ? $parentSociety->getName() : '';
