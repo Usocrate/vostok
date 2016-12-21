@@ -38,6 +38,7 @@ class Society {
 		$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
 		$statement->execute();
 		$this->id = $statement->fetch(PDO::FETCH_COLUMN);
+		echo empty($this->id) ? $this->name.' non identifiée' : $this->name.' identifiée ('.$this->id.') ';
 		return ! empty($this->id);
 	}
 	/**
@@ -1186,7 +1187,7 @@ class Society {
 		
 		$result = $statement->execute();
 		
-		if ($result && ! isset($this->id)) {
+		if ($result && $new) {
             $this->id = $system->getPdo()->lastInsertId();
         }
 		

@@ -25,8 +25,10 @@ if (empty ( $_SESSION ['user_id'] )) {
 $relationship = new Relationship ();
 
 // Formatage des données saisies par l'utilisateur
-if (isset ( $_POST ))
+if (isset ( $_POST )) {
+	print_r($_POST);
 	ToolBox::formatUserPost ( $_POST );
+}
 
 if (! empty ( $_REQUEST ['relationship_id'] )) {
 	// la participation à traiter est identifiée
@@ -67,16 +69,17 @@ if (isset ( $_POST ['relationship_submission'] )) {
 	if (is_null ( $item0 ) && ! empty ( $_POST ['item0_name'] )) {
 		$item0 = new Society ();
 		$item0->setName ( $_POST ['item0_name'] );
-		if (! $item0->identifyFromName ())
+		if (! $item0->identifyFromName ()) {
 			$item0->toDB ();
+		}
 		$relationship->setItem ( $item0, 0 );
-		// print_r($society);
 	}
 	if (is_null ( $item1 ) && ! empty ( $_POST ['item1_name'] )) {
 		$item1 = new Society ();
 		$item1->setName ( $_POST ['item1_name'] );
-		if (! $item1->identifyFromName ())
+		if (! $item1->identifyFromName ()) {
 			$item1->toDB ();
+		}
 		$relationship->setItem ( $item1, 1 );
 	}
 	if ($relationship->toDB ()) {
