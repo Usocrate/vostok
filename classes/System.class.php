@@ -727,25 +727,31 @@ class System {
 	 * Obtient la liste des activités enregistrées sous forme de tags HTML 'option'.
 	 *
 	 * @since 16/07/2006
-	 * @version 29/10/2013
+	 * @version 22/12/2016
 	 */
-	public function getIndustryOptionsTags($idsToSelect = NULL) {
-		if (is_array ( $idsToSelect ) === false && empty ( $idsToSelect ) === false) {
-			$idsToSelect = array (
-					$idsToSelect 
-			);
-		}
-		$rowset = $this->getIndustriesRowset ();
+	public function getIndustryOptionsTags($toSelect = NULL) {
+		global $system;
+
+		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb';
+		$sql .= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si';
+		$sql .= ' ON(si.industry_id=i.industry_id)';
+		$sql .= ' GROUP BY i.industry_name ASC';
+		$sql .= ' ORDER BY i.industry_name ASC';
+		
 		$html = '';
-		while ( $row = mysql_fetch_assoc ( $rowset ) ) {
+		
+		foreach  ($system->getPdo()->query($sql, PDO::FETCH_ASSOC) as $row) {
 			$i = new Industry ();
 			$i->feed ( $row );
 			$html .= '<option value="' . $i->getId () . '"';
-			if (is_array ( $idsToSelect ) && in_array ( $i->getId (), $idsToSelect )) {
-				$html .= ' selected="selected"';
+			if ( !empty($toSelect) ){
+				if ( (is_array ( $toSelect ) && in_array ( $i->getId (), $toSelect )) || (is_string($toSelect) && strcmp($toSelect, $i->getId())==0) ) {
+					$html .= ' selected="selected"';
+				}
 			}
-			$html .= '>' . ToolBox::toHtml ( $i->getName () ) . ' (' . $i->getSocietiesNb () . ')</option>';
+			$html .= '>' . ToolBox::toHtml(ucfirst($i->getName())) . ' (' . $i->getSocietiesNb () . ')</option>';
 		}
+		
 		return $html;
 	}
 	/**

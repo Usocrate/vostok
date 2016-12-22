@@ -100,18 +100,18 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 	<section>	
 	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group">
-        		<label for="s_name_i">nom</label>
+        		<label for="s_name_i">Nom</label>
         		<input id="s_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION ['society_search']['criteria']['name'])) echo $_SESSION ['society_search']['criteria']['name']; ?>" class="form-control" /> 
     		</div>
     		<div class="form-group">
-        		<label for="s_industry_i">activité</label>
+        		<label for="s_industry_i">Activité</label>
         		<select id="s_industry_i" name="industry_id" class="form-control">
         			<option value="">-- choisir --</option>
         			<?php echo isset($_SESSION['society_search']['criteria']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION['society_search']['criteria']['industry_id']) : $system->getIndustryOptionsTags(); ?>
         		</select>
     		</div>
     		<div class="form-group">
-        		<label for="s_city_i">ville</label>
+        		<label for="s_city_i">Ville</label>
         		<input id="s_city_i" name="society_city" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
     		</div>
 	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
@@ -124,11 +124,10 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     			<thead>
     				<tr>
     					<th></th>
-    					<th>Nom</th>
-    					<th>Description</th>
-    					<th>Ville</th>
+    					<th>La société</th>
+    					<th>Localisation</th>
     					<th>Enregistrement</th>
-    					<th>Web</th>
+    					<!-- <th>Web</th> -->
     				</tr>
     			</thead>
     			<tfoot>
@@ -156,10 +155,9 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     					echo '<input name="society_id[]" type="checkbox" value="' . $s->getId () . '" />';
     					echo '</td>';
     					echo '<td>';
-    					echo '<strong><a href="society.php?society_id=' . $s->getId () . '">' . $s->getNameForHtmlDisplay () . '</a></strong>';
-    					echo '</td>';
-    					echo '<td>';
-    					echo $s->getDescription () ? $s->getDescription () : '<small>aucune</small>';
+    					echo '<h2><a href="society.php?society_id=' . $s->getId () . '">' . $s->getNameForHtmlDisplay () . '</a> <small>'.$s->getHtmlLinkToWeb ().'</small></h2>';
+    					if ($s->getDescription ())
+    						echo '<p>'.$s->getDescription ().'</p>';
     					echo '</td>';
     					echo '<td>';
     					echo $s->getCity () ? $s->getCity() : '<small>?</small>';
@@ -167,9 +165,11 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     					echo '<td style="text-align:center">';
     					echo $s->getCreationDate () ? $s->getCreationDateFr () : '<small>à déterminer</small>';
     					echo '</td>';
+    					/*
     					echo '<td>';
     					echo $s->getHtmlLinkToWeb ();
     					echo '</td>';
+    					*/
     					echo '</tr>';
     				}
     				?>

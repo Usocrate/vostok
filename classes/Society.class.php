@@ -667,35 +667,6 @@ class Society {
 		return $this->setAttribute ( 'industry', $industry );
 	}
 	/**
-	 * Obtient la liste des activités envisageables.
-	 * 
-	 * @param $valueToSelect La valeur é sélectionner
-	 * @version 24/05/2006
-	 */
-	public function getIndustryOptionsTags($valueToSelect = NULL) {
-		$sql = 'SELECT society_industry AS industry, COUNT(*) AS nb';
-		$sql .= ' FROM society';
-		$sql .= ' GROUP BY industry ASC';
-		
-		$rowset = mysql_query ( $sql );
-		if (is_null ( $valueToSelect ) && isset ( $this->industry )) {
-			$valueToSelect = $this->industry;
-		}
-		$html = '';
-		$html .= '<option value="-1">-- indifférent --</option>';
-		while ( $row = mysql_fetch_assoc ( $rowset ) ) {
-			$html .= '<option value="' . $row ['industry'] . '"';
-			if (isset ( $valueToSelect ) && strcasecmp ( $valueToSelect, $row ['industry'] ) == 0) {
-				$html .= ' selected="selected"';
-			}
-			$html .= '>';
-			$html .= empty ( $row ['industry'] ) ? '-- à déterminer --' : $row ['industry'];
-			$html .= ' (' . $row ['nb'] . ')</option>';
-		}
-		mysql_free_result ( $rowset );
-		return $html;
-	}
-	/**
 	 * Transfére les activités de la société vers une autre société (dans le cadre d'une fusion notamment).
 	 * 
 	 * @version 16/07/2006

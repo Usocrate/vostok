@@ -55,6 +55,10 @@ TABLE {
 	width: auto;
 }
 
+TD H1, TD H2, TD H3, TD H4 {
+	margin-top :0;
+}
+
 IMG {
 	border-width: 0;
 	margin: 0;
