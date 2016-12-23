@@ -650,38 +650,50 @@ class System {
 		return $statement->execute();
 	}
 	/**
-	 * Obtient les enregistrements des activités.
-	 *
-	 * @return resource
-	 * @since 16/07/2006
-	 * @version 19/08/2006
-	 */
-	public function getIndustriesRowset($criterias = NULL) {
-		$sql = 'SELECT i.*';
-		$sql .= ', COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb';
-		$sql .= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si';
-		$sql .= ' ON(si.industry_id=i.industry_id)';
-		if (! is_null ( $criterias )) {
-			$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
-		}
-		$sql .= ' GROUP BY i.industry_name ASC';
-		$sql .= ' ORDER BY i.industry_name ASC';
-		
-		return mysql_query ( $sql );
-	}
-	/**
 	 * Obtient la liste des activités.
 	 *
 	 * @return array
 	 * @since 16/07/2006
-	 * @version 19/08/2006
+	 * @version 23/12/2016
 	 */
-	public function getIndustries($criterias = NULL) {
+	public function getIndustries($criteria = NULL) {
+		global $system;
+
 		$output = array ();
-		$rowset = $this->getIndustriesRowset ( $criterias );
-		while ( $row = mysql_fetch_array ( $rowset ) ) {
+
+		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb';
+		$sql .= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si ON (si.industry_id=i.industry_id)';
+		if (! is_null ( $criteria )) {
+			$conditions = array();
+
+			// sélection d'activités identifiées
+			if ( isset($criteria['ids']) ) {
+				$ids = array();
+				foreach (array_keys($criteria['ids']) as $i) {
+					$ids[':id'.$i] = $criteria['ids'][$i];
+				}
+				$conditions[] = 'i.industry_id IN ('.implode(',', array_keys($ids)).')';
+			}
+			
+			$sql .= ' WHERE '.implode ( ' AND ', $conditions );
+		}
+		$sql .= ' GROUP BY i.industry_name ASC';
+		
+		$statement = $system->getPdo()->prepare($sql);
+		
+		if (! is_null ( $criteria )) {
+			if ( isset($criteria['ids']) ) {
+				foreach ($ids as $key=>$value) {
+					$statement->bindValue($key, $value, PDO::PARAM_INT);
+				}
+			}
+		}
+		
+		$statement->execute();
+
+		foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $item ) {
 			$i = new Industry ();
-			$i->feed ( $row );
+			$i->feed ( $item );
 			$output [] = $i;
 		}
 		return $output;
@@ -690,37 +702,32 @@ class System {
 	 * Obtient la liste d'activités à partir de la liste de leur identifiant.
 	 *
 	 * @return array
-	 * @param
-	 *        	ids array
+	 * @param ids array
 	 * @since 19/08/2006
+	 * @version 23/12/2016
 	 */
 	public function getIndustriesFromIds($ids) {
-		if (! is_array ( $ids ) || count ( $ids ) < 1)
-			return NULL;
-		$criterias = array (
-				'i.industry_id IN(' . implode ( ',', $ids ) . ')' 
-		);
-		return $this->getIndustries ( $criterias );
+		return $this->getIndustries(array('ids'=>$ids));
 	}
 	/**
 	 * Rassemble plusieurs activités en une seule.
 	 *
 	 * @return Industry
 	 * @since 19/08/2006
+	 * @version 23/12/2016
 	 */
 	public function mergeIndustries($a, $b) {
-		if (! is_a ( $a, 'Industry' ) || ! is_a ( $b, 'Industry' )) {
-			trigger_error ( 'Tentative de fusion d\'activité en échec' );
-			return false;
-		}
-		if ($b->getSocietiesNb () > $a->getSocietiesNb ()) {
-			$a->transferSocieties ( $b );
-			$a->delete ();
-			return $b;
-		} else {
-			$b->transferSocieties ( $a );
-			$b->delete ();
-			return $a;
+		try {
+			if (! is_a ( $a, 'Industry' ) || ! is_a ( $b, 'Industry' )) throw new Exception ('Pour fusionner 2 activités, il faut désigner 2 activités');
+
+			if ($b->getSocietiesNb () > $a->getSocietiesNb ()) {
+				return $a->transferSocieties ( $b ) ? $a->delete() : false;
+			} else {
+				return $b->transferSocieties ( $a ) ? $b->delete() : false;
+			}			
+		} catch (Exception $e) {
+			System::reportException($e);
+			exit;
 		}
 	}
 	/**

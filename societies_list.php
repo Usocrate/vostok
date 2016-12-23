@@ -121,18 +121,9 @@ $doc_title = 'Les sociétés qui m\'intéressent';
    <section>
        	<form method="post" action="societies_merge.php">
     		<table class="table">
-    			<thead>
-    				<tr>
-    					<th></th>
-    					<th>La société</th>
-    					<th>Localisation</th>
-    					<th>Enregistrement</th>
-    					<!-- <th>Web</th> -->
-    				</tr>
-    			</thead>
     			<tfoot>
     				<tr>
-    					<td colspan="5" style="text-align: left">
+    					<td colspan="4" style="text-align: left">
     						<button type="button" class="btn btn-default" onclick="check('society_id[]')">tout cocher</button> /
     						<button type="button" class="btn btn-default" onclick="uncheck('society_id[]')">tout décocher</button>
     						<label for="task_id">Pour la sélection :</label>
@@ -152,24 +143,23 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     				foreach ( $societies as $s ) {
     					echo '<tr>';
     					echo '<td>';
-    					echo '<input name="society_id[]" type="checkbox" value="' . $s->getId () . '" />';
+    					echo '<input name="society_id[]" type="checkbox" value="' . $s->getId () . '" class="inFrontOfH2" />';
     					echo '</td>';
     					echo '<td>';
-    					echo '<h2><a href="society.php?society_id=' . $s->getId () . '">' . $s->getNameForHtmlDisplay () . '</a> <small>'.$s->getHtmlLinkToWeb ().'</small></h2>';
+    					echo '<h2><a href="society.php?society_id=' . $s->getId () . '">' . $s->getNameForHtmlDisplay () . '</a>';
+    					if ($s->getUrl()) {
+    						echo ' <small>'.$s->getHtmlLinkToWeb ().'</small>';
+    					}
+    					echo '</h2>';
+    					if ($s->getCity() && empty($_SESSION ['society_search']['criteria']['city'])) {
+    						echo ' <p>'.$s->getCity ().'</p>';
+    					}
     					if ($s->getDescription ())
     						echo '<p>'.$s->getDescription ().'</p>';
     					echo '</td>';
-    					echo '<td>';
-    					echo $s->getCity () ? $s->getCity() : '<small>?</small>';
-    					echo '</td>';
     					echo '<td style="text-align:center">';
-    					echo $s->getCreationDate () ? $s->getCreationDateFr () : '<small>à déterminer</small>';
+    					echo 'Enregistrée le '.$s->getCreationDate () ? $s->getCreationDateFr () : '<small>à déterminer</small>';
     					echo '</td>';
-    					/*
-    					echo '<td>';
-    					echo $s->getHtmlLinkToWeb ();
-    					echo '</td>';
-    					*/
     					echo '</tr>';
     				}
     				?>
