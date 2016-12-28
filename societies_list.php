@@ -97,74 +97,68 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php"><span class="glyphicon glyphicon-plus"></span></a></small></h1>
-	<section>	
+	<section>
 	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
-    		<div class="form-group">
-        		<label for="s_name_i">Nom</label>
-        		<input id="s_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION ['society_search']['criteria']['name'])) echo $_SESSION ['society_search']['criteria']['name']; ?>" class="form-control" /> 
-    		</div>
-    		<div class="form-group">
-        		<label for="s_industry_i">Activité</label>
-        		<select id="s_industry_i" name="industry_id" class="form-control">
-        			<option value="">-- choisir --</option>
-        			<?php echo isset($_SESSION['society_search']['criteria']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION['society_search']['criteria']['industry_id']) : $system->getIndustryOptionsTags(); ?>
-        		</select>
-    		</div>
-    		<div class="form-group">
-        		<label for="s_city_i">Ville</label>
-        		<input id="s_city_i" name="society_city" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
-    		</div>
+			<div class="form-group">
+	    		<label for="s_name_i">Nom</label>
+	    		<input id="s_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION ['society_search']['criteria']['name'])) echo $_SESSION ['society_search']['criteria']['name']; ?>" class="form-control" /> 
+			</div>
+			<div class="form-group">
+	    		<label for="s_industry_i">Activité</label>
+	    		<select id="s_industry_i" name="industry_id" class="form-control">
+	    			<option value="">-- choisir --</option>
+	    			<?php echo isset($_SESSION['society_search']['criteria']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION['society_search']['criteria']['industry_id']) : $system->getIndustryOptionsTags(); ?>
+	    		</select>
+			</div>
+			<div class="form-group">
+	    		<label for="s_city_i">Ville</label>
+	    		<input id="s_city_i" name="society_city" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
+			</div>
 	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
 	   		<?php if( count($_SESSION['society_search']['criteria']) > 0) echo ' <a href="societies_list.php?society_newsearch=1">Toutes les sociétés</a>'  ?>
-    	</form>
+		</form>
    </section>
    <section>
        	<form method="post" action="societies_merge.php">
-    		<table class="table">
-    			<tfoot>
-    				<tr>
-    					<td colspan="4" style="text-align: left">
-    						<button type="button" class="btn btn-default" onclick="check('society_id[]')">tout cocher</button> /
-    						<button type="button" class="btn btn-default" onclick="uncheck('society_id[]')">tout décocher</button>
-    						<label for="task_id">Pour la sélection :</label>
-                            <!--
-                			<select id="task_id" name="task_id">
-                				<option value="0">- choisir -</option>
-                				<option value="1"<?php if (isset($params['task_id']) && $params['task_id']==1) echo 'selected="selected"' ?>>fusionner</option>
-                				<option value="2"<?php if (isset($params['task_id']) && $params['task_id']==2) echo 'selected="selected"' ?>>supprimer</option>
-                			</select>
-                			-->
-    						<button name="task_submission" type="submit" value="1" class="btn btn-default">fusionner</button> 
-    					</td>
-    				</tr>
-    			</tfoot>
-    			<tbody>
-    				<?php
-    				foreach ( $societies as $s ) {
-    					echo '<tr>';
-    					echo '<td>';
-    					echo '<input name="society_id[]" type="checkbox" value="' . $s->getId () . '" class="inFrontOfH2" />';
-    					echo '</td>';
-    					echo '<td>';
-    					echo '<h2><a href="society.php?society_id=' . $s->getId () . '">' . $s->getNameForHtmlDisplay () . '</a>';
-    					if ($s->getUrl()) {
-    						echo ' <small>'.$s->getHtmlLinkToWeb ().'</small>';
-    					}
-    					echo '</h2>';
-    					if ($s->getCity() && empty($_SESSION ['society_search']['criteria']['city'])) {
-    						echo ' <p>'.$s->getCity ().'</p>';
-    					}
-    					if ($s->getDescription ())
-    						echo '<p>'.$s->getDescription ().'</p>';
-    					echo '</td>';
-    					echo '<td style="text-align:center">';
-    					echo 'Enregistrée le '.$s->getCreationDate () ? $s->getCreationDateFr () : '<small>à déterminer</small>';
-    					echo '</td>';
-    					echo '</tr>';
-    				}
-    				?>
-    			</tbody>
-    		</table>
+    		<div class="list-group">
+				<?php
+				foreach ( $societies as $s ) {
+					echo '<div class="list-group-item">';
+					echo '<div style="display:inline-block; vertical-align:top; margin:6px 6px 6px 0;">';
+					echo '<input name="society_id[]" type="checkbox" value="' . $s->getId () . '" />';
+					echo '</div>';
+					echo '<div style="display:inline-block">';
+					echo '<h2 class="list-group-item-heading"><a href="society.php?society_id=' . $s->getId () . '">' . $s->getNameForHtmlDisplay () . '</a>';
+					if ($s->getUrl()) {
+						echo ' <small>'.$s->getHtmlLinkToWeb ().'</small>';
+					}
+					echo '</h2>';
+					echo '<div class="list-group-item-text">';
+					if ($s->getCity() && empty($_SESSION ['society_search']['criteria']['city'])) {
+						echo ' <p>'.$s->getCity ().'</p>';
+					}
+					if ($s->getDescription ())
+						echo '<p>'.$s->getDescription ().'</p>';
+					if ($s->getCreationDate ()) {
+						echo '<p>Enregistrée le '.$s->getCreationDateFr().'</p>';
+					}
+					echo '</div>';
+					echo '</div>';
+					echo '</div>';
+				}
+				?>
+    		</div>
+			<button type="button" class="btn btn-default" onclick="check('society_id[]')">tout cocher</button> /
+			<button type="button" class="btn btn-default" onclick="uncheck('society_id[]')">tout décocher</button>
+			<label for="task_id">Pour la sélection :</label>
+            <!--
+			<select id="task_id" name="task_id">
+				<option value="0">- choisir -</option>
+				<option value="1"<?php if (isset($params['task_id']) && $params['task_id']==1) echo 'selected="selected"' ?>>fusionner</option>
+				<option value="2"<?php if (isset($params['task_id']) && $params['task_id']==2) echo 'selected="selected"' ?>>supprimer</option>
+			</select>
+			-->
+			<button name="task_submission" type="submit" value="1" class="btn btn-default">fusionner</button> 
     	</form>
     	<div>
     		<?php

@@ -26,6 +26,9 @@
 NAV.navbar {
 	margin-bottom: 0;
 }
+SECTION {
+	padding:1.1em 0.6em;
+}
 
 SPAN.badge>A, SPAN.label>A {
 	color: inherit;
@@ -53,16 +56,6 @@ HR {
 
 TABLE {
 	width: auto;
-}
-
-TD H1, TD H2, TD H3, TD H4 {
-	margin-top :0;
-	margin-bottom :10px;
-}
-
-TD INPUT[type=checkbox].inFrontOfH2 {
-	height:30px;
-	margin-top:0;
 }
 
 IMG {
