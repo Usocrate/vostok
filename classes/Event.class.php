@@ -1,7 +1,7 @@
 <?php
 /**
  * @since 28/01/2006
- * @package usocrate.exomemory.vostok
+ * @package usocrate.vostok
  * @author Florent Chanavat
  */
 class Event {

@@ -3,7 +3,7 @@
  * L'implication d'un individu dans un évènement.
  *
  * @author Florent
- * @package usocrate.exomemory.vostok
+ * @package usocrate.vostok
  */
 class EventInvolvement extends Involvement implements CollectibleElement {
 	private $id;

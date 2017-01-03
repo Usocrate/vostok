@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package usocrate.exomemory.vostok
+ * @package usocrate.vostok
  * @author Florent Chanavat
  */
 class Lead

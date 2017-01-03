@@ -2,7 +2,7 @@
 /**
  * L'implication d'une personne.
  *
- * @package usocrate.exomemory.vostok
+ * @package usocrate.vostok
  */
 abstract class Involvement {
 

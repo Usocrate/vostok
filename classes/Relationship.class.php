@@ -1,6 +1,6 @@
 <?php
 /**
- * @package usocrate.exomemory.vostok
+ * @package usocrate.vostok
  * @author Florent Chanavat
  * @since 30/03/2006 
  */
