@@ -137,7 +137,7 @@ $doc_title = 'Les gens';
             <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> /> Sans société</label>
  		</div>
 		<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
-		<?php if( count($_SESSION['individual_search']['criteria']) > 0) echo ' <a href="individuals.php?individual_newsearch=1">Tous les gens</a>'  ?>
+		<?php if( count($criteria) > 0) echo ' <a href="individuals.php?individual_newsearch=1">Tous les gens</a>'  ?>
 	</form>
 
 	<section>
