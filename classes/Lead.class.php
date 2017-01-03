@@ -553,21 +553,21 @@ class Lead
 
     /**
      *
-     * @version 19/12/2016
+     * @version 03/01/2017
      */
-    public function feed($array = NULL) {
+    public function feed($data = NULL) {
         global $system;
-        if (is_array($array)) {
+        if (is_array($data)) {
             // compte
             $this->society = new Society();
-            $this->society->feed($array);
+            $this->society->feed($data);
             
             // individual
             $this->individual = new Individual();
-            $this->individual->feed($array);
+            $this->individual->feed($data);
             
             // les données de l'initialisation sont transmises
-            foreach ($array as $key => $value) {
+            foreach ($data as $key => $value) {
                 // NB : stricte correspondance entre les noms d'attribut de la classe
                 $items = explode('_', $key);
                 switch ($items[0]) {
@@ -589,8 +589,9 @@ class Lead
             // echo $sql.'<br/>';
             $statement = $system->getPdo()->prepare($sql);
             $statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+            $statement->execute();
             $data = $statement->fetch(PDO::FETCH_ASSOC);
-            return is_array($data) ? false : $this->feed($data);
+            return is_array($data) ? $this->feed($data) : false;
         }
         return false;
     }
