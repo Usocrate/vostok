@@ -47,11 +47,18 @@ class Individual {
 			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
 		}
 	}
+	/**
+	 * @version 03/01/2017
+	 **/
 	public function isEventInvolved(Event $event) {
+		global $system;
 		try {
 			if (isset ( $this->id ) && $event->hasId ()) {
-				$result = mysql_query ( 'SELECT id FROM event_involvement WHERE individual_id=' . $this->id . ' AND event_id=' . $event->getId () );
-				return mysql_num_rows ( $result ) > 0;
+				$statement = $system->getPdo()->prepare('SELECT COUNT(*) FROM event_involvement WHERE individual_id=:individual_id AND event_id=:event_id GROUP BY individual_id');
+				$statement->bindValue(':individual_id', $this->id, PDO::PARAM_INT);
+				$statement->bindValue(':event_id', $event->getId(), PDO::PARAM_INT);
+				$statement->execute();
+				return $statement->fetchColumn() > 0;
 			} else {
 				throw new Exception ( 'Les identifiants de la personne et de l\'évènement doivent être connus' );
 			}
@@ -59,10 +66,17 @@ class Individual {
 			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
 		}
 	}
+	/**
+	 * @version 03/01/2017
+	 **/	
 	public function deleteEventInvolvement(Event $event) {
+		global $system;
 		try {
 			if (isset ( $this->id ) && $event->hasId ()) {
-				return mysql_query ( 'DELETE FROM event_involvement WHERE individual_id=' . $this->id . ' AND event_id=' . $event->getId () );
+				$statement = $system->getPdo()->prepare('DELETE FROM event_involvement WHERE individual_id=:individual_id AND event_id=:event_id');
+				$statement->bindValue(':individual_id', $this->id, PDO::PARAM_INT);
+				$statement->bindValue(':event_id', $event->getId(), PDO::PARAM_INT);
+				return $statement->execute();
 			} else {
 				throw new Exception ( 'Les identifiants de la personne et de l\'évènement doivent être connus' );
 			}
@@ -524,140 +538,196 @@ class Individual {
 		$this->street = $street['number'].' '.$street['route'];
 	}
 	/**
-	 * Obtenir les enregistrements des sociétés auxquelles participe l'individu.
-	 *
-	 * @return resource
-	 * @param int $offset
-	 *        	Le numéro de l'enregistrement à partir duquel la sélection commence
-	 * @param int $row_count
-	 *        	La taille de la sélection en nombre d'enregistrements
-	 * @version 25/06/2006
-	 */
-	public function getMembershipsRowset($criterias = NULL, $sort_key = NULL, $sort_order = NULL, $offset = 0, $row_count = NULL) {
-		if (empty ( $this->id ))
-			return NULL;
-		$sql = 'SELECT *,';
-		$sql .= ' DATE_FORMAT(a.society_creation_date, "%d/%m/%Y") as society_creation_date';
-		$sql .= ' FROM membership AS ac';
-		$sql .= ' LEFT OUTER JOIN society AS a';
-		$sql .= ' ON ac.society_id = a.society_id';
-		$sql .= ' WHERE ac.individual_id=' . $this->id;
-		if ($row_count)
-			$sql .= ' LIMIT ' . $offset . ',' . $row_count;
-		$sql .= ' ORDER BY init_date DESC';
-		
-		return mysql_query ( $sql );
-	}
-	/**
 	 * Obtient le nombre de participations enregistrées en base de données.
 	 *
 	 * @since 15/08/2006
+	 * @version 03/01/2017
 	 */
 	public function getMembershipsRowsNb() {
-		if (empty ( $this->id ))
-			return NULL;
-		$sql = 'SELECT membership_id';
-		$sql .= ' FROM membership';
-		$sql .= ' WHERE individual_id=' . $this->id;
-		
-		return mysql_num_rows ( mysql_query ( $sql ) );
+		global $system;
+		try {
+			if (empty ( $this->id ))
+				throw new Exception('On ne peut compter les participations d\'un individu non identifié.');
+
+			$statement = $system->getPdo()->prepare('SELECT COUNT(*) FROM membership WHERE individual_id=:id GROUP BY individual_id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			return $statement->fetchColumn();
+			
+		} catch (Exception $e) {
+			trigger_error(__METHOD__.$e->getMessage());
+		}
 	}
 	/**
 	 * Obtient les participations associées à l'individu.
 	 *
 	 * @return array
 	 * @since 21/01/2006
-	 * @version 24/05/2006
+	 * @version 03/01/2017
 	 */
 	public function getMemberships($society = NULL) {
-		$memberships = array ();
-		$criterias = array ();
-		if (isset ( $society )) {
-			$criterias [] = 'ac.society_id=' . $society->getId ();
+		global $system;
+		try {
+			if (empty ( $this->id ))
+				throw new Exception('Récupérer les participations d\'un individu exige que celui-ci soit identifié.');
+			
+			$memberships = array ();
+			$criteria = array ();
+			
+			$criteria[] = 'ac.individual_id=:id';
+			
+			if (isset ( $society )) {
+				$criteria[] = 'ac.society_id=:society_id';
+			}
+			
+			$sql = 'SELECT *,';
+			$sql .= ' DATE_FORMAT(a.society_creation_date, "%d/%m/%Y") as society_creation_date';
+			$sql .= ' FROM membership AS ac LEFT OUTER JOIN society AS a ON ac.society_id = a.society_id';
+			$sql .= ' WHERE '.implode(' AND ', $criteria);
+			$sql .= ' ORDER BY init_date DESC';
+			
+			$statement = $system->getPdo()->prepare($sql);
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			if (isset ( $society )) {
+				$statement->bindValue(':society_id', $society->getId, PDO::PARAM_INT);
+			}
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$statement->execute();
+
+			foreach ( $statement->fetchAll() as $row ) {
+				$ms = new Membership ();
+				$ms->feed ( $row );
+				$s = $ms->getSociety ();
+				$s->feed ( $row );
+				$memberships [] = $ms;
+			}
+			return $memberships;			
+		} catch (Exception $e) {
+			trigger_error(__METHOD__.$e->getMessage());
 		}
-		$rowset = $this->getMembershipsRowset ( $criterias );
-		while ( $row = mysql_fetch_assoc ( $rowset ) ) {
-			$ms = new Membership ();
-			$ms->feed ( $row );
-			$s = $ms->getSociety ();
-			$s->feed ( $row );
-			$memberships [] = $ms;
-		}
-		return $memberships;
 	}
+	/**
+	 * @version 03/01/2017
+	 **/
 	public function addMembershipRow($society_id, $department = NULL, $title = NULL, $phone = NULL, $email = NULL, $description = NULL) {
-		if (empty ( $this->id ) || empty ( $society_id )) {
-			return false;
+		global $system;
+		try {
+			if (empty ( $this->id ) || empty ( $society_id )) {
+				throw new Exception('Il faut un individu et une société identifiée pour ajouter une participation.');
+			}
+			$settings = array ();
+			if (isset ( $department )) {
+				$settings [] = 'department=:department';
+			}
+			if (isset ( $title )) {
+				$settings [] = 'title=:title';
+			}
+			if (isset ( $phone )) {
+				$settings [] = 'phone=:phone';
+			}
+			if (isset ( $email )) {
+				$settings [] = 'email=:email';
+			}
+			if (isset ( $description )) {
+				$settings [] = 'description=:description';
+			}
+			if ($this->isMember ( $society_id )) {
+				// il s'agit d'une mise à jour d'un lien existant
+				$sql = 'UPDATE membership SET '.implode ( ', ', $settings ).' WHERE individual_id=:individual_id AND society_id=:society_id';
+			} else {
+				// il s'agit d'un nouveau lien
+				$settings [] = 'society_id=:society_id';
+				$settings [] = 'individual_id=:individual_id';
+				$sql = 'INSERT INTO membership SET '.implode ( ', ', $settings );
+			}
+			$statement = $system->getPdo()->prepare($sql);
+			
+			$statement->bindValue(':society_id', $society_id, PDO::PARAM_INT);
+			$statement->bindValue(':individual_id', $this->id, PDO::PARAM_INT);
+			
+			if (isset ( $department )) {
+				$statement->bindValue(':department', $department, PDO::PARAM_STR);
+			}
+			if (isset ( $title )) {
+				$statement->bindValue(':title', $title, PDO::PARAM_STR);
+			}
+			if (isset ( $phone )) {
+				$statement->bindValue(':phone', $phone, PDO::PARAM_STR);
+			}
+			if (isset ( $email )) {
+				$statement->bindValue(':email', $email, PDO::PARAM_STR);
+			}
+			if (isset ( $description )) {
+				$statement->bindValue(':description', $description, PDO::PARAM_STR);
+			}
+			return $statement->execute();
+		} catch (Exception $e) {
+			trigger_error(__METHOD__.$e->getMessage());
 		}
-		$settings = array ();
-		$settings [] = 'society_id=' . $society_id;
-		$settings [] = 'individual_id=' . $this->id;
-		if (! empty ( $department )) {
-			$settings [] = 'department=\'' . mysql_real_escape_string ( $department ) . '\'';
-		}
-		if (! empty ( $title )) {
-			$settings [] = 'title=\'' . mysql_real_escape_string ( $title ) . '\'';
-		}
-		if (! empty ( $phone )) {
-			$settings [] = 'phone=\'' . mysql_real_escape_string ( $phone ) . '\'';
-		}
-		if (! empty ( $email )) {
-			$settings [] = 'email=\'' . mysql_real_escape_string ( $email ) . '\'';
-		}
-		if (! empty ( $description )) {
-			$settings [] = 'description=\'' . mysql_real_escape_string ( $description ) . '\'';
-		}
-		if ($this->isMember ( $society_id )) {
-			// il s'agit d'une mise à jour d'un lien existant
-			$sql = 'UPDATE membership SET ';
-			$sql .= implode ( ', ', $settings );
-			$sql .= ' WHERE individual_id=' . $this->id . ' AND society_id=' . $society_id;
-		} else {
-			// il s'agit d'un nouveau lien
-			$sql = 'INSERT INTO membership SET ';
-			$sql .= implode ( ', ', $settings );
-		}
-		// echo $sql.'<br/>';
-		return mysql_query ( $sql );
 	}
 	/**
 	 * Efface toutes les participations de cet individu en base de données.
 	 *
 	 * @return boolean
+	 * @version 03/01/2017
 	 */
 	public function deleteMemberships() {
-		if (empty ( $this->id ))
-			return false;
-		$sql = 'DELETE FROM membership';
-		$sql .= ' WHERE individual_id=' . $this->id;
-		return mysql_query ( $sql );
+		global $system;
+		try {
+			if (empty ( $this->id ))
+				throw new Exception('La suppression des participations enregistrées n\'est possible que pour un individu identifié.');
+			
+			$statement = $system->getPdo()->prepare('DELETE FROM membership WHERE individual_id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			return $statement->execute();
+		}
+		catch (Exception $e) {
+			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );			
+		}		
 	}
 	/**
 	 * Indique si l'individu participe à une société donnée.
 	 *
 	 * @return boolean
 	 * @param int $society_id
-	 *        	L'identifiant de la société
+	 * @version 03/01/2017
 	 */
 	public function isMember($society_id) {
-		$sql = 'SELECT * FROM membership';
-		$sql .= ' WHERE individual_id=' . $this->id . ' AND society_id=' . $society_id;
-		$rowset = mysql_query ( $sql );
-		return mysql_num_rows ( $rowset ) > 0 ? true : false;
+		global $system;
+		try {
+			if (empty ( $this->id ))
+				throw new Exception('On ne peut tester l\'appartenance d\'un individu à une société que s\'il est identifié.');
+				
+			$statement = $system->getPdo()->prepare('SELECT * FROM membership WHERE individual_id=:id AND society_id=society_id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->bindValue(':society_id', $society_id, PDO::PARAM_INT);
+			$statement->execute();
+			$rowset = $statement->fetchAll();
+			return count($rowset) > 0 ? true : false;			
+		} catch (Exception $e) {
+			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );			
+		}
 	}
 	/**
 	 * Efface, en base de données, toutes les relations de cet individu aux pistes.
 	 *
 	 * @return boolean
 	 * @since 19/11/2005
-	 * @version 15/08/2006
+	 * @version 03/01/2017
 	 */
 	public function deleteLeadsInvolvement() {
-		if (empty ( $this->id ))
-			return false;
-		$sql = 'UPDATE membership';
-		$sql .= ' SET individual_id=NULL WHERE individual_id=' . $this->id;
-		return mysql_query ( $sql );
+		global $system;
+		try {
+			if (empty ( $this->id ))
+				throw new Exception('La suppression des pistes enregistrées n\'est possible que pour un individu identifié.');
+			
+			$statement = $system->getPdo()->prepare('DELETE FROM membership WHERE individual_id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			return $statement->execute();
+			
+		} catch (Exception $e) {
+			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
+		}
 	}
 	/**
 	 * Enregistre les données de l'individu en base de données.
