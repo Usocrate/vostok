@@ -696,9 +696,6 @@ class Individual {
 		if (isset ( $this->web )) {
 			$settings [] = 'individual_web=:web';
 		}
-		if (isset ( $this->country )) {
-			$settings [] = 'individual_country=:country';
-		}
 		if (isset ( $this->street )) {
 			$settings [] = 'individual_street=:street';
 		}
@@ -757,9 +754,6 @@ class Individual {
 		}
 		if (isset ( $this->web )) {
 			$statement->bindValue(':web', $this->web, PDO::PARAM_STR);
-		}
-		if (isset ( $this->country )) {
-			$statement->bindValue(':country', $this->country, PDO::PARAM_STR);
 		}
 		if (isset ( $this->street )) {
 			$statement->bindValue(':street', $this->street, PDO::PARAM_STR);
