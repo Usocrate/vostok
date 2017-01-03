@@ -852,8 +852,8 @@ class Individual {
 		}
 		
 		$result = $statement->execute();
-		
-		if ($result && ! isset($this->id)) {
+
+		if ($new) {
             $this->id = $system->getPdo()->lastInsertId();
         }
 		
