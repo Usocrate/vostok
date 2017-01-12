@@ -74,7 +74,7 @@ $doc_title = $society->getName();
                     $geo_elt[] = $society->getPostalCode();
                 }
                 if ($society->getCity()) {
-                    $geo_elt[] = '<a href="societies_list.php?society_newsearch=1&society_city='.$society->getCity().'">'.ToolBox::toHtml($society->getCity()).'</a>';
+                    $geo_elt[] = '<a href="societies_list.php?society_newsearch=1&society_city='.urlencode($society->getCity()).'">'.ToolBox::toHtml($society->getCity()).'</a>';
                 }
                 if (count($geo_elt)>0) {
                     $address_elt[] = implode(' ', $geo_elt);

@@ -90,7 +90,7 @@ $doc_title = $individual->getWholeName();
 				
 				
 				if ($individual->getDescription()) {
-					echo '<p>naissance : </small>'.$individual->getDescription().'</p>';
+					echo '<p>'.$individual->getDescription().'</p>';
 				}
 				if ($individual->getWeb()) {
 					echo '<p>'.$individual->getHtmlLinkToWeb().'</p>';
@@ -99,7 +99,7 @@ $doc_title = $individual->getWholeName();
 					echo '<p>'.implode('<span> | </span>', $contact_data).'</p>';
 				}
 				if ($individual->getBirthDate()) {
-					echo '<p>naissance : </small>'.$individual->getBirthDate().'</p>';
+					echo '<p><small>naissance : </small>'.$individual->getBirthDate().'</p>';
 				}
 				if ($individual->getAddress()) {
 					echo '<p>'.$individual->getAddress().'</p>';
