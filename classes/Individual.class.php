@@ -584,7 +584,7 @@ class Individual {
 			$sql .= ' DATE_FORMAT(a.society_creation_date, "%d/%m/%Y") as society_creation_date';
 			$sql .= ' FROM membership AS ac LEFT OUTER JOIN society AS a ON ac.society_id = a.society_id';
 			$sql .= ' WHERE '.implode(' AND ', $criteria);
-			$sql .= ' ORDER BY init_date DESC';
+			$sql .= ' ORDER BY init_year DESC';
 			
 			$statement = $system->getPdo()->prepare($sql);
 			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);

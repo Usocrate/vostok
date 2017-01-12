@@ -13,8 +13,8 @@ class Membership {
 	public $email;
 	public $url;
 	public $description;
-	public $init_date;	//	la date marquant le début de la participation
-	public $end_date;	//	la date marquant la fin de la participation
+	public $init_year;
+	public $end_year;
 	
 	public function __construct($id=NULL) {
 		if (isset($id)) $this->id = $id;
@@ -235,8 +235,8 @@ class Membership {
 		if (isset($this->email)) $settings[] = 'email="'.mysql_real_escape_string($this->email).'"';
 		if (isset($this->url)) $settings[] = 'url="'.mysql_real_escape_string($this->url).'"';
 		if (isset($this->description)) $settings[] = 'description="'.mysql_real_escape_string($this->description).'"';
-		if (isset($this->init_date)) $settings[] = 'init_date="'.mysql_real_escape_string($this->init_date).'"';
-		if (isset($this->end_date)) $settings[] = 'end_date="'.mysql_real_escape_string($this->end_date).'"';
+		if (isset($this->init_year)) $settings[] = 'init_year="'.mysql_real_escape_string($this->init_year).'"';
+		if (isset($this->end_year)) $settings[] = 'end_year="'.mysql_real_escape_string($this->end_year).'"';
 		//	INSERT or UPDATE ?
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql.= ' membership SET ';
@@ -285,8 +285,8 @@ class Membership {
 					case 'email': $this->setEmail($value); break;
 					case 'url': $this->setAttribute('url', $value); break;
 					case 'description': $this->setAttribute('description', $value); break;
-					case 'init_date': $this->setAttribute('init_date', $value); break;
-					case 'end_date': $this->setAttribute('end_date', $value); break;
+					case 'init_year': $this->setAttribute('init_year', $value); break;
+					case 'end_year': $this->setAttribute('end_year', $value); break;
 				}
 			}
 			//print_r($this);

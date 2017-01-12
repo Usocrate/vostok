@@ -158,13 +158,13 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			?>
 
 			<div class="form-group">
-    			<label>Début</label>
-    			<input name="init_date" type="text" value="<?php echo $relationship->getAttribute('init_date'); ?>" size="20" class="form-control" />
+    			<label>Année de démarrage</label>
+    			<input name="init_year" type="text" value="<?php echo $relationship->getAttribute('init_year'); ?>" size="4" class="form-control" />
 			</div>
 			
 			<div class="form-group">
-    			<label>Fin</label>
-    			<input name="end_date" type="text" value="<?php echo $relationship->getAttribute('end_date'); ?>" size="20" class="form-control" />
+    			<label>Année de clôture</label>
+    			<input name="end_year" type="text" value="<?php echo $relationship->getAttribute('end_year'); ?>" size="4" class="form-control" />
 			</div>
 			
 			<div class="form-group">

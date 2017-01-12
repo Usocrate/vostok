@@ -831,11 +831,11 @@ class Society {
 		
 		$output = array();
 		
-		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_date, r.end_date';
+		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
 		$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
 		$sql .= ' UNION';
-		$sql .= ' SELECT s.*, r.relationship_id, r.item0_role AS relatedsociety_role, r.description, r.init_date, r.end_date';
+		$sql .= ' SELECT s.*, r.relationship_id, r.item0_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
 		$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
 		$sql .= ' ORDER BY society_name ASC';

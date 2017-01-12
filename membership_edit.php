@@ -216,12 +216,12 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
     				<fieldset>
     					<legend>Période</legend>
     					<div class="form-group">
-    						<label for="init_date_i">Début</label>
-    						<input id="init_date_i" name="init_date" type="text" value="<?php echo $membership->getAttribute('init_date'); ?>" size="20" class="form-control" />
+    						<label for="init_year_i">Année d'ouverture</label>
+    						<input id="init_year_i" name="init_year" type="text" value="<?php echo $membership->getAttribute('init_year'); ?>" size="20" class="form-control" />
 						</div>
 						<div class="form-group">
-							<label for="end_date_i">Fin</label>
-							<input id="end_date_i" name="end_date" type="text" value="<?php echo $membership->getAttribute('end_date'); ?>" size="20" class="form-control" />
+							<label for="end_year_i">Année de clôture</label>
+							<input id="end_year_i" name="end_year" type="text" value="<?php echo $membership->getAttribute('end_year'); ?>" size="20" class="form-control" />
 						</div>
     				</fieldset>
     				<div class="form-group">

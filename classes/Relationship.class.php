@@ -22,16 +22,9 @@ class Relationship {
 	private $items_roles;
 	private $description;
 	private $url;
-	/**
-	 * la date marquant le début de la relation.
-	 * @type date
-	 */
-	private $init_date;
-	/**
-	 * la date marquant la fin de la relation.
-	 * @type date
-	 */
-	private $end_date;
+
+	private $init_year;
+	private $end_year;
 	
 	public function __construct($id=NULL)	{
 		if (isset($id)) $this->id = $id;
@@ -48,8 +41,7 @@ class Relationship {
 	 * Fixe la valeur d'un attribut.	
 	 * @since 30/03/2006	
 	 */
-	public function getAttribute($name)
-	{
+	public function getAttribute($name)	{
 		return isset($this->$name) ? $this->$name : NULL;
 	}
 	/**
@@ -155,11 +147,11 @@ class Relationship {
 			if (isset($this->url)) {
 				$settings[] = 'url=:url';
 			}
-			if (isset($this->init_date)) {
-				$settings[] = 'init_date=:init_date';
+			if (isset($this->init_year)) {
+				$settings[] = 'init_year=:init_year';
 			}
-			if (isset($this->end_date)) {
-				$settings[] = 'end_date=:end_date';
+			if (isset($this->end_year)) {
+				$settings[] = 'end_year=:end_year';
 			}
 			
 			$sql = $new ? 'INSERT INTO' : 'UPDATE';
@@ -181,11 +173,11 @@ class Relationship {
 			if (isset($this->url)) {
 				$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
 			}
-			if (isset($this->init_date)) {
-				$statement->bindValue(':init_date', $this->init_date, PDO::PARAM_STR);
+			if (isset($this->init_year)) {
+				$statement->bindValue(':init_year', $this->init_year, PDO::PARAM_STR);
 			}
-			if (isset($this->end_date)) {
-				$statement->bindValue(':end_date', $this->init_date, PDO::PARAM_STR);
+			if (isset($this->end_year)) {
+				$statement->bindValue(':end_year', $this->end_year, PDO::PARAM_STR);
 			}
 			if (!$new) {
 				$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
@@ -250,8 +242,8 @@ class Relationship {
 					case 'relationship_id': $this->setId($value); break;
 					case 'description': $this->setAttribute('description', $value); break;
 					case 'url': $this->setAttribute('url', $value); break;					
-					case 'init_date': $this->setAttribute('init_date', $value); break;
-					case 'end_date': $this->setAttribute('end_date', $value); break;
+					case 'init_year': $this->setAttribute('init_year', $value); break;
+					case 'end_year': $this->setAttribute('end_year', $value); break;
 				}
 			}
 			return true;
