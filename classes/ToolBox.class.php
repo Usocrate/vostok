@@ -93,8 +93,7 @@ class ToolBox
     /**
      * Transforme un tableau en chaîne de paramètres à intégrer dans une url.
      *
-     * @param
-     *            $array
+     * @param $array
      * @return string
      * @version 2009-04-17
      */
@@ -104,7 +103,7 @@ class ToolBox
             $params = array();
             foreach ($array as $clé => $valeur) {
                 if (isset($valeur))
-                    $params[] = $clé . '=' . url_encode($valeur);
+                    $params[] = $clé . '=' . urlencode($valeur);
             }
             return implode('&', $params);
         }
