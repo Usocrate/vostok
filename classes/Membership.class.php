@@ -28,6 +28,22 @@ class Membership {
 		$value = trim($value);
 		$value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
 		return $this->{$name} = $value;
+	}
+	/**
+	 * @since 13/01/2017
+	 **/
+	public function setInitYear($input) {
+		if ( is_numeric($input) && strlen($input)==4 ) {
+			$this->init_year = $input;
+		}
+	}
+	/**
+	 * @since 13/01/2017
+	 **/	
+	public function setEndYear($input) {
+		if ( is_numeric($input) && strlen($input)==4 ) {
+			$this->end_year = $input;
+		}
 	}	
 	public function getAttribute($name)	{
 		return isset($this->$name) ? $this->$name : NULL;
@@ -44,7 +60,7 @@ class Membership {
 	 * @param int $input
 	 * @since 19/11/2005
 	 */
-	public function setId($input)	{
+	public function setId($input) {
 		return $this->setAttribute('id', $input);
 	}
 	/**
@@ -75,7 +91,7 @@ class Membership {
 	/**
 	 * @since 27/10/2012
 	 */
-	public static function knownTitlesToJson($substring = NULL){
+	public static function knownTitlesToJson($substring = NULL) {
 		$output = '{"titles":[';
 		$items = self::getKnownTitles($substring);
 		for ($i=0; $i<count($items); $i++) {
@@ -93,7 +109,17 @@ class Membership {
 	 */
 	public function getDescription() {
 		return $this->getAttribute('description');
-	}	
+	}
+	/**
+	 * @since 12/01/2017
+	 **/
+	public function getPeriod() {
+		if (! empty($this->init_year) && ! empty($this->end_year) ) {
+			return $this->init_year.'-'.$this->end_year;
+		} elseif (! empty($this->init_year) ) {
+			return 'depuis '.$this->init_year;
+		}
+	}
 	/**
 	 * Renvoie l'email utilisé dans le cadre de cette participation.
 	 * @return string
@@ -109,14 +135,14 @@ class Membership {
 	 * Renvoie le numéro de téléphone utilisé dans le cadre de cette participation.
 	 * @return string
 	 */
-	public function getPhone(){
+	public function getPhone() {
 		return $this->getAttribute('phone');
 	}	
 	/**
 	 * Renvoie le service dans lequel se situe cette participation.
 	 * @return string
 	 */
-	public function getDepartment(){
+	public function getDepartment() {
 		return $this->getAttribute('department');
 	}
 	/**
@@ -124,8 +150,7 @@ class Membership {
 	 */
 	private static function getKnownDepartments($substring = NULL) {
 		global $system;
-		$sql = 'SELECT department AS value, COUNT(*) AS count FROM membership';
-		$sql.= ' WHERE department IS NOT NULL';
+		$sql = 'SELECT department AS value, COUNT(*) AS count FROM membership WHERE department IS NOT NULL';
 		if (isset($substring)) {
 			$sql.= ' AND department LIKE :pattern';
 		}
@@ -140,7 +165,7 @@ class Membership {
 	/**
 	 * @since 27/10/2012
 	 */
-	public static function knownDepartmentsToJson($substring = NULL){
+	public static function knownDepartmentsToJson($substring = NULL) {
 		$output = '{"departments":[';
 		$items = self::getKnownDepartments($substring);
 		for ($i=0; $i<count($items); $i++) {
@@ -176,16 +201,15 @@ class Membership {
 	 * Fixe la personne impliquée.
 	 * @param Individual $input
 	 */
-	public function setIndividual($input)	{
+	public function setIndividual($input) {
 		if (is_a($input, 'Individual')) $this->individual = $input;
 	}
 	/**
 	 * Renvoie la société concernée.
 	 * @return Society|NULL
 	 */
-	public function getSociety()
-	{
-		if (isset($this->society)){
+	public function getSociety() {
+		if (isset($this->society)) {
 			return $this->society;
 		} elseif ($this->getAttribute('society_id')) {
 			$this->society = new Society($this->getAttribute('society_id'));
@@ -198,69 +222,101 @@ class Membership {
 	 * @param Society $input
 	 * @version 09/04/2006	 
 	 */	
-	public function setSociety($input)
-	{
+	public function setSociety($input) {
 		if (is_a($input, 'Society')) $this->society = $input;
 	}	
 	/**
 	 * Obtient l'Url décrivant la participation de la personne.
 	 * @since 07/01/2006
 	 */
-	public function getUrl()
-	{
+	public function getUrl() {
 		return isset($this->url) ? $this->url : NULL;
 	}
 	/**
 	 * Obtient un lien HTML vers un contenu web décrivant la participation. 
 	 * @since 07/12/2006
 	 */
-	public function getHtmlLinkToWeb()
-	{
+	public function getHtmlLinkToWeb() {
 		return $this->getUrl() ? '<a href="'.$this->getUrl().'" title="'.$this->getUrl().'">[web]</a>' : NULL;	
 	}	
 	/**
 	 * Enregistre en base de données les attributs de la participation.
+	 * @version 13/01/2017
 	 */
-	public function toDB()
-	{
-		//print_r($this);
+	public function toDB() {
+		global $system;
 		$new = empty ($this->id);
-		// settings
+
 		$settings = array ();
-		if (isset($this->individual) && $this->individual->getId()) $settings[] = 'individual_id='.$this->individual->getId();
-		if (isset($this->society) && $this->society->getId()) $settings[] = 'society_id='.$this->society->getId();
-		if (isset($this->title)) $settings[] = 'title="'.mysql_real_escape_string($this->title).'"';
-		if (isset($this->department)) $settings[] = 'department="'.mysql_real_escape_string($this->department).'"';
-		if (isset($this->phone)) $settings[] = 'phone="'.mysql_real_escape_string($this->phone).'"';
-		if (isset($this->email)) $settings[] = 'email="'.mysql_real_escape_string($this->email).'"';
-		if (isset($this->url)) $settings[] = 'url="'.mysql_real_escape_string($this->url).'"';
-		if (isset($this->description)) $settings[] = 'description="'.mysql_real_escape_string($this->description).'"';
-		if (isset($this->init_year)) $settings[] = 'init_year="'.mysql_real_escape_string($this->init_year).'"';
-		if (isset($this->end_year)) $settings[] = 'end_year="'.mysql_real_escape_string($this->end_year).'"';
-		//	INSERT or UPDATE ?
+		if ( isset($this->individual) && $this->individual->getId() ) 
+			$settings[] = 'individual_id=:individual_id';
+		if ( isset($this->society) && $this->society->getId() )
+			$settings[] = 'society_id=:society_id';
+		if ( isset($this->title) ) 
+			$settings[] = 'title=:title';
+		if ( isset($this->department) ) 
+			$settings[] = 'department=:department';
+		if ( isset($this->phone) ) 
+			$settings[] = 'phone=:phone';
+		if ( isset($this->email) ) 
+			$settings[] = 'email=:email';
+		if ( isset($this->url) ) 
+			$settings[] = 'url=:url';
+		if ( isset($this->description) ) 
+			$settings[] = 'description=:description';
+		if ( isset($this->init_year) ) 
+			$settings[] = 'init_year=:init_year';
+		if ( isset($this->end_year) ) 
+			$settings[] = 'end_year=:end_year';
+		
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql.= ' membership SET ';
 		$sql.= implode(', ', $settings);
-		if (!$new) $sql .= ' WHERE membership_id='.$this->id;
+		if (!$new)
+			$sql .= ' WHERE membership_id=:membership_id';
 		
-		$result = mysql_query($sql);
-		if ($new) $this->id = mysql_insert_id();
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset($this->individual) && $this->individual->getId() ) 
+			$statement->bindValue(':individual_id', $this->individual->getId(), PDO::PARAM_INT);
+		if (isset($this->society) && $this->society->getId()) 
+			$statement->bindValue(':society_id', $this->society->getId(), PDO::PARAM_INT);
+		if (isset($this->title))
+			$statement->bindValue(':title', $this->title, PDO::PARAM_STR);
+		if (isset($this->department))
+			$statement->bindValue(':department', $this->department, PDO::PARAM_STR);
+		if (isset($this->phone))
+			$statement->bindValue(':phone', $this->phone, PDO::PARAM_STR);
+		if (isset($this->email))
+			$statement->bindValue(':email', $this->email, PDO::PARAM_STR);
+		if (isset($this->url)) 
+			$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
+		if (isset($this->description))
+			$statement->bindValue(':description', $this->description, PDO::PARAM_STR);
+		if (isset($this->init_year))
+			$statement->bindValue(':init_year', $this->init_year, PDO::PARAM_STR);
+		if (isset($this->end_year))
+			$statement->bindValue(':end_year', $this->end_year, PDO::PARAM_STR);
+		if (!$new)
+			$statement->bindValue(':membership_id', $this->id, PDO::PARAM_INT);;
+
+		$result = $statement->execute();
+		if ($new) $this->id = $system->getPdo()->lastInsertId();
 		return $result;
 	}
 	/**
 	 * Supprime la participation en base de données.
 	 * 
 	 * @return boolean
+	 * @version 13/01/2017
 	 */
 	public function delete() {
+		global $system;
 		if (empty($this->id)) return false;
-		$sql = 'DELETE FROM membership';
-		$sql.= ' WHERE membership_id='.$this->id;
-		
-		return mysql_query($sql);	
+		$statement = $system->getPdo()->prepare('DELETE FROM membership WHERE membership_id=:id');
+		$statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+		return $statement->execute();
 	}
 	public function feed($array=NULL, $prefix=NULL)	{
-		//print_r($array);
 		if (is_array($array)) {
 			//	les données de l'initialisation sont transmises
 			foreach ($array as $key=>$value){
@@ -272,35 +328,50 @@ class Membership {
 					$key = iconv_substr($key, iconv_strlen($prefix));
 				}				
 				switch ($key) {
-					case 'membership_id': $this->setId($value); break;
+					case 'membership_id':
+						$this->setId($value);
+						break;
 					case 'individual_id':
 						$this->setIndividual(new Individual($value));
 						break;
 					case 'society_id':
 						$this->setSociety(new Society($value));
 						break;
-					case 'title': $this->setAttribute('title', $value); break;
-					case 'department': $this->setAttribute('department', $value); break;
-					case 'phone': $this->setAttribute('phone', $value); break;
-					case 'email': $this->setEmail($value); break;
-					case 'url': $this->setAttribute('url', $value); break;
-					case 'description': $this->setAttribute('description', $value); break;
-					case 'init_year': $this->setAttribute('init_year', $value); break;
-					case 'end_year': $this->setAttribute('end_year', $value); break;
+					case 'title':
+						$this->setAttribute('title', $value);
+						break;
+					case 'department':
+						$this->setAttribute('department', $value);
+						break;
+					case 'phone':
+						$this->setAttribute('phone', $value);
+						break;
+					case 'email':
+						$this->setEmail($value);
+						break;
+					case 'url':
+						$this->setAttribute('url', $value);
+						break;
+					case 'description':
+						$this->setAttribute('description', $value);
+						break;
+					case 'init_year':
+						$this->setInitYear($value);
+						break;
+					case 'end_year':
+						$this->setEndYear($value);
+						break;
 				}
 			}
-			//print_r($this);
 			return true;
 		} elseif (isset($this->id)) {
-			//	on ne transmet pas les données de l'initialisation
-			//	mais on connaît l'identifiant de la participation
-			$sql = 'SELECT * FROM membership WHERE membership_id='.$this->id;
-			//echo $sql.'<br/>';
-			$rowset = mysql_query($sql);
-			$row = mysql_fetch_array($rowset);
-			mysql_free_result($rowset);
-			if (!$row) return false;
-			return $this->feed($row);
+			//	on ne transmet pas les données de l'initialisation mais on connaît l'identifiant de la participation
+			global $system;
+			$statement = $system->getPdo()->prepare('SELECT * FROM membership WHERE membership_id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_STR);
+			$statement->execute();
+			$data = $statement->fetch(PDO::FETCH_ASSOC);
+			return $this->feed($data);
 		}
 		return false;
 	}

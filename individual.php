@@ -126,8 +126,13 @@ $doc_title = $individual->getWholeName();
 				echo $s->getHtmlLinkToSociety();
 				if ($ms->getDepartment()) echo ' <small> ('.$ms->getDepartment().')</small>';
 				echo '</h3>';
+				
+				if ($ms->getPeriod()) {
+					echo '<p>'.ucfirst($ms->getPeriod()).'</p>';
+				}
+				
 				if ($ms->getTitle()) {
-					echo '<p>'.$ms->getTitle().'</p>';
+					echo '<p>'.ucfirst($ms->getTitle()).'</p>';
 				}
 				if ($ms->getUrl()) {
 					echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
