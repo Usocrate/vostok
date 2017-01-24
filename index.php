@@ -60,6 +60,13 @@ $doc_title = 'Accueil';
 					<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">Chercher</button>
 				</form>
 				</section>
+				<section>
+					<?php 
+						foreach($system->getIndustries() as $i) {
+							echo '<span class="badge"><a href="societies_list.php?society_newsearch=1&industry_id='.$i->getId().'">'.ToolBox::toHtml($i->getName()).'</a></span> ';
+						}
+					?>
+				</section>
 			</div>
 			<div class="col-md-6">
 				<section>

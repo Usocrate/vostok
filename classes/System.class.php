@@ -578,23 +578,6 @@ class System {
 		return mysql_query ( $sql );
 	}
 	/**
-	 * Retourne le nombre de sociétés groupées par activité.
-	 *
-	 * @return resource
-	 * @version 09/2005
-	 */
-	public function getSocietiesGroupByIndustryRowset($offset = 0, $row_count = NULL) {
-		$sql = 'SELECT society_industry AS industry, COUNT(*) AS nb';
-		$sql .= ' FROM society';
-		// $sql.= ' WHERE society_industry IS NOT NULL';
-		$sql .= ' GROUP BY industry';
-		$sql .= ' ORDER BY nb DESC, industry ASC';
-		if (isset ( $count_row ))
-			$sql .= ' LIMIT ' . $offset . ',' . $count_row;
-		
-		return mysql_query ( $sql );
-	}
-	/**
 	 * Renvoie les pistes correspondant à certains critères (optionnels)
 	 *
 	 * @return resource

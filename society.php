@@ -160,11 +160,19 @@ $doc_title = $society->getName();
 						echo '<li class="list-group-item">';
 						echo '<h3>';
 						echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
+						$position_elt = array();
+						if ($ms->getDepartment()) $position_elt[] = ToolBox::toHtml($ms->getDepartment());
+						if ($ms->getTitle()) $position_elt[] = ToolBox::toHtml($ms->getTitle());
+						
 						$smallTag_elt = array();
-						if ($ms->getDepartment()) $smallTag_elt[] = ToolBox::toHtml($ms->getDepartment());
-						if ($ms->getTitle()) $smallTag_elt[] = ToolBox::toHtml($ms->getTitle());
+						
+						if (count($position_elt)>0) {
+							$smallTag_elt[] = implode(' / ', $position_elt);
+						}
+						if ( $ms->getPeriod() ) $smallTag_elt[] = '('.$ms->getPeriod().')';
+						
 						if (count($smallTag_elt)>0) {
-							echo '<div><small>'.implode(' / ', $smallTag_elt).'</small></div>';
+							echo '<div><small>'.implode(' ', $smallTag_elt).'</small></div>';
 						}
 						echo '</h3>';
 						echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></div>';
