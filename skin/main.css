@@ -23,14 +23,31 @@
 	color: #fff;
 }
 
-NAV.navbar {
+.navbar {
 	margin-bottom: 0;
 }
 SECTION {
 	padding:1.1em 0.6em;
 }
+/*
+.tagCloud {
+	margin:1em;
+}
+*/
 
-SPAN.badge>A, SPAN.label>A {
+.seeMore {
+	text-align:right;
+	margin: 1em 0;
+}
+
+/*
+.seeMore::before {
+	font-family: 'Glyphicons Halflings';
+	content: "\e080 Voir ";
+}
+*/
+
+.badge>A, .label>A {
 	color: inherit;
 	font-size: inherit;
 	font-weight: inherit;

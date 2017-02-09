@@ -681,24 +681,27 @@ class System {
 		return $output;
 	}
 	/**
+	 * Obtient la liste pondérée des dernières activités utilisées pour qualifier une société.
+	 * 
 	 * @since 09/02/2017
 	 */
-	public function getLastUsedIndustries() {
+	public function getLastUsedIndustries($scope = 100) {
 		global $system;
 
 		$output = array ();
-		$sql = 'SELECT i.*, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT 100) AS si';
+		$sql = 'SELECT i.*, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT :scope) AS si';
 		$sql.= ' INNER JOIN industry AS i USING (industry_id)';
 		$sql.= ' GROUP BY i.industry_name ASC';
 		//echo $sql;
 		
 		$statement = $system->getPdo()->prepare($sql);
+		$statement->bindParam(':scope', $scope, PDO::PARAM_INT);
 		$statement->execute();
 
 		foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $item ) {
 			$i = new Industry ();
 			$i->feed ( $item );
-			$output [] = array($i, $item['weight']);
+			$output [] = array ('industry' => $i, 'weight' => $item['weight'] );
 		}
 		return $output;
 	}	

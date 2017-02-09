@@ -53,19 +53,39 @@ $doc_title = 'Accueil';
 					</form>
 				</section>
 				<section>
+					<?php
+						$industries = $system->getLastUsedIndustries();
+						$weights = array_column($industries, 'weight');
+						$maxWeight = max($weights);
+						$minWeight = min($weights);
+						$minEm = 1;
+						$maxEm = 2;
+						
+						echo '<div class="tagCloud">';
+						foreach($system->getLastUsedIndustries() as $item) {
+							if ($maxWeight == $minWeight) {
+								$em = ($maxEm + $minEm) / 2;
+							} else {
+								$weight = $item['weight'];
+								$r = ($weight - $minWeight) / ($maxWeight - $minWeight);
+								$em = round($minEm + ($r * ($maxEm - $minEm)),1);
+							}
+							echo '<span class="badge" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
+							echo '<a href="societies_list.php?society_newsearch=1&industry_id='.$item['industry']->getId().'">';
+							echo ToolBox::toHtml( $item['industry']->getName() );
+							echo '</a></span>';
+						}
+						echo '</div>';
+						echo '<div class="seeMore"><a href="industries.php">Toutes les activités</a> <span class="glyphicon glyphicon-chevron-right"></span></div>';
+					?>
+				</section>
+				<section>
 				<form method="post" action="individuals.php">
 					<div class="form-group">
 						<label for="individual_lastName_i">Un individu</label> <input id="individual_lastName_i" name="individual_lastName" type="text" placeholder="nom de famille" class="form-control" />
 					</div>
 					<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">Chercher</button>
 				</form>
-				</section>
-				<section>
-					<?php 
-						foreach($system->getLastUsedIndustries() as $item) {
-							echo '<span class="badge"><a href="societies_list.php?society_newsearch=1&industry_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getName()).' ('.$item[1].')</a></span> ';
-						}
-					?>
 				</section>
 			</div>
 			<div class="col-md-6">
