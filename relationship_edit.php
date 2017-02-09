@@ -26,7 +26,6 @@ $relationship = new Relationship ();
 
 // Formatage des données saisies par l'utilisateur
 if (isset ( $_POST )) {
-	print_r($_POST);
 	ToolBox::formatUserPost ( $_POST );
 }
 

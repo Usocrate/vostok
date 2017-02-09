@@ -202,7 +202,6 @@ class System {
 	 */
 	public function getPdo() {
 		try {
-			//print_r($this);
 			if (! isset ( $this->pdo )) {
 				$this->pdo = new PDO ( 'mysql:host=' . $this->db_host . ';dbname=' . $this->db_name, $this->db_user, $this->db_password, array (
 						PDO::ATTR_PERSISTENT => true 
@@ -636,7 +635,7 @@ class System {
 	 * Obtient la liste des activités.
 	 *
 	 * @return array
-	 * @since 16/07/2006
+	 * @since /6/07/2006
 	 * @version 23/12/2016
 	 */
 	public function getIndustries($criteria = NULL) {
@@ -681,6 +680,28 @@ class System {
 		}
 		return $output;
 	}
+	/**
+	 * @since 09/02/2017
+	 */
+	public function getLastUsedIndustries() {
+		global $system;
+
+		$output = array ();
+		$sql = 'SELECT i.*, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT 100) AS si';
+		$sql.= ' INNER JOIN industry AS i USING (industry_id)';
+		$sql.= ' GROUP BY i.industry_name ASC';
+		//echo $sql;
+		
+		$statement = $system->getPdo()->prepare($sql);
+		$statement->execute();
+
+		foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $item ) {
+			$i = new Industry ();
+			$i->feed ( $item );
+			$output [] = array($i, $item['weight']);
+		}
+		return $output;
+	}	
 	/**
 	 * Obtient la liste d'activités à partir de la liste de leur identifiant.
 	 *

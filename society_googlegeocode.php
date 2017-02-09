@@ -27,7 +27,6 @@ $society->initFromDB();
 
 $address = $society->getAddress();
 if (!empty($address)) {
-	//echo print_r(json_decode($society->getGoogleGeocodeAsJson()));
 	echo $society->getGoogleGeocodeAsJson();
 }
 ?>

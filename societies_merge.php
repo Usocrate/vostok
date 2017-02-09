@@ -14,8 +14,6 @@ require_once 'config/boot.php';
 session_start();
 ToolBox::getDBAccess();
 
-//print_r($_REQUEST);
-
 if (empty($_SESSION['user_id'])) {
     header('Location:login.php');
     exit();
@@ -125,7 +123,6 @@ $doc_title = 'Fusion de deux sociétés existantes';
 		<li>
 		<?php
             echo $s1->getNameForHtmlDisplay();
-            // print_r($s1);
             if ($s1->getCreationDate()) echo ' <small>(créée le ' . $s1->getCreationDate() . ')</small>';
         ?>
 		</li>

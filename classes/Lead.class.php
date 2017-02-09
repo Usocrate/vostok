@@ -579,7 +579,6 @@ class Lead
                     default:
                 }
             }
-            // print_r($this);
             return true;
         } elseif (! empty($this->id)) {
             $sql = 'SELECT * FROM lead AS l';

@@ -35,7 +35,6 @@ if (isset ( $_POST ['task'] )) {
 		case 'industries_merge' :
 			if (isset ( $_POST ['industries_ids'] )) {
 				$industriesToMerge = $system->getIndustriesFromIds ( $_POST ['industries_ids'] );
-				//print_r($industriesToMerge);
 				while ( count ( $industriesToMerge ) > 1 ) {
 					$result = array ();
 					$result [] = $system->mergeIndustries ( $industriesToMerge [0], $industriesToMerge [1] );

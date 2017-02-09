@@ -909,7 +909,6 @@ class Individual {
 					// $this->setAttribute($key, $value);
 				}
 			}
-			// print_r($this);
 			return true;
 		} elseif (! empty ( $this->id )) {
 			// on ne transmet pas les données de l'initialisation

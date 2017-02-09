@@ -62,8 +62,8 @@ $doc_title = 'Accueil';
 				</section>
 				<section>
 					<?php 
-						foreach($system->getIndustries() as $i) {
-							echo '<span class="badge"><a href="societies_list.php?society_newsearch=1&industry_id='.$i->getId().'">'.ToolBox::toHtml($i->getName()).'</a></span> ';
+						foreach($system->getLastUsedIndustries() as $item) {
+							echo '<span class="badge"><a href="societies_list.php?society_newsearch=1&industry_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getName()).' ('.$item[1].')</a></span> ';
 						}
 					?>
 				</section>
