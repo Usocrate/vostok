@@ -44,7 +44,7 @@ $doc_title = 'Accueil';
 		<div class="row">
 			<div class="col-md-6">
 				<section>
-					<form method="post" action="societies_list.php">
+					<form method="post" action="societies_list.php" class="form-inline">
 						<div class="form-group">
 							<label for="s_name_i">Une société</label>
 							<input id="s_name_i" name="society_name" type="text" class="form-control" placeholder="nom" />
@@ -59,7 +59,7 @@ $doc_title = 'Accueil';
 						$maxWeight = max($weights);
 						$minWeight = min($weights);
 						$minEm = 1;
-						$maxEm = 2;
+						$maxEm = 1.5;
 						
 						echo '<div class="tagCloud">';
 						foreach($system->getLastUsedIndustries() as $item) {
@@ -70,17 +70,17 @@ $doc_title = 'Accueil';
 								$r = ($weight - $minWeight) / ($maxWeight - $minWeight);
 								$em = round($minEm + ($r * ($maxEm - $minEm)),1);
 							}
-							echo '<span class="badge" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
+							echo '<span class="label label-default" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
 							echo '<a href="societies_list.php?society_newsearch=1&industry_id='.$item['industry']->getId().'">';
 							echo ToolBox::toHtml( $item['industry']->getName() );
 							echo '</a></span>';
 						}
 						echo '</div>';
-						echo '<div class="seeMore"><a href="industries.php">Toutes les activités</a> <span class="glyphicon glyphicon-chevron-right"></span></div>';
+						echo '<div class="seeMore"><a href="industries.php">Toutes les activités</a></div>';
 					?>
 				</section>
 				<section>
-				<form method="post" action="individuals.php">
+				<form method="post" action="individuals.php" class="form-inline">
 					<div class="form-group">
 						<label for="individual_lastName_i">Un individu</label> <input id="individual_lastName_i" name="individual_lastName" type="text" placeholder="nom de famille" class="form-control" />
 					</div>
