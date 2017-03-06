@@ -86,11 +86,21 @@ class Individual {
 	}
 	/**
 	 * Fixe la valeur d'un attribut.
+	 * @version 03/05/2017
 	 */
 	public function setAttribute($name, $value) {
 		$value = trim ( $value );
 		$value = html_entity_decode ( $value, ENT_QUOTES, 'UTF-8' );
-		return $this->{$name} = $value;
+
+		switch($name) {
+			case 'birth_date' :
+				if ( strcmp($value, '0000-00-00') == 0 ) {
+					return false;	
+				}
+			default :
+				// après gestion des cas particuliers, règle générale
+				return $this->{$name} = $value;			
+		}
 	}
 	public function getAttribute($name) {
 		return isset ( $this->$name ) ? $this->$name : NULL;
@@ -141,6 +151,7 @@ class Individual {
 	 * Obtient la date de naissance.
 	 *
 	 * @since 07/01/2006
+	 * @version 05/03/2017
 	 */
 	public function getBirthDate() {
 		return isset ( $this->birth_date ) ? $this->birth_date : NULL;
@@ -149,10 +160,11 @@ class Individual {
 	 * Obtient la date de naissance au timestamp unix.
 	 *
 	 * @since 21/01/2007
+	 * @version05/03/2017
 	 */
 	public function getBirthDateTimestamp() {
-		if ($this->getBirthDate ()) {
-			list ( $year, $month, $day ) = explode ( '-', $this->getBirthDate () );
+		if ( isset ( $this->birth_date ) ) {
+			list ( $year, $month, $day ) = explode ( '-', $this->birth_date );
 			return mktime ( 0, 0, 0, $month, $day, $year );
 		} else {
 			return NULL;
@@ -166,15 +178,17 @@ class Individual {
 	public function getBirthDateFr() {
 		return date ( 'd/m/Y', $this->getBirthDateTimestamp () );
 	}
+	/**
+	 * @version 05/03/2017
+	 */
 	public function identifyFromName() {
-		if (empty ( $this->lastName ) || empty ( $this->firstName ))
-			return false;
-		$sql = 'SELECT individual_id FROM individual';
-		$sql .= ' WHERE individual_lastName="' . mysql_real_escape_string ( $this->lastName ) . '"';
-		$sql .= ' AND individual_firstName="' . mysql_real_escape_string ( $this->firstName ) . '"';
-		$rowset = mysql_query ( $sql );
-		$row = mysql_fetch_assoc ( $rowset );
-		return $this->id = $row ['individual_id'];
+		global $system;
+		if (empty ( $this->lastName ) || empty ( $this->firstName )) return false;
+		$statement = $system->getPdo()->prepare('SELECT individual_id FROM individual WHERE individual_lastName=:lastName AND individual_firstName=:firstName');
+		$statement->bindValue(':lastName', $this->getLastName(), PDO::PARAM_STR);
+		$statement->bindValue(':firstName', $this->getFirstName(), PDO::PARAM_STR);
+		$statement->execute();
+		return $this->id = $statement->fetchColumn();
 	}
 	/**
 	 * Obtient la civilité.
@@ -282,21 +296,25 @@ class Individual {
 	public function getHtmlLinkToIndividual() {
 		return '<a href="individual.php?individual_id='.$this->getId().'">'.ToolBox::toHtml($this->getWholeName()).'</a>';
 	}
+	
 	/**
 	 * Obtient le commentaire.
 	 */
 	public function getDescription() {
 		return $this->getAttribute ( 'description' );
 	}
+	
 	/**
 	 * Obtient l'adresse du site web perso.
 	 */
 	public function getWeb() {
 		return $this->getAttribute ( 'web' );
 	}
+	
 	public function getHtmlLinkToWeb() {
 		if ( ! empty($this->web) ) return '<a href="'.$this->web.'">'.$this->web.'</a>';
 	}
+	
 	/**
 	 * Obtient le n° de tél.
 	 * portable.
@@ -304,6 +322,7 @@ class Individual {
 	public function getMobilePhoneNumber() {
 		return $this->getAttribute ( 'mobile' );
 	}
+	
 	/**
 	 * Obtient le n° de tél.
 	 * fixe.
@@ -446,7 +465,7 @@ class Individual {
 	}
 	public function getPhotoHtml() {
 		if ($this->getPhotoUrl ())
-			return '<img src="' . $this->getPhotoUrl () . '" class="thumbnail" />';
+			return '<img src="' . $this->getPhotoUrl () . '" />';
 	}
 	/**
 	 * Obtient l'Url du CV la personne.
@@ -535,7 +554,9 @@ class Individual {
 				$this->country = $c->short_name;
 			}			
 		}
-		$this->street = $street['number'].' '.$street['route'];
+		if (isset($street)) {
+			$this->street = $street['number'].' '.$street['route'];
+		}
 	}
 	/**
 	 * Obtient le nombre de participations enregistrées en base de données.
@@ -897,7 +918,7 @@ class Individual {
 		if (is_array ( $array )) {
 			// les données de l'initialisation sont transmises
 			foreach ( $array as $key => $value ) {
-				// NB : stricte correspondance entre les noms d'attribut de la classe
+				// NB : stricte correspondance entre les noms d'attribut de la classe une fois préfixe retiré
 				$items = explode ( '_', $key );
 				switch ($items [0]) {
 					case 'individual' :

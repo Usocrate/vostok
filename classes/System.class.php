@@ -102,14 +102,35 @@ class System {
 	public function getClassDirPath() {
 		return $this->dir_path . DIRECTORY_SEPARATOR . 'classes';
 	}
+	/**
+	 * @version 05/03/2017
+	 */
 	public function getDataDirPath() {
-		return $this->dir_path . DIRECTORY_SEPARATOR . 'data';
+		$path = $this->dir_path . DIRECTORY_SEPARATOR . 'data';
+		if ( !is_dir($path) ) {
+			mkdir($path, 770);
+		}
+		return $path;
 	}
+	/**
+	 * @version 05/03/2017
+	 */	
 	public function getCvDirPath() {
-		return $this->getDataDirPath () . DIRECTORY_SEPARATOR . 'cv';
+		$path = $this->getDataDirPath () . DIRECTORY_SEPARATOR . 'cv';
+		if ( !is_dir($path) ) {
+			mkdir($path, 770);
+		}
+		return $path;
 	}
+	/**
+	 * @version 05/03/2017
+	 */	
 	public function getTrombiDirPath() {
-		return $this->getDataDirPath () . DIRECTORY_SEPARATOR . 'trombinoscope';
+		$path = $this->getDataDirPath () . DIRECTORY_SEPARATOR . 'trombinoscope';
+		if ( !is_dir($path) ) {
+			mkdir($path, 770);
+		}
+		return $path;
 	}
 	
 	/**

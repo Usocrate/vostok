@@ -39,16 +39,16 @@ if (isset($_POST['deletion_order'])) {
     ToolBox::formatUserPost($_POST);
     // enregistrement des données de l'individu
     $individual->feed($_POST);
-    if (! empty ( $_POST['individual_address'] ) ) {
+    if ( ! empty ( $_POST['individual_address'] ) ) {
     	$individual->getAddressFromGoogle($_POST['individual_address']);
     }
     $individual->toDB();
     // rattachement éventuel à une première société
-    if ($_POST['society_id']) {
+    if ( ! empty( $_POST['society_id'] ) ) {
         $individual->addMembershipRow($_POST['society_id']);
     }
     // upload d'un fichier image (à terminer)
-    if (isset($_FILES['individual_photo_file'])) {
+    if ( ! empty ($_FILES['individual_photo_file']) ) {
         $messages[] = $individual->filePhoto($_FILES['individual_photo_file']) ? 'La photo est mise à jour' : 'Echec de la mise à jour de la photo';
     }
     header('Location:individual.php?individual_id=' . $individual->getId());

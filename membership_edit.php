@@ -68,7 +68,7 @@ if (isset($_POST['task']) && strcmp($_POST['task'], 'membership_submission')==0)
 	// enregistrement des données de la participation
 	//
 	$membership->feed($_POST);
-	if (!is_a($society, 'Society') && !empty($_POST['society_name'])) {
+	if (isset($society) === false && !empty($_POST['society_name'])) {
 		// aucune société n'est encore déclarée comme contexte de la participation
 		$society = new Society();
 		$society->feed($_POST);
@@ -79,7 +79,7 @@ if (isset($_POST['task']) && strcmp($_POST['task'], 'membership_submission')==0)
 		// demande de transfert de la participation dans une autre société
 		$membership->setSociety(new Society($_POST['newsociety_id']));
 	}
-	if (!is_a($individual, 'Individual') && !empty($_POST['individual_lastName'])) {
+	if (isset($individual) === false && !empty($_POST['individual_lastName'])) {
 		// personne n'est déclaré comme participant
 		$individual = new Individual();
 		$individual->feed($_POST);

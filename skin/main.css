@@ -7,32 +7,78 @@
 	font-family: inherit;
 	font-size: 1em;
 }
-
 .ui-widget-content {
 	background: #fff;
 }
-
 .ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em {
 	background-color: #8ea4bc;
 	background-image: none;
 	color: #fff;
 	border: none;
 }
-
 .ui-widget-content .ui-state-focus small {
 	color: #fff;
 }
 
+/* Bootstrap */
+.thumbnail > img {
+	background-color: #eee;
+}
 .navbar {
 	margin-bottom: 0;
 }
+.badge>A, .label>A {
+	color: inherit;
+	font-size: inherit;
+	font-weight: inherit;
+}
+.list-group-item > H3 {
+	margin-top: 10px;
+}
+H1 SMALL SPAN.glyphicon, H2 SMALL SPAN.glyphicon {
+	color: #ccc;
+}
+H1 SMALL SPAN.glyphicon:hover, H2 SMALL SPAN.glyphicon:hover {
+	color: #999;
+}
+
+/* Balises HTML */
 SECTION {
 	padding:1.1em 0.6em;
 }
+HR {
+	clear: both;
+	visibility: hidden;
+	margin: 0;
+}
+TABLE {
+	width: auto;
+}
+IMG {
+	border-width: 0;
+	margin: 0;
+}
+HEADER {
+	background-color: #2f5369;
+	color: #fff;
+}
+HEADER A {
+	color: inherit;
+}
+DIV.card DIV.photo {
+	float: left;
+	margin: 0 1em;
+	border: 3px solid #C5C5C5;
+}
+DD {
+	margin: .3em .6em;
+	padding: .3em;
+}
+
+/* autres styles génériques */
 .tagCloud {
 	margin:1em;
 }
-
 .seeMore {
 	text-align:right;
 	margin: 1em 0;
@@ -51,68 +97,14 @@ SECTION {
 	color: #ccc;
 }
 
-.badge>A, .label>A {
-	color: inherit;
-	font-size: inherit;
-	font-weight: inherit;
-}
-
-H1 SMALL SPAN.glyphicon, H2 SMALL SPAN.glyphicon {
-	color: #ccc;
-}
-
-H1 SMALL SPAN.glyphicon:hover, H2 SMALL SPAN.glyphicon:hover {
-	color: #999;
-}
-
-.list-group-item > H3 {
-	margin-top: 10px;
-}
-
-HR {
-	clear: both;
-	visibility: hidden;
-	margin: 0;
-}
-
-TABLE {
-	width: auto;
-}
-
-IMG {
-	border-width: 0;
-	margin: 0;
-}
-
-HEADER {
-	background-color: #2f5369;
-	color: #fff;
-}
-
-HEADER A {
-	color: inherit;
-}
-
-DIV.card DIV.photo {
-	float: left;
-	margin: 0 1em;
-	border: 3px solid #C5C5C5;
-}
-
-DD {
-	margin: .3em .6em;
-	padding: .3em;
-}
-
+/* styles spécifiques à un écran */
 #loginDoc {
 	background-image: url("./images/bg.gif");
 }
-
 #loginDoc div.container {
 	max-width: 450px;
 	background-color: #fff;
 }
-
 #loginDoc FORM {
 	background-image: url("./images/vostok.gif");
 	background-position: top center;
@@ -120,7 +112,6 @@ DD {
 	margin: auto;
 	padding: 180px 0 0 0;
 }
-
 #loginDoc FOOTER {
 	margin: 20px auto 10px auto;
 	background-image: url("./images/gagarinecasque.gif");
@@ -130,9 +121,4 @@ DD {
 	border-width: 1px 0;
 	border-style: dotted;
 	border-color: #999
-}
-
-#societyDoc DIV.thumbnail {
-	float: left;
-	margin: 0 10px 10px 0;
 }

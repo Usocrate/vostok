@@ -37,26 +37,6 @@ $doc_title = $individual->getWholeName();
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
 	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-	<script language="javascript" type="application/javascript">
-		<!-- <![CDATA[
-			function SocietyLink(society_id, department, title, individual_phone, individual_email, description){
-				this.society_id = society_id;
-				this.department = department;
-				this.title = title;
-				this.individual_phone = individual_phone;
-				this.individual_email = individual_email;
-				this.description = description;
-			}
-			
-			Society.prototype.setSocietyId = new Function(id){
-				this.society_id = id;
-			}
-			
-			function fillSocietyLinkForm(society_id){
-				form = document.getElementById('societyLink_form');
-			}
-		]]>-->
-	</script>
 	<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
@@ -67,15 +47,13 @@ $doc_title = $individual->getWholeName();
 <div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a></small></h1>
 	<section>
-	<div class="card">	
+	<div>	
 		<?php
 		if ($individual->getPhotoUrl()) {
-			echo '<div class="photo">';
 			echo $individual->getPhotoHtml();
-			echo '</div>';
 		}
 		?>
-		<div class="data">
+		<div>
 			<?php
 				$contact_data = array();
 				if ($individual->getPhoneNumber()) {
@@ -87,8 +65,7 @@ $doc_title = $individual->getWholeName();
 				if ($individual->getEmailAddress()) {
 					$contact_data['email'] = $individual->getEmailHtml();
 				}
-				
-				
+
 				if ($individual->getDescription()) {
 					echo '<p>'.$individual->getDescription().'</p>';
 				}
@@ -113,7 +90,8 @@ $doc_title = $individual->getWholeName();
 			?>
 		</div>
 	</div>
-	</section>
+	</section>		
+
 	<section>
 		<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><span class="glyphicon glyphicon-plus"></span></a></small></h2>
 		<?php

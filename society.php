@@ -106,114 +106,129 @@ $doc_title = $society->getName();
         ?>
 	</section>
 	
-	<div class="row">
-		<div class="col-md-8">
-			<section>
-				<h2>Les pistes<small><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
-				<?php if ($leads): ?>
-				<ul class="list-group">
-					<?php
-					foreach ($leads as $l) {
-						echo '<li class="list-group-item">';
-						echo '<h3>';
-						echo '<a href="lead_edit.php?lead_id='.$l->getId().'">';
-						echo $l->getShortDescription() ? ToolBox::toHtml($l->getShortDescription()) : 'Piste n°'.$l->getId();
-						echo '</a>';
-						if ($l->getCreationDate()) echo ' <small>('.ToolBox::toHtml($l->getCreationDateFr()).')</small>';
-						echo '</h3>';
-						echo '</li>';
+	<div>
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" class="active"><a href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge"><?php echo count($relatedSocieties) ?></span></a></li>
+	    <li role="presentation"><a href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge"><?php echo count($memberships) ?></span></a></li>
+	    <li role="presentation"><a href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge"><?php echo count($leads) ?></span></a></li>
+	    <li role="presentation"><a href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge"><?php echo count($events) ?></span></a></li>
+	  </ul>
+	
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+	    <div role="tabpanel" class="tab-pane active" id="societies-tab">
+			<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
+			<?php if (isset($relatedSocieties)): ?>
+			<ul class="list-group">
+				<?php
+				foreach ($relatedSocieties as $item) {
+					$society = $item[0];
+					$relationship_id = $item[1];
+					$role = $item[2];
+					$description = $item[3];
+					echo '<li class="list-group-item">';
+					echo '<h3>';
+					echo '<a href="society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>';
+					echo ' <small>(';
+					echo '<a href="relationship_edit.php?relationship_id='.$relationship_id.'">';
+					echo empty($role) ? '?' : ToolBox::toHtml($role);
+					echo '</a>';
+					echo ')</small>';
+					echo '</h3>';
+					if (!empty($description)) {
+						echo '<p>';
+						echo ToolBox::toHtml($description);
+						echo '</p>';
 					}
-					?>
-				</ul>
-				<?php endif; ?>
-			</section>
-
-			<section>
-				<h2>Évènements<small><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
-				<?php if ($events): ?>
-				<ul class="list-group">
-					<?php
-					foreach ($events as $e) {
-						echo '<li class="list-group-item">';
-						echo '<h3>';
-						echo '<a href="society_event_edit.php?event_id='.$e->getId().'">';
-						echo date("d/m/Y", ToolBox::mktimeFromMySqlDatetime($e->getDatetime()));
-						echo '<small> ('.ToolBox::toHtml(ucfirst($e->getType())).')</small>';
-						echo '</a>';
-						echo '</h3>';
-						echo '<p>'.nl2br(ToolBox::toHtml($e->getComment())).'</p>';
-						echo '</li>';
+					echo '</li>';
+				}
+				?>
+			</ul>
+			<?php endif; ?>
+	    </div>
+	    <div role="tabpanel" class="tab-pane" id="individuals-tab">
+			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
+			<?php if ($memberships): ?>
+			
+			<div class="row">
+			  	<?php 
+			  	foreach ($memberships as $ms) {
+					$i = $ms->getIndividual();
+					echo '<div class="col-sm-6 col-md-3 col-lg-2">';
+					echo '<div class="thumbnail">';
+					if ($i->getPhotoUrl()) {
+						echo $i->getPhotoHtml();
+					} else {
+						echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="img-responsive" />';
 					}
-					?>
-				</ul>
-				<?php endif; ?>
-			</section>
-		</div>
-		<div class="col-md-4">
-			<section>
-				<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
-				<?php if ($memberships): ?>
-				<ul class="list-group">
-					<?php
-					foreach ($memberships as $ms) {
-						$i = $ms->getIndividual();
-						echo '<li class="list-group-item">';
-						echo '<h3>';
-						echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
-						$position_elt = array();
-						if ($ms->getDepartment()) $position_elt[] = ToolBox::toHtml($ms->getDepartment());
-						if ($ms->getTitle()) $position_elt[] = ToolBox::toHtml($ms->getTitle());
-						
-						$smallTag_elt = array();
-						
-						if (count($position_elt)>0) {
-							$smallTag_elt[] = implode(' / ', $position_elt);
-						}
-						if ( $ms->getPeriod() ) $smallTag_elt[] = '('.$ms->getPeriod().')';
-						
-						if (count($smallTag_elt)>0) {
-							echo '<div><small>'.implode(' ', $smallTag_elt).'</small></div>';
-						}
-						echo '</h3>';
-						echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></div>';
-						echo '</li>';
+					echo '<div class="caption">';
+					echo '<h3>';
+					echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
+					$position_elt = array();
+					if ($ms->getDepartment()) $position_elt[] = ToolBox::toHtml($ms->getDepartment());
+					if ($ms->getTitle()) $position_elt[] = ToolBox::toHtml($ms->getTitle());
+					
+					$smallTag_elt = array();
+					
+					if (count($position_elt)>0) {
+						$smallTag_elt[] = implode(' / ', $position_elt);
 					}
-					?>
-				</ul>
-				<?php endif; ?>
-			</section>
-
-			<section>
-				<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
-				<?php if (isset($relatedSocieties)): ?>
-				<ul class="list-group">
-					<?php
-					foreach ($relatedSocieties as $item) {
-						$society = $item[0];
-						$relationship_id = $item[1];
-						$role = $item[2];
-						$description = $item[3];
-						echo '<li class="list-group-item">';
-						echo '<h3>';
-						echo '<a href="society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>';
-						echo ' <small>(';
-						echo '<a href="relationship_edit.php?relationship_id='.$relationship_id.'">';
-						echo empty($role) ? '?' : ToolBox::toHtml($role);
-						echo '</a>';
-						echo ')</small>';
-						echo '</h3>';
-						if (!empty($description)) {
-							echo '<p>';
-							echo ToolBox::toHtml($description);
-							echo '</p>';
-						}
-						echo '</li>';
-					}
-					?>
-				</ul>
-				<?php endif; ?>
-			</section>
-		</div>
+					if ( $ms->getPeriod() ) $smallTag_elt[] = '('.$ms->getPeriod().')';
+					
+					if (count($smallTag_elt)>0) {
+						echo '<div><small>'.implode(' ', $smallTag_elt).'</small></div>';
+					}					
+					echo '</h3>';
+					echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
+					echo '</div>';
+					echo '</div>';
+					echo '</div>';
+			  	}
+				?>
+			</div>
+			<?php endif; ?>
+	    </div>
+	    <div role="tabpanel" class="tab-pane" id="leads-tab">
+			<h2>Les pistes<small><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
+			<?php if ($leads): ?>
+			<ul class="list-group">
+				<?php
+				foreach ($leads as $l) {
+					echo '<li class="list-group-item">';
+					echo '<h3>';
+					echo '<a href="lead_edit.php?lead_id='.$l->getId().'">';
+					echo $l->getShortDescription() ? ToolBox::toHtml($l->getShortDescription()) : 'Piste n°'.$l->getId();
+					echo '</a>';
+					if ($l->getCreationDate()) echo ' <small>('.ToolBox::toHtml($l->getCreationDateFr()).')</small>';
+					echo '</h3>';
+					echo '</li>';
+				}
+				?>
+			</ul>
+			<?php endif; ?>
+	    </div>
+	    <div role="tabpanel" class="tab-pane" id="events-tab">
+			<h2>Évènements<small><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
+			<?php if ($events): ?>
+			<ul class="list-group">
+				<?php
+				foreach ($events as $e) {
+					echo '<li class="list-group-item">';
+					echo '<h3>';
+					echo '<a href="society_event_edit.php?event_id='.$e->getId().'">';
+					echo date("d/m/Y", ToolBox::mktimeFromMySqlDatetime($e->getDatetime()));
+					echo '<small> ('.ToolBox::toHtml(ucfirst($e->getType())).')</small>';
+					echo '</a>';
+					echo '</h3>';
+					echo '<p>'.nl2br(ToolBox::toHtml($e->getComment())).'</p>';
+					echo '</li>';
+				}
+				?>
+			</ul>
+			<?php endif; ?>
+	    </div>
+	  </div>
 	</div>
 </div>
 <script type="text/javascript">
