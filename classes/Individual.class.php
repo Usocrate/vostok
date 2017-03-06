@@ -367,38 +367,45 @@ class Individual {
 	/**
 	 * Obtient l'Url de la photographie de la personne.
 	 *
+	 * @version 06/03/2017
 	 * @return string
 	 */
 	public function getPhotoUrl() {
 		global $system;
-		if (isset ( $this->photo_url )) {
-			return $this->photo_url;
-		} else {
-			$file_extensions = array (
-					'jpg',
-					'jpeg',
-					'gif',
-					'png' 
-			);
-			
-			// recherche d'un fichier construit à partir de l'id de l'individu.
-			foreach ( $file_extensions as $e ) {
-				$file_name = $this->getId () . '.' . $e;
-				if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
-					return $this->photo_url = $system->getTrombiUrl () . $file_name;
+		try {
+			if (isset ( $this->photo_url )) {
+				return $this->photo_url;
+			} else {
+				$file_extensions = array (
+						'jpg',
+						'jpeg',
+						'gif',
+						'png' 
+				);
+				
+				// recherche d'un fichier construit à partir de l'id de l'individu.
+				foreach ( $file_extensions as $e ) {
+					$file_name = $this->getId () . '.' . $e;
+					if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+						return $this->photo_url = $system->getTrombiUrl () . $file_name;
+					}
+				}
+				
+				// recherche d'un fichier construit à partir du nom de l'individu.
+				if ( !isset ($this->lastName) && !isset ($this->firstName) ) {
+					throw New Exception ('Il nous manque le nom de la personne pour trouver sa photo');
+				}
+				$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
+				foreach ( $file_extensions as $e ) {
+					$file_name = $file_basename . '.' . $e;
+					if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+						return $this->photo_url = $system->getTrombiUrl () . $file_name;
+					}
 				}
 			}
-			
-			// recherche d'un fichier construit à partir du nom de l'individu.
-			$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
-			foreach ( $file_extensions as $e ) {
-				$file_name = $file_basename . '.' . $e;
-				if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
-					return $this->photo_url = $system->getTrombiUrl () . $file_name;
-				}
-			}
+		} catch (Exception $e) {
+			trigger_error(__METHOD__.$e->getMessage());	
 		}
-		return NULL;
 	}
 	/**
 	 * Obtient le chemin d'accès au fichier.
@@ -451,7 +458,7 @@ class Individual {
 				return copy ( $uploadedFile ['tmp_name'], $targetFilePath );
 			}
 		} catch ( Exception $e ) {
-			System::reportException ( $e );
+			trigger_error(__METHOD__.$e->getMessage());
 			return false;
 		}
 	}

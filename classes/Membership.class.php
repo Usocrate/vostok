@@ -179,7 +179,7 @@ class Membership {
 	}
 	/**
 	 * Renvoie la personne impliquée.
-	 * 
+	 * @version 06/03/2017
 	 * @return Individual|NULL
 	 */
 	public function getIndividual()	{

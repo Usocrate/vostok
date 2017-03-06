@@ -155,6 +155,7 @@ $doc_title = $society->getName();
 			  	<?php 
 			  	foreach ($memberships as $ms) {
 					$i = $ms->getIndividual();
+					$i->feed();
 					echo '<div class="col-sm-6 col-md-3 col-lg-2">';
 					echo '<div class="thumbnail">';
 					if ($i->getPhotoUrl()) {
