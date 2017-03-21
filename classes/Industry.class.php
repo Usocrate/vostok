@@ -20,7 +20,7 @@ class Industry {
 	public function identifyFromName() {
 		global $system;
 		if (empty($this->name)) return false;
-		$statement = $system->getPdo()->prepare('SELECT industry_id FROM industry WHERE industry_name=:name');
+		$statement = $system->getPdo()->prepare('SELECT id FROM industry WHERE name=:name');
 		$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
 		$statement->execute();
 		$this->id = $statement->fetch(PDO::FETCH_COLUMN);
@@ -120,7 +120,7 @@ class Industry {
 		global $system;
 		if (is_null($array)) {
 			// si aucune donnée transmise on puise dans la base de données
-			$statement = $system->getPdo()->prepare('SELECT * FROM industry WHERE industry_id=:id');
+			$statement = $system->getPdo()->prepare('SELECT * FROM industry WHERE id=:id');
 			$statement->execute();
 			$row = $statement->fetch(PDO::FETCH_ASSOC);
 			return is_array($row) ? $this->feed($row) : false;
@@ -147,7 +147,7 @@ class Industry {
 	public function delete() {
 		global $system;
 		if (empty($this->id)) return false;
-		$statement = $system->getPdo()->prepare('DELETE FROM industry WHERE industry_id=:id');
+		$statement = $system->getPdo()->prepare('DELETE FROM industry WHERE id=:id');
 		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 		return $statement->execute();
 	}
@@ -163,13 +163,13 @@ class Industry {
 		$settings = array();
 		
 		if (isset($this->name)) {
-			$settings[] = 'industry_name=:name';
+			$settings[] = 'name=:name';
 		}
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql.= ' industry SET '.implode(', ',$settings);
 		
 		if (!$new) {
-			$sql.= ' WHERE industry_id=:id';
+			$sql.= ' WHERE id=:id';
 		}
 		
 		$statement = $system->getPdo()->prepare($sql);

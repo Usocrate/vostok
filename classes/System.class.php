@@ -664,8 +664,7 @@ class System {
 
 		$output = array ();
 
-		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb';
-		$sql .= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si ON (si.industry_id=i.industry_id)';
+		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb FROM industry AS i LEFT OUTER JOIN society_industry AS si ON (si.industry_id=i.id)';
 		if (! is_null ( $criteria )) {
 			$conditions = array();
 
@@ -675,12 +674,12 @@ class System {
 				foreach (array_keys($criteria['ids']) as $i) {
 					$ids[':id'.$i] = $criteria['ids'][$i];
 				}
-				$conditions[] = 'i.industry_id IN ('.implode(',', array_keys($ids)).')';
+				$conditions[] = 'i.id IN ('.implode(',', array_keys($ids)).')';
 			}
 			
 			$sql .= ' WHERE '.implode ( ' AND ', $conditions );
 		}
-		$sql .= ' GROUP BY i.industry_name ASC';
+		$sql .= ' GROUP BY i.name ASC';
 		
 		$statement = $system->getPdo()->prepare($sql);
 		
@@ -711,10 +710,9 @@ class System {
 
 		$output = array ();
 		$sql = 'SELECT i.*, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT :scope) AS si';
-		$sql.= ' INNER JOIN industry AS i USING (industry_id)';
-		$sql.= ' GROUP BY i.industry_name ASC';
-		//echo $sql;
-		
+		$sql.= ' INNER JOIN industry AS i ON (i.id = si.industry_id)';
+		$sql.= ' GROUP BY i.name ASC';
+
 		$statement = $system->getPdo()->prepare($sql);
 		$statement->bindParam(':scope', $scope, PDO::PARAM_INT);
 		$statement->execute();
@@ -769,9 +767,8 @@ class System {
 
 		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb';
 		$sql .= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si';
-		$sql .= ' ON(si.industry_id=i.industry_id)';
-		$sql .= ' GROUP BY i.industry_name ASC';
-		$sql .= ' ORDER BY i.industry_name ASC';
+		$sql .= ' ON ( si.industry_id = i.id )';
+		$sql .= ' GROUP BY i.name ASC';
 		
 		$html = '';
 		

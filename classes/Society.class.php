@@ -551,7 +551,7 @@ class Society {
 			
 			if (empty ( $this->id )) return NULL;
 			
-			$sql = 'SELECT i.* FROM society_industry AS si INNER JOIN industry AS i ON (i.industry_id=si.industry_id)';
+			$sql = 'SELECT i.* FROM society_industry AS si INNER JOIN industry AS i ON (i.id=si.industry_id)';
 			$sql .= ' WHERE si.society_id=:id';
 			$statement = $system->getPdo()->prepare($sql);
 			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
