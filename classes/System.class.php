@@ -664,7 +664,7 @@ class System {
 
 		$output = array ();
 
-		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb FROM industry AS i LEFT OUTER JOIN society_industry AS si ON (si.industry_id=i.id)';
+		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb FROM industry AS i LEFT OUTER JOIN society_industry AS si ON (si.industry_id=i.id)';
 		if (! is_null ( $criteria )) {
 			$conditions = array();
 
@@ -765,7 +765,7 @@ class System {
 	public function getIndustryOptionsTags($toSelect = NULL) {
 		global $system;
 
-		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS industry_societies_nb';
+		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb';
 		$sql .= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si';
 		$sql .= ' ON ( si.industry_id = i.id )';
 		$sql .= ' GROUP BY i.name ASC';

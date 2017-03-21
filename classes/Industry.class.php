@@ -114,9 +114,9 @@ class Industry {
 	}
 	/**
 	 * Fixe les attributs de l'activité à partir d'un tableau aux clefs normalisées.
-	 * @version 23/12/2016
+	 * @version 21/03/2017
 	 */
-	public function feed($array=NULL, $prefix='industry_') {
+	public function feed($array=NULL, $prefix=NULL) {
 		global $system;
 		if (is_null($array)) {
 			// si aucune donnée transmise on puise dans la base de données
