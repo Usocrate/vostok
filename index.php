@@ -116,7 +116,6 @@ $doc_title = 'Accueil';
 						$html.= '</section>';
 						echo $html;
 					}
-				}
 				?>
 				<section>
 					<h2>Les derniers évènements enregistrés</h2>

@@ -38,10 +38,10 @@ if (! empty ( $_REQUEST ['event_id'] )) {
 if (isset ( $_POST )) {
 	ToolBox::formatUserPost ( $_POST );
 
-	if (isset ( $_POST ['task_id'] )) {
-		switch ($_POST ['task_id']) {
+	if (isset ( $_REQUEST ['task_id'] )) {
+		switch ($_REQUEST ['task_id']) {
 			case 'save' :
-				$event->feed ( $_POST );
+				$event->feed ( $_REQUEST );
 				$event->toDB();
 				header ( 'Location:society.php?society_id=' . $society->getId () );
 				exit();

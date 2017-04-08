@@ -255,6 +255,12 @@ class Event {
 	public function setType($input)	{
 		return $this->setAttribute('type', $input);
 	}
+	public function getWarehouse($input) {
+		return $this->warehouse;
+	}
+	public function setWarehouse($input) {
+		$this->warehouse = $input;
+	}
 	public function getType(){
 		if (!isset($this->type) && $this->hasId()) {
 			$dataset = $this->getDataFromBase(array('type'));
@@ -364,83 +370,88 @@ class Event {
 	public function toDB() {
 		global $system;
 
-		$new = !$this->hasId();
-
-		$settings = array();
-
-		if ( $this->society instanceof Society && $this->society->hasId() ) {
-			$settings[] = 'society_id=:society_id';
-		}
-		if ( isset ($_SESSION['user_id']) ) {
-			$settings[] = 'user_id=:user_id';
-		}
-		if ( isset ($this->datetime) ) {
-			$settings[] = 'datetime=:datetime';
-			if ( $new && empty($this->warehouse) ) {
-				$this->warehouse = ToolBox::mktimeFromMySqlDatetime($this->datetime)>time() ? 'planning' : 'history';
+		try {
+			$new = ! $this->hasId();
+	
+			$settings = array();
+	
+			if ( $this->society instanceof Society && $this->society->hasId() ) {
+				$settings[] = 'society_id=:society_id';
 			}
+			if ( isset ($_SESSION['user_id']) ) {
+				$settings[] = 'user_id=:user_id';
+			}
+			if ( isset ($this->datetime) ) {
+				$settings[] = 'datetime=:datetime';
+				if ( $new && empty($this->warehouse) ) {
+					$this->warehouse = ToolBox::mktimeFromMySqlDatetime($this->datetime)>time() ? 'planning' : 'history';
+				}
+			}
+			if ( isset ($this->warehouse) ) {
+				$settings[] = 'warehouse=:warehouse';
+			}
+			if ( isset ($this->user_position) ) {
+				$settings[] = 'user_position=:user_position';
+			}
+			if ( isset ($this->type) ) {
+				$settings[] = 'type=:type';
+			}
+			if ( isset ($this->media) ) {
+				$settings[] = 'media=:media';
+			}
+			if ( isset ($this->comment) ) {
+				$settings[] = 'comment=:comment';
+			}
+	
+			$sql = $new ? 'INSERT INTO' : 'UPDATE';
+			$sql.= ' event SET ';
+			$sql.= implode(', ',$settings);
+			if ( ! $new ) {
+				$sql.= ' WHERE id=:id';
+			}
+			$statement = $system->getPdo()->prepare($sql);
+	
+			//
+			// binding
+			//
+			if ( $this->society instanceof Society && $this->society->hasId() ) {
+				$statement->bindValue(':society_id', $this->society->getId(), PDO::PARAM_INT);
+			}
+			if ( isset ($_SESSION['user_id']) ) {
+				$statement->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+			}
+			if ( isset ($this->datetime) ) {
+				$statement->bindValue(':datetime', $this->datetime, PDO::PARAM_STR);
+			}
+			if ( isset ($this->warehouse) ) {
+				$statement->bindValue(':warehouse', $this->warehouse, PDO::PARAM_STR);
+			}
+			if ( isset ($this->user_position) ) {
+				$statement->bindValue(':user_position', $this->user_position, PDO::PARAM_STR);
+			}
+			if ( isset ($this->type) ) {
+				$statement->bindValue(':type', $this->type, PDO::PARAM_STR);
+			}
+			if ( isset ($this->media) ) {
+				$statement->bindValue(':media', $this->media, PDO::PARAM_STR);
+			}
+			if ( isset ($this->comment) ) {
+				$statement->bindValue(':comment', $this->comment, PDO::PARAM_STR);
+			}
+			if ( ! $new ) {
+				$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			}
+	
+			$result = $statement->execute();
+			if ( $result && $new ) {
+				$this->id = $system->getPdo()->lastInsertId();
+			}
+			return $result;
+		} catch (Exception $e) {
+			//var_dump($system->getPdo());
+			//var_dump($statement);
+			trigger_error(__METHOD__.' : '.$e->getMessage());
 		}
-		if ( isset ($this->warehouse) ) {
-			$settings[] = 'warehouse=:warehouse';
-		}
-		if ( isset ($this->user_position) ) {
-			$settings[] = 'user_position=:user_position';
-		}
-		if ( isset($this->type) ) {
-			$settings[] = 'type=:type';
-		}
-		if ( isset($this->media) ) {
-			$settings[] = 'media=:media';
-		}
-		if ( isset($this->comment) ) {
-			$settings[] = 'comment:comment';
-		}
-
-		$sql = $new ? 'INSERT INTO' : 'UPDATE';
-		$sql.= ' event SET ';
-		$sql.= implode(', ',$settings);
-		if ( ! $new ) {
-			$sql.= ' WHERE id=:id';
-		}
-
-		$statement = $system->getPdo()->prepare($sql);
-
-		//
-		// binding
-		//
-		if ( $this->society instanceof Society && $this->society->hasId() ) {
-			$statement->bindValue(':society_id', $this->society->getId(), PDO::PARAM_INT);
-		}
-		if ( isset ($_SESSION['user_id']) ) {
-			$statement->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-		}
-		if ( isset ($this->datetime) ) {
-			$statement->bindValue(':datetime', $this->datetime, PDO::PARAM_STR);
-		}
-		if ( isset ($this->warehouse) ) {
-			$statement->bindValue(':warehouse', $this->warehouse, PDO::PARAM_STR);
-		}
-		if ( isset ($this->user_position) ) {
-			$statement->bindValue(':user_position', $this->user_position, PDO::PARAM_STR);
-		}
-		if ( isset($this->type) ) {
-			$statement->bindValue(':type', $this->type, PDO::PARAM_STR);
-		}
-		if ( isset($this->media) ) {
-			$statement->bindValue(':media', $this->media, PDO::PARAM_STR);
-		}
-		if ( isset($this->comment) ) {
-			$statement->bindValue(':comment', $this->comment, PDO::PARAM_STR);
-		}
-		if ( ! $new ) {
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-		}
-
-		$result = $statement->execute();
-		if ( $result && $new ) {
-			$this->id = $system->getPdo()->lastInsertId();
-		}
-		return $result;
 	}
 	/**
 	 * Supprime l'enregistrement de l'instance.
@@ -451,7 +462,7 @@ class Event {
 	public function delete() {
 		global $system;
 		$statement = $system->getPdo()->prepare('DELETE FROM event WHERE id=:id');
-		$statement->bindValue(:id, $this->id, PDO::PARAM_INT);
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 		return $statement->execute();
 	}
 	/**
