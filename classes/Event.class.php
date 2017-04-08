@@ -13,6 +13,7 @@ class Event {
 	public $type;
 	public $media;
 	public $comment;
+	public $warehouse;
 	public $involvements;
 
 	public function __construct($id=NULL)	{
@@ -303,17 +304,34 @@ class Event {
 					$key = iconv_substr($key, iconv_strlen($prefix));
 				}
 				switch ($key) {
-					case 'id': $this->id = $value; break;
+					case 'id':
+						$this->id = $value;
+						break;
 					case 'society_id':
 						$this->society = new Society($value);
 						$this->society->feed($array,'society_');
 						break;
-					case 'user_id': $this->user = new User($value); break;
-					case 'user_position': $this->setUserPosition($value); break;
-					case 'type': $this->setType($value); break;
-					case 'media': $this->setMedia($value); break;
-					case 'datetime': $this->setDatetime($value); break;
-					case 'comment': $this->setComment($value); break;
+					case 'user_id':
+						$this->user = new User($value);
+						break;
+					case 'user_position':
+						$this->setUserPosition($value);
+						break;
+					case 'type':
+						$this->setType($value);
+						break;
+					case 'media':
+						$this->setMedia($value);
+						break;
+					case 'datetime':
+						$this->setDatetime($value);
+						break;
+					case 'comment':
+						$this->setComment($value);
+						break;
+					case 'warehouse':
+						$this->warehouse = $value;
+						break;
 				}
 			}
 			return true;
@@ -340,59 +358,101 @@ class Event {
 	}
 	/**
 	 * Enregistre les données de l'instance en base de données.
+	 *
+	 * @version 08/04/2017
 	 */
 	public function toDB() {
-		$new = !$this->hasId();
-		$settings = array();
-		if ($this->society instanceof Society && $this->society->hasId()) {
-			$settings[] = 'society_id='.$this->society->getId();
-		}
-		if (isset($_SESSION['user_id'])) {
-			$settings[] = 'user_id='.$_SESSION['user_id'];
-		}
-		if (isset($this->datetime)) {
-			$settings[] = 'datetime="'.$this->datetime.'"';
+		global $system;
 
-			if ($new) {
-				$settings[] = ToolBox::mktimeFromMySqlDatetime($this->datetime)>time() ? 'warehouse="planning"' : 'warehouse="history"';
+		$new = !$this->hasId();
+
+		$settings = array();
+
+		if ( $this->society instanceof Society && $this->society->hasId() ) {
+			$settings[] = 'society_id=:society_id';
+		}
+		if ( isset ($_SESSION['user_id']) ) {
+			$settings[] = 'user_id=:user_id';
+		}
+		if ( isset ($this->datetime) ) {
+			$settings[] = 'datetime=:datetime';
+			if ( $new && empty($this->warehouse) ) {
+				$this->warehouse = ToolBox::mktimeFromMySqlDatetime($this->datetime)>time() ? 'planning' : 'history';
 			}
 		}
-		if ($this->user_position) {
-			$settings[] = 'user_position="'.$this->user_position.'"';
+		if ( isset ($this->warehouse) ) {
+			$settings[] = 'warehouse=:warehouse';
 		}
-		if (isset($this->type)) {
-			$settings[] = 'type="'.$this->type.'"';
+		if ( isset ($this->user_position) ) {
+			$settings[] = 'user_position=:user_position';
 		}
-		if (isset($this->media)) {
-			$settings[] = 'media="'.$this->media.'"';
+		if ( isset($this->type) ) {
+			$settings[] = 'type=:type';
 		}
-		if (isset($this->comment)) {
-			$settings[] = 'comment="'.mysql_real_escape_string($this->comment).'"';
+		if ( isset($this->media) ) {
+			$settings[] = 'media=:media';
+		}
+		if ( isset($this->comment) ) {
+			$settings[] = 'comment:comment';
 		}
 
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql.= ' event SET ';
 		$sql.= implode(', ',$settings);
-
-		if (!$new) {
-			$sql.= ' WHERE id='.$this->id;
+		if ( ! $new ) {
+			$sql.= ' WHERE id=:id';
 		}
-		
-		$result = mysql_query($sql);
-		if ($new) {
-			$this->id = mysql_insert_id();
+
+		$statement = $system->getPdo()->prepare($sql);
+
+		//
+		// binding
+		//
+		if ( $this->society instanceof Society && $this->society->hasId() ) {
+			$statement->bindValue(':society_id', $this->society->getId(), PDO::PARAM_INT);
+		}
+		if ( isset ($_SESSION['user_id']) ) {
+			$statement->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+		}
+		if ( isset ($this->datetime) ) {
+			$statement->bindValue(':datetime', $this->datetime, PDO::PARAM_STR);
+		}
+		if ( isset ($this->warehouse) ) {
+			$statement->bindValue(':warehouse', $this->warehouse, PDO::PARAM_STR);
+		}
+		if ( isset ($this->user_position) ) {
+			$statement->bindValue(':user_position', $this->user_position, PDO::PARAM_STR);
+		}
+		if ( isset($this->type) ) {
+			$statement->bindValue(':type', $this->type, PDO::PARAM_STR);
+		}
+		if ( isset($this->media) ) {
+			$statement->bindValue(':media', $this->media, PDO::PARAM_STR);
+		}
+		if ( isset($this->comment) ) {
+			$statement->bindValue(':comment', $this->comment, PDO::PARAM_STR);
+		}
+		if ( ! $new ) {
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		}
+
+		$result = $statement->execute();
+		if ( $result && $new ) {
+			$this->id = $system->getPdo()->lastInsertId();
 		}
 		return $result;
 	}
 	/**
 	 * Supprime l'enregistrement de l'instance.
 	 *
-	 * @return unknown_type
+	 * @return boolean
+	 * @version 08/04/2017
 	 */
 	public function delete() {
-		$sql = 'DELETE FROM event ';
-		$sql.= 'WHERE id='.$this->id;
-		return mysql_query($sql);
+		global $system;
+		$statement = $system->getPdo()->prepare('DELETE FROM event WHERE id=:id');
+		$statement->bindValue(:id, $this->id, PDO::PARAM_INT);
+		return $statement->execute();
 	}
 	/**
 	 * Fixe le commentaire associé à l'évènement.

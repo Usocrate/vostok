@@ -5,16 +5,16 @@
  */
 class Society {
 	public $id;
-	
+
 	protected $industries;
-	
+
 	protected $street;
 	protected $city;
 	protected $postalcode;
 	protected $subAdministrativeAreaName;
 	protected $administrativeAreaName;
 	protected $countryNameCode;
-	
+
 	/**
 	 * les coordonnées géographiques telles que récupérées par l'API Google
 	 */
@@ -22,13 +22,13 @@ class Society {
 	protected $latitude;
 	protected $altitude;
 	protected $parent;
-	
+
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
 	/**
 	 * Tente d'indentifier la société par son nom.
-	 * 
+	 *
 	 * @return boolean
 	 * @version 20/12/2016
 	 */
@@ -50,7 +50,7 @@ class Society {
 	}
 	/**
 	 * Fixe la valeur d'un attribut.
-	 * 
+	 *
 	 * @since 28/01/2006
 	 * @version 04/03/2006
 	 */
@@ -89,7 +89,7 @@ class Society {
 	}
 	/**
 	 * Indique si l'identifiant de la société est connu.
-	 * 
+	 *
 	 * @since 28/12/2010
 	 * @return bool
 	 */
@@ -110,7 +110,7 @@ class Society {
 	public function getName() {
 		if (! isset ( $this->name ) && $this->hasId ()) {
 			$dataset = $this->getDataFromBase ( array (
-					'society_name' 
+					'society_name'
 			) );
 			$this->name = $dataset ['society_name'];
 		}
@@ -165,7 +165,7 @@ class Society {
 			}
 			if (is_null ( $fields )) {
 				$fields = array (
-						'*' 
+						'*'
 				);
 			}
 			$sql = 'SELECT ' . implode ( ',', $fields ) . ' FROM society WHERE society_id=:id';
@@ -179,7 +179,7 @@ class Society {
 	}
 	/**
 	 * Obtient le nom affichable de la société.
-	 * 
+	 *
 	 * @since 15/01/2006
 	 * @version 26/12/2006
 	 */
@@ -188,7 +188,7 @@ class Society {
 	}
 	/**
 	 * Obtient la date d'enregistrement de la société.
-	 * 
+	 *
 	 * @version 01/01/2006
 	 */
 	public function getCreationDate() {
@@ -196,7 +196,7 @@ class Society {
 	}
 	/**
 	 * Obtient le timestamp de l'enregistrement de la société.
-	 * 
+	 *
 	 * @since 01/01/2006
 	 */
 	public function getCreationTimestamp() {
@@ -209,7 +209,7 @@ class Society {
 	}
 	/**
 	 * Obtient la date d'enregistrement de la société au format français.
-	 * 
+	 *
 	 * @since 01/01/2006
 	 */
 	public function getCreationDateFr() {
@@ -248,7 +248,7 @@ class Society {
 	}
 	/**
 	 * Obtient la premiére partie de l'adresse physique.
-	 * 
+	 *
 	 * @todo Supprimer caractére indésirable notamment double-espace; retour-chariot courants lors de copier-coller.
 	 */
 	public function setStreet($input) {
@@ -285,7 +285,7 @@ class Society {
 	public static function knownCitiesToJson($substring = NULL) {
 		$output = '{"cities":' . json_encode ( self::getKnownCities ( $substring ) ) . '}';
 		return $output;
-	}	
+	}
 	/**
 	 * Obtient la chaîne complète de l'adresse de la société
 	 *
@@ -377,7 +377,7 @@ class Society {
 				}
 				if (in_array('country', $c->types)) {
 					$this->countryNameCode = $c->short_name;
-				}			
+				}
 			}
 			$this->street = $street['number'].' '.$street['route'];
 			$this->latitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
@@ -402,7 +402,7 @@ class Society {
 	public function getUrl() {
 		if (! isset ( $this->url ) && $this->hasId ()) {
 			$dataset = $this->getDataFromBase ( array (
-					'society_url' 
+					'society_url'
 			) );
 			$this->url = $dataset ['society_url'];
 		}
@@ -418,7 +418,7 @@ class Society {
 	}
 	/**
 	 * Obtient un lien HTML vers le site web de la société.
-	 * 
+	 *
 	 * @since 24/11/2006
 	 * @version 23/11/2016
 	 */
@@ -445,7 +445,7 @@ class Society {
 	}
 	/**
 	 * Obtient le fichier image représentant l'interface web de la ressource depuis le site Bluga.net.
-	 * 
+	 *
 	 * @return bool
 	 * @since 27/12/2010
 	 */
@@ -454,15 +454,15 @@ class Society {
 			if (! defined ( 'WEBTHUMB_KEY' ) || ! defined ( 'WEBTHUMB_USER_ID' )) {
 				throw new Exception ( 'Absence d\'identifiants Bluga' );
 			}
-			
+
 			ToolBox::addIncludePath ( BLUGA_DIR );
 			include_once 'Autoload.php';
-			
+
 			$webthumb = new Bluga_Webthumb ();
 			$webthumb->setApiKey ( WEBTHUMB_KEY );
 			$job = $webthumb->addUrl ( $this->getUrl (), 'medium2', 1024, 768 );
 			$webthumb->submitRequests ();
-			
+
 			while ( ! $webthumb->readyToDownload () ) {
 				sleep ( 2 );
 				$webthumb->checkJobStatus ();
@@ -475,7 +475,7 @@ class Society {
 	}
 	/**
 	 * Obtient le nom du fichier où est stockée la miniature du site web.
-	 * 
+	 *
 	 * @return string
 	 * @since 27/12/2010
 	 */
@@ -494,8 +494,8 @@ class Society {
 	}
 	/**
 	 * Obtient un la miniature du site web de la société sous forme de balise Html <img>
-	 * 
-	 * @param string $size        	
+	 *
+	 * @param string $size
 	 * @return string
 	 * @since 27/12/2010
 	 */
@@ -510,9 +510,9 @@ class Society {
 	}
 	/**
 	 * Obtient un lien vers le site web de la société sous forme de miniature.
-	 * 
-	 * @param string $target        	
-	 * @param string $size        	
+	 *
+	 * @param string $target
+	 * @param string $size
 	 * @return string
 	 * @since 27/12/2010
 	 */
@@ -538,7 +538,7 @@ class Society {
 	}
 	/**
 	 * Obtient la liste des activités auxquelles est associée la société.
-	 * 
+	 *
 	 * @return array
 	 * @since 16/07/2006
 	 * @version 20/12/2016
@@ -546,11 +546,11 @@ class Society {
 	public function getIndustries() {
 		global $system;
 		if (! isset ( $this->industries )) {
-			
+
 			$this->industries = array ();
-			
+
 			if (empty ( $this->id )) return NULL;
-			
+
 			$sql = 'SELECT i.* FROM society_industry AS si INNER JOIN industry AS i ON (i.id=si.industry_id)';
 			$sql .= ' WHERE si.society_id=:id';
 			$statement = $system->getPdo()->prepare($sql);
@@ -595,7 +595,7 @@ class Society {
 	}
 	/**
 	 * Ajoute une activité é la liste existante.
-	 * 
+	 *
 	 * @since 16/07/2006
 	 * @todo substituer é setIndustry()
 	 */
@@ -605,7 +605,7 @@ class Society {
 	}
 	/**
 	 * Indique si une activité fait partie de la liste des activités de la société.
-	 * 
+	 *
 	 * @return boolean
 	 * @since 16/07/2006
 	 */
@@ -621,7 +621,7 @@ class Society {
 	}
 	/**
 	 * Vide la liste des activités de la société.
-	 * 
+	 *
 	 * @since 16/07/2006
 	 */
 	public function resetIndustries() {
@@ -629,7 +629,7 @@ class Society {
 	}
 	/**
 	 * Enregistre en base de données la liste des activités déclarées de la société.
-	 * 
+	 *
 	 * @return boolean
 	 * @since 16/07/2006
 	 * @version 15/08/2006
@@ -649,7 +649,7 @@ class Society {
 	}
 	/**
 	 * Supprime de la base de données la liste des activités déclarées de la société.
-	 * 
+	 *
 	 * @since 15/08/2006
 	 * @version 20/12/2016
 	 */
@@ -668,7 +668,7 @@ class Society {
 	}
 	/**
 	 * Transfére les activités de la société vers une autre société (dans le cadre d'une fusion notamment).
-	 * 
+	 *
 	 * @version 16/07/2006
 	 */
 	public function transferIndustries($society) {
@@ -682,7 +682,7 @@ class Society {
 	}
 	/**
 	 * Obtient les enregistrements des participations associées à la société.
-	 * 
+	 *
 	 * @return resource
 	 * @since 09/2005
 	 */
@@ -702,7 +702,7 @@ class Society {
 		// LIMIT
 		if (isset ( $row_count ))
 			$sql .= ' LIMIT ' . $offset . ',' . $row_count;
-		
+
 		return mysql_query ( $sql );
 	}
 	/**
@@ -724,7 +724,7 @@ class Society {
 	}
 	/**
 	 * Transfére les participations de membres au sein de la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
-	 * 
+	 *
 	 * @version 23/10/2005
 	 */
 	public function transferMemberships($society) {
@@ -732,12 +732,12 @@ class Society {
 			return false;
 		$sql = 'UPDATE membership SET society_id=' . $society->getId ();
 		$sql .= ' WHERE society_id=' . $this->id;
-		
+
 		return mysql_query ( $sql );
 	}
 	/**
 	 * Supprime de la base de données les enregistrements des participations (les personnes associées sont supprimées si elles n'ont pas d'autres participations).
-	 * 
+	 *
 	 * @since 15/08/2006
 	 */
 	public function deleteMemberships() {
@@ -752,7 +752,7 @@ class Society {
 	}
 	/**
 	 * Obtient la liste des membres sous forme de balises Html <option>.
-	 * 
+	 *
 	 * @return string
 	 * @since 25/06/2006
 	 */
@@ -772,7 +772,7 @@ class Society {
 	}
 	/**
 	 * Obtient les éléments en relation avec la société.
-	 * 
+	 *
 	 * @return array
 	 * @since 03/2006
 	 * @version 20/12/2016
@@ -817,20 +817,20 @@ class Society {
 	}
 	/**
 	 * Obtient la liste des sociétés en relation.
-	 * 
+	 *
 	 * @return array
 	 * @since 27/08/2006
 	 * @version 20/12/2016
 	 */
 	public function getRelatedSocieties() {
 		global $system;
-		
+
 		if (empty ( $this->id )) {
 			return NULL;
 		}
-		
+
 		$output = array();
-		
+
 		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
 		$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
@@ -839,13 +839,13 @@ class Society {
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
 		$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
 		$sql .= ' ORDER BY society_name ASC';
-		
+
 		$statement = $system->getPdo()->prepare($sql);
 		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
 		$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
 		$statement->execute();
 		$data = $statement->fetchAll(PDO::FETCH_ASSOC);
-		
+
 		foreach ( $data as $row ) {
 			$s = new Society ();
 			$s->feed ( $row );
@@ -855,7 +855,7 @@ class Society {
 	}
 	/**
 	 * Obtient la liste des sociétés ayant en relation au format html (balises <option>).
-	 * 
+	 *
 	 * @return string
 	 * @since 27/08/2006
 	 */
@@ -889,7 +889,7 @@ class Society {
 	}
 	/**
 	 * Supprime de la base de données les enregistrements des relations avec des personnes ou d'autres sociétés.
-	 * 
+	 *
 	 * @since 15/08/2006
 	 */
 	public function deleteRelationships() {
@@ -900,12 +900,12 @@ class Society {
 		$criterias [] = '(item0_id=' . $this->id . ' AND item0_class="' . get_class ( $this ) . '")';
 		$criterias [] = '(item1_id=' . $this->id . ' AND item1_class="' . get_class ( $this ) . '")';
 		$sql .= ' WHERE ' . implode ( ' OR ', $criterias );
-		
+
 		return mysql_query ( $sql );
 	}
 	/**
 	 * Obtient les enregistrements des pistes associées à la sociétés.
-	 * 
+	 *
 	 * @return resource
 	 */
 	protected function getLeadsRowset($offset = 0, $row_count = NULL) {
@@ -916,12 +916,12 @@ class Society {
 		if ($row_count)
 			$sql .= ' LIMIT ' . $offset . ',' . $row_count;
 		$sql .= ' ORDER BY lead_creation_date DESC';
-		
+
 		return mysql_query ( $sql );
 	}
 	/**
 	 * Obtient les enregistrements des évènements liés à la société.
-	 * 
+	 *
 	 * @param
 	 *        	$offset
 	 * @param
@@ -937,12 +937,12 @@ class Society {
 			$sql .= ' LIMIT ' . $offset . ',' . $row_count;
 		}
 		$sql .= ' ORDER BY datetime DESC';
-		
+
 		return mysql_query ( $sql );
 	}
 	/**
 	 * Obtient les pistes associées à la société.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function getLeads() {
@@ -977,7 +977,7 @@ class Society {
 	}
 	/**
 	 * Transfére les pistes liées à la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
-	 * 
+	 *
 	 * @version 24/11/2016
 	 */
 	public function transferLeads($society) {
@@ -990,7 +990,7 @@ class Society {
 	}
 	/**
 	 * Supprime de la base de données toutes les pistes rattachées à la société.
-	 * 
+	 *
 	 * @since 15/08/2006
 	 * @version 24/11/2016
 	 */
@@ -1028,7 +1028,7 @@ class Society {
 	}
 	/**
 	 * Fixe les attributs de la société à partir de son enregistrement en base de données.
-	 * 
+	 *
 	 * @version 23/11/2016
 	 */
 	public function initFromDB() {
@@ -1048,9 +1048,9 @@ class Society {
 	 */
 	public function toDB() {
 		global $system;
-		
+
 		$new = empty ( $this->id );
-		
+
 		$settings = array ();
 		if (isset ( $this->name )) {
 			$settings [] = 'society_name=:name';
@@ -1100,16 +1100,16 @@ class Society {
 				$settings [] = 'society_lastModification_user_id=:user_id';
 			}
 		}
-		
+
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql .= ' society SET ';
 		$sql .= implode ( ', ', $settings );
 		if (! $new)	{
 			$sql .= ' WHERE society_id=:id';
 		}
-		
+
 		$statement = $system->getPDO()->prepare($sql);
-		
+
 		if (isset ( $this->name )) {
 			$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
 		}
@@ -1136,7 +1136,7 @@ class Society {
 		}
 		if (isset ( $this->countryNameCode )) {
 			$statement->bindValue(':countryNameCode', $this->countryNameCode, PDO::PARAM_STR);
-		}		
+		}
 		if (isset ( $this->url )) {
 			$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
 		}
@@ -1155,18 +1155,18 @@ class Society {
 		if (! $new)	{
 			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 		}
-		
+
 		$result = $statement->execute();
-		
+
 		if ($result && $new) {
-            $this->id = $system->getPdo()->lastInsertId();
-        }
-		
+    	$this->id = $system->getPdo()->lastInsertId();
+    }
+
 		return $result;
 	}
 	/**
 	 * Efface l'enregistrement de la société en base de données.
-	 * 
+	 *
 	 * @return boolean
 	 * @version 15/08/2006
 	 */
@@ -1179,7 +1179,7 @@ class Society {
 	}
 	/**
 	 * Supprime la société de la base de données ainsi que toutes les données associées (pistes, participations, etc).
-	 * 
+	 *
 	 * @return boolean
 	 * @since 15/08/2006
 	 */

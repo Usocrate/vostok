@@ -60,7 +60,7 @@ $doc_title = 'Accueil';
 						$minWeight = min($weights);
 						$minEm = 1;
 						$maxEm = 1.5;
-						
+
 						echo '<div class="tagCloud">';
 						foreach($system->getLastUsedIndustries() as $item) {
 							if ($maxWeight == $minWeight) {
@@ -89,10 +89,35 @@ $doc_title = 'Accueil';
 				</section>
 			</div>
 			<div class="col-md-6">
-				<section>
-					<h2>Les prochains évènements planifiés</h2>
-    				<?php echo EventCollection::getNextPlanningEvents()->toHtml(); ?>
-    			</section>
+				<?php
+					$c = EventCollection::getNextPlanningEvents();
+					if ($c->getSize()>0) {
+						$html = '<section>';
+						$html.= '<h2>Les prochains évènements planifiés</h2>';
+						$i = $c->getIterator();
+						$i->rewind();
+						$pieces = array();
+						$html.= '<ul class="list-group">';
+						while ($i->current()) {
+							$html.= '<li class="list-group-item">';
+							$html.=  '<h3>';
+							$html.= '<div><small>'.$i->current()->getSociety()->getHtmlLinkToSociety().'</small></div>';
+							$html.=  '<a href="society_event_edit.php?event_id='.$i->current()->getId().'">';
+							$html.=  date("d/m/Y", ToolBox::mktimeFromMySqlDatetime($i->current()->getDatetime()));
+							$html.=  '</a>';
+							$html.=  ' <small>('.ToolBox::toHtml(ucfirst($i->current()->getType())).')</small>';
+							$html.=  '</h3>';
+							$html.= '<p>'.ToolBox::toHtml($i->current()->getComment()).'</p>';
+							$html.=  '<div><a href="society_event_edit.php?event_id='.$i->current()->getId().'&task_id=markAsDone">Fait</a> | <a href="society_event_edit.php?event_id='.$i->current()->getId().'&task_id=markAsCancelled">Abandonné</a></div>';							
+							$html.= '</li>';
+							$i->next();
+						}
+						$html.= '</ul>';
+						$html.= '</section>';
+						echo $html;
+					}
+				}
+				?>
 				<section>
 					<h2>Les derniers évènements enregistrés</h2>
     				<?php echo EventCollection::getLastHistoryEvents()->toHtml(); ?>

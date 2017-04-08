@@ -37,19 +37,29 @@ if (! empty ( $_REQUEST ['event_id'] )) {
 // Formatage des données saisies par l'utilisateur
 if (isset ( $_POST )) {
 	ToolBox::formatUserPost ( $_POST );
-	
+
 	if (isset ( $_POST ['task_id'] )) {
 		switch ($_POST ['task_id']) {
 			case 'save' :
 				$event->feed ( $_POST );
-				$event->toDB ();
+				$event->toDB();
 				header ( 'Location:society.php?society_id=' . $society->getId () );
-				exit ();
+				exit();
+			case 'markAsDone' :
+				$event->setWarehouse('history');
+				$event->toDB();
+				header('Location:'.$system->getAppliUrl());
+				exit();
+			case 'markAsCancelled' :
+				$event->setWarehouse('trashcan');
+				$event->toDB();
+				header('Location:'.$system->getAppliUrl());
+				exit();
 		}
 	}
 }
 
-$doc_title = 'Un évènement survient chez ' . $society->getName();
+$doc_title = 'Un évènement chez ' . $society->getName();
 ?>
 <!doctype html>
 <html lang="fr">
@@ -112,6 +122,6 @@ $doc_title = 'Un évènement survient chez ' . $society->getName();
 
 		<button type="submit" class="btn btn-primary">Enregistrer</button>
 	</form>
-</div>	
+</div>
 </body>
 </html>
