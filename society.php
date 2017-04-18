@@ -123,22 +123,22 @@ $doc_title = $society->getName();
 			<ul class="list-group">
 				<?php
 				foreach ($relatedSocieties as $item) {
-					$society = $item[0];
-					$relationship_id = $item[1];
-					$role = $item[2];
-					$description = $item[3];
+					// $item[0] : Société
+					// $item[1] : Identifiant de la relation;
+					// $item[2] : Rôle
+					// $item[3] : Description
 					echo '<li class="list-group-item">';
 					echo '<h3>';
-					echo '<a href="society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>';
+					echo '<a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a>';
 					echo ' <small>(';
-					echo '<a href="relationship_edit.php?relationship_id='.$relationship_id.'">';
-					echo empty($role) ? '?' : ToolBox::toHtml($role);
+					echo '<a href="relationship_edit.php?relationship_id='.$item[1].'">';
+					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
 					echo '</a>';
 					echo ')</small>';
 					echo '</h3>';
-					if (!empty($description)) {
+					if (!empty($item[3])) {
 						echo '<p>';
-						echo ToolBox::toHtml($description);
+						echo ToolBox::toHtml($item[3]);
 						echo '</p>';
 					}
 					echo '</li>';
