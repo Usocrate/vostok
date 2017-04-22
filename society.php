@@ -42,8 +42,11 @@ $events = $society->getEvents();
 
 $doc_title = $society->getName();
 
-$preferences = isset($_SESSION['preferences']['society']) ? $_SESSION['preferences']['society'] : array() ;
-
+if (isset($_SESSION['preferences']['society']['focus'])) {
+	$focus = $_SESSION['preferences']['society']['focus'];
+} else {
+	$focus = 'onRelatedSocieties';
+}
 //print_r($_SESSION);
 //print_r($preferences);
 ?>
@@ -114,15 +117,15 @@ $preferences = isset($_SESSION['preferences']['society']) ? $_SESSION['preferenc
 	<div>
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs" role="tablist">
-	    <li role="presentation" <?php if (in_array('focusOnRelatedSocieties', $preferences)) echo  'class="active"' ?>><a id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge"><?php echo count($relatedSocieties) ?></span></a></li>
-	    <li role="presentation" <?php if (in_array('focusOnIndividuals', $preferences)) echo 'class="active"' ?>><a id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge"><?php echo count($memberships) ?></span></a></li>
-	    <li role="presentation"><a id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge"><?php echo count($leads) ?></span></a></li>
-	    <li role="presentation"><a id="eventsTabSelector" href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge"><?php echo count($events) ?></span></a></li>
+	    <li role="presentation" <?php if (strcmp($focus,'onRelatedSocieties')==0) echo  'class="active"' ?>><a id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge"><?php echo count($relatedSocieties) ?></span></a></li>
+	    <li role="presentation" <?php if (strcmp($focus,'onIndividuals')==0) echo 'class="active"' ?>><a id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge"><?php echo count($memberships) ?></span></a></li>
+	    <li role="presentation" <?php if (strcmp($focus,'onLeads')==0) echo 'class="active"' ?>><a id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge"><?php echo count($leads) ?></span></a></li>
+	    <li role="presentation" <?php if (strcmp($focus,'onEvents')==0) echo 'class="active"' ?>><a id="eventsTabSelector" href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge"><?php echo count($events) ?></span></a></li>
 	  </ul>
 	
 	  <!-- Tab panes -->
 	  <div class="tab-content">
-	    <div role="tabpanel" class="tab-pane<?php if (in_array('focusOnRelatedSocieties', $preferences)) echo ' active' ?>" id="societies-tab">
+	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societies-tab">
 			<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
 			<?php if (isset($relatedSocieties)): ?>
 			<ul class="list-group">
@@ -152,7 +155,7 @@ $preferences = isset($_SESSION['preferences']['society']) ? $_SESSION['preferenc
 			</ul>
 			<?php endif; ?>
 	    </div>
-	    <div role="tabpanel" class="tab-pane<?php if (in_array('focusOnIndividuals', $preferences)) echo ' active' ?>" id="individuals-tab">
+	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individuals-tab">
 			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
 			<?php if ($memberships): ?>
 			
@@ -195,7 +198,7 @@ $preferences = isset($_SESSION['preferences']['society']) ? $_SESSION['preferenc
 			</div>
 			<?php endif; ?>
 	    </div>
-	    <div role="tabpanel" class="tab-pane" id="leads-tab">
+	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leads-tab">
 			<h2>Les pistes<small><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
 			<?php if ($leads): ?>
 			<ul class="list-group">
@@ -214,7 +217,7 @@ $preferences = isset($_SESSION['preferences']['society']) ? $_SESSION['preferenc
 			</ul>
 			<?php endif; ?>
 	    </div>
-	    <div role="tabpanel" class="tab-pane" id="events-tab">
+	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onEvents')==0) echo ' active' ?>" id="events-tab">
 			<h2>Évènements<small><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
 			<?php if ($events): ?>
 			<ul class="list-group">
@@ -269,26 +272,26 @@ $preferences = isset($_SESSION['preferences']['society']) ? $_SESSION['preferenc
 		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
 	    };
 	    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-			var pref;
+			var focus;
 			var scope = 'society';
 
 			switch(e.target.id) {
 			  	case 'societiesTabSelector':
-			  		pref = 'focusOnRelatedSocieties';
+			  		focus = 'onRelatedSocieties';
 			  		break;
 			  	case 'individualsTabSelector':
-			  		pref = 'focusOnIndividuals';
+			  		focus = 'onIndividuals';
 			  		break;
 			  	case 'leadsTabSelector':
-			  		pref = 'focusOnLeads';
+			  		focus = 'onLeads';
 			  		break;
 			  	case 'eventsTabSelector':
-			  		pref = 'focusOnEvents';
+			  		focus = 'onEvents';
 			  		break;			  		
 			}
 
 			$.ajax({
-				  url: 'session.ws.php?pref='+pref+'&scope='+scope,
+				  url: 'session.ws.php?focus='+focus+'&scope='+scope,
 				  beforeSend: function( xhr ) {
 				    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
 				  }
