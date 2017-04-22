@@ -41,6 +41,11 @@ $leads = $society->getLeads();
 $events = $society->getEvents();
 
 $doc_title = $society->getName();
+
+$preferences = isset($_SESSION['preferences']['society']) ? $_SESSION['preferences']['society'] : array() ;
+
+//print_r($_SESSION);
+//print_r($preferences);
 ?>
 <!doctype html>
 <html lang="fr">
@@ -109,15 +114,15 @@ $doc_title = $society->getName();
 	<div>
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs" role="tablist">
-	    <li role="presentation" class="active"><a href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge"><?php echo count($relatedSocieties) ?></span></a></li>
-	    <li role="presentation"><a href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge"><?php echo count($memberships) ?></span></a></li>
-	    <li role="presentation"><a href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge"><?php echo count($leads) ?></span></a></li>
-	    <li role="presentation"><a href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge"><?php echo count($events) ?></span></a></li>
+	    <li role="presentation" <?php if (in_array('focusOnRelatedSocieties', $preferences)) echo  'class="active"' ?>><a id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge"><?php echo count($relatedSocieties) ?></span></a></li>
+	    <li role="presentation" <?php if (in_array('focusOnIndividuals', $preferences)) echo 'class="active"' ?>><a id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge"><?php echo count($memberships) ?></span></a></li>
+	    <li role="presentation"><a id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge"><?php echo count($leads) ?></span></a></li>
+	    <li role="presentation"><a id="eventsTabSelector" href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge"><?php echo count($events) ?></span></a></li>
 	  </ul>
 	
 	  <!-- Tab panes -->
 	  <div class="tab-content">
-	    <div role="tabpanel" class="tab-pane active" id="societies-tab">
+	    <div role="tabpanel" class="tab-pane<?php if (in_array('focusOnRelatedSocieties', $preferences)) echo ' active' ?>" id="societies-tab">
 			<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
 			<?php if (isset($relatedSocieties)): ?>
 			<ul class="list-group">
@@ -147,7 +152,7 @@ $doc_title = $society->getName();
 			</ul>
 			<?php endif; ?>
 	    </div>
-	    <div role="tabpanel" class="tab-pane" id="individuals-tab">
+	    <div role="tabpanel" class="tab-pane<?php if (in_array('focusOnIndividuals', $preferences)) echo ' active' ?>" id="individuals-tab">
 			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
 			<?php if ($memberships): ?>
 			
@@ -263,6 +268,32 @@ $doc_title = $society->getName();
 	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
 		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
 	    };
+	    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+			var pref;
+			var scope = 'society';
+
+			switch(e.target.id) {
+			  	case 'societiesTabSelector':
+			  		pref = 'focusOnRelatedSocieties';
+			  		break;
+			  	case 'individualsTabSelector':
+			  		pref = 'focusOnIndividuals';
+			  		break;
+			  	case 'leadsTabSelector':
+			  		pref = 'focusOnLeads';
+			  		break;
+			  	case 'eventsTabSelector':
+			  		pref = 'focusOnEvents';
+			  		break;			  		
+			}
+
+			$.ajax({
+				  url: 'session.ws.php?pref='+pref+'&scope='+scope,
+				  beforeSend: function( xhr ) {
+				    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+				  }
+			});
+		});
 	})
 </script>
 </body>
