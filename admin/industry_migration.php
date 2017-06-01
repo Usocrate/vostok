@@ -18,8 +18,6 @@ if (empty ( $_SESSION ['user_id'] )) {
 	exit ();
 }
 
-ToolBox::getDBAccess ();
-
 $sql = 'SELECT society_id, society_industry FROM society WHERE society_industry IS NOT NULL';
 $rowset = mysql_query ( $sql );
 while ( $row = mysql_fetch_array ( $rowset ) ) {

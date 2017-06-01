@@ -12,7 +12,6 @@ $system = new System( './config/host.json' );
 require_once 'config/boot.php';
 
 session_start();
-ToolBox::getDBAccess();
 
 if (empty ($_SESSION['user_id'])) {
 	header('Location:login.php');
@@ -26,9 +25,6 @@ if (empty ($_SESSION['user_id'])) {
  * messages à délivrer.
  */
 $messages = array();
-
-//	DataBase Connection
-ToolBox::getDBAccess();
 
 // Formatage des données saisies par l'utilisateur
 if (isset($_POST)) ToolBox::formatUserPost($_POST);

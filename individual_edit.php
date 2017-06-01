@@ -12,7 +12,6 @@ $system = new System( './config/host.json' );
 require_once 'config/boot.php';
 
 session_start();
-ToolBox::getDBAccess();
 
 if (empty($_SESSION['user_id'])) {
     header('Location:login.php');

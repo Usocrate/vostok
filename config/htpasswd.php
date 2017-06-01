@@ -3,8 +3,6 @@ require 'boot.php';
 include_once '../class/ToolBox.class.php';
 include_once '../class/system.class.php';
 
-ToolBox::getDBAccess();
-
 // récupération des utilisateurs
 $users = $system->getUsers();
 

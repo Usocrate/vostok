@@ -12,7 +12,6 @@ $system = new System( './config/host.json' );
 require_once 'config/boot.php';
 
 session_start ();
-ToolBox::getDBAccess ();
 
 if (empty ( $_SESSION ['user_id'] )) {
 	header ( 'Location:login.php' );
@@ -24,9 +23,6 @@ if (empty ( $_SESSION ['user_id'] )) {
 
 $doc_title = 'Type de piste : Fusionner 2 catégories';
 $messages = array ();
-
-// DataBase Connection
-ToolBox::getDBAccess ();
 
 if (isset ( $_POST ['task'] )) {
 	ToolBox::formatUserPost ( $_POST );

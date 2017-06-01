@@ -12,7 +12,6 @@ $system = new System( './config/host.json' );
 require 'config/boot.php';
 
 session_start();
-//ToolBox::getDBAccess();
 
 $messages = array();
 

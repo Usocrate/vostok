@@ -12,7 +12,6 @@ $system = new System( './config/host.json' );
 require_once 'config/boot.php';
 
 session_start ();
-ToolBox::getDBAccess ();
 
 if (empty ( $_SESSION ['user_id'] )) {
 	header ( 'Location:login.php' );
@@ -90,7 +89,8 @@ $doc_title = 'Accueil';
 			</div>
 			<div class="col-md-6">
 				<?php
-					$c = EventCollection::getNextPlanningEvents();
+					$planningEvents = $system->getNextPlanningEvents();
+					$c = new EventCollection($planningEvents);
 					if ($c->getSize()>0) {
 						$html = '<section>';
 						$html.= '<h2>Les prochains évènements planifiés</h2>';
@@ -119,7 +119,11 @@ $doc_title = 'Accueil';
 				?>
 				<section>
 					<h2>Les derniers évènements enregistrés</h2>
-    				<?php echo EventCollection::getLastHistoryEvents()->toHtml(); ?>
+    				<?php
+	    				$lastHistoryEvents = $system->getLastHistoryEvents();
+						$c = new EventCollection($lastHistoryEvents);
+    					echo $c->toHtml();
+    				?>
     			</section>
 			</div>
 		</div>

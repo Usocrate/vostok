@@ -17,7 +17,6 @@ if (empty($_SESSION['user_id'])) {
 	header('Location:login.php');
 	exit;
 }
-ToolBox::getDBAccess();
 
 $society = new Society();
 if (isset($_REQUEST['society_id'])) {

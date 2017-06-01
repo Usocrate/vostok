@@ -38,26 +38,41 @@ Class EventCollection extends Collection {
 	 * Obtient la liste des derniers évènements enregistrés à l'historique.
 	 * @param $size
 	 * @return EventCollection
+	 * @version 01/06/2017
 	 */
-	public static function getLastHistoryEvents($size=7) {
-		$criterias = array();
-		$criterias[] = 't1.warehouse = "history"';
-		return self::getEvents($criterias, 't1.datetime', 'DESC', $size);
+	public static function getLastHistoryEvents($nb=7) {
+		$criteria = array();
+		$criteria['warehouse'] = 'history';
+		return self::getEvents($criteria, 'Last created first', $nb);
 	}
 	/**
 	 * Obtient la liste des prochains évènements enregistrés au planning.
 	 * @param $size
 	 * @return EventCollection
+	 * @version 01/06/2017 
 	 */
-	public static function getNextPlanningEvents($size=7) {
-		$criterias = array();
-		$criterias[] = 't1.warehouse = "planning"';
-		return self::getEvents($criterias, 't1.datetime', 'ASC', $size);
+	public static function getNextPlanningEvents($nb=7) {
+		$criteria = array();
+		$criteria['warehouse'] = 'planning';
+		return self::getEvents($criteria, 'Last created first', $nb);		
 	}
 	/**
-	 * @version 01/08/2014
+	 * @since 01/06/2017
+	 */
+	public static function getEvents($criteria = NULL, $sort = 'Last created first', $nb = NULL, $offset = 0) {
+		$output = array();
+		foreach ( self::getEventsData($criteria, $sort, $nb, $offset) as $data ) {
+			$e = new Event ();
+			$e->feed ( $data );
+			$output[] = $e;
+		}
+		return $output;
+	}
+	/**
+	 * @version 01/06/2017
 	 */	
-	private static function getEvents($criterias=null, $sort_key=null, $sort_order='ASC', $size=null, $offset=0) {
+	private static function getEventsData($criteria=null, $sort='Last created first', $nb = NULL, $offset = 0) {
+		global $system;
 		try {
 			$fields = array();
 			$fields[] = 't1.id';
@@ -69,24 +84,43 @@ Class EventCollection extends Collection {
 			$fields[] = 't1.datetime';
 			$fields[] = 't1.comment';
 			$fields[] = 't2.society_name';
-			$sql = 'SELECT '.implode(',', $fields);
-			$sql.= ' FROM event AS t1';
-			$sql.= ' LEFT JOIN society AS t2 USING (society_id)';
-			if (isset($criterias)) {
-				$sql.= ' WHERE '.implode(' AND ',$criterias);
+			$sql = 'SELECT '.implode(',', $fields).' FROM event AS t1 LEFT JOIN society AS t2 USING (society_id)';
+			
+			if (isset ($criteria) && count ( $criteria ) > 0) {
+				$sql_criteria = array();
+				if (isset ($criteria['warehouse']) ) {
+					$sql_criteria[] = 't1.warehouse = :warehouse';
+				}
+				$sql .= ' WHERE '.implode(' AND ', $sql_criteria);
 			}
-			if (isset($sort_key)) {
-				$sql.= ' ORDER BY '.$sort_key.' '.$sort_order;
+			switch ($sort) {
+				case 'Last created first' :
+					$sql .= ' ORDER BY t1.datetime DESC';
+					break;
+				case 'First created first' :
+					$sql .= ' ORDER BY t1.datetime ASC';
+					break;
 			}
-			if (isset($size)) {
-				$sql.= ' LIMIT '.$offset.','.$size;
+	
+			if (isset ( $nb )) {
+				$sql .= ' LIMIT :offset, :nb';
 			}
-			$dataset = mysql_query($sql);
-			if ($dataset !== false) {
-				return new EventCollection($dataset);
-			} else {
-				throw new Exception(__METHOD__.' : échec de la requête '.$sql);
+
+			$statement = $system->getPdo()->prepare($sql);
+			
+			if (isset ($criteria) && count ( $criteria ) > 0) {
+				if (isset ($criteria['warehouse']) ) {
+					$statement->bindValue(':warehouse', $criteria['warehouse'], PDO::PARAM_STR);
+				}
 			}
+			if (isset ( $nb )) {
+				$statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+				$statement->bindValue(':nb', $nb, PDO::PARAM_INT);
+			}
+			
+			$statement->execute();
+			return $statement->fetchAll(PDO::FETCH_ASSOC);
+
 		} catch (Exception $e) {
 			error_log($e->getMessage());
 		}
