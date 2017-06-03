@@ -769,7 +769,7 @@ class System {
 		global $system;
 
 		$output = array ();
-		$sql = 'SELECT i.*, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT :scope) AS si';
+		$sql = 'SELECT i.id, i.name, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT :scope) AS si';
 		$sql.= ' INNER JOIN industry AS i ON (i.id = si.industry_id)';
 		$sql.= ' GROUP BY i.name ASC';
 
