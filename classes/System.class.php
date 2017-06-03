@@ -490,14 +490,13 @@ class System {
 			}
 			$sql .= ' WHERE '.implode(' AND ', $sql_criteria);
 		}
-		$sql .= ' GROUP BY s.society_id';
-		
+
 		switch ($sort) {
 			case 'Last created first' :
-				$sql .= ' ORDER BY society_creation_timestamp DESC';
+				$sql .= ' GROUP BY society_creation_timestamp DESC, s.society_id';
 				break;
 			default :
-				$sql .= ' ORDER BY s.society_name ASC';
+				$sql .= ' GROUP BY s.society_name ASC, s.society_id';
 		}
 
 		if (isset ( $nb )) {

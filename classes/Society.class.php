@@ -274,7 +274,7 @@ class Society {
 		if (isset ( $substring )) {
 			$sql .= ' AND society_city LIKE :pattern';
 		}
-		$sql .= ' GROUP BY society_city ORDER BY society_city ASC';
+		$sql .= ' GROUP BY society_city ASC';
 		$statement = $system->getPdo()->prepare($sql);
 		if (isset ( $substring )) {
 		    $statement->bindValue(':pattern', $substring.'%', PDO::PARAM_STR);

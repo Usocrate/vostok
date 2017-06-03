@@ -224,7 +224,7 @@ class Lead
         if (isset($label_substring)) {
             $sql .= ' AND lead_type LIKE :pattern';
         }
-        $sql .= ' GROUP BY lead_type ORDER BY count DESC';
+        $sql .= ' GROUP BY lead_type ORDER BY COUNT(*) DESC';
         $statement = $system->getPdo()->prepare($sql);
         if (isset($label_substring)) {
             $statement->bindValue(':pattern', '%' . $label_substring . '%', PDO::PARAM_STR);
@@ -319,7 +319,7 @@ class Lead
         if (isset($label_substring)) {
             $sql .= ' AND lead_source LIKE :pattern';
         }
-        $sql .= ' GROUP BY lead_source ORDER BY count DESC';
+        $sql .= ' GROUP BY lead_source ORDER BY COUNT(*) DESC';
         $statement = $system->getPdo()->prepare($sql);
         if (isset($label_substring)) {
             $statement->bindValue(':pattern', '%' . $label_substring . '%', PDO::PARAM_STR);

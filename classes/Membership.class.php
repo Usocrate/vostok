@@ -80,7 +80,7 @@ class Membership {
 		if (isset($substring)) {
 			$sql.= ' AND title LIKE :pattern';
 		}
-		$sql.= ' GROUP BY title ORDER BY count DESC';
+		$sql.= ' GROUP BY title ORDER BY COUNT(*) DESC';
 		$statement = $system->getPdo()->prepare($sql);
 		if (isset($substring)) {
 			$statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
@@ -154,7 +154,7 @@ class Membership {
 		if (isset($substring)) {
 			$sql.= ' AND department LIKE :pattern';
 		}
-		$sql.= ' GROUP BY department ORDER BY count DESC';
+		$sql.= ' GROUP BY department ORDER BY COUNT(*) DESC';
 		$statement = $system->getPdo()->prepare($sql);
 		if (isset($substring)) {
 			$statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
