@@ -11,13 +11,7 @@ class IndividualCollection extends Collection {
 				$this->addElement ( $i );
 			}
 		}
-		if (is_resource ( $input )) {
-			while ( $row = mysql_fetch_assoc ( $input ) ) {
-				$element = new Individual ();
-				$element->feed ( $row );
-				$this->addElement ( $element );
-			}
-		} elseif (is_array ( $input )) {
+		if (is_array ( $input )) {
 			foreach ( $input as $datum ) {
 				if ($datum instanceof Individual) {
 					// la case du tableau considérée contient un objet du type attendu

@@ -26,7 +26,7 @@ $messages = array ();
 
 if (! empty ( $_REQUEST ['event_id'] )) {
 	$event = new Event ( $_REQUEST ['event_id'] );
-	$event->feed ();
+	$event->feed();
 	$society = $event->getSociety ();
 } else {
 	$event = new Event ();

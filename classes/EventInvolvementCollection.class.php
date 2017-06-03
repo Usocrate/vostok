@@ -8,19 +8,9 @@ Class EventInvolvementCollection extends Collection {
 	public function __construct($dataset=NULL) {
 		parent::__construct('EventInvolvement');
 		/*
-		 * les données sont constituées d'enregistrements issus de base de données.
-		 */
-		if (is_resource($dataset)) {
-			while ($row = mysql_fetch_assoc($dataset)) {
-				$element = new EventInvolvement();
-				$element->feed($row);
-				$this->addElement($element);
-			}
-		}
-		/*
 		 * les données sont stockées dans un tableau.
 		 */
-		elseif (is_array($dataset)) {
+		if (is_array($dataset)) {
 			foreach ($dataset as $data) {
 				if ($data instanceof EventInvolvement) {
 					// la case du tableau considérée contient un objet du type attendu

@@ -632,15 +632,18 @@ class Society {
 	 *
 	 * @return boolean
 	 * @since 16/07/2006
-	 * @version 15/08/2006
+	 * @version 03/06/2017
 	 */
 	public function saveIndustries() {
+		global $system;
 		if (! empty ( $this->id ) && isset ( $this->industries )) {
 			if ($this->deleteIndustries ()) {
 				$errorless = true;
+				$statement = $system->getPdo()->prepare('INSERT INTO society_industry SET society_id=:society_id, industry_id=:industry_id');
+				$statement->bindValue(':society_id', $this->id, PDO::PARAM_INT);
 				foreach ( $this->industries as $i ) {
-					$sql = 'INSERT INTO society_industry SET society_id=' . $this->id . ', industry_id=' . $i->getId ();
-					$errorless = $errorless && mysql_query ( $sql );
+					$statement->bindValue(':industry_id', $i->getId(), PDO::PARAM_INT);
+					$errorless = $errorless && $statement->execute();
 				}
 				return $errorless;
 			}
@@ -681,40 +684,31 @@ class Society {
 		return $society->saveIndustries () && $this->saveIndustries ();
 	}
 	/**
-	 * Obtient les enregistrements des participations associées à la société.
-	 *
-	 * @return resource
-	 * @since 09/2005
-	 */
-	public function getMembershipsRowset($criterias = NULL, $sort_key = 'individual_lastName', $sort_order = 'ASC', $offset = 0, $row_count = NULL) {
-		$sql = 'SELECT *, DATE_FORMAT(i.individual_creation_date, "%d/%m/%Y")';
-		// FROM
-		$sql .= ' FROM membership AS ms';
-		$sql .= ' INNER JOIN individual AS i';
-		$sql .= ' ON ms.individual_id = i.individual_id';
-		// WHERE
-		if (is_null ( $criterias ))
-			$criterias = array ();
-		$criterias [] = ' ms.society_id=' . $this->id;
-		$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
-		// ORDER BY
-		$sql .= ' ORDER BY ' . $sort_key . ' ' . $sort_order;
-		// LIMIT
-		if (isset ( $row_count ))
-			$sql .= ' LIMIT ' . $offset . ',' . $row_count;
-
-		return mysql_query ( $sql );
-	}
-	/**
 	 * Obtient les participations associées à la société.
 	 *
 	 * @return array
+	 * @version 03/06/2017
 	 */
 	public function getMemberships() {
+		global $system;
 		if (! isset ( $this->memberships )) {
 			$this->memberships = array ();
-			$rowset = $this->getMembershipsRowset ();
-			while ( $row = mysql_fetch_assoc ( $rowset ) ) {
+			
+			$sql = 'SELECT *, DATE_FORMAT(i.individual_creation_date, "%d/%m/%Y")';
+			// FROM
+			$sql .= ' FROM membership AS ms';
+			$sql .= ' INNER JOIN individual AS i';
+			$sql .= ' ON ms.individual_id = i.individual_id';
+			// WHERE
+			$sql .= ' WHERE ms.society_id=:id';
+			// ORDER BY
+			$sql .= ' ORDER BY i.individual_lastName ASC';
+
+			$statement = $system->getPdo()->prepare($sql);
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			
+			foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
 				$ms = new Membership ();
 				$ms->feed ( $row );
 				$this->memberships [] = $ms;
@@ -725,15 +719,17 @@ class Society {
 	/**
 	 * Transfére les participations de membres au sein de la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
 	 *
-	 * @version 23/10/2005
+	 * @version 03/06/2017
 	 */
 	public function transferMemberships($society) {
-		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id ))
+		global $system;
+		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id )) {
 			return false;
-		$sql = 'UPDATE membership SET society_id=' . $society->getId ();
-		$sql .= ' WHERE society_id=' . $this->id;
-
-		return mysql_query ( $sql );
+		}
+		$statement = $system->getPdo()->prepare('UPDATE membership SET society_id=:target_id WHERE society_id=:id');
+		$statement->bindValue(':target_id', $society->getId(), PDO::PARAM_INT);
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		return $statement->execute();
 	}
 	/**
 	 * Supprime de la base de données les enregistrements des participations (les personnes associées sont supprimées si elles n'ont pas d'autres participations).
@@ -806,11 +802,13 @@ class Society {
 	 */
 	public function getParentSociety() {
 		$data = $this->getRelatedSocieties();
-		foreach ($data as $item) {
-			$role = $item[2];
-			$society = $item[0];
-			if (isset ( $role ) && strcasecmp ( $role , 'Maison-mère' ) == 0) {
-				return $society;
+		if (isset($data)) {
+			foreach ($data as $item) {
+				$role = $item[2];
+				$society = $item[0];
+				if (isset ( $role ) && strcasecmp ( $role , 'Maison-mère' ) == 0) {
+					return $society;
+				}
 			}
 		}
 		return NULL;
@@ -876,80 +874,71 @@ class Society {
 	/**
 	 *
 	 * @since 09/04/2006
+	 * @version 03/06/2017
 	 */
 	public function transferRelationships($society) {
+		global $system;
+		
 		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id ))
 			return false;
-		$sqlA = 'UPDATE relationship SET item0_id=' . $society->getId ();
-		$sqlA .= ' WHERE item0_id=' . $this->id . ' AND item0_class="Society"';
-		$sqlB = 'UPDATE relationship SET item1_id=' . $society->getId ();
-		$sqlB .= ' WHERE item1_id=' . $this->id . ' AND item1_class="Society"';
-		// echo '<p>'.$sqlA.'<br/>'.$sqlB.'</p>';
-		return mysql_query ( $sqlA ) && mysql_query ( $sqlB );
+		
+		$statementA = $system->getPdo()->prepare('UPDATE relationship SET item0_id=:target_id WHERE item0_id=:id AND item0_class=:class');
+		$statementB = $system->getPdo()->prepare('UPDATE relationship SET item1_id=:target_id WHERE item1_id=:id AND item1_class=:class');
+		
+		$statementA->bindValue(':target_id', $society->getId(), PDO::PARAM_INT);
+		$statementA->bindValue(':id', $this->id, PDO::PARAM_INT);
+		$statementA->bindValue(':class', get_class($this), PDO::PARAM_STR);
+		
+		$statementB->bindValue(':target_id', $society->getId(), PDO::PARAM_INT);
+		$statementB->bindValue(':id', $this->id, PDO::PARAM_INT);
+		$statementB->bindValue(':class', get_class($this), PDO::PARAM_STR);
+
+		return $statementA->execute() && $statementB->execute();
 	}
 	/**
 	 * Supprime de la base de données les enregistrements des relations avec des personnes ou d'autres sociétés.
 	 *
 	 * @since 15/08/2006
+	 * @version 03/06/2017
 	 */
 	public function deleteRelationships() {
-		if (empty ( $this->id ))
+		global $system;
+		if (empty ( $this->id )) {
 			return false;
-		$sql = 'DELETE FROM relationship';
-		$criterias = array ();
-		$criterias [] = '(item0_id=' . $this->id . ' AND item0_class="' . get_class ( $this ) . '")';
-		$criterias [] = '(item1_id=' . $this->id . ' AND item1_class="' . get_class ( $this ) . '")';
-		$sql .= ' WHERE ' . implode ( ' OR ', $criterias );
-
-		return mysql_query ( $sql );
-	}
-	/**
-	 * Obtient les enregistrements des pistes associées à la sociétés.
-	 *
-	 * @return resource
-	 */
-	protected function getLeadsRowset($offset = 0, $row_count = NULL) {
-		$sql = 'SELECT *, DATE_FORMAT(lead_creation_date, "%d/%m/%Y") as lead_creation_date_fr';
-		$sql .= ' FROM lead';
-		$sql .= ' WHERE';
-		$sql .= ' society_id=' . $this->id;
-		if ($row_count)
-			$sql .= ' LIMIT ' . $offset . ',' . $row_count;
-		$sql .= ' ORDER BY lead_creation_date DESC';
-
-		return mysql_query ( $sql );
-	}
-	/**
-	 * Obtient les enregistrements des évènements liés à la société.
-	 *
-	 * @param
-	 *        	$offset
-	 * @param
-	 *        	$row_count
-	 * @return unknown_type
-	 */
-	protected function getEventsRowset($offset = 0, $row_count = NULL) {
-		$sql = 'SELECT *, DATE_FORMAT(datetime, "%d/%m/%Y") as event_datetime_fr';
-		$sql .= ' FROM event';
-		$sql .= ' WHERE';
-		$sql .= ' society_id=' . $this->id;
-		if ($row_count) {
-			$sql .= ' LIMIT ' . $offset . ',' . $row_count;
 		}
-		$sql .= ' ORDER BY datetime DESC';
+		$sql = 'DELETE FROM relationship';
+		$sql.= ' WHERE (item0_id=:item0_id AND item0_class=:item0_class)';
+		$sql.= ' OR (item1_id=:item1_id AND item1_class=:item1_class)';
+		
+		$statement = $system->getPdo()->prepare($sql);
+		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
+		$statement->bindValue(':item0_class', get_class($this), PDO::PARAM_STR);
+		$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
+		$statement->bindValue(':item1_class', get_class($this), PDO::PARAM_STR);
 
-		return mysql_query ( $sql );
+		return $statement->execute();
 	}
 	/**
 	 * Obtient les pistes associées à la société.
 	 *
 	 * @return array
+	 * @version 03/06/2017
 	 */
 	public function getLeads() {
+		global $system;
+		
 		if (! isset ( $this->leads )) {
 			$this->leads = array ();
-			$rowset = $this->getLeadsRowset ();
-			while ( $row = mysql_fetch_assoc ( $rowset ) ) {
+			
+			$sql = 'SELECT *, DATE_FORMAT(lead_creation_date, "%d/%m/%Y") as lead_creation_date_fr FROM lead';
+			$sql .= ' WHERE society_id=:id';
+			$sql .= ' ORDER BY lead_creation_date DESC';
+			
+			$statement = $system->getPdo()->prepare($sql);
+			
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+
+			foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
 				$lead = new Lead ();
 				$lead->feed ( $row );
 				$this->leads [] = $lead;
@@ -962,18 +951,13 @@ class Society {
 	 *
 	 * @return array
 	 * @since 2009-01-19
+	 * @version 03/06/2017
 	 */
 	public function getEvents() {
-		if (! isset ( $this->events )) {
-			$this->events = array ();
-			$rowset = $this->getEventsRowset ();
-			while ( $row = mysql_fetch_assoc ( $rowset ) ) {
-				$e = new Event ();
-				$e->feed ( $row );
-				$this->events [] = $e;
-			}
-		}
-		return $this->events;
+		global $system;
+		$criteria = array();
+		$criteria['society_id'] = $this->id;
+		return $system->getEvents($criteria);
 	}
 	/**
 	 * Transfére les pistes liées à la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
@@ -1159,8 +1143,8 @@ class Society {
 		$result = $statement->execute();
 
 		if ($result && $new) {
-    	$this->id = $system->getPdo()->lastInsertId();
-    }
+	    	$this->id = $system->getPdo()->lastInsertId();
+	    }
 
 		return $result;
 	}

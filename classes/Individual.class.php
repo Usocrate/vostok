@@ -18,35 +18,6 @@ class Individual {
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
-	public function involveInEvent(Event $event, $role = null, $comment = null) {
-		try {
-			if (isset ( $this->id ) && $event->hasId ()) {
-				$settings = array ();
-				if (isset ( $role )) {
-					$settings [] = 'role="' . mysql_real_escape_string ( $role ) . '"';
-				}
-				if (isset ( $comment )) {
-					$settings [] = 'comment="' . mysql_real_escape_string ( $comment ) . '"';
-				}
-				if ($this->isEventInvolved ( $event )) {
-					$sql = 'UPDATE event_involvement SET ' . implode ( ',', $settings ) . ' WHERE individual_id=' . $this->id . ' AND event_id=' . $event->getId ();
-				} else {
-					$settings [] = 'individual_id=' . $this->id;
-					$settings [] = 'event_id=' . $event->getId ();
-					$sql = 'INSERT INTO event_involvement SET ' . implode ( ',', $settings );
-				}
-				if (mysql_query ( $sql ) === true) {
-					return true;
-				} else {
-					throw new Exception ( 'Échec de la requête : ' . $sql );
-				}
-			} else {
-				throw new Exception ( 'Les identifiants de la personne et de l\'évènement doivent être connus' );
-			}
-		} catch ( Exception $e ) {
-			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
-		}
-	}
 	/**
 	 * @version 03/01/2017
 	 **/

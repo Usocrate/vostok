@@ -41,34 +41,33 @@ if (isset ($_REQUEST['lead_newsearch_order']) || empty ($_SESSION['lead_search']
 		$_SESSION['lead_search']['status'] = $_REQUEST['lead_status'];
 	}
 	$_SESSION['lead_search']['page_index'] = 1;
-	$_SESSION['lead_search']['sort_key'] = 'lead_creation_date';
-	$_SESSION['lead_search']['sort_order'] = 'DESC';
+	$_SESSION['lead_search']['sort'] = 'Last created first';
 }
 if (!isset ($_SESSION['lead_search'])) {
 	$_SESSION['lead_search'] = array ();
 }
 // critères de filtrage
-$criterias = array ();
+$criteria = array ();
 if (isset ($_SESSION['lead_search']['type'])) {
 	if (empty($_SESSION['lead_search']['type'])) {
-		$criterias[] = '(lead_type="" OR lead_type IS NULL)';
+		$criteria['type'] = '';
 	} else {
-		$criterias[] = 'lead_type = "' . mysql_real_escape_string($_SESSION['lead_search']['type']) . '"';
+		$criteria['type'] = $_SESSION['lead_search']['type'];
 	}
 }
 if (isset ($_SESSION['lead_search']['source'])) {
 	if (empty($_SESSION['lead_search']['source'])) {
-		$criterias[] = '(lead_source = "" OR lead_source IS NULL)';
+		$criteria['source'] = '';
 	} else {
-		$criterias[] = 'lead_source = "' . mysql_real_escape_string($_SESSION['lead_search']['source']) . '"';
+		$criteria['source'] = $_SESSION['lead_search']['source'];
 	}
 }
 if (isset ($_SESSION['lead_search']['status'])) {
-	$criterias[] = 'lead_status = "' . mysql_real_escape_string($_SESSION['lead_search']['status']) . '"';
+	$criteria['status'] = $_SESSION['lead_search']['status'];
 }
 
 // nb de pistes correspondant aux critères
-$leads_nb = $system->getLeadsNb($criterias);
+$leads_nb = $system->getLeadsNb($criteria);
 
 // nb de pages nécessaire à l'affichage des pistes
 $pages_nb = ceil($leads_nb / $page_items_nb);
@@ -79,11 +78,11 @@ if (isset ($_REQUEST['lead_search_page_index']))
 
 //	sélection de leads correspondant aux critères (dont le nombre dépend de la variable $page_items_nb)
 $page_debut = ($_SESSION['lead_search']['page_index'] - 1) * $page_items_nb;
-$page_rowset = $system->getLeadsRowset($criterias, $_SESSION['lead_search']['sort_key'], $_SESSION['lead_search']['sort_order'], $page_debut, $page_items_nb);
+$page_rowset = $system->getLeadsRowset($criteria, $_SESSION['lead_search']['sort'], $page_items_nb, $page_debut);
 
 //	la sélection de pistes
 $leads = array ();
-while ($row = mysql_fetch_assoc($page_rowset)) {
+foreach ($page_rowset as $row) {
 	$l = new Lead();
 	$l->feed($row);
 	$l->getIndividual()->feed($row);

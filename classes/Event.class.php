@@ -20,17 +20,6 @@ class Event {
 		$this->id = $id;
 	}
 	/**
-	 * Obtient les enregistrements des implications.
-	 * @return resource
-	 */
-	private function getInvolvementsRowset($criterias=NULL, $sort_key='timestamp', $sort_order='DESC', $offset=0, $row_count=NULL, $tablesToJoin=NULL)	{
-		if (!isset($this->id)) {
-			return false;
-		}
-		$sql = 'SELECT * FROM event_involvement WHERE event_id='.$this->id;
-		return mysql_query($sql);
-	}
-	/**
 	 * Indique si l'individu passé en paramètre est impliqué dans l'évènement.
 	 * @param $individual
 	 * @return EventInvolvement
@@ -43,10 +32,18 @@ class Event {
 	/**
 	 * Obtient les implications individuelles.
 	 * @return EventInvolvementCollection
+	 * @version 03/06/2017
 	 */
 	public function &getInvolvements() {
+		global $system;
 		if (!isset($this->involvements)) {
-			$dataset = $this->getInvolvementsRowset();
+			if (!isset($this->id)) {
+				return false;
+			}
+			$statement = $system->getPdo()->prepare('SELECT * FROM event_involvement WHERE event_id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			$dataset = $statement->fetchAll(PDO::FETCH_ASSOC);
 			if ($dataset !== false) {
 				$this->involvements = new EventInvolvementCollection($dataset);
 			} else {
@@ -55,34 +52,9 @@ class Event {
 		}
 		return $this->involvements;
 	}
-	public function getIndividualInvolvement() {
-
-	}
-	/**
-	 * Obtient l'ensemble d'individus impliqués dans l'évènement.
-	 *
-	 * @return IndividualCollection
-	 */
-	public function getInvolvedIndividuals() {
-		try {
-			return $this->getInvolvements()->getIndividuals();
-			//	$criterias = array();
-			//	$criterias[] = 't1.event_id='.$this->id;
-			//	$sql = 'SELECT t2.*';
-			//	$sql.= ' FROM event_involvement AS t1';
-			//	$sql.= ' LEFT JOIN individual AS t2 USING(individual_id)';
-			//	$sql.= ' WHERE '.implode(' AND ', $criterias);
-			//	$sql.= ' ORDER BY t2.individual_lastName, t2.individual_firstName';
-			//	$result = mysql_query($sql);
-			//	return new IndividualCollection($result);
-		}
-		catch (Exception $e) {
-			trigger_error(__METHOD__.' : '.$e->getMessage());
-		}
-	}
 	/**
 	 * Fixe la valeur d'un attribut.
-	 */
+mysql	 */
 	public function setAttribute($name, $value)	{
 		$value = trim($value);
 		//$value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
@@ -346,8 +318,10 @@ class Event {
 	/**
 	 * @param $fields
 	 * @return array
+	 * @version 03/06/2017
 	 */
 	private function getDataFromBase($fields = NULL) {
+		global $system;
 		try {
 			if (is_null($this->id)) {
 				throw new Exception(__METHOD__.' : l\'instance doit être identifiée.');
@@ -355,9 +329,10 @@ class Event {
 			if (is_null($fields)) {
 				$fields = array('*');
 			}
-			$sql = 'SELECT '.implode(',', $fields).' FROM event WHERE id='.$this->id;
-			$result = mysql_query($sql);
-			return mysql_fetch_assoc($result);
+			$statement = $system->getPdo()->prepare('SELECT '.implode(',', $fields).' FROM event WHERE id=:id');
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			return  $statement->fetch(PDO::FETCH_ASSOC);
 		} catch (Exception $e) {
 			echo $e->getMessage();
 		}

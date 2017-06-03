@@ -583,58 +583,119 @@ class System {
 	/**
 	 * Retourne le nombre de sociétés groupées par ville.
 	 *
-	 * @return resource
-	 * @version 09/2005
+	 * @version 03/06/2017
 	 */
-	public function getSocietiesGroupByCityRowset($offset = 0, $row_count = NULL) {
-		$sql = 'SELECT society_city AS city, COUNT(*) AS nb';
-		$sql .= ' FROM society';
-		// $sql.= ' WHERE society_city IS NOT NULL';
+	public function getSocietyCountByCity($nb = NULL, $offset = 0) {
+		$sql = 'SELECT society_city AS city, COUNT(*) AS count FROM society';
 		$sql .= ' GROUP BY city';
-		$sql .= ' ORDER BY nb DESC, city ASC';
-		if (isset ( $count_row ))
-			$sql .= ' LIMIT ' . $offset . ',' . $count_row;
-		
-		return mysql_query ( $sql );
-	}
+		$sql .= ' ORDER BY COUNT(*) DESC, city ASC';
+		if (isset($nb))	{
+			$sql .= ' LIMIT :offset, :nb';
+		}
+		$statement = $this->getPdo()->prepare($sql);
+		if (isset($nb))	{
+			$statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+			$statement->bindValue(':nb', $nb, PDO::PARAM_INT);
+		}
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}	
 	/**
 	 * Renvoie les pistes correspondant à certains critères (optionnels)
 	 *
 	 * @return resource
+	 * @version 03/06/2017
 	 */
-	public function getLeadsRowset($criterias, $sort_key = 'lead_creation_date', $sort_order = 'DESC', $offset = 0, $nb = NULL) {
-		$sql = 'SELECT *';
-		$sql .= ' FROM lead AS l';
-		$sql .= ' LEFT JOIN individual AS c ON l.individual_id=c.individual_id';
-		$sql .= ' LEFT JOIN society AS a ON l.society_id=a.society_id';
-		if (count ( $criterias ) > 0) {
-			$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
-		}
-		$sql .= ' ORDER BY ' . $sort_key . ' ' . $sort_order;
-		if (isset ( $nb ))
-			$sql .= ' LIMIT ' . $offset . ',' . $nb;
+	public function getLeadsRowset($criteria = NULL, $sort = 'Last created first', $nb = NULL, $offset = 0) {
+		global $system;
 		
-		return mysql_query ( $sql );
+		$sql = 'SELECT * FROM lead AS l';
+		$sql .= ' LEFT JOIN individual AS c USING (individual_id)';
+		$sql .= ' LEFT JOIN society AS a USING (society_id)';
+		if (count ( $criteria ) > 0) {
+			$where = array();
+			if ($criteria['type']) {
+				$where[] = 'l.lead_type = :type';
+			}
+			if ($criteria['source']) {
+				$where[] = 'l.lead_source = :source';
+			}
+			if ($criteria['status']) {
+				$where[] = 'l.lead_status = :status';
+			}
+			$sql .= ' WHERE ' . implode ( ' AND ', $where );
+		}
+		if (isset($sort)) {
+			switch ($sort) {
+				case 'Last created first' :
+					$sql .= ' ORDER BY l.lead_creation_date DESC';
+					break;
+			}
+		}
+		if (isset ( $nb )) {
+			$sql .= ' LIMIT :offset, :nb';
+		}		
+		
+		$statement = $system->getPdo()->prepare($sql);
+		if (count ( $criteria ) > 0) {
+			if ($criteria['type']) {
+				$statement->bindValue(':type', $criteria['type'], PDO::PARAM_STR);
+			}
+			if ($criteria['source']) {
+				$statement->bindValue(':source', $criteria['source'], PDO::PARAM_STR);
+			}
+			if ($criteria['status']) {
+				$statement->bindValue(':status', $criteria['status'], PDO::PARAM_STR);
+			}
+		}
+		if (isset ( $nb )) {
+			$statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+			$statement->bindValue(':nb', $nb, PDO::PARAM_INT);
+		}
+		
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 	/**
 	 * Renvoie le nombre de piste correspondant éventuellement à certains critères.
 	 *
 	 * @return int
-	 * @version 10/2005
+	 * @version 03/06/2017
 	 */
-	public function getLeadsNb($criterias = NULL) {
-		$sql = 'SELECT COUNT(*) AS nb';
-		$sql .= ' FROM lead AS l';
-		$sql .= ' LEFT JOIN individual AS c ON l.individual_id=c.individual_id';
-		$sql .= ' LEFT JOIN society AS a ON l.society_id=a.society_id';
-		if (count ( $criterias ) > 0) {
-			$sql .= ' WHERE ' . implode ( ' AND ', $criterias );
+	public function getLeadsNb($criteria = NULL) {
+		global $system;
+		
+		$sql = 'SELECT COUNT(*) AS nb FROM lead AS l';
+		//$sql .= ' LEFT JOIN individual AS c USING (individual_id)';
+		//$sql .= ' LEFT JOIN society AS a USING (society_id)';
+		if (count ( $criteria ) > 0) {
+			$where = array();
+			if ($criteria['type']) {
+				$where[] = 'l.lead_type = :type';
+			}
+			if ($criteria['source']) {
+				$where[] = 'l.lead_source = :source';
+			}
+			if ($criteria['status']) {
+				$where[] = 'l.lead_status = :status';
+			}
+			$sql .= ' WHERE ' . implode ( ' AND ', $where );
 		}
 		
-		$rowset = mysql_query ( $sql );
-		$row = mysql_fetch_assoc ( $rowset );
-		mysql_free_result ( $rowset );
-		return $row ? $row ['nb'] : 0;
+		$statement = $system->getPdo()->prepare($sql);
+		if (count ( $criteria ) > 0) {
+			if ($criteria['type']) {
+				$statement->bindValue(':type', $criteria['type'], PDO::PARAM_STR);
+			}
+			if ($criteria['source']) {
+				$statement->bindValue(':source', $criteria['source'], PDO::PARAM_STR);
+			}
+			if ($criteria['status']) {
+				$statement->bindValue(':status', $criteria['status'], PDO::PARAM_STR);
+			}
+		}		
+		$statement->execute();
+		return $statement->fetchColumn();
 	}
 	/**
 	 * Concerne les types de pistes, fusionne 2 catégories.
@@ -839,12 +900,16 @@ class System {
 			$fields[] = 't1.media';
 			$fields[] = 't1.type';
 			$fields[] = 't1.datetime';
+			$fields[] = 'DATE_FORMAT(t1.datetime, "%d/%m/%Y") as event_datetime_fr';
 			$fields[] = 't1.comment';
 			$fields[] = 't2.society_name';
 			$sql = 'SELECT '.implode(',', $fields).' FROM event AS t1 LEFT JOIN society AS t2 USING (society_id)';
 			
 			if (isset ($criteria) && count ( $criteria ) > 0) {
 				$sql_criteria = array();
+				if (isset ($criteria['society_id']) ) {
+					$sql_criteria[] = 't1.society_id = :society_id';
+				}				
 				if (isset ($criteria['warehouse']) ) {
 					$sql_criteria[] = 't1.warehouse = :warehouse';
 				}
@@ -866,6 +931,9 @@ class System {
 			$statement = $this->getPdo()->prepare($sql);
 			
 			if (isset ($criteria) && count ( $criteria ) > 0) {
+				if (isset ($criteria['society_id']) ) {
+					$statement->bindValue(':society_id', $criteria['society_id'], PDO::PARAM_INT);
+				}
 				if (isset ($criteria['warehouse']) ) {
 					$statement->bindValue(':warehouse', $criteria['warehouse'], PDO::PARAM_STR);
 				}

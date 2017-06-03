@@ -20,8 +20,6 @@ if (empty ( $_SESSION ['user_id'] )) {
 	$user = new User ( $_SESSION ['user_id'] );
 	$user->feed ();
 }
-
-$rowset = $system->getSocietiesGroupByCityRowset ();
 $doc_title = 'Les sociétés classées par ville';
 ?>
 <!doctype html>
@@ -52,7 +50,7 @@ $doc_title = 'Les sociétés classées par ville';
 			</thead>
 			<tbody>
 		<?php
-		while ( $row = mysql_fetch_assoc ( $rowset ) ) {
+		foreach ( $system->getSocietyCountByCity() as $row ) {
 			echo '<tr>';
 			echo '<td>';
 			echo empty ( $row ['city'] ) ? '<small>n.c.</small>' : '<a href="societies_list.php?society_newsearch=1&amp;society_city=' . $row ['city'] . '">' . $row ['city'] . '</a>';
@@ -60,7 +58,7 @@ $doc_title = 'Les sociétés classées par ville';
 			echo '<td>';
 			echo '<span class="badge">';
 			echo '<a href="societies_list.php?society_newsearch=1&amp;society_city=' . $row ['city'] . '">';
-			echo $row ['nb'];
+			echo $row ['count'];
 			echo '</a>';
 			echo '</span>';
 			echo '</td>';
