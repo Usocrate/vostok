@@ -820,15 +820,15 @@ class System {
 	 * Obtient la liste des activités enregistrées sous forme de tags HTML 'option'.
 	 *
 	 * @since 16/07/2006
-	 * @version 22/12/2016
+	 * @version 03/06/2017
 	 */
 	public function getIndustryOptionsTags($toSelect = NULL) {
 		global $system;
 
-		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb';
-		$sql .= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si';
-		$sql .= ' ON ( si.industry_id = i.id )';
-		$sql .= ' GROUP BY i.name ASC';
+		$sql = 'SELECT i.id, i.name, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb';
+		$sql.= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si';
+		$sql.= ' ON ( si.industry_id = i.id )';
+		$sql.= ' GROUP BY i.name ASC, i.id';
 		
 		$html = '';
 		
