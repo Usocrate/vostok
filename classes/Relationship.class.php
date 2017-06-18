@@ -35,7 +35,10 @@ class Relationship {
 	public function setAttribute($name, $value)	{
 		$value = trim($value);
 		$value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-		return $this->{$name} = $value;
+		switch($name) {
+			default:
+				return $this->{$name} = $value;		
+		}
 	}
 	/*
 	 * Fixe la valeur d'un attribut.	
@@ -119,8 +122,8 @@ class Relationship {
 	}
 	/**
 	 * Enregistre en base de données les valeurs des attributs de la relation.
-	 * @since 30/03/2006
-	 * @version 20/12/2016
+	 * @since 03/2006
+	 * @version 06/2017
 	 */
 	public function toDB() {
 		global $system;
@@ -174,10 +177,10 @@ class Relationship {
 				$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
 			}
 			if (isset($this->init_year)) {
-				$statement->bindValue(':init_year', $this->init_year, PDO::PARAM_STR);
+				empty($this->init_year) ? $statement->bindValue(':init_year', NULL, PDO::PARAM_NULL) : $statement->bindValue(':init_year', $this->init_year, PDO::PARAM_INT);
 			}
 			if (isset($this->end_year)) {
-				$statement->bindValue(':end_year', $this->end_year, PDO::PARAM_STR);
+				empty($this->end_year) ? $statement->bindValue(':end_year', NULL, PDO::PARAM_NULL) : $statement->bindValue(':end_year', $this->end_year, PDO::PARAM_INT);
 			}
 			if (!$new) {
 				$statement->bindValue(':id', $this->id, PDO::PARAM_INT);

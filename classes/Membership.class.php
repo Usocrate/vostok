@@ -292,13 +292,15 @@ class Membership {
 			$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
 		if (isset($this->description))
 			$statement->bindValue(':description', $this->description, PDO::PARAM_STR);
-		if (isset($this->init_year))
-			$statement->bindValue(':init_year', $this->init_year, PDO::PARAM_STR);
-		if (isset($this->end_year))
-			$statement->bindValue(':end_year', $this->end_year, PDO::PARAM_STR);
-		if (!$new)
-			$statement->bindValue(':membership_id', $this->id, PDO::PARAM_INT);;
-
+		if (isset($this->init_year)) {
+			empty($this->init_year) ? $statement->bindValue(':init_year', NULL, PDO::PARAM_NULL) : $statement->bindValue(':init_year', $this->init_year, PDO::PARAM_INT);
+		}
+		if (isset($this->end_year)) {
+			empty($this->end_year) ? $statement->bindValue(':end_year', NULL, PDO::PARAM_NULL) : $statement->bindValue(':end_year', $this->end_year, PDO::PARAM_INT);
+		}
+		if (!$new) {
+			$statement->bindValue(':membership_id', $this->id, PDO::PARAM_INT);
+		}
 		$result = $statement->execute();
 		if ($new) $this->id = $system->getPdo()->lastInsertId();
 		return $result;

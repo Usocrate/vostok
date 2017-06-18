@@ -40,15 +40,18 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 		header ( 'location:society.php?society_id=' . $item0->getId () );
 	} else {
 		// récupération des données en base
-		$item0 = & $relationship->getItem ( 0 );
-		if (is_object ( $item0 ))
+		$item0 = $relationship->getItem ( 0 );
+		if (is_object ( $item0 )) {
 			$item0->feed ();
-		$item1 = & $relationship->getItem ( 1 );
-		if (is_object ( $item1 ))
+		}
+		$item1 = $relationship->getItem ( 1 );
+		if (is_object ( $item1 )) {
 			$item1->feed ();
+		}
 	}
 } else {
 	// la relation est nouvelle
+	// on récupère les identifiants, éventuellement fournis, des sociétés impliquées  
 	if (isset ( $_REQUEST ['item0_id'] )) {
 		$item0 = new Society ( $_REQUEST ['item0_id'] );
 		$item0->feed();
