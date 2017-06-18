@@ -807,7 +807,7 @@ class Individual {
 			$statement->bindValue(':lastName', $this->lastName, PDO::PARAM_STR);
 		}
 		if (isset ( $this->birth_date )) {
-			$statement->bindValue(':birth_date', $this->birth_date, PDO::PARAM_STR);
+			empty ($this->birth_date) ? $statement->bindValue(':birth_date', NULL, PDO::PARAM_NULL) : $statement->bindValue(':birth_date', $this->birth_date, PDO::PARAM_STR);
 		}
 		if (isset ( $this->description )) {
 			$statement->bindValue(':description', $this->description, PDO::PARAM_STR);
