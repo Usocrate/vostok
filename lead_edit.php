@@ -418,9 +418,24 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 			</div>
           </div>
         </div>
-		<div>
+		<div class="btn-group">
 			<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+			
+			<?php if ($lead->hasId()): ?>
 			<button name="deletion_order" type="submit" value="1" class="btn btn-default">supprimer</button>
+			<?php endif; ?>
+			
+			<?php if ( $lead->hasId() && isset($society) && $society->hasId() ): ?>
+			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Transférer <span class="caret"></span></span></button>
+		 	<ul class="dropdown-menu">
+		  	<?php
+		  		$data = $society->getRelatedSocieties();
+		  		foreach($data as $d) {
+		  			echo '<li><a href="lead_transfer.php?lead_id='.$lead->getId().'&cmd=transfer&targetSociety_id='.$d[0]->getId().'">'.$d[0]->getName().'</a></li>';
+		  		}
+		  	?>
+		  	</ul>
+			<?php endif; ?>
 		</div>
 	</form>
 </div>

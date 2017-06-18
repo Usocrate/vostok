@@ -68,7 +68,12 @@ class Lead
     {
         return $this->getAttribute('id');
     }
-
+    /**
+     * @since 06/2017
+     */
+    public function hasId() {
+        return !empty($this->id);
+    }
     /**
      * Obtient le statut de la piste
      *
