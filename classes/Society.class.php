@@ -922,7 +922,7 @@ class Society {
 	 * Obtient les pistes associées à la société.
 	 *
 	 * @return array
-	 * @version 03/06/2017
+	 * @version 18/06/2017
 	 */
 	public function getLeads() {
 		global $system;
@@ -935,8 +935,8 @@ class Society {
 			$sql .= ' ORDER BY lead_creation_date DESC';
 			
 			$statement = $system->getPdo()->prepare($sql);
-			
 			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
 
 			foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
 				$lead = new Lead ();
