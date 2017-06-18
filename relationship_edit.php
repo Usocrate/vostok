@@ -50,14 +50,14 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 } else {
 	// la relation est nouvelle
 	if (isset ( $_REQUEST ['item0_id'] )) {
-		$relationship->setItem ( new Society ( $_REQUEST ['item0_id'] ), 0 );
-		$item0 = & $relationship->getItem ( 0 );
-		$item0->feed ();
+		$item0 = new Society ( $_REQUEST ['item0_id'] );
+		$item0->feed();
+		$relationship->setItem ($item0, 0);
 	}
 	if (isset ( $_REQUEST ['item1_id'] )) {
-		$relationship->setItem ( new Society ( $_REQUEST ['item1_id'] ), 1 );
-		$item1 = & $relationship->getItem ( 1 );
-		$item1->feed ();
+		$item1 = new Society ( $_REQUEST ['item1_id'] );
+		$item1->feed();
+		$relationship->setItem($item1, 1);
 	}
 }
 
