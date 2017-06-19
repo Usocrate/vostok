@@ -101,7 +101,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
 <!doctype html>
 <html lang="fr">
 <head>
-    <title><?php echo ToolBox::toHtml($doctitle); ?></title>
+    <title><?php echo ToolBox::toHtml($doc_title); ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />

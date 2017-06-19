@@ -716,15 +716,17 @@ class System {
 	 * Obtient la liste des activités.
 	 *
 	 * @return array
-	 * @since /6/07/2006
-	 * @version 23/12/2016
+	 * @since 07/2006
+	 * @version 06/2017
 	 */
 	public function getIndustries($criteria = NULL) {
 		global $system;
 
 		$output = array ();
 
-		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb FROM industry AS i LEFT OUTER JOIN society_industry AS si ON (si.industry_id=i.id)';
+		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb FROM industry AS i';
+		$sql.= ' LEFT OUTER JOIN society_industry AS si ON (si.industry_id=i.id)';
+		
 		if (! is_null ( $criteria )) {
 			$conditions = array();
 
@@ -737,9 +739,10 @@ class System {
 				$conditions[] = 'i.id IN ('.implode(',', array_keys($ids)).')';
 			}
 			
-			$sql .= ' WHERE '.implode ( ' AND ', $conditions );
+			$sql.= ' WHERE '.implode ( ' AND ', $conditions );
 		}
-		$sql .= ' GROUP BY i.name ASC';
+		
+		$sql.= ' GROUP BY i.id ASC';
 		
 		$statement = $system->getPdo()->prepare($sql);
 		
