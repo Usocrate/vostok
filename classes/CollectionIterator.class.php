@@ -2,11 +2,15 @@
 class CollectionIterator implements Iterator {
  private $var = array();
 
- public function __construct(&$array) {
- if (is_array($array) ) {
-  $this->var =& $array;
+/**
+ * @version 06/2017
+ */
+ public function __construct($array) {
+  if (is_array($array) ) {
+   $this->var = $array;
+  }
  }
- }
+
  /**
  * Remet le focus sur le premier élément de la collection
  *
@@ -15,14 +19,14 @@ class CollectionIterator implements Iterator {
  public function rewind() {
  return reset($this->var);
  }
-
+ 
  /**
  * Obtient l'object sur lequel est le focus.
  */
  public function current() {
  return current($this->var);
  }
-
+ 
  public function key() {
  return key($this->var);
  }
@@ -32,7 +36,7 @@ class CollectionIterator implements Iterator {
  public function next() {
  return next($this->var);
  }
-
+ 
  public function valid() {
  $var = $this->current() !== false;
  return $var;

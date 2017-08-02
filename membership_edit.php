@@ -41,10 +41,14 @@ if (!empty($_REQUEST['membership_id'])) {
 		exit;
 	} else {
 		// récupération des données en base
-		$individual =& $membership->getIndividual();
-		if (is_a($individual, 'Individual')) $individual->feed();
-		$society =& $membership->getSociety();
-		if (is_a($society, 'Society')) $society->feed();
+		$individual = $membership->getIndividual();
+		if (is_a($individual, 'Individual')) {
+			$individual->feed();
+		}
+		$society = $membership->getSociety();
+		if (is_a($society, 'Society')) {
+			$society->feed();
+		}
 	}
 } else {
 	//

@@ -21,8 +21,12 @@
 }
 
 /* Bootstrap */
-.thumbnail > img {
+.thumbnail {
 	background-color: #eee;
+	width:100%;
+}
+.thumbnail DIV.caption {
+	background-color: #fff;
 }
 .navbar {
 	margin-bottom: 0;
@@ -121,4 +125,12 @@ DD {
 	border-width: 1px 0;
 	border-style: dotted;
 	border-color: #999
+}
+
+@media ( min-width : 992px) {
+	/* Bootstrap */
+	.thumbnail {
+		width:330px;
+		margin:10px;
+	}	
 }

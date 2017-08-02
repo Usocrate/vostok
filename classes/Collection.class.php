@@ -227,7 +227,7 @@ abstract class Collection implements IteratorAggregate {
  * @return object
  */
  public function &getElementById($id) {
- return isset($this->elements[$id]) ? $this->elements[$id] : NULL;
+  return isset($this->elements[$id]) ? $this->elements[$id] : NULL;
  }
  /**
  * Renvoie les éléments de la collection portant le nom passé en paramètre

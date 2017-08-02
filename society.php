@@ -60,6 +60,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
     <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo MASONRY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body id="societyDoc">
@@ -156,46 +157,43 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individuals-tab">
 			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
-			<?php if ($memberships): ?>
-			
-			<div class="row">
-			  	<?php 
-			  	foreach ($memberships as $ms) {
-					$i = $ms->getIndividual();
-					$i->feed();
-					echo '<div class="col-sm-6 col-md-3 col-lg-2">';
-					echo '<div class="thumbnail">';
-					if ($i->getPhotoUrl()) {
-						echo $i->getPhotoHtml();
-					} else {
-						echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="img-responsive" />';
-					}
-					echo '<div class="caption">';
-					echo '<h3>';
-					echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
-					$position_elt = array();
-					if ($ms->getDepartment()) $position_elt[] = ToolBox::toHtml($ms->getDepartment());
-					if ($ms->getTitle()) $position_elt[] = ToolBox::toHtml($ms->getTitle());
-					
-					$smallTag_elt = array();
-					
-					if (count($position_elt)>0) {
-						$smallTag_elt[] = implode(' / ', $position_elt);
-					}
-					if ( $ms->getPeriod() ) $smallTag_elt[] = '('.$ms->getPeriod().')';
-					
-					if (count($smallTag_elt)>0) {
-						echo '<div><small>'.implode(' ', $smallTag_elt).'</small></div>';
-					}					
-					echo '</h3>';
-					echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
-					echo '</div>';
-					echo '</div>';
-					echo '</div>';
-			  	}
-				?>
-			</div>
-			<?php endif; ?>
+			<?php
+				if ($memberships) {
+			  		echo '<div class="il">';
+			  		foreach ($memberships as $ms) {
+						$i = $ms->getIndividual();
+						$i->feed();
+						echo '<div class="thumbnail">';
+						if ($i->getPhotoUrl()) {
+							echo $i->getPhotoHtml();
+						} else {
+							echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="img-responsive" />';
+						}
+						echo '<div class="caption">';
+							echo '<h3>';
+							echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
+							$position_elt = array();
+							if ($ms->getDepartment()) $position_elt[] = ToolBox::toHtml($ms->getDepartment());
+							if ($ms->getTitle()) $position_elt[] = ToolBox::toHtml($ms->getTitle());
+							
+							$smallTag_elt = array();
+							
+							if (count($position_elt)>0) {
+								$smallTag_elt[] = implode(' / ', $position_elt);
+							}
+							if ( $ms->getPeriod() ) $smallTag_elt[] = '('.$ms->getPeriod().')';
+							
+							if (count($smallTag_elt)>0) {
+								echo '<div><small>'.implode(' ', $smallTag_elt).'</small></div>';
+							}					
+							echo '</h3>';
+							echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
+						echo '</div>';
+						echo '</div>';
+				  	}
+					echo '</div>';				  	
+				}
+			?>
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leads-tab">
 			<h2>Les pistes<small><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></small></h2>
@@ -240,7 +238,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 	</div>
 </div>
 <script type="text/javascript">
-	$(document).ready(function(){
+	$(document).ready(function() {
 		$('#s_city_i').autocomplete({
 			minLength: 1,
 	   		source: function( request, response ) {
@@ -270,6 +268,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
 		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
 	    };
+	    
 	    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
 			var focus;
 			var scope = 'society';
@@ -296,7 +295,11 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 				  }
 			});
 		});
-	})
+		
+		$('.il').masonry({
+	      itemSelector: 'div[class="thumbnail"]'
+	    });
+	});
 </script>
 </body>
 </html>
