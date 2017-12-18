@@ -127,10 +127,11 @@ DD {
 	border-color: #999
 }
 
-@media ( min-width : 992px) {
+@media ( min-width : 768px) {
 	/* Bootstrap */
 	.thumbnail {
-		width:330px;
-		margin:10px;
-	}	
+		width: 330px;
+		margin-bottom: 10px;
+	}
+	.masonryGutterSizer {width: 10px; height:1px;}	
 }

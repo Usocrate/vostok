@@ -21,7 +21,6 @@ if (empty($_SESSION['user_id'])) {
     $user->feed();
 }
 
-$doc_title = 'éditer la fiche détaillée d\'un individu';
 $messages = array();
 
 $individual = new Individual();
@@ -55,6 +54,7 @@ if (isset($_POST['deletion_order'])) {
 } else {
     $individual->feed();
 }
+$doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 ?>
 <!doctype html>
 <html lang="fr">

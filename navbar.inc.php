@@ -20,6 +20,9 @@
 						<li><a href="industries.php">Par activité</a></li>
 						<li><a href="society_edit.php">Nouvelle société</a></li>
 						<li role="separator" class="divider"></li>
+						<li class="dropdown-header">Les gens</li>
+						<li><a href="individual_edit.php">Introduire un nouvel individu</a></li>
+						<li role="separator" class="divider"></li>
 						<li class="dropdown-header">Les pistes</li>
 						<li><a href="leads.php?lead_newsearch_order=1&amp;lead_status=suivie">Suivies</a></li>
 						<li><a href="leads.php">Dernière recherche</a></li>

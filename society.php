@@ -160,6 +160,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 			<?php
 				if ($memberships) {
 			  		echo '<div class="il">';
+			  		echo '<div class="masonryGutterSizer"></div>';
 			  		foreach ($memberships as $ms) {
 						$i = $ms->getIndividual();
 						$i->feed();
@@ -297,7 +298,9 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 		});
 		
 		$('.il').masonry({
-	      itemSelector: 'div[class="thumbnail"]'
+	      itemSelector: '.thumbnail',
+	      columnWidth: '.thumbnail',
+	      gutter: '.masonryGutterSizer'
 	    });
 	});
 </script>
