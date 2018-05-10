@@ -89,7 +89,7 @@ $doc_title = 'Accueil';
 				</section>
 				<section>
 					<?php
-					$memberships = $system->getMemberships(null, 'Last updated first', 0, 3);
+					$memberships = $system->getMemberships(null, 'Last updated first', 0, 12);
 					if ($memberships) {
 				  		echo '<div class="il">';
 				  		echo '<div class="masonryGutterSizer"></div>';
