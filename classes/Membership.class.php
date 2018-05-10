@@ -21,8 +21,8 @@ class Membership {
 	}
 	/**
 	 * Fixe la valeur d'un attribut.
-	 * @since 28/01/2006 
-	 * @version 04/03/2006
+	 * @since 01/2006 
+	 * @version 03/2006
 	 */
 	public function setAttribute($name, $value)	{
 		$value = trim($value);
@@ -30,7 +30,25 @@ class Membership {
 		return $this->{$name} = $value;
 	}
 	/**
-	 * @since 13/01/2017
+	 * @since 05/2018
+	 */
+	public function setTitle($input)	{
+		return $this->title = $input;
+	}
+	/**
+	 * @since 05/2018
+	 */
+	public function setDepartment($input)	{
+		return $this->department = $input;
+	}
+	/**
+	 * @since 05/2018
+	 */
+	public function setDescription($input)	{
+		return $this->description = $input;
+	}	
+	/**
+	 * @since 01/2017
 	 **/
 	public function setInitYear($input) {
 		if ( is_numeric($input) && strlen($input)==4 ) {
@@ -38,7 +56,7 @@ class Membership {
 		}
 	}
 	/**
-	 * @since 13/01/2017
+	 * @since 01/2017
 	 **/	
 	public function setEndYear($input) {
 		if ( is_numeric($input) && strlen($input)==4 ) {

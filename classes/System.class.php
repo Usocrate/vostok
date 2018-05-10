@@ -276,8 +276,7 @@ class System {
 		}
 	}
 	/**
-	 *
-	 * @since 04/08/2014
+	 * @since 08/2014
 	 */
 	public static function getIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
 		global $system;
@@ -308,6 +307,12 @@ class System {
 			switch ($sort) {
 				case 'Name' : 
 					$sql .= ' ORDER BY individual_lastName ASC';
+					break;
+				case 'Last updated first' : 
+					$sql .= ' ORDER BY individual_timestamp DESC';
+					break;
+				case 'Last created first' :
+					$sql .= ' ORDER BY individual_creation_date DESC';
 					break;
 			}
 
@@ -346,9 +351,99 @@ class System {
 		}
 	}
 	/**
-	 *
-	 * @since 04/08/2014
-	 * @version 15/12/2016
+	 * @since 05/2018
+	 */
+	public function getMemberships($criteria = NULL, $sort = 'Last updated first', $offset = 0, $count = NULL) {
+		global $system;
+		try {
+			$sql = 'SELECT m.membership_id AS id, m.individual_id, m.society_id, m.title, m.department, m.description, m.init_year, m.end_year, m.timestamp';
+			$sql.= ', i.individual_firstName, i.individual_lastName';
+			$sql.= ', s.society_name, s.society_city';
+			$sql.= ' FROM membership AS m';
+			$sql.= ' INNER JOIN society AS s ON s.society_id = m.society_id';
+			$sql.= ' INNER JOIN individual AS i ON i.individual_id = m.individual_id';
+
+			// WHERE
+			$where = array ();
+			
+			if (isset ( $criteria ['individual_id'] )) {
+				$where [] = 'm.individual_id = :individual_id';
+			}
+			
+			if (isset ( $criteria ['society_id'] )) {
+				$where [] = 'm.society_id = :society_id';
+			}
+			
+			if (count ( $where ) > 0) {
+				$sql .= ' WHERE ' . implode ( ' AND ', $where );
+			}
+			
+			// ORDER
+			switch ($sort) {
+				case 'Last updated first' : 
+					$sql .= ' ORDER BY m.timestamp DESC';
+					break;
+			}
+
+			// LIMIT
+			if (isset ( $count )) {
+				$sql .= isset ( $offset ) ? ' LIMIT :offset,:count' : ' LIMIT :count';
+			}			
+			
+			$statement = $system->getPdo()->prepare($sql);
+
+			if (isset ($criteria ['individual_id'])) {
+				$statement->bindValue(':individual_id', $criteria['individual_id'], PDO::PARAM_INT);
+			}
+			if (isset ($criteria ['society_id'])) {
+				$statement->bindValue(':society_id', $criteria['society_id'], PDO::PARAM_INT);
+			}
+
+			if (isset ( $count )) {
+				if (isset ( $offset )) {
+					$statement->bindValue ( ':offset', ( int ) $offset, PDO::PARAM_INT );
+				}
+				$statement->bindValue ( ':count', ( int ) $count, PDO::PARAM_INT );
+			}
+			
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$statement->execute();
+
+			$memberships = array ();
+			foreach ( $statement->fetchAll() as $data ) {
+				// individual
+				$i = new Individual();
+				$i->setId($data['individual_id']);
+				$i->setFirstName($data['individual_firstName']);
+				$i->setLastName($data['individual_lastName']);
+
+				// society
+				$s = new Society();
+				$s->setId($data['society_id']);
+				$s->setName($data['society_name']);
+				$s->setCity($data['society_city']);
+
+				// membership
+				$m = new Membership();
+				$m->setId($data['id']);
+				$m->setSociety($s);
+				$m->setIndividual($i);
+				$m->setTitle($data['title']);
+				$m->setDepartment($data['department']);
+				$m->setDescription($data['description']);
+				$m->setInitYear($data['init_year']);
+				$m->setEndYear($data['end_year']);
+				//$m->setTimestamp($data['timestamp']);
+				$memberships[$data['id']] = $m;
+			}
+			return $memberships;			
+		} catch (Exception $e) {
+			trigger_error(__METHOD__.$e->getMessage());
+		}
+	}	
+	/**
+	 * @since 08/2014
+	 * @version 12/2016
 	 */
 	public static function getAloneIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
 		global $system;
@@ -850,9 +945,7 @@ class System {
 		return $html;
 	}
 	/**
-	 * Informe d'une exception.
-	 *
-	 * @since 04/08/2014
+	 * @since 08/2014
 	 */
 	public static function reportException(Exception $e) {
 		// echo '<p>' . ToolBox::toHtml ( $e->getMessage () ) . '</p>';
@@ -861,13 +954,20 @@ class System {
 	}
 	/**
 	 * Obtient la liste des derniers évènements enregistrés à l'historique.
-	 * @version 01/06/2017
+	 * @version 06/2017
 	 */
-	public function getLastHistoryEvents($nb=7) {
+	public function getLastHistoryEvents($nb=3) {
 		$criteria = array();
 		$criteria['warehouse'] = 'history';
 		return self::getEvents($criteria, 'Last created first', $nb);
 	}
+	/**
+	 * @since 05/2018
+	 */
+	public function getLastUpdatedIndividualCollection($nb=3) {
+		$statement = self::getIndividualCollectionStatement(null, 'Last updated first',0 ,$nb);
+		return new IndividualCollection($statement);
+	}	
 	/**
 	 * Obtient la liste des prochains évènements enregistrés au planning.
 	 * @version 01/06/2017 

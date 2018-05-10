@@ -35,9 +35,10 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 	
 	if (isset ( $_POST ['relationship_deletion'] )) {
 		// demande de suppression de la participation
-		$item0 = $relationship->getItem ( 0 );
-		$relationship->delete ();
-		header ( 'location:society.php?society_id=' . $item0->getId () );
+		$item0 = $relationship->getItem(0);
+		$relationship->delete();
+		header('location:society.php?society_id='.$item0->getId());
+		exit;
 	} else {
 		// récupération des données en base
 		$item0 = $relationship->getItem ( 0 );

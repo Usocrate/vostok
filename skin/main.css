@@ -133,5 +133,15 @@ DD {
 		width: 330px;
 		margin-bottom: 10px;
 	}
-	.masonryGutterSizer {width: 10px; height:1px;}	
+	.masonryGutterSizer {
+		width: 10px;
+		height:10px;
+	}
+	#indexDoc .thumbnail {
+		width: 380px;
+	}
+	#indexDoc .masonryGutterSizer {
+		width: 30px;
+		height:30px;
+	}	
 }
