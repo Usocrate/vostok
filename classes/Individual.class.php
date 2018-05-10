@@ -412,16 +412,14 @@ class Individual {
 		return unlink ( $this->getPhotoFilePath () );
 	}
 	/**
-	 *
-	 * @since 07/08/2014
-	 * @param array $uploadedFile        	
-	 * @return boolean
+	 * @since 08/2014
 	 */
 	public function filePhoto(array $uploadedFile) {
 		global $system;
 		try {
-			if ($uploadedFile ['size'] > 0) {
-				$ext = end ( explode ( '.', $uploadedFile ['name'] ) );
+			if ($uploadedFile['size'] > 0) {
+				$a = explode('.', $uploadedFile ['name']);
+				$ext = end($a);
 				$targetFilePath = $system->getTrombiDirPath() . DIRECTORY_SEPARATOR . $this->getId () . '.' . $ext;
 				if (is_file ( $targetFilePath )) {
 					unlink ( $targetFilePath );
