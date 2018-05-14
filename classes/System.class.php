@@ -852,11 +852,43 @@ class System {
 		$statement->execute();
 
 		foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $item ) {
-			$i = new Industry ();
-			$i->feed ( $item );
-			$output [] = $i;
+			$i = new Industry();
+			$i->feed($item);
+			$output[$i->getId()] = $i;
 		}
 		return $output;
+	}
+	/**
+	 * @since 05/2018
+	 */
+	public function getIndustryFromId($id) {
+		global $system;
+
+		$sql = 'SELECT * FROM industry WHERE id=?';
+		$statement = $system->getPdo()->prepare($sql);
+		$statement->execute(array($id));
+		$data = $statement->fetch(PDO::FETCH_ASSOC);
+		if ($data) {
+			$output = new Industry();
+			$output->feed($data);
+			return $output;
+		}
+	}	
+	/**
+	 * @since 05/2018
+	 */
+	public function getIndustryFromName($name) {
+		global $system;
+
+		$sql = 'SELECT * FROM industry WHERE name=?';
+		$statement = $system->getPdo()->prepare($sql);
+		$statement->execute(array($name));
+		$data = $statement->fetch(PDO::FETCH_ASSOC);
+		if ($data) {
+			$output = new Industry();
+			$output->feed($data);
+			return $output;
+		}
 	}
 	/**
 	 * Obtient la liste pondérée des dernières activités utilisées pour qualifier une société.
@@ -897,8 +929,8 @@ class System {
 	 * Rassemble plusieurs activités en une seule.
 	 *
 	 * @return Industry
-	 * @since 19/08/2006
-	 * @version 23/12/2016
+	 * @since 08/2006
+	 * @version 12/2016
 	 */
 	public function mergeIndustries($a, $b) {
 		try {

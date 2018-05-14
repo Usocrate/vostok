@@ -153,7 +153,7 @@ class Industry {
 	}
 	/**
 	 * Enregistre les données de l'activité en base de données.
-	 * @version 23/12/2016
+	 * @version 05/2018
 	 */
 	public function toDB()	{
 		global $system;
@@ -177,6 +177,8 @@ class Industry {
 		if (isset($this->name)) {
 			$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
 		}
+		
+		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 		
 		$result = $statement->execute();
 		

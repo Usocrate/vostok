@@ -82,10 +82,11 @@ $doc_title = 'Les activités';
         				<?php
         				foreach ( $system->getIndustries () as $i ) {
         					echo '<tr>';
-        					echo '<td><input name="industries_ids[]" type="checkbox" value="' . $i->getId () . '" /></td>';
+        					echo '<td><input name="industries_ids[]" type="checkbox" value="'.$i->getId().'" /></td>';
         					echo '<td>';
-        					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id=' . $i->getId () . '">';
+        					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id='.$i->getId().'">';
         					echo $i->getName ();
+        					echo ' <small><a href="industry_edit.php?id='.$i->getId().'"><span class="glyphicon glyphicon-edit"></span></a></small>';
         					echo '</a>';
         					echo '</td>';
         					echo '<td>';
