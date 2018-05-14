@@ -178,7 +178,9 @@ class Industry {
 			$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
 		}
 		
-		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		if (!$new) {
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		}
 		
 		$result = $statement->execute();
 		
