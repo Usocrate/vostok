@@ -68,21 +68,21 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 if (isset ( $_POST ['relationship_submission'] )) {
 	// enregistrement des données de la participation
 	$relationship->feed ( $_POST );
-	if (is_null ( $item0 ) && ! empty ( $_POST ['item0_name'] )) {
+	if (empty($item0) && !empty($_POST['item0_name'])) {
 		$item0 = new Society ();
 		$item0->setName ( $_POST ['item0_name'] );
 		if (! $item0->identifyFromName ()) {
 			$item0->toDB ();
 		}
-		$relationship->setItem ( $item0, 0 );
+		$relationship->setItem($item0,0);
 	}
-	if (is_null ( $item1 ) && ! empty ( $_POST ['item1_name'] )) {
-		$item1 = new Society ();
-		$item1->setName ( $_POST ['item1_name'] );
-		if (! $item1->identifyFromName ()) {
-			$item1->toDB ();
+	if (empty($item1) && !empty($_POST['item1_name'])) {
+		$item1 = new Society();
+		$item1->setName($_POST['item1_name']);
+		if(!$item1->identifyFromName()) {
+			$item1->toDB();
 		}
-		$relationship->setItem ( $item1, 1 );
+		$relationship->setItem($item1,1);
 	}
 	if ($relationship->toDB ()) {
 		header ( 'location:society.php?society_id=' . $item0->getId () );
