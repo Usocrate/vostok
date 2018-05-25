@@ -49,7 +49,7 @@ $doc_title = 'Accueil';
 							<label for="s_name_i">Une société</label>
 							<input id="s_name_i" name="society_name" type="text" class="form-control" placeholder="nom" />
 						</div>
-						<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Retrouver</button>
+						<button type="submit" name="society_newsearch" value="1" class="btn btn-default">Retrouver</button>
 					</form>
 				</section>
 				<section>
@@ -84,7 +84,7 @@ $doc_title = 'Accueil';
 						<div class="form-group">
 							<label for="individual_lastName_i">Un individu</label> <input id="individual_lastName_i" name="individual_lastName" type="text" placeholder="nom de famille" class="form-control" />
 						</div>
-						<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">Retrouver</button>
+						<button type="submit" name="individual_newsearch" value="1" class="btn btn-default">Retrouver</button>
 					</form>
 				</section>
 				<section>

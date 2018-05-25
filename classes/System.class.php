@@ -361,6 +361,9 @@ class System {
 			$sql.= ', s.society_name, s.society_city';
 			$sql.= ' FROM membership AS m';
 			$sql.= ' INNER JOIN society AS s ON s.society_id = m.society_id';
+			if (isset($criteria['industry_id'])) {
+				$sql.= ' INNER JOIN society_industry AS si ON si.society_id = s.society_id';
+			}
 			$sql.= ' INNER JOIN individual AS i ON i.individual_id = m.individual_id';
 
 			// WHERE
@@ -372,6 +375,10 @@ class System {
 			
 			if (isset ( $criteria ['society_id'] )) {
 				$where [] = 'm.society_id = :society_id';
+			}
+			
+			if (isset ( $criteria ['industry_id'] )) {
+				$where [] = 'si.industry_id = :industry_id';
 			}
 			
 			if (count ( $where ) > 0) {
@@ -398,6 +405,9 @@ class System {
 			if (isset ($criteria ['society_id'])) {
 				$statement->bindValue(':society_id', $criteria['society_id'], PDO::PARAM_INT);
 			}
+			if (isset ($criteria ['industry_id'])) {
+				$statement->bindValue(':industry_id', $criteria['industry_id'], PDO::PARAM_INT);
+			}			
 
 			if (isset ( $count )) {
 				if (isset ( $offset )) {
