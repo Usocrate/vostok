@@ -175,11 +175,17 @@ $doc_title = 'Les sociétés qui m\'intéressent';
    		<div class="col-md-5">
 			<section>
 				<?php
-				if (isset ($_SESSION ['society_search']['criteria']['industry_id']) && ! empty($_SESSION ['society_search']['criteria']['industry_id']) ) {
-					$memberships = $system->getMemberships(array('industry_id'=>$_SESSION ['society_search']['criteria']['industry_id']), 'Last updated first', 0, 8);
-				} else {
-					$memberships = $system->getMemberships(null, 'Last updated first', 0, 8);
+				$criteria = array();
+				if ($_SESSION ['society_search']['criteria']['name']) {
+					$criteria['society_name_like_pattern'] = $_SESSION ['society_search']['criteria']['name'];
+				}				
+				if (isset($_SESSION ['society_search']['criteria']['industry_id'])) {
+					$criteria['industry_id'] = $_SESSION ['society_search']['criteria']['industry_id'];
 				}
+				if (isset($_SESSION ['society_search']['criteria']['city'])) {
+					$criteria['society_city'] = $_SESSION ['society_search']['criteria']['city'];
+				}				
+				$memberships = $system->getMemberships($criteria, 'Last updated first', 0, 8);
 				if ($memberships) {
 			  		echo '<div class="il">';
 			  		echo '<div class="masonryGutterSizer"></div>';

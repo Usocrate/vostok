@@ -376,6 +376,14 @@ class System {
 			if (isset ( $criteria ['society_id'] )) {
 				$where [] = 'm.society_id = :society_id';
 			}
+
+			if (isset ( $criteria ['society_name_like_pattern'] )) {
+				$where [] = 's.society_name LIKE :society_name_like_pattern';
+			}			
+			
+			if (isset ( $criteria ['society_city'] )) {
+				$where [] = 's.society_city = :society_city';
+			}
 			
 			if (isset ( $criteria ['industry_id'] )) {
 				$where [] = 'si.industry_id = :industry_id';
@@ -404,6 +412,12 @@ class System {
 			}
 			if (isset ($criteria ['society_id'])) {
 				$statement->bindValue(':society_id', $criteria['society_id'], PDO::PARAM_INT);
+			}
+			if (isset ($criteria ['society_name_like_pattern'])) {
+				$statement->bindValue(':society_name_like_pattern', '%'.$criteria['society_name_like_pattern'].'%', PDO::PARAM_STR);
+			}			
+			if (isset ($criteria ['society_city'])) {
+				$statement->bindValue(':society_city', $criteria['society_city'], PDO::PARAM_STR);
 			}
 			if (isset ($criteria ['industry_id'])) {
 				$statement->bindValue(':industry_id', $criteria['industry_id'], PDO::PARAM_INT);
