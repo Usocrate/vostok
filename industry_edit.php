@@ -7,7 +7,7 @@ function __autoload($class_name) {
 		include_once $path . $class_name . '.interface.php';
 	}
 }
-$system = new System( './config/host.json' );
+$system = new System('./config/host.json');
 
 require_once 'config/boot.php';
 
@@ -33,12 +33,13 @@ if (isset($_REQUEST['id'])) {
 			case 'registration' :
 				if (!empty($_POST['name'] && strcmp($industry->getName(), $_POST['name'])!=0)) {
 					
+					$i = $system->getIndustryFromName($_POST['name']);
+					
 					$industry->setName($_POST['name']);
 					$industry->toDB();
 
-					$i = $system->getIndustryFromName($_POST['name']);
-					if (is_a($i, 'Industry')) {
-						$system->mergeIndustries ($industry, $i);
+					if (is_a($i,'Industry') && $i->getId() != $industry->getId()) {
+						$system->mergeIndustries($industry, $i);
 					}
 				}
 				header('Location:industries.php');

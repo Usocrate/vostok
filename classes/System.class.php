@@ -954,16 +954,18 @@ class System {
 	 *
 	 * @return Industry
 	 * @since 08/2006
-	 * @version 12/2016
+	 * @version 05/2018
 	 */
 	public function mergeIndustries($a, $b) {
 		try {
-			if (! is_a ( $a, 'Industry' ) || ! is_a ( $b, 'Industry' )) throw new Exception ('Pour fusionner 2 activités, il faut désigner 2 activités');
+			if (! is_a ($a, 'Industry') || ! is_a($b, 'Industry')) throw new Exception ('Pour fusionner 2 activités, il faut désigner 2 activités');
+			if (empty($a->getId()) || empty($b->getId())) throw new Exception ('Les 2 activités doivent être identifiées.');
+			if ($a->getId() == $b->getId()) throw new Exception ('On fusionne 2 activités différentes !');
 
-			if ($b->getSocietiesNb () > $a->getSocietiesNb ()) {
-				return $a->transferSocieties ( $b ) ? $a->delete() : false;
+			if ($b->getSocietiesNb() > $a->getSocietiesNb()) {
+				return $a->transferSocieties ($b) ? $a->delete() : false;
 			} else {
-				return $b->transferSocieties ( $a ) ? $b->delete() : false;
+				return $b->transferSocieties($a) ? $b->delete() : false;
 			}			
 		} catch (Exception $e) {
 			System::reportException($e);
