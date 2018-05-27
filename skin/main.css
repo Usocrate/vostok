@@ -88,7 +88,7 @@ DD {
 
 /* autres styles génériques */
 .tagCloud {
-	margin:1em;
+	margin: 1em 0;
 }
 .seeMore {
 	text-align:right;
@@ -138,6 +138,9 @@ DD {
 	.thumbnail {
 		width: 340px;
 	}
+	.tagCloud {
+		margin: 1em;
+	}	
 }
 
 @media ( min-width : 992px) {

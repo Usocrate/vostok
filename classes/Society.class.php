@@ -379,7 +379,9 @@ class Society {
 					$this->countryNameCode = $c->short_name;
 				}
 			}
-			$this->street = $street['number'].' '.$street['route'];
+			if (isset($street['number']) && isset($street['route'])) {
+				$this->street = $street['number'].' '.$street['route'];
+			}
 			$this->latitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
 			$this->longitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 		} catch (Exception $e) {

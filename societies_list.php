@@ -176,7 +176,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 			<section>
 				<?php
 				$criteria = array();
-				if ($_SESSION ['society_search']['criteria']['name']) {
+				if (isset($_SESSION ['society_search']['criteria']['name'])) {
 					$criteria['society_name_like_pattern'] = $_SESSION ['society_search']['criteria']['name'];
 				}				
 				if (isset($_SESSION ['society_search']['criteria']['industry_id'])) {

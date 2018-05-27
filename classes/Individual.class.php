@@ -57,7 +57,7 @@ class Individual {
 	}
 	/**
 	 * Fixe la valeur d'un attribut.
-	 * @version 03/05/2017
+	 * @version 05/2018
 	 */
 	public function setAttribute($name, $value) {
 		$value = trim ( $value );
@@ -68,14 +68,21 @@ class Individual {
 				if ( strcmp($value, '0000-00-00') == 0 ) {
 					return false;	
 				}
+			case 'individual_salutation' :
+				$salutations = array('mr', 'mme', 'mlle');
+				if (!in_array($value, $salutations)) {
+					return false;
+				}
 			default :
 				// après gestion des cas particuliers, règle générale
 				return $this->{$name} = $value;			
 		}
 	}
+	
 	public function getAttribute($name) {
 		return isset ( $this->$name ) ? $this->$name : NULL;
 	}
+	
 	/**
 	 * Obtient le lieu de résidence de l'individu.
 	 */
@@ -666,7 +673,7 @@ class Individual {
 	 * Efface toutes les participations de cet individu en base de données.
 	 *
 	 * @return boolean
-	 * @version 03/01/2017
+	 * @version 01/2017
 	 */
 	public function deleteMemberships() {
 		global $system;
@@ -687,7 +694,7 @@ class Individual {
 	 *
 	 * @return boolean
 	 * @param int $society_id
-	 * @version 03/01/2017
+	 * @version 01/2017
 	 */
 	public function isMember($society_id) {
 		global $system;
@@ -890,6 +897,7 @@ class Individual {
 		$statement->execute();
 		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
+	
 	public function feed($array = NULL) {
 		if (is_array ( $array )) {
 			// les données de l'initialisation sont transmises
