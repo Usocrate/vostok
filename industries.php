@@ -22,7 +22,8 @@ if (empty ( $_SESSION ['user_id'] )) {
 }
 
 if (isset ( $_POST ['task'] )) {
-	ToolBox::formatUserPost ( $_POST );
+	ToolBox::formatUserPost($_POST);
+	//print_r($_POST);
 	switch ($_POST ['task']) {
 		case 'newindustry' :
 			if (! empty ( $_POST ['newindustry_name'] )) {
@@ -33,16 +34,17 @@ if (isset ( $_POST ['task'] )) {
 			break;
 		case 'industries_merge' :
 			if (isset ( $_POST ['industries_ids'] )) {
-				$industriesToMerge = $system->getIndustriesFromIds ( $_POST ['industries_ids'] );
-				while ( count ( $industriesToMerge ) > 1 ) {
+				$industriesToMerge = $system->getIndustriesFromIds($_POST['industries_ids']);
+				//print_r($industriesToMerge);
+				while ( count($industriesToMerge) > 1 ) {
 					$result = array ();
-					$result [] = $system->mergeIndustries ( $industriesToMerge [0], $industriesToMerge [1] );
-					array_splice ( $industriesToMerge, 0, 2, $result );
+					$result[] = $system->mergeIndustries(current($industriesToMerge), next($industriesToMerge));
+					array_splice($industriesToMerge, 0, 2, $result);
 				}
 			}
 			break;
 		default :
-			trigger_error ( 'La tâche à éxécuter est inconnue' );
+			trigger_error ( 'La tâche à exécuter est inconnue' );
 	}
 }
 $doc_title = 'Les activités';
@@ -102,8 +104,6 @@ $doc_title = 'Les activités';
 					<tfoot>
 						<tr>
 							<td colspan="3">
-								<button type="button" onclick="check('industries_ids[]')">tout cocher</button>     /
-								<button type="button" onclick="uncheck('industries_ids[]')">tout décocher</button> <label for="task">Pour la sélection :</label>
 								<button type="submit" name="task" value="industries_merge" class="btn btn-primary">Fusionner</button>
 							</td>
 						</tr>

@@ -917,7 +917,7 @@ class System {
 	/**
 	 * Obtient la liste pondérée des dernières activités utilisées pour qualifier une société.
 	 * 
-	 * @since 09/02/2017
+	 * @since 02/2017
 	 */
 	public function getLastUsedIndustries($scope = 100) {
 		global $system;
@@ -943,8 +943,8 @@ class System {
 	 *
 	 * @return array
 	 * @param ids array
-	 * @since 19/08/2006
-	 * @version 23/12/2016
+	 * @since 08/2006
+	 * @version 12/2016
 	 */
 	public function getIndustriesFromIds($ids) {
 		return $this->getIndustries(array('ids'=>$ids));
