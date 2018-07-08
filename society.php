@@ -61,6 +61,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo MASONRY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo IMAGESLOADED_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body id="societyDoc">
@@ -296,12 +297,19 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 				  }
 			});
 		});
-		
-		$('.il').masonry({
+
+		var $grid = $('.il').masonry({
 	      itemSelector: '.thumbnail',
 	      columnWidth: '.thumbnail',
 	      gutter: '.masonryGutterSizer'
 	    });
+		
+		$grid.imagesLoaded().progress(
+			function() {
+				$grid.masonry('layout');	
+			}
+		);
+
 	});
 </script>
 </body>

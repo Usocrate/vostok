@@ -90,7 +90,8 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     <script type="application/javascript" src="js/controls.js"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-		<script type="text/javascript" src="<?php echo MASONRY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo MASONRY_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo IMAGESLOADED_URI ?>"></script>
 	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
 </head>
 <body id="societiesListDoc">
@@ -260,11 +261,17 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
 	    };
 	    
-    	$('.il').masonry({
+	    var $grid = $('.il').masonry({
 	      itemSelector: '.thumbnail',
 	      columnWidth: '.thumbnail',
 	      gutter: '.masonryGutterSizer'
 	    });
+			
+		$grid.imagesLoaded().progress(
+			function() {
+				$grid.masonry('layout');	
+			}
+		);
 	})
 </script>
 </body>
