@@ -9,8 +9,8 @@ define ( 'BOOTSTRAP_CSS_THEME_URI', $system->getSkinUrl().'bootstrap/css/bootstr
 define ( 'BOOTSTRAP_JS_URI', $system->getSkinUrl().'bootstrap/js/bootstrap.min.js');
 
 // JQuery
-define ( 'JQUERY_URI', 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js' );
-define ( 'JQUERY_UI_URI', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js' );
+define ( 'JQUERY_URI', 'https://code.jquery.com/jquery-1.12.4.min.js' );
+define ( 'JQUERY_UI_URI', 'https://code.jquery.com/ui/1.12.1/jquery-ui.min.js' );
 
 // Masonry
 define ('MASONRY_URI', 'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js');
