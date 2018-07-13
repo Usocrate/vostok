@@ -166,15 +166,13 @@ $doc_title = 'Accueil';
 			    return $( "<li>" ).append(item.label).appendTo( ul );
 		    };
 		    
-			var $grid = $('.il').masonry({
-		      itemSelector: '.thumbnail',
-		      columnWidth: '.thumbnail',
-		      gutter: '.masonryGutterSizer'
-		    });
-			
-			$grid.imagesLoaded().progress(
+			$('.il').masonry({
+				itemSelector: '.thumbnail',
+				columnWidth: '.thumbnail',
+				gutter: '.masonryGutterSizer'
+		    }).imagesLoaded().progress(
 				function() {
-					$grid.masonry('layout');	
+					$('.il').masonry('layout');	
 				}
 			);
 		})

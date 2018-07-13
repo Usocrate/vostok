@@ -241,8 +241,10 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-
-	    $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+		
+		// https://www.sitepoint.com/bootstrap-tabs-play-nice-with-masonry/
+		
+	    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			var focus;
 			var scope = 'society';
 
@@ -252,6 +254,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 			  		break;
 			  	case 'individualsTabSelector':
 			  		focus = 'onIndividuals';
+			  		$('.il').masonry('layout');
 			  		break;
 			  	case 'leadsTabSelector':
 			  		focus = 'onLeads';
@@ -269,15 +272,12 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 			});
 		});
 
-		var $grid = $('.il').masonry({
+		$('.il').masonry({
 	      itemSelector: '.thumbnail',
 	      columnWidth: '.thumbnail',
 	      gutter: '.masonryGutterSizer'
-	    });
-		
-		$grid.imagesLoaded().progress(
-			function() {
-				$grid.masonry('layout');	
+	    }).imagesLoaded().progress(function() {
+				$('.il').masonry('layout');
 			}
 		);
 

@@ -261,15 +261,13 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
 	    };
 	    
-	    var $grid = $('.il').masonry({
+	    $('.il').masonry({
 	      itemSelector: '.thumbnail',
 	      columnWidth: '.thumbnail',
 	      gutter: '.masonryGutterSizer'
-	    });
-			
-		$grid.imagesLoaded().progress(
+	    }).imagesLoaded().progress(
 			function() {
-				$grid.masonry('layout');	
+				$('.il').masonry('layout');	
 			}
 		);
 	})
