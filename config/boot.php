@@ -11,6 +11,7 @@ define ( 'BOOTSTRAP_JS_URI', $system->getSkinUrl().'bootstrap/js/bootstrap.min.j
 // JQuery
 define ( 'JQUERY_URI', 'https://code.jquery.com/jquery-1.12.4.min.js' );
 define ( 'JQUERY_UI_URI', 'https://code.jquery.com/ui/1.12.1/jquery-ui.min.js' );
+define ( 'JQUERY_UI_CSS_THEME_URI', 'https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css');
 
 // Masonry
 define ('MASONRY_URI', 'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js');

@@ -854,6 +854,30 @@ class Society {
 		return $output;
 	}
 	/**
+	 * Obtient les sociétés à l'activité proche
+	 * @since 07/2018
+	 */
+	public function getInSameIndustrySocieties() {
+		global $system;
+		$sql = 'SELECT s.society_id, s.society_name, COUNT(i2.industry_id) AS similarity_indicator';
+		$sql.= ' FROM society_industry AS i INNER JOIN society_industry AS i2 USING (industry_id)';
+		$sql.= ' INNER JOIN society AS s ON s.society_id = i2.society_id';
+		$sql.= ' WHERE i.society_id = ? AND i2.society_id <> i.society_id';
+		$sql.= ' GROUP BY i.society_id, i2.society_id';
+		$sql.= ' HAVING similarity_indicator > 1';
+		$sql.= ' ORDER BY similarity_indicator DESC';
+		$sql.= ' LIMIT 0,7';
+		$statement = $system->getPdo()->prepare($sql);
+		$statement->execute(array($this->id));
+		$data = $statement->fetchAll(PDO::FETCH_ASSOC);
+		foreach ( $data as $row ) {
+			$s = new Society($row['society_id']);
+			$s->setName($row['society_name']);
+			$output[$row['society_id']] = $s;
+		}
+		return $output;
+	}
+	/**
 	 * Obtient la liste des sociétés ayant en relation au format html (balises <option>).
 	 *
 	 * @return string

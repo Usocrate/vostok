@@ -63,6 +63,7 @@ $h1_content = 'Une activité';
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>" type="text/css" />
     <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
     <link rel="icon" type="image/x-icon" href="<?php echo $system->getSkinUrl() ?>favicon.ico" />    
     <script type="text/javascript" src="js/controls.js"></script>
