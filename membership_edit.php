@@ -268,10 +268,11 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 		        select: function( event, ui ) {
 					$('#s_name_i').val( ui.item.value );
 		        	return false;
-		        }
-		   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-			    return $( "<li>" ).append(item.label).appendTo( ul );
-		    };
+		        },
+		        _renderItem: function( ul, item ) {
+				    return $( "<li>" ).append(item.label).appendTo( ul );
+			    }
+		   	});
 		    $('#title_i').autocomplete({
 				minLength: 3,
 		   		source: function( request, response ) {
@@ -297,10 +298,11 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 		        select: function( event, ui ) {
 					$('#title_i').val( ui.item.value );
 		        	return false;
-		        }
-		   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-		    };
+		        },
+		        _renderItem: function( ul, item ) {
+				    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+			    }
+		   	});
 		    $('#department_i').autocomplete({
 				minLength: 3,
 		   		source: function( request, response ) {
@@ -326,10 +328,11 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 		        select: function( event, ui ) {
 					$('#department_i').val( ui.item.value );
 		        	return false;
-		        }
-		   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-		    };	    		    
+		        },
+		        _renderItem: function( ul, item ) {
+				    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+			    }
+		   	});	    		    
 		});
 	</script>
 </div>

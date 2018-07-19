@@ -161,11 +161,12 @@ $doc_title = 'Accueil';
 		        select: function( event, ui ) {
 					$('#s_name_i').val( ui.item.value );
 		        	return false;
-		        }
-		   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-			    //alert(JSON.stringify(item));
-			    return $( "<li>" ).append(item.label).appendTo( ul );
-		    };
+		        },
+		        _renderItem: function( ul, item ) {
+				    //alert(JSON.stringify(item));
+				    return $("<li>").append(item.label).appendTo(ul);
+			    }
+		   	});
 		    
 			$('.il').masonry({
 				itemSelector: '.thumbnail',

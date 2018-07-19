@@ -257,10 +257,11 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 	        select: function( event, ui ) {
 				$('#s_city_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-	    };
+	        },
+	        _renderItem: function( ul, item ) {
+			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+		    }
+	   	});
 	    
 	    $('.il').masonry({
 	      itemSelector: '.thumbnail',

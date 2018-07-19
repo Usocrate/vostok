@@ -468,10 +468,11 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	        select: function( event, ui ) {
 				$('#lead_type_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-	    };
+	        },
+	        _renderItem: function( ul, item ) {
+			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+		    }
+	   	});
 	    $('#lead_source_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
@@ -497,10 +498,11 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	        select: function( event, ui ) {
 				$('#lead_source_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-	    };
+	        },
+	        _renderItem: function( ul, item ) {
+			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+		    }
+	   	});
 	    <?php if (!(isset($society) && $society->hasId())): ?>
 	    $('#s_name_i').autocomplete({
 			minLength: 2,
@@ -527,11 +529,12 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	        select: function( event, ui ) {
 				$('#s_name_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    //alert(JSON.stringify(item));
-		    return $( "<li>" ).append(item.label).appendTo( ul );
-	    };
+	        },
+	        _renderItem: function( ul, item ) {
+			    //alert(JSON.stringify(item));
+			    return $( "<li>" ).append(item.label).appendTo( ul );
+		    }
+	   	});
 	    $('#s_parent_name_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
@@ -557,11 +560,12 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	        select: function( event, ui ) {
 				$('#s_parent_name_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    //alert(JSON.stringify(item));
-		    return $( "<li>" ).append(item.label).appendTo( ul );
-	    };	    
+	        },
+	        _renderItem: function( ul, item ) {
+			    //alert(JSON.stringify(item));
+			    return $( "<li>" ).append(item.label).appendTo( ul );
+		    }
+	   	});	    
 	    <?php endif; ?>
 	    $('#ms_title_i').autocomplete({
 			minLength: 3,
@@ -588,10 +592,11 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	        select: function( event, ui ) {
 				$('#ms_title_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-	    };
+	        },
+	        _renderItem: function( ul, item ) {
+			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+		    }
+	   	});
 	    $('#ms_department_i').autocomplete({
 			minLength: 3,
 	   		source: function( request, response ) {
@@ -617,10 +622,11 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	        select: function( event, ui ) {
 				$('#ms_department_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-	    };
+	        },
+	        _renderItem: function( ul, item ) {
+			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
+		    }
+	   	});
 	})
 </script>
 </body>

@@ -192,10 +192,11 @@ if (isset($_POST['task'])) {
 	        select: function( event, ui ) {
 				$('#s_parent_name_i').val( ui.item.value );
 	        	return false;
-	        }
-	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		    return $( "<li>" ).append(item.label).appendTo( ul );
-	    };	    
+	        },
+	        _renderItem: function( ul, item ) {
+			    return $( "<li>" ).append(item.label).appendTo( ul );
+		    }
+	   	});	    
 	})
 </script>
 </body>
