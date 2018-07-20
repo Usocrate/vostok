@@ -24,9 +24,20 @@ if (empty ($_SESSION['user_id'])) {
 
 $individual = new Individual($_REQUEST['individual_id']);
 $individual->feed();
+
+// participations
 $memberships = $individual->getMemberships();
 
+// individus liés
+$relatedIndividuals = $individual->getRelatedIndividuals();
+
 $doc_title = $individual->getWholeName();
+
+if (isset($_SESSION['preferences']['individual']['focus'])) {
+	$focus = $_SESSION['preferences']['individual']['focus'];
+} else {
+	$focus = 'onMemberships';
+}
 ?>
 <!doctype html>
 <html lang="fr">
@@ -90,47 +101,111 @@ $doc_title = $individual->getWholeName();
 			?>
 		</div>
 	</div>
-	</section>		
-
-	<section>
-		<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><span class="glyphicon glyphicon-plus"></span></a></small></h2>
-		<?php
-		if (isset($memberships)){
-			echo '<ul class="list-group">';
-			foreach ($memberships as $ms) {
-				$s = $ms->getSociety();
-				echo '<li class="list-group-item">';
-				echo '<h3>';
-				echo $s->getHtmlLinkToSociety();
-				if ($ms->getDepartment()) echo ' <small> ('.$ms->getDepartment().')</small>';
-				echo '</h3>';
-				
-				if ($ms->getPeriod()) {
-					echo '<p>'.ucfirst($ms->getPeriod()).'</p>';
-				}
-				
-				if ($ms->getTitle()) {
-					echo '<p>'.ucfirst($ms->getTitle()).'</p>';
-				}
-				if ($ms->getUrl()) {
-					echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
-				}
-				$data = array();
-				if ($ms->getPhone()) $data[] = $ms->getPhone();
-				if ($ms->getEmail()) {
-					$data[] = '<a href="mailto:'.ToolBox::toHtml($individual->getFirstName()).'%20'.ToolBox::toHtml($individual->getLastName()).'%20<'.$ms->getEmail().'>">'.$ms->getEmail().'</a>';
-				}
-				if (count($data)>0) {
-					echo '<p>'.implode('<span> | </span>', $data).'</p>';
-				}
-				if ($ms->getDescription()) echo '<p>'.$ms->getDescription().'</p>';
-				echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
-				echo '</li>';
-			}
-			echo '</ul>';
-		}
-		?>
 	</section>
-</div>	
+	
+	<div>
+	  <!-- Nav tabs -->
+	  <ul class="nav nav-tabs" role="tablist">
+	    <li role="presentation" <?php if (strcmp($focus,'onMemberships')==0) echo  'class="active"' ?>><a id="membershipTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge"><?php echo count($memberships) ?></span></a></li>
+	    <li role="presentation" <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo  'class="active"' ?>><a id="relationsTabSelector" href="#relations-tab" aria-controls="relations-tab" role="tab" data-toggle="tab">Relations <span class="badge"><?php echo count($relatedIndividuals) ?></span></a></li>
+	  </ul>
+	
+	  <!-- Tab panes -->
+	  <div class="tab-content">
+	    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onMemberships')==0) echo 'active' ?>" id="memberships-tab">
+			<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><span class="glyphicon glyphicon-plus"></span></a></small></h2>
+			<?php
+			if (isset($memberships)){
+				echo '<ul class="list-group">';
+				foreach ($memberships as $ms) {
+					$s = $ms->getSociety();
+					echo '<li class="list-group-item">';
+					echo '<h3>';
+					echo $s->getHtmlLinkToSociety();
+					if ($ms->getDepartment()) echo ' <small> ('.$ms->getDepartment().')</small>';
+					echo '</h3>';
+					
+					if ($ms->getPeriod()) {
+						echo '<p>'.ucfirst($ms->getPeriod()).'</p>';
+					}
+					
+					if ($ms->getTitle()) {
+						echo '<p>'.ucfirst($ms->getTitle()).'</p>';
+					}
+					if ($ms->getUrl()) {
+						echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
+					}
+					$data = array();
+					if ($ms->getPhone()) $data[] = $ms->getPhone();
+					if ($ms->getEmail()) {
+						$data[] = '<a href="mailto:'.ToolBox::toHtml($individual->getFirstName()).'%20'.ToolBox::toHtml($individual->getLastName()).'%20<'.$ms->getEmail().'>">'.$ms->getEmail().'</a>';
+					}
+					if (count($data)>0) {
+						echo '<p>'.implode('<span> | </span>', $data).'</p>';
+					}
+					if ($ms->getDescription()) echo '<p>'.$ms->getDescription().'</p>';
+					echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
+					echo '</li>';
+				}
+				echo '</ul>';
+			}
+			?>
+	    </div>
+	    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo 'active' ?>" id="relations-tab">
+			<h2>Relations <small><a href="individualToIndividualRelationship_edit.php?item0_id=<?php echo $individual->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
+			<?php if (isset($relatedIndividuals)): ?>
+			<ul class="list-group">
+				<?php
+				foreach ($relatedIndividuals as $item) {
+					// $item[0] : Individu
+					// $item[1] : Identifiant de la relation;
+					// $item[2] : Rôle
+					// $item[3] : Description
+					echo '<li class="list-group-item">';
+					echo '<h3>';
+					echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
+					echo ' <small>(';
+					echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'">';
+					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
+					echo '</a>';
+					echo ')</small>';
+					echo '</h3>';
+					if (!empty($item[3])) {
+						echo '<p>';
+						echo ToolBox::toHtml($item[3]);
+						echo '</p>';
+					}
+					echo '</li>';
+				}
+				?>
+			</ul>	    	
+			<?php endif; ?>
+	    </div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+	    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			var focus;
+			var scope = 'individual';
+
+			switch(e.target.id) {
+			  	case 'membershipsTabSelector':
+			  		focus = 'onMemberships';
+			  		break;
+			  	case 'relationsTabSelector':
+			  		focus = 'onRelatedIndividuals';
+			  		break;
+			}
+
+			$.ajax({
+				  url: 'session.ws.php?focus='+focus+'&scope='+scope,
+				  beforeSend: function( xhr ) {
+				    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+				  }
+			});
+		});
+	});
+</script>
 </body>
 </html>

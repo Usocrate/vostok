@@ -192,7 +192,7 @@ class Relationship {
 			return $result;			
 		}
 		catch (Exception $e) {
-			System::reportException($e);
+			$system->reportException($e);
 		}
 	}
 	/**

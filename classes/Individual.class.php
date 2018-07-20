@@ -217,6 +217,29 @@ class Individual {
 			$this->lastName = $name;
 	}
 	/**
+	 * @since 07/2018
+	 */
+	private static function getKnownLastNames($substring = NULL) {
+	    global $system;
+		$sql = 'SELECT individual_lastName FROM individual WHERE individual_lastName IS NOT NULL';
+		if (isset ( $substring )) {
+			$sql .= ' AND individual_lastName LIKE :pattern';
+		}
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset ( $substring )) {
+		    $statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
+		}
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_COLUMN);
+	}
+	/**
+	 * @since 07/2018
+	 */
+	public static function knownLastNamesToJson($substring = NULL) {
+		$output = '{"lastnames":' . json_encode ( self::getKnownLastNames ( $substring ) ) . '}';
+		return $output;
+	}	
+	/**
 	 * Obtient le prénom de l'individu.
 	 *
 	 * @return string
@@ -689,6 +712,41 @@ class Individual {
 			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );			
 		}		
 	}
+	/**
+	 * @since 07/2018
+	 */
+	public function getRelatedIndividuals() {
+		global $system;
+
+		if (empty ( $this->id )) {
+			return NULL;
+		}
+
+		$output = array();
+
+		$sql = 'SELECT i.*, r.relationship_id, r.item1_role AS relatedindividual_role, r.description, r.init_year, r.end_year';
+		$sql .= ' FROM relationship AS r INNER JOIN individual AS i ON(r.item1_id=i.individual_id)';
+		$sql .= ' WHERE item0_class="individual" AND item0_id=:item0_id AND item1_class="individual"';
+		$sql .= ' UNION';
+		$sql .= ' SELECT i.*, r.relationship_id, r.item0_role AS relatedindividual_role, r.description, r.init_year, r.end_year';
+		$sql .= ' FROM relationship AS r INNER JOIN individual AS i ON(r.item0_id=i.individual_id)';
+		$sql .= ' WHERE item1_class="individual" AND item1_id=:item1_id AND item0_class="individual"';
+		$sql .= ' ORDER BY individual_lastName ASC';
+
+		$statement = $system->getPdo()->prepare($sql);
+		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
+		$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
+		$statement->execute();
+		$data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+		foreach ( $data as $row ) {
+			$i = new Individual();
+			$i->feed($row);
+			$output[] = array($i, $row['relationship_id'], $row['relatedindividual_role'], $row['description']);
+		}
+		return $output;
+	}
+	
 	/**
 	 * Indique si l'individu participe à une société donnée.
 	 *

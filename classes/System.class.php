@@ -232,7 +232,7 @@ class System {
 			}
 			return $this->pdo;
 		} catch ( PDOException $e ) {
-			self::reportException ( $e );
+			$this->reportException($e);
 			return false;
 		}
 	}
@@ -272,7 +272,7 @@ class System {
 			}
 			return $output;
 		} catch ( Exception $e ) {
-			self::reportException ( $e );
+			$this->reportException($e);
 		}
 	}
 	/**
@@ -347,7 +347,7 @@ class System {
 			$statement->setFetchMode ( PDO::FETCH_ASSOC );
 			return $statement;
 		} catch ( Exception $e ) {
-			self::reportException ( $e );
+			$this->reportException($e);
 		}
 	}
 	/**
@@ -519,7 +519,7 @@ class System {
 			$statement->setFetchMode ( PDO::FETCH_ASSOC );
 			return $statement;
 		} catch ( Exception $e ) {
-			self::reportException ( $e );
+			$this->reportException($e);
 		}
 	}
 	/**
@@ -550,7 +550,7 @@ class System {
 			$statement->execute ();
 			return $statement->fetchColumn ();
 		} catch ( Exception $e ) {
-			System::reportException ( $e );
+			$system->reportException($e);
 		}
 	}
 	/**
@@ -563,7 +563,7 @@ class System {
 			$c = new IndividualCollection ( self::getAloneIndividualCollectionStatement ( $criteria ) );
 			return $c->getSize ();
 		} catch ( Exception $e ) {
-			System::reportException ( $e );
+			$system->reportException($e);
 		}
 	}
 	/**
@@ -583,7 +583,7 @@ class System {
 			$statement = self::getIndividualCollectionStatement ( $criteria, $sort_key, $sort_order );
 			return new IndividualCollection ( $statement );
 		} catch ( Exception $e ) {
-			self::reportException ( $e );
+			$system->reportException($e);
 		}
 	}
 	/**
@@ -968,7 +968,7 @@ class System {
 				return $b->transferSocieties($a) ? $b->delete() : false;
 			}			
 		} catch (Exception $e) {
-			System::reportException($e);
+			$system->reportException($e);
 			exit;
 		}
 	}
@@ -1004,11 +1004,16 @@ class System {
 	}
 	/**
 	 * @since 08/2014
+	 * @version 07/2018
 	 */
-	public static function reportException(Exception $e) {
-		// echo '<p>' . ToolBox::toHtml ( $e->getMessage () ) . '</p>';
-		// error_log ( $e->getMessage () );
-		trigger_error ( $e->getMessage () );
+	public function reportException(Exception $e, $comment=null) {
+		$toDisplay = $e->getMessage();
+		if (!empty($comment)) {
+			$toDisplay.= ' ('.$comment.')';
+		}
+		// echo '<p>' . ToolBox::toHtml ( $toDisplay ) . '</p>';
+		// error_log( $toDisplay );
+		trigger_error($toDisplay);
 	}
 	/**
 	 * Obtient la liste des derniers évènements enregistrés à l'historique.

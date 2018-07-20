@@ -101,7 +101,7 @@ class Industry {
 			}
 			return $statement->execute();
 		} catch (Exception $e) {
-			System::reportException($e);
+			$system->reportException($e);
 			exit;
 		}
 	}

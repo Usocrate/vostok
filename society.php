@@ -44,7 +44,7 @@ $doc_title = $society->getName();
 if (isset($_SESSION['preferences']['society']['focus'])) {
 	$focus = $_SESSION['preferences']['society']['focus'];
 } else {
-	$focus = 'onRelatedSocieties';
+	$focus = 'onSocieties';
 }
 //print_r($_SESSION);
 //print_r($preferences);
@@ -143,7 +143,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societies-tab">
-			<h2>Sociétés liées<small><a href="relationship_edit.php?item0_class=Society&amp;item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
+			<h2>Sociétés liées<small><a href="societyToSocietyRelationship_edit.php?item0_id=<?php echo $society->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
 			<?php if (isset($relatedSocieties)): ?>
 			<ul class="list-group">
 				<?php
@@ -156,7 +156,7 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 					echo '<h3>';
 					echo '<a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a>';
 					echo ' <small>(';
-					echo '<a href="relationship_edit.php?relationship_id='.$item[1].'">';
+					echo '<a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'">';
 					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
 					echo '</a>';
 					echo ')</small>';

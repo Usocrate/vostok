@@ -385,7 +385,7 @@ class Society {
 			$this->latitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
 			$this->longitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 		} catch (Exception $e) {
-			System::reportException($e);
+			$system->reportException($e);
 		}
 	}
 	public function setType($type) {
