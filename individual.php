@@ -33,7 +33,9 @@ $relatedIndividuals = $individual->getRelatedIndividuals();
 
 $doc_title = $individual->getWholeName();
 
-if (isset($_SESSION['preferences']['individual']['focus'])) {
+//var_dump($_SESSION);
+
+if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	$focus = $_SESSION['preferences']['individual']['focus'];
 } else {
 	$focus = 'onMemberships';
@@ -106,7 +108,7 @@ if (isset($_SESSION['preferences']['individual']['focus'])) {
 	<div>
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs" role="tablist">
-	    <li role="presentation" <?php if (strcmp($focus,'onMemberships')==0) echo  'class="active"' ?>><a id="membershipTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge"><?php echo count($memberships) ?></span></a></li>
+	    <li role="presentation" <?php if (strcmp($focus,'onMemberships')==0) echo 'class="active"' ?>><a id="membershipsTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge"><?php echo count($memberships) ?></span></a></li>
 	    <li role="presentation" <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo  'class="active"' ?>><a id="relationsTabSelector" href="#relations-tab" aria-controls="relations-tab" role="tab" data-toggle="tab">Relations <span class="badge"><?php echo count($relatedIndividuals) ?></span></a></li>
 	  </ul>
 	
@@ -122,16 +124,32 @@ if (isset($_SESSION['preferences']['individual']['focus'])) {
 					echo '<li class="list-group-item">';
 					echo '<h3>';
 					echo $s->getHtmlLinkToSociety();
-					if ($ms->getDepartment()) echo ' <small> ('.$ms->getDepartment().')</small>';
+					
+					echo ' <small>';
+					if ($ms->getTitle()) {
+						echo ' (<a href="membership_edit.php?membership_id='.$ms->getId().'">'.ToolBox::toHtml(ucfirst($ms->getTitle())).')</a>';
+					}
+					echo ' <a href="membership_edit.php?membership_id='.$ms->getId().'"><span class="glyphicon glyphicon-edit"></span></a>';	
+					echo ' </small>';
+					
 					echo '</h3>';
 					
+					$more = array();
 					if ($ms->getPeriod()) {
-						echo '<p>'.ucfirst($ms->getPeriod()).'</p>';
+						$more[] = $ms->getPeriod();
+												
+					}
+					if ($ms->getDepartment()) {
+						$more[] = $ms->getDepartment();
+					}
+					if (count($more)>0) {
+						echo '<div><small>'.implode(' - ', $more).'</small></div>';
+					}					
+					
+					if ($ms->getDescription()) {
+						echo '<p>'.$ms->getDescription().'</p>';
 					}
 					
-					if ($ms->getTitle()) {
-						echo '<p>'.ucfirst($ms->getTitle()).'</p>';
-					}
 					if ($ms->getUrl()) {
 						echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
 					}
@@ -143,8 +161,6 @@ if (isset($_SESSION['preferences']['individual']['focus'])) {
 					if (count($data)>0) {
 						echo '<p>'.implode('<span> | </span>', $data).'</p>';
 					}
-					if ($ms->getDescription()) echo '<p>'.$ms->getDescription().'</p>';
-					echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
 					echo '</li>';
 				}
 				echo '</ul>';
@@ -161,15 +177,21 @@ if (isset($_SESSION['preferences']['individual']['focus'])) {
 					// $item[1] : Identifiant de la relation;
 					// $item[2] : Rôle
 					// $item[3] : Description
+					// $item[4] : Period object
 					echo '<li class="list-group-item">';
 					echo '<h3>';
 					echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
 					echo ' <small>(';
 					echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'">';
-					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
+					echo empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
 					echo '</a>';
-					echo ')</small>';
+					echo ')';
+					echo ' <a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><span class="glyphicon glyphicon-edit"></span></a>';
+					echo '</small>';
 					echo '</h3>';
+					if ($item[4]->isDefined()) {
+						echo '<div><small>'.$item[4]->toString().'</small></div>';
+					}
 					if (!empty($item[3])) {
 						echo '<p>';
 						echo ToolBox::toHtml($item[3]);

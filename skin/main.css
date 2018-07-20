@@ -38,10 +38,10 @@
 	margin-top: 10px;
 }
 
-H1 SMALL SPAN.glyphicon, H2 SMALL SPAN.glyphicon {
+H1 SMALL SPAN.glyphicon, H2 SMALL SPAN.glyphicon, H3 SMALL SPAN.glyphicon {
 	color: #ccc;
 }
-H1 SMALL SPAN.glyphicon:hover, H2 SMALL SPAN.glyphicon:hover {
+H1 SMALL SPAN.glyphicon:hover, H2 SMALL SPAN.glyphicon:hover, H3 SMALL SPAN.glyphicon:hover {
 	color: #999;
 }
 

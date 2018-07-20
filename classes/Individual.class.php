@@ -731,7 +731,7 @@ class Individual {
 		$sql .= ' SELECT i.*, r.relationship_id, r.item0_role AS relatedindividual_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN individual AS i ON(r.item0_id=i.individual_id)';
 		$sql .= ' WHERE item1_class="individual" AND item1_id=:item1_id AND item0_class="individual"';
-		$sql .= ' ORDER BY individual_lastName ASC';
+		$sql .= ' ORDER BY init_year DESC, individual_lastName ASC';
 
 		$statement = $system->getPdo()->prepare($sql);
 		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
@@ -742,7 +742,7 @@ class Individual {
 		foreach ( $data as $row ) {
 			$i = new Individual();
 			$i->feed($row);
-			$output[] = array($i, $row['relationship_id'], $row['relatedindividual_role'], $row['description']);
+			$output[] = array($i, $row['relationship_id'], $row['relatedindividual_role'], $row['description'], new Period($row['init_year'], $row['end_year']));
 		}
 		return $output;
 	}

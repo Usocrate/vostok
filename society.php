@@ -41,7 +41,7 @@ $events = $society->getEvents();
 
 $doc_title = $society->getName();
 
-if (isset($_SESSION['preferences']['society']['focus'])) {
+if (!empty($_SESSION['preferences']['society']['focus'])) {
 	$focus = $_SESSION['preferences']['society']['focus'];
 } else {
 	$focus = 'onRelatedSocieties';
@@ -159,7 +159,9 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 					echo '<a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'">';
 					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
 					echo '</a>';
-					echo ')</small>';
+					echo ')';
+					echo ' <a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'"><span class="glyphicon glyphicon-edit"></span></a>';
+					echo '</small>';
 					echo '</h3>';
 					if (!empty($item[3])) {
 						echo '<p>';
@@ -224,7 +226,9 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 					echo '<a href="lead_edit.php?lead_id='.$l->getId().'">';
 					echo $l->getShortDescription() ? ToolBox::toHtml($l->getShortDescription()) : 'Piste n°'.$l->getId();
 					echo '</a>';
-					if ($l->getCreationDate()) echo ' <small>('.ToolBox::toHtml($l->getCreationDateFr()).')</small>';
+					if ($l->getCreationDate()) echo ' <small>('.ToolBox::toHtml($l->getCreationDateFr()).')';
+					echo ' <a href="lead_edit.php?lead_id='.$l->getId().'"><span class="glyphicon glyphicon-edit"></span></a>';
+					echo '</small>';
 					echo '</h3>';
 					echo '</li>';
 				}
@@ -242,8 +246,10 @@ if (isset($_SESSION['preferences']['society']['focus'])) {
 					echo '<h3>';
 					echo '<a href="society_event_edit.php?event_id='.$e->getId().'">';
 					echo date("d/m/Y", ToolBox::mktimeFromMySqlDatetime($e->getDatetime()));
-					echo '<small> ('.ToolBox::toHtml(ucfirst($e->getType())).')</small>';
 					echo '</a>';
+					echo ' <small>('.ToolBox::toHtml(ucfirst($e->getType())).')';
+					echo ' <a href="society_event_edit.php?event_id='.$e->getId().'"><span class="glyphicon glyphicon-edit"></span></a>';					
+					echo '</small>';
 					echo '</h3>';
 					echo '<p>'.nl2br(ToolBox::toHtml($e->getComment())).'</p>';
 					echo '</li>';

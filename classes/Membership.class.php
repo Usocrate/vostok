@@ -49,7 +49,7 @@ class Membership {
 	}	
 	/**
 	 * @since 01/2017
-	 **/
+	 */
 	public function setInitYear($input) {
 		if ( is_numeric($input) && strlen($input)==4 ) {
 			$this->init_year = $input;
@@ -129,14 +129,12 @@ class Membership {
 		return $this->getAttribute('description');
 	}
 	/**
-	 * @since 12/01/2017
-	 **/
+	 * @since 01/2017
+	 * @version 07/2018
+	 */
 	public function getPeriod() {
-		if (! empty($this->init_year) && ! empty($this->end_year) ) {
-			return $this->init_year.'-'.$this->end_year;
-		} elseif (! empty($this->init_year) ) {
-			return 'depuis '.$this->init_year;
-		}
+		$p = new Period($this->init_year, $this->end_year);
+		return $p->toString();
 	}
 	/**
 	 * Renvoie l'email utilisé dans le cadre de cette participation.
