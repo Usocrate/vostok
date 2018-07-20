@@ -94,23 +94,60 @@ class Relationship {
 	public function getItem($rang) {
 		return isset($this->items[$rang]) ? $this->items[$rang] : NULL;
 	}
-	public static function getKnownRoles($substring = NULL)	{
+	/**
+	 * @version 07/2018
+	 */
+	public static function getKnownRoles($substring = null, $type = null)	{
 		global $system;
-		if (isset ( $substring )) {
-			$sql = 'SELECT DISTINCT(role) FROM (SELECT item0_role AS role FROM relationship WHERE item0_role LIKE :item0_role_pattern UNION SELECT item1_role AS role FROM relationship WHERE item1_role LIKE :item1_role_pattern) AS t ORDER BY role';
-		} else {
-			$sql = 'SELECT DISTINCT(role) FROM (SELECT item0_role AS role FROM relationship UNION SELECT item1_role AS role FROM relationship) AS t ORDER BY role';
+
+		if (isset($type)) {
+			switch($type) {
+				case 'societyRole':
+					$classFilter = 'society';
+					break;
+				case 'individualRole':
+					$classFilter = 'individual';
+					break;					
+			}
 		}
+		$sql = 'SELECT DISTINCT(role) FROM (SELECT item0_role AS role FROM relationship';
+		$where = array();
+		if (!empty($substring)) {
+			$where[] = 'item0_role LIKE :item0_role_pattern';
+		}
+		if (isset($classFilter)) {
+			$where[] = 'item0_class = :item0_class';
+		}
+		if (count($where)>0) {
+			$sql.= ' WHERE '.implode(' AND ', $where);
+		}
+		$sql.= ' UNION SELECT item1_role AS role FROM relationship';
+		$where = array();
+		if (!empty($substring)) {
+			$where[] = 'item1_role LIKE :item1_role_pattern';
+		}
+		if (isset($classFilter)) {
+			$where[] = 'item1_class = :item1_class';
+		}
+		if (count($where)>0) {
+			$sql.= ' WHERE '.implode(' AND ', $where);
+		}		
+		$sql.= ') AS t ORDER BY role';
 		$statement = $system->getPDO()->prepare($sql);
-		if (isset ( $substring )) {
-		    $statement->bindValue(':item0_role_pattern', '%'.$substring.'%', PDO::PARAM_STR);
+		if (!empty($substring)) {
+			$statement->bindValue(':item0_role_pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		    $statement->bindValue(':item1_role_pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		}
+		if (isset($classFilter)) {
+			$statement->bindValue(':item0_class', $classFilter, PDO::PARAM_STR);
+			$statement->bindValue(':item1_class', $classFilter, PDO::PARAM_STR);
+		}		    
+		
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_COLUMN);
 	}
-	public static function knownRolesToJson($substring = NULL) {
-		$output = '{"roles":' . json_encode ( self::getKnownRoles ( $substring ) ) . '}';
+	public static function knownRolesToJson($substring = null, $roleType = null) {
+		$output = '{"roles":' . json_encode ( self::getKnownRoles ( $substring, $roleType ) ) . '}';
 		return $output;
 	}	
 	/**

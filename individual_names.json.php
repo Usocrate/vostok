@@ -17,10 +17,5 @@ if (empty($_SESSION['user_id'])) {
 	exit;
 }
 
-$searchPattern = isset($_REQUEST['searchPattern']) ? $_REQUEST['searchPattern'] : null;
-$roleType = isset($_REQUEST['roleType']) ? $_REQUEST['roleType'] : null;
-
-//var_dump($_REQUEST);
-
-echo Relationship::knownRolesToJson($searchPattern, $roleType);
+echo empty($_REQUEST['query']) ? Society::knownNamesToJson() : Society::knownNamesToJson($_REQUEST['query']);
 ?>

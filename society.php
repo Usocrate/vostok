@@ -44,7 +44,7 @@ $doc_title = $society->getName();
 if (isset($_SESSION['preferences']['society']['focus'])) {
 	$focus = $_SESSION['preferences']['society']['focus'];
 } else {
-	$focus = 'onSocieties';
+	$focus = 'onRelatedSocieties';
 }
 //print_r($_SESSION);
 //print_r($preferences);
