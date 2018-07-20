@@ -611,7 +611,7 @@ class Individual {
 			$sql .= ' DATE_FORMAT(a.society_creation_date, "%d/%m/%Y") as society_creation_date';
 			$sql .= ' FROM membership AS ac LEFT OUTER JOIN society AS a ON ac.society_id = a.society_id';
 			$sql .= ' WHERE '.implode(' AND ', $criteria);
-			$sql .= ' ORDER BY init_year DESC, end_year ASC';
+			$sql .= ' ORDER BY init_year DESC, end_year DESC';
 			
 			$statement = $system->getPdo()->prepare($sql);
 			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
@@ -731,7 +731,7 @@ class Individual {
 		$sql .= ' SELECT i.*, r.relationship_id, r.item0_role AS relatedindividual_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN individual AS i ON(r.item0_id=i.individual_id)';
 		$sql .= ' WHERE item1_class="individual" AND item1_id=:item1_id AND item0_class="individual"';
-		$sql .= ' ORDER BY init_year DESC, end_year ASC, individual_lastName ASC';
+		$sql .= ' ORDER BY init_year DESC, end_year DESC, individual_lastName ASC';
 
 		$statement = $system->getPdo()->prepare($sql);
 		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
