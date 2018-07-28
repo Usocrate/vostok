@@ -384,6 +384,10 @@ class System {
 			if (isset ( $criteria ['society_id'] )) {
 				$where [] = 'm.society_id = :society_id';
 			}
+			
+			if ( isset($criteria['active']) && $criteria['active']===true ) {
+				$where [] = 'm.end_year IS NULL';
+			}			
 
 			if (isset ( $criteria ['society_name_like_pattern'] )) {
 				$where [] = 's.society_name LIKE :society_name_like_pattern';
@@ -393,14 +397,14 @@ class System {
 				$where [] = 's.society_city = :society_city';
 			}
 			
+			if (isset ($criteria ['everPinnedIndividual']) && $criteria ['everPinnedIndividual']===true) {
+				$where [] = 'i.individual_lastPin_date IS NOT NULL';
+			}
+			
 			if (isset ( $criteria ['industry_id'] )) {
 				$where [] = 'si.industry_id = :industry_id';
 			}
-			
-			if ( isset($criteria['active']) && $criteria['active']===true ) {
-				$where [] = 'm.end_year IS NULL';
-			}			
-			
+
 			if (count ( $where ) > 0) {
 				$sql .= ' WHERE ' . implode ( ' AND ', $where );
 			}

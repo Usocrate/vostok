@@ -52,7 +52,7 @@ if (empty ( $_SESSION ['user_id'] )) {
 
 	switch($memberships_focus) {
 		case 'onLastPinned' : 
-			$memberships = $system->getMemberships(array('active'=>true), 'Last pinned first', 0, 12);
+			$memberships = $system->getMemberships(array('active'=>true, 'everPinnedIndividual'=>true), 'Last pinned first', 0, 12);
 			break;
 		case 'onLastUpdated' : 
 			$memberships = $system->getMemberships(array('active'=>true), 'Last updated first', 0, 12);
