@@ -277,8 +277,9 @@ class System {
 	}
 	/**
 	 * @since 08/2014
+	 * @version 07/2018
 	 */
-	public static function getIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
+	public function getIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
 		global $system;
 		try {
 			
@@ -300,6 +301,10 @@ class System {
 				$where [] = '(MOD(TO_DAYS(CURDATE()) - TO_DAYS(individual_birth_date), 365.25)<:birthdate_distance OR MOD(TO_DAYS(CURDATE()) - TO_DAYS(individual_birth_date), 365.25)>(365.25-:birthdate_distance))';
 			}
 			
+			if (isset ($criteria ['everPinned']) && $criteria ['everPinned']===true) {
+				$where [] = 'individual_lastPin_date IS NOT NULL';
+			}
+			
 			if (count ( $where ) > 0) {
 				$sql .= ' WHERE ' . implode ( ' AND ', $where );
 			}
@@ -314,6 +319,9 @@ class System {
 				case 'Last created first' :
 					$sql .= ' ORDER BY individual_creation_date DESC';
 					break;
+				case 'Last pinned first' :
+					$sql .= ' ORDER BY individual_lastPin_date DESC';
+					break;					
 			}
 
 			// LIMIT
@@ -389,6 +397,10 @@ class System {
 				$where [] = 'si.industry_id = :industry_id';
 			}
 			
+			if ( isset($criteria['active']) && $criteria['active']===true ) {
+				$where [] = 'm.end_year IS NULL';
+			}			
+			
 			if (count ( $where ) > 0) {
 				$sql .= ' WHERE ' . implode ( ' AND ', $where );
 			}
@@ -398,6 +410,9 @@ class System {
 				case 'Last updated first' : 
 					$sql .= ' ORDER BY m.timestamp DESC';
 					break;
+				case 'Last pinned first' :
+					$sql .= ' ORDER BY i.individual_lastPin_date DESC';
+					break;					
 			}
 
 			// LIMIT
@@ -462,7 +477,7 @@ class System {
 			}
 			return $memberships;			
 		} catch (Exception $e) {
-			trigger_error(__METHOD__.$e->getMessage());
+			$this->reportException($e, __METHOD__);
 		}
 	}	
 	/**
@@ -580,12 +595,31 @@ class System {
 			);
 			$sort_key = 'individual_birth_date';
 			$sort_order = 'ASC';
-			$statement = self::getIndividualCollectionStatement ( $criteria, $sort_key, $sort_order );
+			$statement = $this->getIndividualCollectionStatement ( $criteria, $sort_key, $sort_order );
 			return new IndividualCollection ( $statement );
 		} catch ( Exception $e ) {
 			$system->reportException($e);
 		}
 	}
+	/**
+	 * Obtient les dernières personnes épinglées.
+	 *
+	 * @since 07/2018
+	 * @return IndividualCollection
+	 */	
+	public function getLastPinnedIndividuals($nb = 12) {
+		try {
+			$criteria = array (
+				'everPinned' => true
+			);
+			$sort_key = 'Last pinned first';
+			$sort_order = 'DESC';
+			$statement = $this->getIndividualCollectionStatement ($criteria, $sort_key, $sort_order, $nb);
+			return new IndividualCollection ( $statement );
+		} catch ( Exception $e ) {
+			$system->reportException($e);
+		}
+	}	
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
 	 *
@@ -1012,8 +1046,8 @@ class System {
 			$toDisplay.= ' ('.$comment.')';
 		}
 		// echo '<p>' . ToolBox::toHtml ( $toDisplay ) . '</p>';
-		// error_log( $toDisplay );
 		trigger_error($toDisplay);
+		//error_log( $toDisplay );
 	}
 	/**
 	 * Obtient la liste des derniers évènements enregistrés à l'historique.
@@ -1028,7 +1062,7 @@ class System {
 	 * @since 05/2018
 	 */
 	public function getLastUpdatedIndividualCollection($nb=3) {
-		$statement = self::getIndividualCollectionStatement(null, 'Last updated first',0 ,$nb);
+		$statement = $this->getIndividualCollectionStatement(null, 'Last updated first',0 ,$nb);
 		return new IndividualCollection($statement);
 	}	
 	/**

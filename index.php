@@ -17,8 +17,47 @@ if (empty ( $_SESSION ['user_id'] )) {
 	header ( 'Location:login.php' );
 	exit ();
 } else {
+
 	$user = new User ( $_SESSION ['user_id'] );
 	$user->feed ();
+
+	if (isset($_REQUEST['individual_task_id'])) {
+	    // une tâche à effectuer
+	    switch ($_REQUEST['individual_task_id']) {
+	        case 'pin':
+	            if (empty($_REQUEST['individual_id'])) {
+	            	break;
+	            }
+	            $i = new Individual($_REQUEST['individual_id']);
+	            $result = $i->Pin();
+	    }
+	}
+	
+	if ( isset($_REQUEST['memberships_focus']) ) {
+	    if (!isset($_SESSION['preferences'])) {
+	        $_SESSION['preferences'] = array();
+	    }
+        if ( ! isset($_SESSION['preferences']['memberships']) ) {
+            $_SESSION['preferences']['memberships'] = array();
+        }
+        $_SESSION['preferences']['memberships']['focus'] = $_REQUEST['memberships_focus'];
+	    //var_dump($_SESSION);
+	}
+	
+	if (!empty($_SESSION['preferences']['memberships']['focus'])) {
+		$memberships_focus = $_SESSION['preferences']['memberships']['focus'];
+	} else {
+		$memberships_focus = 'onLastPinned';
+	}
+
+	switch($memberships_focus) {
+		case 'onLastPinned' : 
+			$memberships = $system->getMemberships(array('active'=>true), 'Last pinned first', 0, 12);
+			break;
+		case 'onLastUpdated' : 
+			$memberships = $system->getMemberships(array('active'=>true), 'Last updated first', 0, 12);
+			break;			
+	}
 }
 
 $doc_title = 'Accueil';
@@ -89,48 +128,58 @@ $doc_title = 'Accueil';
 						<button type="submit" name="individual_newsearch" value="1" class="btn btn-default">Retrouver</button>
 					</form>
 				</section>
-				<section>
-					<?php
-					$memberships = $system->getMemberships(null, 'Last updated first', 0, 12);
-					if ($memberships) {
-				  		echo '<div class="il">';
-				  		echo '<div class="masonryGutterSizer"></div>';
-				  		foreach ($memberships as $ms) {
-							$i = $ms->getIndividual();
-							$s = $ms->getSociety();
-							echo '<div class="thumbnail">';
-							if ($i->getPhotoUrl()) {
-								echo $i->getPhotoHtml();
-							} else {
-								echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="img-responsive" />';
-							}
-							echo '<div class="caption">';
-								echo '<h3>';
-								echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
-								echo '<br><small>'.$s->getHtmlLinkToSociety().'</small>';
-								echo '</h3>';
-								echo '<div>';
-									$position_elt = array();
-									if ($ms->getDepartment()) {
-										$position_elt[] = ToolBox::toHtml($ms->getDepartment());
-									}
-									if ($ms->getTitle()) {
-										$position_elt[] = ToolBox::toHtml($ms->getTitle());
-									};
-									if (count($position_elt)>0) {
-										echo '<p>'.implode(' / ', $position_elt).'</p>';
-									}
+				
+				<?php
+				if ($memberships) {
+					echo '<section>';
+			  		echo '<div class="il">';
+			  		echo '<div class="masonryGutterSizer"></div>';
+			  		foreach ($memberships as $ms) {
+						$i = $ms->getIndividual();
+						$s = $ms->getSociety();
+						echo '<div class="thumbnail">';
+						if ($i->getPhotoUrl()) {
+							echo $i->getPhotoHtml();
+						} else {
+							echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="img-responsive" />';
+						}
+						echo '<div class="caption">';
+							echo '<h3>';
+							echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
+							echo '<br><small>'.$s->getHtmlLinkToSociety().'</small>';
+							echo '</h3>';
+							echo '<div>';
+								$position_elt = array();
+								if ($ms->getDepartment()) {
+									$position_elt[] = ToolBox::toHtml($ms->getDepartment());
+								}
+								if ($ms->getTitle()) {
+									$position_elt[] = ToolBox::toHtml($ms->getTitle());
+								};
+								if (count($position_elt)>0) {
+									echo '<p>'.implode(' / ', $position_elt).'</p>';
+								}
 
-									if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
-								echo '</div>';
-								echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
+								if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
 							echo '</div>';
-							echo '</div>';
-					  	}
-						echo '</div>';				  	
+							echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
+						echo '</div>';
+						echo '</div>';
+				  	}
+					echo '</div>';
+					echo '<div>';
+					switch($memberships_focus) {
+						case 'onLastPinned' : 
+							echo '<a href="index.php?memberships_focus=onLastUpdated">Voir les dernières participations mise à jour</a>';
+							break;
+						case 'onLastUpdated' : 
+							echo '<a href="index.php?memberships_focus=onLastPinned">Voir les participations des derniers gens épinglés</a>';
+							break;			
 					}
-					?>
-				</section>
+					echo '</div>';
+					echo '</section>';
+				}
+				?>
 			</div>
 		</div>
 	</div>

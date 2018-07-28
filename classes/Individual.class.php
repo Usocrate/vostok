@@ -15,6 +15,8 @@ class Individual {
 	protected $state;
 	protected $country;
 	
+	protected $lastPin_date;
+	
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
@@ -34,7 +36,7 @@ class Individual {
 				throw new Exception ( 'Les identifiants de la personne et de l\'évènement doivent être connus' );
 			}
 		} catch ( Exception $e ) {
-			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**
@@ -52,7 +54,7 @@ class Individual {
 				throw new Exception ( 'Les identifiants de la personne et de l\'évènement doivent être connus' );
 			}
 		} catch ( Exception $e ) {
-			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**
@@ -405,7 +407,7 @@ class Individual {
 				}
 			}
 		} catch (Exception $e) {
-			trigger_error(__METHOD__.$e->getMessage());	
+			$system->reportException($e, __METHOD__);	
 		}
 	}
 	/**
@@ -457,7 +459,7 @@ class Individual {
 				return copy ( $uploadedFile ['tmp_name'], $targetFilePath );
 			}
 		} catch ( Exception $e ) {
-			trigger_error(__METHOD__.$e->getMessage());
+			$system->reportException($e, __METHOD__);
 			return false;
 		}
 	}
@@ -582,7 +584,7 @@ class Individual {
 			return $statement->fetchColumn();
 			
 		} catch (Exception $e) {
-			trigger_error(__METHOD__.$e->getMessage());
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**
@@ -630,7 +632,7 @@ class Individual {
 			}
 			return $memberships;			
 		} catch (Exception $e) {
-			trigger_error(__METHOD__.$e->getMessage());
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**
@@ -689,7 +691,7 @@ class Individual {
 			}
 			return $statement->execute();
 		} catch (Exception $e) {
-			trigger_error(__METHOD__.$e->getMessage());
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**
@@ -709,7 +711,7 @@ class Individual {
 			return $statement->execute();
 		}
 		catch (Exception $e) {
-			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );			
+			$system->reportException($e, __METHOD__);			
 		}		
 	}
 	/**
@@ -767,7 +769,7 @@ class Individual {
 			$rowset = $statement->fetchAll();
 			return count($rowset) > 0 ? true : false;			
 		} catch (Exception $e) {
-			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );			
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**
@@ -788,7 +790,27 @@ class Individual {
 			return $statement->execute();
 			
 		} catch (Exception $e) {
-			trigger_error ( __METHOD__ . ' : ' . $e->getMessage () );
+			$system->reportException($e, __METHOD__);
+		}
+	}
+	/**
+	 * Demande de focus sur l'individu
+	 * @since 07/2018
+	 */
+	public function Pin() {
+		global $system;
+		try {
+			if (empty ( $this->id )) {
+				throw new Exception('Tentative d\'épinglage sur un individu non identifié.');
+			}
+			$statement = $system->getPdo()->prepare('UPDATE individual SET individual_lastPin_date=:datetime WHERE individual_id=:id');
+			//var_dump($statement);
+			$statement->bindValue(':datetime', date('Y-m-d H:i:s', time()), PDO::PARAM_STR);
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			return $statement->execute();			
+		}
+		catch (Exception $e) {
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**

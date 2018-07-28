@@ -423,9 +423,7 @@ mysql	 */
 			}
 			return $result;
 		} catch (Exception $e) {
-			//var_dump($system->getPdo());
-			//var_dump($statement);
-			trigger_error(__METHOD__.' : '.$e->getMessage());
+			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**

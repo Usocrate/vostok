@@ -58,7 +58,8 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a></small></h1>
+	<h1>
+	<?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-pushpin"></span></a></small></h1>
 	<section>
 	<div>	
 		<?php
