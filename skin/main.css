@@ -95,9 +95,6 @@ A > I:hover {
 }
 
 /* autres styles génériques */
-.tagCloud {
-	margin: 1em 0;
-}
 .tag {
 	color: #fff;
 	display:inline-block;
@@ -162,9 +159,6 @@ A > I:hover {
 	.card {
 		width: 340px;
 	}
-	.tagCloud {
-		margin: 1em;
-	}	
 }
 
 @media ( min-width : 992px) {
