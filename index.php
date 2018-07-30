@@ -96,7 +96,7 @@ $doc_title = 'Accueil';
 				</section>
 				<section>
 					<?php
-						$industries = $system->getLastUsedIndustries();
+						$industries = $system->getLastUsedIndustries(30);
 						$weights = array_column($industries, 'weight');
 						$maxWeight = max($weights);
 						$minWeight = min($weights);
@@ -104,7 +104,7 @@ $doc_title = 'Accueil';
 						$maxEm = 1.5;
 
 						echo '<div class="tagCloud">';
-						foreach($system->getLastUsedIndustries() as $item) {
+						foreach($industries as $item) {
 							if ($maxWeight == $minWeight) {
 								$em = ($maxEm + $minEm) / 2;
 							} else {
