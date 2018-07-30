@@ -69,29 +69,29 @@ $doc_title = 'Accueil';
 	<title><?php echo ToolBox::toHtml($system->getAppliName()).' : '.ToolBox::toHtml($doc_title) ?></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+	<link type="text/css" rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" integrity="<?php echo BOOTSTRAP_CSS_URI_INTEGRITY ?>" crossorigin="anonymous"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />
+	<link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo MASONRY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo IMAGESLOADED_URI ?>"></script>
-	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="indexDoc">
     <?php include 'navbar.inc.php'; ?>
     <div class="container-fluid">
-		<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+		<h1 class="sr-only"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<div class="row justify-content-md-center">
 			<div class="col-md-10 col-md-offset-1">
 				<section>
 					<form method="post" action="societies_list.php" class="form-inline">
-						<div class="form-group">
-							<label for="s_name_i">Une société</label>
+						<div class="form-group m-2">
+							<label for="s_name_i" class="mr-2">Une société</label>
 							<input id="s_name_i" name="society_name" type="text" class="form-control" placeholder="nom" />
 						</div>
-						<button type="submit" name="society_newsearch" value="1" class="btn btn-default">Retrouver</button>
+						<button type="submit" name="society_newsearch" value="1" class="btn btn-default m-2">Retrouver</button>
 					</form>
 				</section>
 				<section>
@@ -112,21 +112,22 @@ $doc_title = 'Accueil';
 								$r = ($weight - $minWeight) / ($maxWeight - $minWeight);
 								$em = round($minEm + ($r * ($maxEm - $minEm)),1);
 							}
-							echo '<span class="label label-default" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
+							echo '<span class="tag" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
 							echo '<a href="societies_list.php?society_newsearch=1&industry_id='.$item['industry']->getId().'">';
 							echo ToolBox::toHtml( $item['industry']->getName() );
 							echo '</a></span>';
 						}
 						echo '</div>';
-						echo '<div class="seeMore"><a href="industries.php">Toutes les activités</a></div>';
+						echo '<div class="seeMore"><a href="industries.php">Toutes les activités</a> <i class="fas fa-angle-right"></i></div>';
 					?>
 				</section>
 				<section>
 					<form method="post" action="individuals.php" class="form-inline">
-						<div class="form-group">
-							<label for="individual_lastName_i">Un individu</label> <input id="individual_lastName_i" name="individual_lastName" type="text" placeholder="nom de famille" class="form-control" />
+						<div class="form-group m-2">
+							<label for="individual_lastName_i" class="mr-2">Qui ?</label>
+							<input id="individual_lastName_i" name="individual_lastName" type="text" placeholder="nom de famille" class="form-control" />
 						</div>
-						<button type="submit" name="individual_newsearch" value="1" class="btn btn-default">Retrouver</button>
+						<button type="submit" name="individual_newsearch" value="1" class="btn btn-default m-2">Retrouver</button>
 					</form>
 				</section>
 				
@@ -137,37 +138,40 @@ $doc_title = 'Accueil';
 					  		echo '<div class="il">';
 					  		echo '<div class="masonryGutterSizer"></div>';
 					  		foreach ($individuals as $i) {
-								echo '<div class="thumbnail">';
+								echo '<div class="card">';
 								if ($i->getPhotoUrl()) {
-									echo $i->getPhotoHtml();
+									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 								} else {
-									echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="img-responsive" />';
+									echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
+									echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+									echo '</a>';
 								}
-								echo '<div class="caption">';
-									echo '<h3>';
-									echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
-									echo '</h3>';
-									echo '<ul>';
-									foreach ($i->getMemberships() as $ms) {
-										echo '<li>';
-											$s = $ms->getSociety();
-											echo '<h4>'.$s->getHtmlLinkToSociety().'<br><small>'.$ms->getPeriod().'</small></h4>';
-											$position_elt = array();
-											if ($ms->getDepartment()) {
-												$position_elt[] = ToolBox::toHtml($ms->getDepartment());
-											}
-											if ($ms->getTitle()) {
-												$position_elt[] = ToolBox::toHtml($ms->getTitle());
-											};
-											if (count($position_elt)>0) {
-												echo '<p>'.implode(' / ', $position_elt).'</p>';
-											}
-			
-											if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
-										echo '</li>';
-									}
-									echo '</ul>';
+								echo '<div class="card-header">';
+									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">'.ToolBox::toHtml($i->getWholeName()).'</a>';
 								echo '</div>';
+								echo '<ul class="list-group list-group-flush">';
+								foreach ($i->getMemberships() as $ms) {
+									$s = $ms->getSociety();
+									echo '<li class="list-group-item">';
+										echo '<div class="card-text">';
+										echo '<div>'.$s->getHtmlLinkToSociety('onIndividuals').'</div>';
+										$href = 'membership_edit.php?membership_id='.$ms->getId();
+										if ($ms->getTitle()) {
+											echo '<a href="'.$href.'" class="implicit">';
+											echo ToolBox::toHtml($ms->getTitle());
+											echo '</a>';
+											if ( $ms->getPeriod() ) {
+												echo ' <small style="white-space: nowrap">('.$ms->getPeriod().')</small>';
+											}
+										} else {
+											echo '<a href="'.$href.'" class="implicit">';
+											echo '<i class="fas fa-edit"></i> éditer';
+											echo '</a>';
+										}
+										echo '</div>';
+									echo '</li>';
+								}
+								echo '</ul>';
 								echo '</div>';
 					  		}
 							echo '</div>';
@@ -179,18 +183,20 @@ $doc_title = 'Accueil';
 					  		foreach ($memberships as $ms) {
 								$i = $ms->getIndividual();
 								$s = $ms->getSociety();
-								echo '<div class="thumbnail">';
+								echo '<div class="card">';
 								if ($i->getPhotoUrl()) {
-									echo $i->getPhotoHtml();
+									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 								} else {
-									echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="img-responsive" />';
+									echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
+									echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+									echo '</a>';
 								}
-								echo '<div class="caption">';
-									echo '<h3>';
+								echo '<div class="card-body">';
+									echo '<h3 class="card-title">';
 									echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
 									echo '<br><small>'.$s->getHtmlLinkToSociety().'</small>';
 									echo '</h3>';
-									echo '<div>';
+									echo '<div class="card-text">';
 										$position_elt = array();
 										if ($ms->getDepartment()) {
 											$position_elt[] = ToolBox::toHtml($ms->getDepartment());
@@ -204,12 +210,12 @@ $doc_title = 'Accueil';
 		
 										if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
 									echo '</div>';
-									echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><span class="glyphicon glyphicon-edit"></span> édition</a></p>';
+									echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i> édition</a></p>';
 								echo '</div>';
 								echo '</div>';
 						  	}
 							echo '</div>';
-							echo '<div><a href="index.php?people_focus=onLastPinned">Voir les participations des derniers gens épinglés</a></div>';
+							echo '<div><a href="index.php?people_focus=onLastPinned">Voir les derniers gens épinglés</a></div>';
 							break;			
 					}
 				?>
@@ -252,8 +258,8 @@ $doc_title = 'Accueil';
 		   	});
 		    
 			$('.il').masonry({
-				itemSelector: '.thumbnail',
-				columnWidth: '.thumbnail',
+				itemSelector: '.card',
+				columnWidth: '.card',
 				gutter: '.masonryGutterSizer'
 		    }).imagesLoaded().progress(
 				function() {

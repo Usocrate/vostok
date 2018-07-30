@@ -19,30 +19,18 @@
 }
 
 /* Bootstrap */
-.thumbnail {
-	background-color: #eee;
-	width:100%;
+.badge-info {
+	color: #fff;
+	background-color: #777;
 }
-.thumbnail DIV.caption {
-	background-color: #fff;
+.tab-content {
+	padding:1em;
 }
-.navbar {
-	margin-bottom: 0;
+.nav-item A, .badge A {
+	color:inherit;
 }
-.badge>A, .label>A {
-	color: inherit;
-	font-size: inherit;
-	font-weight: inherit;
-}
-.list-group-item > H3 {
-	margin-top: 10px;
-}
-
-H1 SMALL SPAN.glyphicon, H2 SMALL SPAN.glyphicon, H3 SMALL SPAN.glyphicon {
-	color: #ccc;
-}
-H1 SMALL SPAN.glyphicon:hover, H2 SMALL SPAN.glyphicon:hover, H3 SMALL SPAN.glyphicon:hover {
-	color: #999;
+.card {
+	margin-bottom: 20px;
 }
 
 /* Masonry */
@@ -86,14 +74,44 @@ DD {
 	margin: .3em .6em;
 	padding: .3em;
 }
+A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
+	color: inherit;
+}
 SMALL {
 	font-size : 1em;
 	color : #bbb;
+}
+H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
+	font-size: .6em;
+}
+H1 SMALL A:hover, H2 SMALL A:hover, H3 SMALL A:hover {
+	color: #999;
+}
+A > I {
+	color:#bbb;
+}
+A > I:hover {
+	color:#999;
 }
 
 /* autres styles génériques */
 .tagCloud {
 	margin: 1em 0;
+}
+.tag {
+	color: #fff;
+	display:inline-block;
+	background-color: #777;
+	text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    padding:.2em .6em .3em;
+}
+.tag>A {
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
 }
 .seeMore {
 	text-align:right;
@@ -105,12 +123,13 @@ SMALL {
 .seeMore A::hover {
 	text-decoration: none;
 }
-.seeMore A::after {
-	font-family: 'Glyphicons Halflings';
+.seeMore I {
 	font-size: 1.2em;
-	content: "\e080";
 	vertical-align: middle;
 	color: #ccc;
+}
+.missing-thumbnail {
+	background-color:#eee; 
 }
 
 /* styles spécifiques à un écran */
@@ -140,7 +159,7 @@ SMALL {
 }
 
 @media ( min-width : 768px) {
-	.thumbnail {
+	.card {
 		width: 340px;
 	}
 	.tagCloud {
@@ -149,25 +168,26 @@ SMALL {
 }
 
 @media ( min-width : 992px) {
-	#indexDoc .thumbnail {
+	#indexDoc .card {
 		width: 370px;
 	}
 }
 
 @media ( min-width : 1200px) {
-	#indexDoc .thumbnail {
+	#indexDoc .card {
 		width: 300px;
 	}
 }
 
 @media ( min-width : 1520px) {
-	#indexDoc .thumbnail {
-		width: 290px;
+	#indexDoc .card {
+		/* width: 290px; */
+		width: 288px;
 	}
 }
 
 @media ( min-width : 1600px) {
-	#indexDoc .thumbnail {
+	#indexDoc .card {
 		width: 290px;
 	}
 }

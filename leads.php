@@ -98,36 +98,36 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 	<title><?php echo ToolBox::toHtml($system->getAppliName()).' : '.ToolBox::toHtml($doc_title) ?></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+	<link type="text/css" rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" integrity="<?php echo BOOTSTRAP_CSS_URI_INTEGRITY ?>" crossorigin="anonymous"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />	
+	<link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title) ?> <small><a href="lead_edit.php"><span class="glyphicon glyphicon-plus"></span></a></small></h1>
+	<h1>Les pistes <span class="badge badge-info"><?php echo $leads_nb ?></span> <small><a href="lead_edit.php"><i class="fas fa-plus"></i></a></small></h1>
 	<section>
     	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
-    		<div class="form-group">
-        		<label for="lead_type_i">type</label>
+    		<div class="form-group m-2">
+        		<label for="lead_type_i" class="mr-2">type</label>
         		<select id="lead_type_i" name="lead_type" class="form-control">
         			<option value="-1">-- tous --</option>
         			<?php echo isset($_SESSION['lead_search']['type']) ? Lead::getKnownTypesAsOptionsTags($_SESSION['lead_search']['type']) : Lead::getKnownTypesAsOptionsTags() ?>
         		</select>
     		</div>
-    		<div class="form-group">
-        		<label for="lead_source_i">origine</label>
+    		<div class="form-group m-2">
+        		<label for="lead_source_i" class="mr-2">origine</label>
         		<select id="lead_source_i" name="lead_source" class="form-control">
         			<option value="-1">-- toutes --</option>
         			<?php echo isset($_SESSION['lead_search']['source']) ? Lead::getKnownSourcesAsOptionsTags($_SESSION['lead_search']['source']) : Lead::getKnownSourcesAsOptionsTags() ?>
         		</select>
         	</div>
-        	<div class="form-group">
-        		<label for="lead_status_i">état</label>
+        	<div class="form-group m-2">
+        		<label for="lead_status_i" class="mr-2">état</label>
         		<select id="lead_status_i" name="lead_status" class="form-control">
         			<option value="-1">-- tous --</option>
         			<?php
@@ -139,7 +139,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
         			?>
         		</select>
     		</div>
-    		<button type="submit" name="lead_newsearch_order" value="1" class="btn btn-default">Filtrer</button>
+    		<button type="submit" name="lead_newsearch_order" value="1" class="btn btn-default m-2">Filtrer</button>
     	</form>
 	</section>
 	<section>
@@ -150,7 +150,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 					echo '<li class="list-group-item">';
 					//title
 					if ($l->getShortDescription()) {
-					    echo '<h2>'.$l->getShortDescription().'<small><a href="lead_edit.php?lead_id=' . $l->getId() . '"> <span class="glyphicon glyphicon-edit"></span></a></small></h2>';
+					    echo '<h2>'.$l->getShortDescription().'<small><a href="lead_edit.php?lead_id=' . $l->getId() . '"> <i class="fas fa-edit"></i></a></small></h2>';
 					}
 					//	society
 					$href = 'society.php?society_id=' . $l->society->getId();

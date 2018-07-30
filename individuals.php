@@ -104,19 +104,19 @@ $doc_title = 'Les gens';
     <title><?php echo ToolBox::toHtml($system->getAppliName()).' : '.ToolBox::toHtml($doc_title) ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+    <link type="text/css" rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" integrity="<?php echo BOOTSTRAP_CSS_URI_INTEGRITY ?>" crossorigin="anonymous"></link>
+    <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
+    <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
+    <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
     <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
     <script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-    <script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+    <script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	
-	<h1><?php echo ToolBox::toHtml($doc_title); ?><small><a href="individual_edit.php"> <span class="glyphicon glyphicon-plus"></span></a></small></h1>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?><small><a href="individual_edit.php"> <i class="fas fa-plus"></i></a></small></h1>
 	
 	<?php
         if (count($messages) > 0) {
@@ -129,14 +129,14 @@ $doc_title = 'Les gens';
     ?>
 	
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
-		<div class="form-group">
-			<label for="individual_lastName_i">Nom</label>
+		<div class="form-group m-2">
+			<label for="individual_lastName_i" class="mr-2">Nom</label>
 			<input id="individual_lastName_i" name="individual_lastName" type="text" value="<?php if (isset($_SESSION['individual_search']['lastName'])) echo $_SESSION['individual_search']['lastName'] ?>" placeholder="nom de famille" class="form-control" />
 		</div>
-		<div class="checkbox">
-            <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> /> Sans société</label>
+		<div class="checkbox m-2">
+            <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> class="mr-2" /> Sans société</label>
  		</div>
-		<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default">Filtrer</button>
+		<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-default m-2">Filtrer</button>
 		<?php if( count($criteria) > 0) echo ' <a href="individuals.php?individual_newsearch=1">Tous les gens</a>'  ?>
 	</form>
 
@@ -144,11 +144,11 @@ $doc_title = 'Les gens';
     	<?php
         if ($individuals->getSize() > 0) {
             echo '<ul class="list-group">';
-            do {
+            foreach ($individuals as $i) {
                 echo '<li class="list-group-item">';
-                echo '<a href="individual.php?individual_id=' . $i->current()->getId() . '">' . $i->current()->getWholeName() . '</a>';
+                echo '<a href="individual.php?individual_id=' . $i->getId() . '">' . ToolBox::toHtml($i->getWholeName()) . '</a>';
                 echo '</li>';
-            } while ($i->next());
+            }
             echo '</ul>';
          }
         ?>

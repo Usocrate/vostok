@@ -12,7 +12,7 @@ $users = $system->getUsers();
 <head>
 <title>Génération de mot de passe htaccess</title>
 <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>standalone.css" type="text/css" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css"><script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script></head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link><script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script><script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script></head>
 <body>
 <h1><?php echo $system->getHtmlLink(); ?> Génération de mot de passe htaccess</h1>
 <blockquote>

@@ -201,15 +201,15 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     <title><?php echo ToolBox::toHtml($doc_title); ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+    <link type="text/css" rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" integrity="<?php echo BOOTSTRAP_CSS_URI_INTEGRITY ?>" crossorigin="anonymous"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
+    <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
+    <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
     <link rel="icon" type="image/x-icon" href="<?php echo $system->getSkinUrl() ?>favicon.ico" />
     <script type="text/javascript" src="js/controls.js"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="leadEditDoc" >
 <?php include 'navbar.inc.php'; ?>
@@ -224,11 +224,11 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 		?>
         <div>
           <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Piste</a></li>
+            <li class="nav-item"><a class="nav-link active" href="#tab1" data-toggle="tab">Piste</a></li>
             <?php if (!(isset($society ) && $society->hasId())): ?>
-			<li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Société</a></li>
+			<li class="nav-item"><a class="nav-link" href="#tab2" data-toggle="tab">Société</a></li>
             <?php endif; ?>
-            <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="#tab3" data-toggle="tab">Contact</a></li>
           </ul>
         
           <div class="tab-content">

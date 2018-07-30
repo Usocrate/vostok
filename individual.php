@@ -47,19 +47,19 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	<title><?php echo $doc_title ?></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>" type="text/css" />
-	<link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+	<link type="text/css" rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" integrity="<?php echo BOOTSTRAP_CSS_URI_INTEGRITY ?>" crossorigin="anonymous"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />	
+	<link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1>
-	<?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><span class="glyphicon glyphicon-edit"></span></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><span class="glyphicon glyphicon-pushpin"></span></a></small></h1>
+	<?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a></small></h1>
 	<section>
 	<div>	
 		<?php
@@ -108,15 +108,19 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	
 	<div>
 	  <!-- Nav tabs -->
-	  <ul class="nav nav-tabs" role="tablist">
-	    <li role="presentation" <?php if (strcmp($focus,'onMemberships')==0) echo 'class="active"' ?>><a id="membershipsTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge"><?php echo count($memberships) ?></span></a></li>
-	    <li role="presentation" <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo  'class="active"' ?>><a id="relationsTabSelector" href="#relations-tab" aria-controls="relations-tab" role="tab" data-toggle="tab">Relations <span class="badge"><?php echo count($relatedIndividuals) ?></span></a></li>
+	  <ul class="nav nav-tabs">
+	    <li class="nav-item">
+	    	<a class="nav-link <?php if (strcmp($focus,'onMemberships')==0) echo ' active' ?>" id="membershipsTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge badge-info"><?php echo count($memberships) ?></span></a>
+    	</li>
+	    <li class="nav-item">
+	    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Relations <span class="badge badge-info"><?php echo count($relatedIndividuals) ?></span></a>
+    	</li>
 	  </ul>
-	
+	  
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onMemberships')==0) echo 'active' ?>" id="memberships-tab">
-			<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><span class="glyphicon glyphicon-plus"></span></a></small></h2>
+			<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><i class="fas fa-plus"></i></a></small></h2>
 			<?php
 			if (isset($memberships)){
 				echo '<ul class="list-group">';
@@ -128,9 +132,9 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 					
 					echo ' <small>';
 					if ($ms->getTitle()) {
-						echo ' (<a href="membership_edit.php?membership_id='.$ms->getId().'">'.ToolBox::toHtml(ucfirst($ms->getTitle())).')</a>';
+						echo ' (<a href="membership_edit.php?membership_id='.$ms->getId().'">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>)';
 					}
-					echo ' <a href="membership_edit.php?membership_id='.$ms->getId().'"><span class="glyphicon glyphicon-edit"></span></a>';	
+					echo ' <a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';	
 					echo ' </small>';
 					
 					echo '</h3>';
@@ -169,7 +173,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 			?>
 	    </div>
 	    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo 'active' ?>" id="relations-tab">
-			<h2>Relations <small><a href="individualToIndividualRelationship_edit.php?item0_id=<?php echo $individual->getId() ?>"> <span class="glyphicon glyphicon-plus"></span></a></a></small></h2>
+			<h2>Relations <small><a href="individualToIndividualRelationship_edit.php?item0_id=<?php echo $individual->getId() ?>"> <i class="fas fa-plus"></i></a></a></small></h2>
 			<?php if (isset($relatedIndividuals)): ?>
 			<ul class="list-group">
 				<?php
@@ -187,7 +191,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 					echo empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
 					echo '</a>';
 					echo ')';
-					echo ' <a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><span class="glyphicon glyphicon-edit"></span></a>';
+					echo ' <a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
 					echo '</small>';
 					echo '</h3>';
 					if ($item[4]->isDefined()) {

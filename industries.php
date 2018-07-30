@@ -55,14 +55,14 @@ $doc_title = 'Les activités';
     <title><?php echo ToolBox::toHtml($system->getAppliName()) ?>: Répartition des sociétés par activité</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_THEME_URI ?>" type="text/css" />
-    <link rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>" type="text/css" />
+    <link type="text/css" rel="stylesheet" href="<?php echo BOOTSTRAP_CSS_URI ?>" integrity="<?php echo BOOTSTRAP_CSS_URI_INTEGRITY ?>" crossorigin="anonymous"></link>
+	<link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
+    <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <script language="JavaScript" type="application/javascript" src="js/controls.js"></script>
-    <link rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css" type="text/css">
+    <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
     <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
     <script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-    <script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI; ?>"></script>
+    <script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -89,11 +89,11 @@ $doc_title = 'Les activités';
         					echo '<td>';
         					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id='.$i->getId().'">';
         					echo $i->getName ();
-        					echo ' <small><a href="industry_edit.php?id='.$i->getId().'"><span class="glyphicon glyphicon-edit"></span></a></small>';
+        					echo ' <small><a href="industry_edit.php?id='.$i->getId().'"><i class="fas fa-edit"></i></a></small>';
         					echo '</a>';
         					echo '</td>';
         					echo '<td>';
-        					echo '<span class="badge">';
+        					echo '<span class="badge badge-info">';
         					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id=' . $i->getId () . '">';
         					echo $i->getSocietiesNb ();
         					echo '</span>';

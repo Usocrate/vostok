@@ -1,52 +1,43 @@
-<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-				<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="<?php echo $system->getAppliUrl() ?>"><?php echo ToolBox::toHtml($system->getAppliName()) ?></a>
-		</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="<?php echo $system->getAppliUrl() ?>"><?php echo ToolBox::toHtml($system->getAppliName()) ?></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<ul class="nav navbar-nav">
-				<li><a href="lead_edit.php">Nouvelle piste</a></li>
-				<li><a href="leads.php?lead_newsearch_order=1">Les pistes</a></li>
-				<li><a href="societies_list.php">Les sociétés</a></li>
-				<li><a href="individuals.php">Les gens</a></li>	
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li class="dropdown-header">Les sociétés</li>
-						<li><a href="cities.php">Par ville</a></li>
-						<li><a href="industries.php">Par activité</a></li>
-						<li><a href="society_edit.php">Nouvelle société</a></li>
-						<li role="separator" class="divider"></li>
-						<li class="dropdown-header">Les gens</li>
-						<li><a href="individual_edit.php">Introduire un nouvel individu</a></li>
-						<li role="separator" class="divider"></li>
-						<li class="dropdown-header">Les pistes</li>
-						<li><a href="leads.php?lead_newsearch_order=1&amp;lead_status=suivie">Suivies</a></li>
-						<li><a href="leads.php">Dernière recherche</a></li>
-						<li><a href="leads.php?lead_newsearch_order=1&amp;lead_status=<?php echo urlencode('à suivre') ?>">A suivre</a></li>
-						<li><a href="lead_types_admin.php">Gérer les types</a></li>
-					</ul>
-				</li>
-				</ul>
-			<form class="navbar-form navbar-left" method="post" action="societies_list.php">
-				<div class="form-group">
-					<input id="navbar_s_name_i" name="society_name" type="text" class="form-control" placeholder="société..." />
-				</div>
-				<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default">Ok</button>
-			</form>
-			<ul class="nav navbar-nav navbar-right">
-				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li><a href="login.php?anonymat_submission=1">Se déconnecter</a></li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</div>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+		<li class="nav-item"><a class="nav-link" href="lead_edit.php">Nouvelle piste</a></li>
+		<li class="nav-item"><a class="nav-link" href="leads.php?lead_newsearch_order=1">Les pistes</a></li>
+		<li class="nav-item"><a class="nav-link" href="societies_list.php">Les sociétés</a></li>
+		<li class="nav-item"><a class="nav-link" href="individuals.php">Les gens</a></li>	
+		<li class="nav-item dropdown">
+			<a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus</a>
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<h6 class="dropdown-header">Les sociétés</h6>
+				<a class="dropdown-item" href="cities.php">Par ville</a>
+				<a class="dropdown-item" href="industries.php">Par activité</a>
+				<a class="dropdown-item" href="society_edit.php">Nouvelle société</a>
+				<div class="dropdown-divider"></div>
+				<h6 class="dropdown-header">Les gens</h6>
+				<a class="dropdown-item" href="individual_edit.php">Introduire un nouvel individu</a>
+				<div class="dropdown-divider"></div>
+				<h6 class="dropdown-header">Les pistes</h6>
+				<a class="dropdown-item" href="leads.php?lead_newsearch_order=1&amp;lead_status=suivie">Suivies</a>
+				<a class="dropdown-item" href="leads.php">Dernière recherche</a>
+				<a class="dropdown-item" href="leads.php?lead_newsearch_order=1&amp;lead_status=<?php echo urlencode('à suivre') ?>">A suivre</a>
+				<a class="dropdown-item" href="lead_types_admin.php">Gérer les types</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="login.php?anonymat_submission=1">Se déconnecter</a>
+			</div>
+		</li>    	
+    </ul>
+	<form class="form-inline my-2 my-lg-0" method="post" action="societies_list.php">
+		<input id="navbar_s_name_i" name="society_name" type="search" class="form-control mr-sm-2" placeholder="société..." />
+		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-outline-success my-2 my-sm-0">Ok</button>
+	</form>    
+  </div>
 </nav>
+
 <script type="text/javascript">
 	$(document).ready(function(){
     $('#navbar_s_name_i').autocomplete({

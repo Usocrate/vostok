@@ -37,7 +37,7 @@ abstract class Collection implements IteratorAggregate {
  * @return CollectionIterator
  */
  public function getIterator() {
- return new CollectionIterator($this->elements);
+  return new CollectionIterator($this->elements);
  }
  /**
  * Ajoute un élément à la collection
@@ -200,25 +200,26 @@ abstract class Collection implements IteratorAggregate {
  * @return boolean
  */
  public function hasElement($element=NULL) {
- try {
-  /**
-  * si pas d'élément passé en paramètre on indique simplement si la collection possède des éléments
-  */
-  if (is_null($element)) {
-  return $this->getSize()>0;
+  global $system;
+  try {
+   /**
+   * si pas d'élément passé en paramètre on indique simplement si la collection possède des éléments
+   */
+   if (is_null($element)) {
+    return $this->getSize()>0;
+   }
+   /**
+   * sinon on indique si l'élément fait partie de la collection
+   */
+   if ($element instanceof $this->element_type) {
+    return in_array($element->getId(), $this->getIds());
+   } else {
+    return false;
+   }
+  } catch(Exception $e) {
+   $system->reportException($e);
+   exit;
   }
-  /**
-  * sinon on indique si l'élément fait partie de la collection
-  */
-  if ($element instanceof $this->element_type) {
-  return in_array($element->getId(), $this->getIds());
-  } else {
-  return false;
-  }
- } catch(Exception $e) {
-  echo '<p>'.__METHOD__.' : '.htmlentities($e->getMessage()).'</p>';
-  exit;
- }
  }
  /**
  * Renvoie un des éléments de la collection, retrouvé par son identifiant.
@@ -226,7 +227,7 @@ abstract class Collection implements IteratorAggregate {
  * @param string $id
  * @return object
  */
- public function &getElementById($id) {
+ public function getElementById($id) {
   return isset($this->elements[$id]) ? $this->elements[$id] : NULL;
  }
  /**
@@ -259,9 +260,9 @@ abstract class Collection implements IteratorAggregate {
  * @param string $name
  * @return Object
  */
- public function &getElementByName($name) {
- $selection = $this->getElementsByName($name);
- return $selection->getSize() > 0 ? $selection->getFirstElement() : NULL;
+ public function getElementByName($name) {
+  $selection = $this->getElementsByName($name);
+  return $selection->getSize() > 0 ? $selection->getFirstElement() : NULL;
  }
  /**
  * Renvoie le nom d'un élément de la collection retrouvé par son identifiant.
