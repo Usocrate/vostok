@@ -605,17 +605,18 @@ class Individual {
 				
 				$criteria = array ();
 				
-				$criteria[] = 'ac.individual_id=:id';
+				$criteria[] = 'm.individual_id=:id';
 				
 				if (isset ( $society )) {
-					$criteria[] = 'ac.society_id=:society_id';
+					$criteria[] = 'm.society_id=:society_id';
 				}
 				
-				$sql = 'SELECT *,';
-				$sql .= ' DATE_FORMAT(a.society_creation_date, "%d/%m/%Y") as society_creation_date';
-				$sql .= ' FROM membership AS ac LEFT OUTER JOIN society AS a ON ac.society_id = a.society_id';
+				$sql = 'SELECT m.membership_id AS id, m.title, m.department, m.description, m.init_year, m.end_year';
+				$sql.= ', s.society_id, s.society_name, s.society_city';				
+				$sql .= ' ,DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") as society_creation_date';
+				$sql .= ' FROM membership AS m LEFT OUTER JOIN society AS s USING (society_id)';
 				$sql .= ' WHERE '.implode(' AND ', $criteria);
-				$sql .= ' ORDER BY init_year DESC, end_year DESC';
+				$sql .= ' ORDER BY m.init_year DESC, m.end_year DESC';
 				
 				$statement = $system->getPdo()->prepare($sql);
 				$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
@@ -626,12 +627,24 @@ class Individual {
 				$statement->execute();
 	
 				$this->memberships = array();
-				foreach ( $statement->fetchAll() as $row ) {
-					$ms = new Membership ();
-					$ms->feed ( $row );
-					$s = $ms->getSociety ();
-					$s->feed ( $row );
-					$this->memberships[$row['id']] = $ms;
+				foreach ( $statement->fetchAll() as $data ) {
+					// society
+					$s = new Society();
+					$s->setId($data['society_id']);
+					$s->setName($data['society_name']);
+					$s->setCity($data['society_city']);
+	
+					// membership
+					$m = new Membership();
+					$m->setId($data['id']);
+					$m->setSociety($s);
+					$m->setTitle($data['title']);
+					$m->setDepartment($data['department']);
+					$m->setDescription($data['description']);
+					$m->setInitYear($data['init_year']);
+					$m->setEndYear($data['end_year']);
+					
+					$this->memberships[$m->getId()] = $m;
 				}
 			}
 			return $this->memberships;			
