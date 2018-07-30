@@ -159,6 +159,13 @@ SMALL {
 		width: 300px;
 	}
 }
+
+@media ( min-width : 1520px) {
+	#indexDoc .thumbnail {
+		width: 290px;
+	}
+}
+
 @media ( min-width : 1600px) {
 	#indexDoc .thumbnail {
 		width: 290px;

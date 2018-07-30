@@ -17,6 +17,8 @@ class Individual {
 	
 	protected $lastPin_date;
 	
+	protected $memberships;
+	
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
@@ -591,53 +593,61 @@ class Individual {
 	 * Obtient les participations associées à l'individu.
 	 *
 	 * @return array
-	 * @since 21/01/2006
-	 * @version 03/01/2017
+	 * @since 01/2006
+	 * @since 07/2017
 	 */
 	public function getMemberships($society = NULL) {
 		global $system;
 		try {
-			if (empty ( $this->id ))
-				throw new Exception('Récupérer les participations d\'un individu exige que celui-ci soit identifié.');
-			
-			$memberships = array ();
-			$criteria = array ();
-			
-			$criteria[] = 'ac.individual_id=:id';
-			
-			if (isset ( $society )) {
-				$criteria[] = 'ac.society_id=:society_id';
+			if (!isset($this->memberships)) {			
+				if (empty ( $this->id ))
+					throw new Exception('Récupérer les participations d\'un individu exige que celui-ci soit identifié.');
+				
+				$criteria = array ();
+				
+				$criteria[] = 'ac.individual_id=:id';
+				
+				if (isset ( $society )) {
+					$criteria[] = 'ac.society_id=:society_id';
+				}
+				
+				$sql = 'SELECT *,';
+				$sql .= ' DATE_FORMAT(a.society_creation_date, "%d/%m/%Y") as society_creation_date';
+				$sql .= ' FROM membership AS ac LEFT OUTER JOIN society AS a ON ac.society_id = a.society_id';
+				$sql .= ' WHERE '.implode(' AND ', $criteria);
+				$sql .= ' ORDER BY init_year DESC, end_year DESC';
+				
+				$statement = $system->getPdo()->prepare($sql);
+				$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+				if (isset ( $society )) {
+					$statement->bindValue(':society_id', $society->getId, PDO::PARAM_INT);
+				}
+				$statement->setFetchMode(PDO::FETCH_ASSOC);
+				$statement->execute();
+	
+				$this->memberships = array();
+				foreach ( $statement->fetchAll() as $row ) {
+					$ms = new Membership ();
+					$ms->feed ( $row );
+					$s = $ms->getSociety ();
+					$s->feed ( $row );
+					$this->memberships[$row['id']] = $ms;
+				}
 			}
-			
-			$sql = 'SELECT *,';
-			$sql .= ' DATE_FORMAT(a.society_creation_date, "%d/%m/%Y") as society_creation_date';
-			$sql .= ' FROM membership AS ac LEFT OUTER JOIN society AS a ON ac.society_id = a.society_id';
-			$sql .= ' WHERE '.implode(' AND ', $criteria);
-			$sql .= ' ORDER BY init_year DESC, end_year DESC';
-			
-			$statement = $system->getPdo()->prepare($sql);
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			if (isset ( $society )) {
-				$statement->bindValue(':society_id', $society->getId, PDO::PARAM_INT);
-			}
-			$statement->setFetchMode(PDO::FETCH_ASSOC);
-			$statement->execute();
-
-			foreach ( $statement->fetchAll() as $row ) {
-				$ms = new Membership ();
-				$ms->feed ( $row );
-				$s = $ms->getSociety ();
-				$s->feed ( $row );
-				$memberships [] = $ms;
-			}
-			return $memberships;			
+			return $this->memberships;			
 		} catch (Exception $e) {
 			$system->reportException($e, __METHOD__);
 		}
 	}
 	/**
-	 * @version 03/01/2017
-	 **/
+	 * @since 07/2018
+	 */
+	public function setMemberships(array $input) {
+		$this->memberships = $input;
+	}
+	/**
+	 * @version 01/2017
+	 */
 	public function addMembershipRow($society_id, $department = NULL, $title = NULL, $phone = NULL, $email = NULL, $description = NULL) {
 		global $system;
 		try {
