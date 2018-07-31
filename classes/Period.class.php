@@ -14,7 +14,7 @@ class Period {
 	
 	public function toString() {
 	    if (! empty($this->init_year) && ! empty($this->end_year) ) {
-			return $this->init_year.'-'.$this->end_year;
+			return strcmp($this->init_year, $this->end_year)!=0 ? $this->init_year.'-'.$this->end_year : $this->end_year;
 		} elseif (! empty($this->init_year) ) {
 			return 'depuis '.$this->init_year;
 		} elseif (! empty($this->end_year)) {
