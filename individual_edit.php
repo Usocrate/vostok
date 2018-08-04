@@ -151,6 +151,27 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 						<a id="individual_web_link" href="#" style="display: none">[voir]</a>
 					</div>
 					
+					<div class="form-group">
+						<label for="individual_twitter_id_i" class="sr-only">Compte Twitter</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+						      <div class="input-group-text"><i class="fab fa-twitter"></i></div>
+						    </div>
+							<input type="text" id="individual_twitter_id_i" name="individual_twitter_id" value="<?php echo $individual->getTwitterId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant Twitter" />
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="individual_Linkedin_id_i" class="sr-only">Compte Linkedin</label>
+						<div class="input-group">
+							<div class="input-group-prepend">
+						      <div class="input-group-text"><i class="fab fa-Linkedin"></i></div>
+						    </div>
+							<input type="text" id="individual_Linkedin_id_i" name="individual_Linkedin_id" value="<?php echo $individual->getLinkedinId(); ?>" size="15" maxlength="255" class="form-control" placeholder="Person ID Linkedin" />
+						</div>
+					</div>
+
+					
 				</fieldset>
 			</div>
 			<div class="col-md-4">

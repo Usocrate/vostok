@@ -6,6 +6,9 @@
 class Individual {
 	protected $id;
 	
+	protected $twitter_id;
+	protected $Linkedin_id;
+	
 	protected $firstName;
 	protected $lastName;
 	
@@ -121,9 +124,33 @@ class Individual {
 		return $this->getAttribute ( 'id' );
 	}
 	/**
+	 * @since 08/2018
+	 */
+	public function getTwitterId() {
+		return isset($this->twitter_id) ? $this->twitter_id : null;
+	}
+	/**
+	 * @since 08/2018
+	 */
+	public function hasTwitterId() {
+		return !empty($this->twitter_id);
+	}
+	/**
+	 * @since 08/2018
+	 */
+	public function getLinkedinId() {
+		return isset($this->Linkedin_id) ? $this->Linkedin_id : null;
+	}
+	/**
+	 * @since 08/2018
+	 */
+	public function hasLinkedinId() {
+		return !empty($this->Linkedin_id);
+	}	
+	/**
 	 * Indique si l'identifiant de l'individu est connu.
 	 *
-	 * @since 28/12/2010
+	 * @since 12/2010
 	 * @return bool
 	 */
 	public function hasId() {
@@ -132,7 +159,7 @@ class Individual {
 	/**
 	 * Obtient la date de naissance.
 	 *
-	 * @since 07/01/2006
+	 * @since 01/2006
 	 * @version 05/03/2017
 	 */
 	public function getBirthDate() {
@@ -299,16 +326,33 @@ class Individual {
 	 * @since 09/12/2016
 	 */
 	public function getHtmlLinkToIndividual() {
-		return '<a href="individual.php?individual_id='.$this->getId().'">'.ToolBox::toHtml($this->getWholeName()).'</a>';
+		return '<a href="individual.php?individual_id='.$this->getId().'/">'.ToolBox::toHtml($this->getWholeName()).'</a>';
 	}
-	
+	/**
+	 * @since 08/2018
+	 */
+	public function getHtmlLinkToTwitter() {
+		return '<a href="https://twitter.com/'.$this->getTwitterId().'" target="_blank"><i class="fab fa-twitter"></i> '.$this->getTwitterId().'</a>';		
+	}
+	/**
+	 * @since 08/2018
+	 */
+	public function getHtmlLinkToLinkedin() {
+		return '<a href="https://Linkedin.com/in/'.$this->getLinkedinId().'/" target="_blank"><i class="fab fa-Linkedin"></i> '.$this->getLinkedinId().'</a>';		
+	}	
 	/**
 	 * Obtient le commentaire.
+	 * @version 08/2018 
 	 */
 	public function getDescription() {
-		return $this->getAttribute ( 'description' );
+		return isset($this->description) ? $this->description : null;
 	}
-	
+	/**
+	 * @since 08/2018
+	 */
+	public function hasDescription() {
+		return !empty($this->description);
+	}
 	/**
 	 * Obtient l'adresse du site web perso.
 	 */
@@ -838,6 +882,7 @@ class Individual {
 	}
 	/**
 	 * Enregistre les données de l'individu en base de données.
+	 * @version 08/2018
 	 */
 	public function toDB() {
 		global $system;
@@ -846,6 +891,16 @@ class Individual {
 		
 		$settings = array ();
 		
+		if (isset ( $this->twitter_id )) {
+			$settings [] = 'individual_twitter_id=:twitter_id';
+		}
+		if (isset ( $this->Linkedin_id )) {
+			$settings [] = 'individual_Linkedin_id=:Linkedin_id';
+		}
+		
+		if (isset ( $this->firstName )) {
+			$settings [] = 'individual_firstName=:firstName';
+		}
 		if (isset ( $this->salutation )) {
 			$settings [] = 'individual_salutation=:salutation';
 		}
@@ -905,6 +960,12 @@ class Individual {
 	
 		$statement = $system->getPdo()->prepare($sql);
 		
+		if (isset ( $this->twitter_id )) {
+			$statement->bindValue(':twitter_id', $this->twitter_id, PDO::PARAM_STR);
+		}
+		if (isset ( $this->Linkedin_id )) {
+			$statement->bindValue(':Linkedin_id', $this->Linkedin_id, PDO::PARAM_STR);
+		}
 		if (isset ( $this->salutation )) {
 			$statement->bindValue(':salutation', $this->salutation, PDO::PARAM_STR);
 		}

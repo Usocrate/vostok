@@ -69,6 +69,28 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 		?>
 		<div>
 			<?php
+				
+				$social_links = array();
+				if ($individual->hasTwitterId()) {
+					$social_links[] = $individual->getHtmlLinkToTwitter();
+				}
+				if ($individual->hasLinkedinId()) {
+					$social_links[] = $individual->getHtmlLinkToLinkedin();
+				}
+				if (count($social_links) > 0) {
+					echo '<p>'.implode('<span> | </span>', $social_links).'</p>';
+				}
+
+				
+				if ($individual->getDescription()) {
+					echo '<p>'.$individual->getDescription().'</p>';
+				}
+				
+				if ($individual->getWeb()) {
+					echo '<p>'.$individual->getHtmlLinkToWeb().'</p>';
+				}
+				
+				
 				$contact_data = array();
 				if ($individual->getPhoneNumber()) {
 					$contact_data['phone'] = $individual->getPhoneNumber();
@@ -79,16 +101,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				if ($individual->getEmailAddress()) {
 					$contact_data['email'] = $individual->getEmailHtml();
 				}
-
-				if ($individual->getDescription()) {
-					echo '<p>'.$individual->getDescription().'</p>';
-				}
-				if ($individual->getWeb()) {
-					echo '<p>'.$individual->getHtmlLinkToWeb().'</p>';
-				}
 				if (count($contact_data) >0) {
 					echo '<p>'.implode('<span> | </span>', $contact_data).'</p>';
 				}
+				
 				if ($individual->getBirthDate()) {
 					echo '<p><small>naissance : </small>'.$individual->getBirthDate().'</p>';
 				}
