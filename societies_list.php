@@ -152,19 +152,21 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 						}
 						?>
 		    		</div>
-					<button type="button" class="btn btn-default" onclick="check('society_id[]')">tout cocher</button> /
-					<button type="button" class="btn btn-default" onclick="uncheck('society_id[]')">tout décocher</button>
-					<label for="task_id">Pour la sélection :</label>
-		            <!--
-					<select id="task_id" name="task_id">
-						<option value="0">- choisir -</option>
-						<option value="1"<?php if (isset($params['task_id']) && $params['task_id']==1) echo 'selected="selected"' ?>>fusionner</option>
-						<option value="2"<?php if (isset($params['task_id']) && $params['task_id']==2) echo 'selected="selected"' ?>>supprimer</option>
-					</select>
-					-->
-					<button name="task_submission" type="submit" value="1" class="btn btn-default">fusionner</button> 
+		    		<div class="mt-4 mb-4">
+						<button type="button" class="btn btn-default" onclick="check('society_id[]')">tout cocher</button> /
+						<button type="button" class="btn btn-default" onclick="uncheck('society_id[]')">tout décocher</button>
+						<label for="task_id">Pour la sélection :</label>
+			            <!--
+						<select id="task_id" name="task_id">
+							<option value="0">- choisir -</option>
+							<option value="1"<?php if (isset($params['task_id']) && $params['task_id']==1) echo 'selected="selected"' ?>>fusionner</option>
+							<option value="2"<?php if (isset($params['task_id']) && $params['task_id']==2) echo 'selected="selected"' ?>>supprimer</option>
+						</select>
+						-->
+						<button name="task_submission" type="submit" value="1" class="btn btn-default">fusionner</button> 
+					</div>
 		    	</form>
-		    	<div>
+		    	<div class="mt-4 mb-4">
 		    		<?php
 		    		if ($pages_nb > 1) {
 		    			$params = array ();
@@ -196,9 +198,13 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 						$s = $ms->getSociety();
 						echo '<div class="card">';
 						if ($i->getPhotoUrl()) {
+							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">';
 							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+							echo '</a>';
 						} else {
+							echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
 							echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+							echo '</a>';
 						}
 						echo '<div class="card-body">';
 							echo '<h3 class="card-title">';

@@ -338,7 +338,7 @@ class Individual {
 	 * @since 08/2018
 	 */
 	public function getHtmlLinkToLinkedin() {
-		return '<a href="https://Linkedin.com/in/'.$this->getLinkedinId().'/" target="_blank"><i class="fab fa-Linkedin"></i> '.$this->getLinkedinId().'</a>';		
+		return '<a href="https://Linkedin.com/in/'.$this->getLinkedinId().'/" target="_blank"><i class="fab fa-linkedin"></i> '.$this->getLinkedinId().'</a>';		
 	}	
 	/**
 	 * Obtient le commentaire.

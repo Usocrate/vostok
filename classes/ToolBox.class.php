@@ -16,11 +16,9 @@ class ToolBox
     }
 
     /**
-     *
-     * @version 01/08/2014
+     * @version 08/2018
      */
-    public static function getHtmlPagesNav($page_index = 1, $pages_nb, $param, $page_index_param_name = 'page_index')
-    {
+    public static function getHtmlPagesNav($page_index = 1, $pages_nb, $param, $page_index_param_name = 'page_index') {
         // contruction de l'url de base des liens
         $url_param = is_array($param) ? self::arrayToUrlParam($param) : $param;
         if (iconv_strlen($url_param) > 0)
@@ -34,17 +32,17 @@ class ToolBox
          * Première page
          */
         if ($page_index > 2) {
-            $nav_items[] = '<li><a class="prev" href="' . $url_base . $page_index_param_name . '=1">&#171;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link" href="' . $url_base . $page_index_param_name . '=1">&#171;</a></li>';
         } else {
-            $nav_items[] = '<li><a class="prev">&#171;&#171;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link">&#171;&#171;</a></li>';
         }
         /*
          * Page précédente
          */
         if ($page_index > 1) {
-            $nav_items[] = '<li><a class="prev" href="' . $url_base . $page_index_param_name . '=' . ($page_index - 1) . '">&#171;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link" href="' . $url_base . $page_index_param_name . '=' . ($page_index - 1) . '">&#171;</a></li>';
         } else {
-            $nav_items[] = '<li><a class="prev">&#171;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link">&#171;</a></li>';
         }
         /*
          * Autres pages
@@ -53,26 +51,26 @@ class ToolBox
             if ($i < 1 || $i > $pages_nb)
                 continue;
             if ($i == $page_index) {
-                $nav_items[] = '<li><a class="active" href="#">' . $i . '</a></li>';
+                $nav_items[] = '<li class="page-item active"><a class="page-link" href="#">' . $i . '</a></li>';
             } else {
-                $nav_items[] = '<li><a href="' . $url_base . $page_index_param_name . '=' . $i . '">' . $i . '</a></li>';
+                $nav_items[] = '<li class="page-item"><a class="page-link" href="' . $url_base . $page_index_param_name . '=' . $i . '">' . $i . '</a></li>';
             }
         }
         /*
          * Page suivante
          */
         if ($page_index < $pages_nb) {
-            $nav_items[] = '<li><a class="next" href="' . $url_base . $page_index_param_name . '=' . ($page_index + 1) . '">&#187;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link" href="' . $url_base . $page_index_param_name . '=' . ($page_index + 1) . '">&#187;</a></li>';
         } else {
-            $nav_items[] = '<li><a class="next">&#187;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link">&#187;</a></li>';
         }
         /*
          * Dernière page
          */
         if ($page_index < ($pages_nb - 1)) {
-            $nav_items[] = '<li><a class="next" href="' . $url_base . $page_index_param_name . '=' . $pages_nb . '">&#187;&#187;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link" href="' . $url_base . $page_index_param_name . '=' . $pages_nb . '">&#187;&#187;</a></li>';
         } else {
-            $nav_items[] = '<li><a class="next">&#187;&#187;</a></li>';
+            $nav_items[] = '<li class="page-item"><a class="page-link">&#187;&#187;</a></li>';
         }
         return '<ul class="pagination">' . implode('', $nav_items) . '</ul>';
     }

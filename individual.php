@@ -58,197 +58,226 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1>
-	<?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a></small></h1>
-	<section>
-	<div>	
-		<?php
-		if ($individual->getPhotoUrl()) {
-			echo $individual->getPhotoHtml();
-		}
-		?>
-		<div>
-			<?php
+	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a></small></h1>
+	
+  	<div class="row">
+    	<div class="col-lg-3">
+    		<div class="card">
+    		<?php
+    			// photo
+				if ($individual->getPhotoUrl()) {
+					echo '<img src="' . $individual->getPhotoUrl () . '"  class="card-img-top" />';
+				} else {
+					echo '<a href="individual_edit.php?individual_id='.$individual->getId().'" class="implicit">';
+					echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+					echo '</a>';
+				}
 				
-				$social_links = array();
+				if ($individual->hasDescription()) {
+					echo '<div class="card-body">';
+					echo Toolbox::toHtml($individual->getDescription());
+					echo '</div>';
+				}
+				if ($individual->getBirthDate()) {
+					echo '<div class="card-body">';
+					echo '<p><small>naissance : </small>'.$individual->getBirthDate().'</p>';
+					echo '</div>';
+				}
+				
+				// liens vers comptes des réseaux sociaux
+				$links = array();
 				if ($individual->hasTwitterId()) {
-					$social_links[] = $individual->getHtmlLinkToTwitter();
+					$links[] = $individual->getHtmlLinkToTwitter();
 				}
 				if ($individual->hasLinkedinId()) {
-					$social_links[] = $individual->getHtmlLinkToLinkedin();
+					$links[] = $individual->getHtmlLinkToLinkedin();
 				}
-				if (count($social_links) > 0) {
-					echo '<p>'.implode('<span> | </span>', $social_links).'</p>';
-				}
-
-				
-				if ($individual->getDescription()) {
-					echo '<p>'.$individual->getDescription().'</p>';
-				}
-				
 				if ($individual->getWeb()) {
-					echo '<p>'.$individual->getHtmlLinkToWeb().'</p>';
-				}
-				
-				
-				$contact_data = array();
-				if ($individual->getPhoneNumber()) {
-					$contact_data['phone'] = $individual->getPhoneNumber();
-				}
-				if ($individual->getMobilePhoneNumber()) {
-					$contact_data['mobile'] = $individual->getMobilePhoneNumber();
-				}
-				if ($individual->getEmailAddress()) {
-					$contact_data['email'] = $individual->getEmailHtml();
-				}
-				if (count($contact_data) >0) {
-					echo '<p>'.implode('<span> | </span>', $contact_data).'</p>';
-				}
-				
-				if ($individual->getBirthDate()) {
-					echo '<p><small>naissance : </small>'.$individual->getBirthDate().'</p>';
-				}
-				if ($individual->getAddress()) {
-					echo '<p>'.$individual->getAddress().'</p>';
+					$links[] = $individual->getHtmlLinkToWeb();
 				}
 				if ($individual->getCvUrl()) {
-					echo '<p><a href="'.$individual->getCvUrl().'">cv</a></p>';
+					$links[] = '<a href="'.$individual->getCvUrl().'">cv</a>';
 				}
-				if ($individual->getGoogleQueryUrl()) {
-					echo '<p><a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.$individual->getWholeName().' dans Google</a></p>';
+				if (count($links) > 0) {
+					echo '<ul class="list-group list-group-flush">';
+					foreach ($links as $l) {
+						echo '<li class="list-group-item">'.$l.'</li>';
+					}
+					echo '</ul>';
 				}
-			?>
+			?>			
+			<div class="card-footer text-muted">
+			    <?php
+					if ($individual->getGoogleQueryUrl()) {
+						echo '<p><a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.$individual->getWholeName().' dans Google</a></p>';
+					}			    
+			    ?>
+			</div>
 		</div>
-	</div>
-	</section>
-	
-	<div>
-	  <!-- Nav tabs -->
-	  <ul class="nav nav-tabs">
-	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onMemberships')==0) echo ' active' ?>" id="membershipsTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge badge-info"><?php echo count($memberships) ?></span></a>
-    	</li>
-	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Relations <span class="badge badge-info"><?php echo count($relatedIndividuals) ?></span></a>
-    	</li>
-	  </ul>
-	  
-	  <!-- Tab panes -->
-	  <div class="tab-content">
-	    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onMemberships')==0) echo 'active' ?>" id="memberships-tab">
-			<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><i class="fas fa-plus"></i></a></small></h2>
-			<?php
-			if (isset($memberships)){
-				echo '<ul class="list-group">';
-				foreach ($memberships as $ms) {
-					$s = $ms->getSociety();
-					echo '<li class="list-group-item">';
-					echo '<h3>';
-					echo $s->getHtmlLinkToSociety();
-					
-					echo ' <small>';
-					if ($ms->getTitle()) {
-						echo ' (<a href="membership_edit.php?membership_id='.$ms->getId().'">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>)';
-					}
-					echo ' <a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';	
-					echo ' </small>';
-					
-					echo '</h3>';
-					
-					$more = array();
-					if ($ms->getPeriod()) {
-						$more[] = $ms->getPeriod();
-												
-					}
-					if ($ms->getDepartment()) {
-						$more[] = $ms->getDepartment();
-					}
-					if (count($more)>0) {
-						echo '<div><small>'.implode(' - ', $more).'</small></div>';
-					}					
-					
-					if ($ms->getDescription()) {
-						echo '<p>'.$ms->getDescription().'</p>';
-					}
-					
-					if ($ms->getUrl()) {
-						echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
-					}
-					$data = array();
-					if ($ms->getPhone()) $data[] = $ms->getPhone();
-					if ($ms->getEmail()) {
-						$data[] = '<a href="mailto:'.ToolBox::toHtml($individual->getFirstName()).'%20'.ToolBox::toHtml($individual->getLastName()).'%20<'.$ms->getEmail().'>">'.$ms->getEmail().'</a>';
-					}
-					if (count($data)>0) {
-						echo '<p>'.implode('<span> | </span>', $data).'</p>';
-					}
-					echo '</li>';
-				}
-				echo '</ul>';
-			}
-			?>
+    	</div>
+	    <div class="col-lg">
+	    	<div>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs">
+				    <li class="nav-item">
+				    	<a class="nav-link <?php if (strcmp($focus,'onMemberships')==0) echo ' active' ?>" id="membershipsTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge badge-info"><?php echo count($memberships) ?></span></a>
+			    	</li>
+				    <li class="nav-item">
+				    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Relations <span class="badge badge-info"><?php echo count($relatedIndividuals) ?></span></a>
+			    	</li>
+				  </ul>
+		  		
+		  		<!-- Tab panes -->
+				<div class="tab-content">
+				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onMemberships')==0) echo 'active' ?>" id="memberships-tab">
+						<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><i class="fas fa-plus"></i></a></small></h2>
+						<?php
+						if (isset($memberships)){
+							echo '<ul class="list-group list-group-flush">';
+							foreach ($memberships as $ms) {
+								$s = $ms->getSociety();
+								echo '<li class="list-group-item">';
+								echo '<h3>';
+								echo $s->getHtmlLinkToSociety();
+								
+								echo ' <small>';
+								if ($ms->getTitle()) {
+									echo ' (<a href="membership_edit.php?membership_id='.$ms->getId().'">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>)';
+								}
+								echo ' <a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';	
+								echo ' </small>';
+								
+								echo '</h3>';
+								
+								$more = array();
+								if ($ms->getPeriod()) {
+									$more[] = $ms->getPeriod();
+															
+								}
+								if ($ms->getDepartment()) {
+									$more[] = $ms->getDepartment();
+								}
+								if (count($more)>0) {
+									echo '<div><small>'.implode(' - ', $more).'</small></div>';
+								}					
+								
+								if ($ms->getDescription()) {
+									echo '<p>'.$ms->getDescription().'</p>';
+								}
+								
+								if ($ms->getUrl()) {
+									echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
+								}
+								$data = array();
+								if ($ms->getPhone()) $data[] = $ms->getPhone();
+								if ($ms->getEmail()) {
+									$data[] = '<a href="mailto:'.ToolBox::toHtml($individual->getFirstName()).'%20'.ToolBox::toHtml($individual->getLastName()).'%20<'.$ms->getEmail().'>">'.$ms->getEmail().'</a>';
+								}
+								if (count($data)>0) {
+									echo '<p>'.implode('<span> | </span>', $data).'</p>';
+								}
+								echo '</li>';
+							}
+							echo '</ul>';
+						}
+						?>
+				    </div>
+				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo 'active' ?>" id="relations-tab">
+						<h2>Relations <small><a href="individualToIndividualRelationship_edit.php?item0_id=<?php echo $individual->getId() ?>"> <i class="fas fa-plus"></i></a></a></small></h2>
+						<?php if (isset($relatedIndividuals)): ?>
+						<ul class="list-group list-group-flush">
+							<?php
+							foreach ($relatedIndividuals as $item) {
+								// $item[0] : Individu
+								// $item[1] : Identifiant de la relation;
+								// $item[2] : Rôle
+								// $item[3] : Description
+								// $item[4] : Period object
+								echo '<li class="list-group-item">';
+								echo '<h3>';
+								echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
+								echo ' <small>(';
+								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'">';
+								echo empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
+								echo '</a>';
+								echo ')';
+								echo ' <a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
+								echo '</small>';
+								echo '</h3>';
+								if ($item[4]->isDefined()) {
+									echo '<div><small>'.$item[4]->toString().'</small></div>';
+								}
+								if (!empty($item[3])) {
+									echo '<p>';
+									echo ToolBox::toHtml($item[3]);
+									echo '</p>';
+								}
+								echo '</li>';
+							}
+							?>
+						</ul>	    	
+						<?php endif; ?>
+				    </div>
+		</div>
+			</div>
 	    </div>
-	    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo 'active' ?>" id="relations-tab">
-			<h2>Relations <small><a href="individualToIndividualRelationship_edit.php?item0_id=<?php echo $individual->getId() ?>"> <i class="fas fa-plus"></i></a></a></small></h2>
-			<?php if (isset($relatedIndividuals)): ?>
-			<ul class="list-group">
-				<?php
-				foreach ($relatedIndividuals as $item) {
-					// $item[0] : Individu
-					// $item[1] : Identifiant de la relation;
-					// $item[2] : Rôle
-					// $item[3] : Description
-					// $item[4] : Period object
-					echo '<li class="list-group-item">';
-					echo '<h3>';
-					echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
-					echo ' <small>(';
-					echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'">';
-					echo empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
-					echo '</a>';
-					echo ')';
-					echo ' <a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
-					echo '</small>';
-					echo '</h3>';
-					if ($item[4]->isDefined()) {
-						echo '<div><small>'.$item[4]->toString().'</small></div>';
+	    <div class="col-lg-3">
+	    	<div class="card">
+	    		<div class="card-header">Coordonnées</div>
+	    		<?php
+					// coordonnées
+					$contact_data = array();
+					if ($individual->getAddress()) {
+						$contact_data[] = $individual->getAddress();
 					}
-					if (!empty($item[3])) {
-						echo '<p>';
-						echo ToolBox::toHtml($item[3]);
-						echo '</p>';
+					if ($individual->getPhoneNumber()) {
+						$contact_data[] = $individual->getPhoneNumber();
 					}
-					echo '</li>';
-				}
+					if ($individual->getMobilePhoneNumber()) {
+						$contact_data[] = $individual->getMobilePhoneNumber();
+					}
+					if ($individual->getEmailAddress()) {
+						$contact_data[] = $individual->getEmailHtml();
+					}
+					if (count($contact_data) >0) {
+						echo '<ul class="list-group list-group-flush">';
+						foreach ($contact_data as $d) {
+							echo '<li class="list-group-item">'.$d.'</li>';
+						}
+						echo '</ul>';
+					} else {
+						echo '<div class="card-body"><p>A renseigner</p>';
+						echo '<a class="card-link" href="individual_edit.php?individual_id='.$individual->getId().'"><i class="fas fa-edit"></i> Renseigner</a>';
+						echo '</div>';
+					}
 				?>
-			</ul>	    	
-			<?php endif; ?>
+			</div>
 	    </div>
-	</div>
-</div>
-<script type="text/javascript">
-	$(document).ready(function() {
-	    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-			var focus;
-			var scope = 'individual';
+  	</div>
 
-			switch(e.target.id) {
-			  	case 'membershipsTabSelector':
-			  		focus = 'onMemberships';
-			  		break;
-			  	case 'relationsTabSelector':
-			  		focus = 'onRelatedIndividuals';
-			  		break;
-			}
-
-			$.ajax({
-				  url: 'session.ws.php?focus='+focus+'&scope='+scope,
-				  beforeSend: function( xhr ) {
-				    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
-				  }
+	<script type="text/javascript">
+		$(document).ready(function() {
+		    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				var focus;
+				var scope = 'individual';
+	
+				switch(e.target.id) {
+				  	case 'membershipsTabSelector':
+				  		focus = 'onMemberships';
+				  		break;
+				  	case 'relationsTabSelector':
+				  		focus = 'onRelatedIndividuals';
+				  		break;
+				}
+	
+				$.ajax({
+					  url: 'session.ws.php?focus='+focus+'&scope='+scope,
+					  beforeSend: function( xhr ) {
+					    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
+					  }
+				});
 			});
 		});
-	});
-</script>
+	</script>
 </body>
 </html>

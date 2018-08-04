@@ -140,7 +140,9 @@ $doc_title = 'Accueil';
 					  		foreach ($individuals as $i) {
 								echo '<div class="card">';
 								if ($i->getPhotoUrl()) {
+									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">';
 									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+									echo '</a>';
 								} else {
 									echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
 									echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
@@ -153,7 +155,7 @@ $doc_title = 'Accueil';
 								foreach ($i->getMemberships() as $ms) {
 									$s = $ms->getSociety();
 									echo '<li class="list-group-item">';
-										echo '<div class="card-text">';
+										//echo '<div class="card-text">';
 										echo '<div>'.$s->getHtmlLinkToSociety('onIndividuals').'</div>';
 										$href = 'membership_edit.php?membership_id='.$ms->getId();
 										if ($ms->getTitle()) {
@@ -168,7 +170,7 @@ $doc_title = 'Accueil';
 											echo '<i class="fas fa-edit"></i> éditer';
 											echo '</a>';
 										}
-										echo '</div>';
+										//echo '</div>';
 									echo '</li>';
 								}
 								echo '</ul>';
@@ -185,7 +187,9 @@ $doc_title = 'Accueil';
 								$s = $ms->getSociety();
 								echo '<div class="card">';
 								if ($i->getPhotoUrl()) {
+									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">';
 									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+									echo '</a>';
 								} else {
 									echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
 									echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';

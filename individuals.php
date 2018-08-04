@@ -152,7 +152,7 @@ $doc_title = 'Les gens';
             echo '</ul>';
          }
         ?>
-    	<div>
+    	<div class="mt-4 mb-4">
     		<?php
             if ($pages_nb > 1) {
                 $params = array();
