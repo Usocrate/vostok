@@ -35,6 +35,10 @@ $doc_title = $individual->getWholeName();
 
 //var_dump($_SESSION);
 
+if (isset($_SESSION['preferences']['individual']['focus']) && strcmp($_SESSION['preferences']['individual']['focus'], 'onTweets')==0 && !$individual->hasTwitterId()) {
+	unset($_SESSION['preferences']['individual']['focus']);	
+}
+
 if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	$focus = $_SESSION['preferences']['individual']['focus'];
 } else {
@@ -125,6 +129,13 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <li class="nav-item">
 				    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Relations <span class="badge badge-info"><?php echo count($relatedIndividuals) ?></span></a>
 			    	</li>
+			    	<?php
+				    	if ($individual->hasTwitterId()) {
+				    		echo '<li class="nav-item"><a class="nav-link';
+				    		if (strcmp($focus,'onTweets')==0) echo ' active';
+				    		echo '" id="tweetsTabSelector" href="#tweets-tab" data-toggle="tab">Tweets</a></li>';
+				    	}
+			    	?>
 				  </ul>
 		  		
 		  		<!-- Tab panes -->
@@ -218,6 +229,11 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 						</ul>	    	
 						<?php endif; ?>
 				    </div>
+				    <?php  if ($individual->hasTwitterId()) :?>
+				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onTweets')==0) echo 'active' ?>" id="tweets-tab">
+				    	<?php echo $individual->embedTwitterTimeline(); ?>
+				    </div>
+				    <?php endif; ?>
 		</div>
 			</div>
 	    </div>
@@ -268,6 +284,9 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				  	case 'relationsTabSelector':
 				  		focus = 'onRelatedIndividuals';
 				  		break;
+				  	case 'tweetsTabSelector':
+				  		focus = 'onTweets';
+				  		break;	
 				}
 	
 				$.ajax({
