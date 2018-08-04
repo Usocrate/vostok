@@ -874,9 +874,9 @@ class System {
 	 *
 	 * @return array
 	 * @since 07/2006
-	 * @version 06/2017
+	 * @version 08/2018
 	 */
-	public function getIndustries($criteria = NULL) {
+	public function getIndustries($criteria = NULL, $sort = 'Most used first') {
 		global $system;
 
 		$output = array ();
@@ -900,6 +900,14 @@ class System {
 		}
 		
 		$sql.= ' GROUP BY i.id ASC';
+		
+		switch ($sort) {
+			case 'Most used first':
+				$sql.= ' ORDER BY societies_nb DESC';
+				break;
+			default :
+				$sql.= ' ORDER BY name ASC';
+		}
 		
 		$statement = $system->getPdo()->prepare($sql);
 		
