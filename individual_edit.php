@@ -167,7 +167,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 							<div class="input-group-prepend">
 						      <div class="input-group-text"><i class="fab fa-linkedin"></i></div>
 						    </div>
-							<input type="text" id="individual_Linkedin_id_i" name="individual_Linkedin_id" value="<?php echo $individual->getLinkedinId(); ?>" size="15" maxlength="255" class="form-control" placeholder="Person ID Linkedin" />
+							<input type="text" id="individual_Linkedin_id_i" name="individual_linkedin_id" value="<?php echo $individual->getLinkedinId(); ?>" size="15" maxlength="255" class="form-control" placeholder="Person ID Linkedin" />
 						</div>
 					</div>
 

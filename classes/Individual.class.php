@@ -139,13 +139,13 @@ class Individual {
 	 * @since 08/2018
 	 */
 	public function getLinkedinId() {
-		return isset($this->Linkedin_id) ? $this->Linkedin_id : null;
+		return isset($this->linkedin_id) ? $this->linkedin_id : null;
 	}
 	/**
 	 * @since 08/2018
 	 */
 	public function hasLinkedinId() {
-		return !empty($this->Linkedin_id);
+		return !empty($this->linkedin_id);
 	}	
 	/**
 	 * Indique si l'identifiant de l'individu est connu.
@@ -894,8 +894,8 @@ class Individual {
 		if (isset ( $this->twitter_id )) {
 			$settings [] = 'individual_twitter_id=:twitter_id';
 		}
-		if (isset ( $this->Linkedin_id )) {
-			$settings [] = 'individual_Linkedin_id=:Linkedin_id';
+		if (isset ( $this->linkedin_id )) {
+			$settings [] = 'individual_linkedin_id=:linkedin_id';
 		}
 		
 		if (isset ( $this->firstName )) {
@@ -963,8 +963,8 @@ class Individual {
 		if (isset ( $this->twitter_id )) {
 			$statement->bindValue(':twitter_id', $this->twitter_id, PDO::PARAM_STR);
 		}
-		if (isset ( $this->Linkedin_id )) {
-			$statement->bindValue(':Linkedin_id', $this->Linkedin_id, PDO::PARAM_STR);
+		if (isset ( $this->linkedin_id )) {
+			$statement->bindValue(':linkedin_id', $this->linkedin_id, PDO::PARAM_STR);
 		}
 		if (isset ( $this->salutation )) {
 			$statement->bindValue(':salutation', $this->salutation, PDO::PARAM_STR);
@@ -1046,6 +1046,7 @@ class Individual {
 		}
 		return false;
 	}
+	
 	private function getDataFromBase($fields = NULL) {
 		global $system;
 		if (is_null ( $this->id )) {

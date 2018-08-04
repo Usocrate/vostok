@@ -876,6 +876,7 @@ class Society {
 		$statement = $system->getPdo()->prepare($sql);
 		$statement->execute(array($this->id));
 		$data = $statement->fetchAll(PDO::FETCH_ASSOC);
+		$output = array();
 		foreach ( $data as $row ) {
 			$s = new Society($row['society_id']);
 			$s->setName($row['society_name']);
