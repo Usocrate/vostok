@@ -903,10 +903,6 @@ class Individual {
 		if (isset ( $this->linkedin_id )) {
 			$settings [] = 'individual_linkedin_id=:linkedin_id';
 		}
-		
-		if (isset ( $this->firstName )) {
-			$settings [] = 'individual_firstName=:firstName';
-		}
 		if (isset ( $this->salutation )) {
 			$settings [] = 'individual_salutation=:salutation';
 		}
