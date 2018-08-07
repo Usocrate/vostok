@@ -64,7 +64,7 @@ class Individual {
 	}
 	/**
 	 * Fixe la valeur d'un attribut.
-	 * @version 05/2018
+	 * @version 08/2018
 	 */
 	public function setAttribute($name, $value) {
 		$value = trim ( $value );
@@ -75,9 +75,9 @@ class Individual {
 				if ( strcmp($value, '0000-00-00') == 0 ) {
 					return false;	
 				}
-			case 'individual_salutation' :
+			case 'salutation' :
 				$salutations = array('mr', 'mme', 'mlle');
-				if (!in_array($value, $salutations)) {
+				if ( !(in_array($value, $salutations) || empty($value)) ) {
 					return false;
 				}
 			default :
@@ -1066,6 +1066,9 @@ class Individual {
 		return $statement->fetch(PDO::FETCH_ASSOC);
 	}
 	
+	/**
+	 * @version 08/2018
+	 */
 	public function feed($array = NULL) {
 		if (is_array ( $array )) {
 			// les données de l'initialisation sont transmises
@@ -1076,7 +1079,7 @@ class Individual {
 					case 'individual' :
 						// pour les champs préfixés 'individual_', on supprime le préfixe
 						array_shift ( $items );
-						$this->setAttribute ( implode ( '_', $items ), stripslashes ( $value ) );
+						$this->setAttribute(implode ( '_', $items ), $value );
 						break;
 					default :
 					// $this->setAttribute($key, $value);

@@ -166,7 +166,7 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
     					echo '<div class="form-group">';
     					echo '<label for="individual_salutation_i">Civilité</label>';
     					echo '<select id="individual_salutation_i" name="individual_salutation" class="form-control">';
-    					echo '<option>-- choisis --</option>';
+    					echo '<option value="">-- choisis --</option>';
     					echo $individual->getSalutationOptionsTags();
     					echo '</select>';
     					echo '</div>';
