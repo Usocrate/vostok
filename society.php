@@ -205,7 +205,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 						if ($i->getPhotoUrl()) {
 							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 						} else {
-							echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
 						}
 						echo '<div class="card-body">';
 							echo '<h3 class="card-title">';

@@ -202,9 +202,11 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 							echo '</a>';
 						} else {
+							/*
 							echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
 							echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
 							echo '</a>';
+							*/
 						}
 						echo '<div class="card-body">';
 							echo '<h3 class="card-title">';
