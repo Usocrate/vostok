@@ -173,9 +173,21 @@ A > I:hover {
 	}
 }
 
-@media ( min-width : 1520px) {
+/* EID screen 1 */
+@media (min-width : 1349px) {
 	#indexDoc .card {
-		/* width: 290px; */
+		width: 345px;
+	}
+	#societyDoc .card {
+		width: 300px;
+	}
+	#individualDoc .card {
+		width: 310px;
+	}
+}
+
+@media (min-width : 1520px) {
+	#indexDoc .card {
 		width: 288px;
 	}
 }
@@ -183,5 +195,18 @@ A > I:hover {
 @media ( min-width : 1600px) {
 	#indexDoc .card {
 		width: 290px;
+	}
+}
+
+/* EID screen 2 */
+@media ( min-width : 1920px) {
+	#indexDoc .card {
+		width: 290px;
+	}
+	#societyDoc .card {
+		width: 350px;
+	}
+	#individualDoc .card {
+		width: 450px;
 	}
 }

@@ -195,8 +195,8 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
     					</div>
     					
     					<div class="form-group">
-        					<label>Page perso</label>
-        					<input id="membership_url_input" name="url" type="url" value="<?php echo $membership->getUrl(); ?>" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_input', 'membership_url_link');" />
+        					<label for="membership_url_i">Sur le web</label>
+        					<input id="membership_url_i" name="url" type="url" value="<?php echo $membership->getUrl(); ?>" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_i', 'membership_url_link');" />
         					<a id="membership_url_link" href="#" style="display: none">[voir]</a>
     					</div>
     					

@@ -661,7 +661,7 @@ class Individual {
 					$criteria[] = 'm.society_id=:society_id';
 				}
 				
-				$sql = 'SELECT m.membership_id AS id, m.title, m.department, m.description, m.init_year, m.end_year';
+				$sql = 'SELECT m.membership_id AS id, m.title, m.department, m.description, m.url, m.init_year, m.end_year';
 				$sql.= ', s.society_id, s.society_name, s.society_city';				
 				$sql .= ' ,DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") as society_creation_date';
 				$sql .= ' FROM membership AS m LEFT OUTER JOIN society AS s USING (society_id)';
@@ -691,6 +691,7 @@ class Individual {
 					$m->setTitle($data['title']);
 					$m->setDepartment($data['department']);
 					$m->setDescription($data['description']);
+					$m->setUrl($data['url']);
 					$m->setInitYear($data['init_year']);
 					$m->setEndYear($data['end_year']);
 					

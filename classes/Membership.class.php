@@ -249,6 +249,12 @@ class Membership {
 		return isset($this->url) ? $this->url : NULL;
 	}
 	/**
+	 * @since 08/2018
+	 */
+	public function setUrl($input) {
+		$this->url = $input;
+	}	
+	/**
 	 * Obtient un lien HTML vers un contenu web décrivant la participation. 
 	 * @since 07/12/2006
 	 */

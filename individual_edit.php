@@ -76,7 +76,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 		
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><?php echo ToolBox::toHtml($doc_title); ?></a></h1>
 	
 	<?php
         if (count($messages) > 0) {
@@ -146,7 +146,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 					</div>
 					
 					<div class="form-group">
-						<label for="individual_web_input">Page web</label>
+						<label for="individual_web_input">Sur le web</label>
 						<input type="text" id="individual_web_input" name="individual_web" value="<?php echo $individual->getWeb(); ?>" size="55" maxlength="255" class="form-control" onchange="checkUrlInput('individual_web_input', 'individual_web_link');" /> 
 						<a id="individual_web_link" href="#" style="display: none">[voir]</a>
 					</div>

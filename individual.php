@@ -59,11 +59,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
-<body>
+<body id="individualDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a></small></h1>
-	
   	<div class="row">
     	<div class="col-lg-3">
     		<div class="card">
