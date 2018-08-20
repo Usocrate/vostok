@@ -52,7 +52,7 @@ if (empty ( $_SESSION ['user_id'] )) {
 
 	switch($people_focus) {
 		case 'onLastPinned' : 
-			$individuals = $system->getLastPinnedIndividuals(12);
+			$individuals = $system->getLastPinnedIndividuals(30);
 			$individuals->setIndividualMemberships();
 			break;
 		case 'onLastUpdated' : 
