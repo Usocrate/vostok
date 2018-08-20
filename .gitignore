@@ -1,6 +1,8 @@
 /.settings/
 /.buildpath
 /.project
+/config/host.json
+/config/client_id.json
 /data/
 /logs/
-/config/host.json
+/outsourcing/

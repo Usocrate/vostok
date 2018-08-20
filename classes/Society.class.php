@@ -422,10 +422,10 @@ class Society {
 	 * Obtient un lien HTML vers le site web de la société.
 	 *
 	 * @since 24/11/2006
-	 * @version 23/11/2016
+	 * @version 08/2018
 	 */
 	public function getHtmlLinkToWeb() {
-		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" title="' . $this->getUrl () . '"><i class="fas fa-external-link"></i></a>' : NULL;
+		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" target="_blank" title="' . $this->getUrl () . '"><i class="fas fa-external-link"></i></a>' : NULL;
 	}
 	/**
 	 * Obtenir le lien vers l'écran dédié à la société.

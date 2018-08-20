@@ -367,7 +367,7 @@ class Individual {
 	}
 	
 	public function getHtmlLinkToWeb() {
-		if ( ! empty($this->web) ) return '<a href="'.$this->web.'">'.$this->web.'</a>';
+		if ( ! empty($this->web) ) return '<a href="'.$this->web.'" target="_blank">'.$this->web.'</a>';
 	}
 	
 	/**
