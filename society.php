@@ -125,7 +125,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
                 
 				
 				$inSameIndustrySocieties = $society->getInSameIndustrySocieties();
-				if ($inSameIndustrySocieties > 0) {
+				if (count($inSameIndustrySocieties) > 0) {
 					echo '<div>';
 					echo '<p>';
 					echo '<small>Similaire à : </small>';
