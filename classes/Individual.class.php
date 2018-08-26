@@ -478,12 +478,12 @@ class Individual {
 		$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
 		foreach ( $file_extensions as $e ) {
 			$file_name = $file_basename . '.' . $e;
-			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name )) {
-				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name;
+			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name;
 			}
 			$file_name = $this->getId () . '.' . $e;
-			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name )) {
-				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR_ . $file_name;
+			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name;
 			}
 		}
 	}
