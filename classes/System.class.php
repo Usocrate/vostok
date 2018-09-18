@@ -251,7 +251,29 @@ class System {
 	 * @return string
 	 */
 	public function getHtmlLink() {
-		return '<a href="' . $system->getAppliUrl () . '">' . ToolBox::html5entities ( $system->getAppliName () ) . '</a>';
+		return '<a href="' . $system->getAppliUrl () . '">' . ToolBox::toHtml( $this->getAppliName() ) . '</a>';
+	}
+	
+	public function getHtmlHeadTagsForFavicon() {
+		$output = array();
+		$output[] = '<link rel="apple-touch-icon" sizes="180x180" href="/skin/apple-touch-icon.png">';
+		$output[] = '<link rel="icon" type="image/png" sizes="32x32" href="/skin/favicon-32x32.png">';
+		$output[] = '<link rel="icon" type="image/png" sizes="16x16" href="/skin/favicon-16x16.png">';
+		$output[] = '<link rel="manifest" href="/skin/site.webmanifest">';
+		$output[] = '<link rel="mask-icon" href="/skin/safari-pinned-tab.svg" color="#da8055">';
+		$output[] = '<link rel="shortcut icon" href="/skin/favicon.ico">';
+		$output[] = '<meta name="apple-mobile-web-app-title" content="'.ToolBox::toHtml( $this->getAppliName() ).'">';
+		$output[] = '<meta name="application-name" content="'.ToolBox::toHtml( $this->getAppliName() ).'">';
+		$output[] = '<meta name="msapplication-TileColor" content="#6a453b">';
+		$output[] = '<meta name="msapplication-config" content="/skin/browserconfig.xml">';
+		$output[] = '<meta name="theme-color" content="#6a453b">';
+		return $output;
+	}
+	
+	public function writeHtmlHeadTagsForFavicon() {
+		foreach ($this->getHtmlHeadTagsForFavicon() as $tag) {
+			echo $tag;
+		}
 	}
 	/**
 	 * Renvoie l'ensemble des utilisateurs accrédités.

@@ -92,7 +92,7 @@ if (isset($_POST['task'])) {
 	<link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
     <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
-    <link rel="icon" type="image/x-icon" href="<?php echo $system->getSkinUrl() ?>favicon.ico" />    
+    <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>    
     <script type="text/javascript" src="js/controls.js"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>

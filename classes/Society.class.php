@@ -343,8 +343,8 @@ class Society {
 	/**
 	 * Obtient les informations de localisation auprès de Google map et complète celles-ci si nécessaire
 	 *
-	 * @since 23/06/2007
-	 * @version 18/11/2016
+	 * @since 06/2007
+	 * @version 08/2018
 	 */
 	public function getAddressFromGoogle($input = NULL) {
 		try {
@@ -386,6 +386,7 @@ class Society {
 			$this->longitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
 		} catch (Exception $e) {
 			$system->reportException($e);
+			return false;
 		}
 	}
 	public function setType($type) {
