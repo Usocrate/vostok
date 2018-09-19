@@ -256,12 +256,12 @@ class System {
 	
 	public function getHtmlHeadTagsForFavicon() {
 		$output = array();
-		$output[] = '<link rel="apple-touch-icon" sizes="180x180" href="'.$this->getSkinUrl().'apple-touch-icon.png">';
-		$output[] = '<link rel="icon" type="image/png" sizes="32x32" href="'.$this->getSkinUrl().'favicon-32x32.png">';
-		$output[] = '<link rel="icon" type="image/png" sizes="16x16" href="'.$this->getSkinUrl().'favicon-16x16.png">';
+		$output[] = '<link rel="apple-touch-icon" sizes="180x180" href="'.$this->getSkinUrl().'images/apple-touch-icon.png">';
+		$output[] = '<link rel="icon" type="image/png" sizes="32x32" href="'.$this->getSkinUrl().'images/favicon-32x32.png">';
+		$output[] = '<link rel="icon" type="image/png" sizes="16x16" href="'.$this->getSkinUrl().'images/favicon-16x16.png">';
 		$output[] = '<link rel="manifest" href="'.$this->getSkinUrl().'site.webmanifest">';
-		$output[] = '<link rel="mask-icon" href="'.$this->getSkinUrl().'safari-pinned-tab.svg" color="#da8055">';
-		$output[] = '<link rel="shortcut icon" href="'.$this->getSkinUrl().'favicon.ico">';
+		$output[] = '<link rel="mask-icon" href="'.$this->getSkinUrl().'images/safari-pinned-tab.svg" color="#da8055">';
+		$output[] = '<link rel="shortcut icon" href="'.$this->getSkinUrl().'images/favicon.ico">';
 		$output[] = '<meta name="apple-mobile-web-app-title" content="'.ToolBox::toHtml( $this->getAppliName() ).'">';
 		$output[] = '<meta name="application-name" content="'.ToolBox::toHtml( $this->getAppliName() ).'">';
 		$output[] = '<meta name="msapplication-TileColor" content="#6a453b">';
