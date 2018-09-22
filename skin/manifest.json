@@ -1,6 +1,6 @@
 {
     "name": "Vostok",
-    "short_name": "Vk",
+    "short_name": "Vostok",
     "icons": [
         {
             "src": "https:\/\/usocrate.fr\/vostok\/skin\/images\/android-chrome-192x192.png",
@@ -11,9 +11,14 @@
             "src": "https:\/\/usocrate.fr\/vostok\/skin\/images\/android-chrome-256x256.png",
             "sizes": "256x256",
             "type": "image\/png"
+        },
+        {
+            "src": "https:\/\/usocrate.fr\/vostok\/skin\/images\/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image\/png"
         }
     ],
-    "theme_color": "#6a453b",
+    "theme_color": "#da8055",
     "background_color": "#6a453b",
     "display": "standalone"
 }
