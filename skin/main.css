@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Sigmar+One');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url('https://fonts.googleapis.com/css?family=Oswald');
+@import url('theme.css');
 
 /* Jquery UI */
 .ui-widget {
@@ -19,21 +20,6 @@
 }
 .ui-widget-content .ui-state-focus small {
 	color: #fff;
-}
-
-/* Bootstrap */
-.badge-info {
-	color: #fff;
-	background-color: #777;
-}
-.tab-content {
-	padding:1em;
-}
-.nav-item A, .badge A {
-	color:inherit;
-}
-.card {
-	margin-bottom: 20px;
 }
 
 /* Masonry */

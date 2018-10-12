@@ -4,8 +4,8 @@ iconv_set_encoding ( 'input_encoding', 'UTF-8' );
 iconv_set_encoding ( 'output_encoding', 'UTF-8' );
 
 // Bootstrap
-define ( 'BOOTSTRAP_CSS_URI', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
-define ( 'BOOTSTRAP_CSS_URI_INTEGRITY', 'sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm');
+//define ( 'BOOTSTRAP_CSS_URI', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');
+//define ( 'BOOTSTRAP_CSS_URI_INTEGRITY', 'sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm');
 define ( 'BOOTSTRAP_JS_URI', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js');
 define ( 'BOOTSTRAP_JS_URI_INTEGRITY', 'sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl');
 
