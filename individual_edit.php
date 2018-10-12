@@ -201,7 +201,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 			</div>
 		</div>
 		<div>
-			<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+			<button name="toDB_order" type="submit" value="1" class="btn btn-default">enregistrer</button>
 			<button name="deletion_order" type="submit" value="1" class="btn btn-default">supprimer</button>
 		</div>
 	</form>

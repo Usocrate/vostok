@@ -419,7 +419,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
           </div>
         </div>
 		<div class="btn-group">
-			<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+			<button name="toDB_order" type="submit" value="1" class="btn btn-default">enregistrer</button>
 			
 			<?php if ($lead->hasId()): ?>
 			<button name="deletion_order" type="submit" value="1" class="btn btn-default">supprimer</button>

@@ -119,7 +119,7 @@ $doc_title = 'Un évènement chez ' . $society->getName();
 			<textarea name="comment" cols="55" rows="10" class="form-control"><?php echo $event->getComment() ?></textarea>
 		</div>
 
-		<button type="submit" class="btn btn-primary">Enregistrer</button>
+		<button type="submit" class="btn btn-default">Enregistrer</button>
 	</form>
 </div>
 </body>

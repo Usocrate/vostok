@@ -234,7 +234,7 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
     				</div>
     			</div>
     		</div>
-    		<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
+    		<button name="task" type="submit" value="membership_submission" class="btn btn-default">Enregistrer</button>
     		<?php if ($membership->getId()) : ?>
     			<button name="task" type="submit" value="membership_deletion" class="btn btn-default">Supprimer</button>
     		<?php endif; ?>

@@ -22,6 +22,21 @@
 	color: #fff;
 }
 
+/* Bootstrap */
+.badge-info {
+	color: #fff;
+	background-color: #777;
+}
+.tab-content {
+	padding:1em;
+}
+.nav-item A, .badge A {
+	color:inherit;
+}
+.card {
+	margin-bottom: 20px;
+}
+
 /* Masonry */
 .masonryGutterSizer {
 	width: 20px;

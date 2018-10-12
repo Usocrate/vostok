@@ -457,7 +457,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
         }
         echo '<br />';
         ?>
-		<button type="submit" name="fusion_submission" value="1" class="btn btn-primary">Valider</button>
+		<button type="submit" name="fusion_submission" value="1" class="btn btn-default">Valider</button>
 		<input name="society_id[]" type="hidden" value="<?php echo $s1->getId() ?>" /> <input name="society_id[]" type="hidden" value="<?php echo $s2->getId() ?>" />
 	</form>
 	</section>

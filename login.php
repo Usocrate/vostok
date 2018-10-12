@@ -68,7 +68,7 @@ $doc_title = $system->getAppliName();
     		<label for="user_password_i">Mot de passe</label>
     		<input id="user_password_i" name="user_password" type="password" class="form-control" />
 		</div>
-		<button name="login_submission" type="submit" value="1" class="btn btn-primary">Lancement</button>
+		<button name="login_submission" type="submit" value="1" class="btn">Lancement</button>
 	</form>
 	
 	<footer><q>Reçu. Sens bien, excellent état d'esprit, prêt à y aller</q><br /> <cite>Youri Gagarine, 12 avril 1961</cite></footer>
