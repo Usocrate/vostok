@@ -53,7 +53,7 @@ $doc_title = $system->getAppliName();
 </head>
 <body id="loginDoc" >
 <div class="container">	
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1 class="brand"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<div>
 		<p><strong><?php echo ToolBox::toHtml($system->getAppliName()); ?> </strong> est l'outil de prospection <a href="http://www.usocrate.fr" title="Lien vers maison-mère">Usocrate.fr</a>.</p>

@@ -1,4 +1,7 @@
 @charset "utf-8";
+@import url('https://fonts.googleapis.com/css?family=Sigmar+One');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
 
 /* Jquery UI */
 .ui-widget {
@@ -74,6 +77,12 @@ DD {
 	margin: .3em .6em;
 	padding: .3em;
 }
+A {
+	#da8055;
+}
+A:hover {
+	#da8055;
+}
 A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 	color: inherit;
 }
@@ -95,6 +104,13 @@ A > I:hover {
 }
 
 /* autres styles génériques */
+.brand {
+	font-family: 'Sigmar one';
+	color: #da8055;
+}
+.brand SMALL {
+	font-family: 'Open Sans';
+}
 .tag {
 	color: #fff;
 	display:inline-block;
