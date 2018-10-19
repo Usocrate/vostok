@@ -83,7 +83,7 @@ header ( 'charset=utf-8' );
 </head>
 <body class="container" class="container">
 	<header>
-		<h1>Configuration</h1>
+		<h1 class="bd-title">Configuration</h1>
 	</header>
 	<?php
 	if (isset ( $fb )) {

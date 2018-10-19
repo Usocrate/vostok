@@ -78,7 +78,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 <body id="societyDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a></small></h1>
+	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a></small></h1>
     <section>
         <?php
             //
@@ -119,7 +119,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
             if (count($industries)>0) {
                 echo '<div>';
                 foreach ($industries as $i) {
-                    echo '<span class="tag">'.$i->getHtmlLink().'</span> ';
+                    echo '<span class="badge badge-secondary tag">'.$i->getHtmlLink().'</span> ';
                 }
                 echo '<div>';
                 
@@ -145,16 +145,16 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs">
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge badge-info"><?php echo count($relatedSocieties) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge badge-secondary"><?php echo count($relatedSocieties) ?></span></a>
     	</li>
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge badge-info"><?php echo count($memberships) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge badge-secondary"><?php echo count($memberships) ?></span></a>
     	</li>
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge badge-info"><?php echo count($leads) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge badge-secondary"><?php echo count($leads) ?></span></a>
     	</li>
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onEvents')==0) echo ' active' ?>" id="eventsTabSelector" href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge badge-info"><?php echo count($events) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onEvents')==0) echo ' active' ?>" id="eventsTabSelector" href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge badge-secondary"><?php echo count($events) ?></span></a>
 	    </li>
 	  </ul>
 	  

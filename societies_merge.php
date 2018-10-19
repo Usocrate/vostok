@@ -115,7 +115,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<section>
 	<p>La validation du formulaire ci-dessous permettra de fusionner les sociétés suivantes :</p>
@@ -145,19 +145,19 @@ $doc_title = 'Fusion de deux sociétés existantes';
          */
         if ($s1->getName() || $s2->getName()) {
             if (strcmp($s1->getName(), $s2->getName()) == 0) {
-                echo '<h1>Nom <small>(en commun)</small></h1>';
+                echo '<h1 class="bd-title">Nom <small>(en commun)</small></h1>';
                 echo '<p>' . $s1->getNameForHtmlDisplay() . '</p>';
             } else {
                 if (! $s2->getName()) {
-                    echo '<h1>Nom</h1>';
+                    echo '<h1 class="bd-title">Nom</h1>';
                     echo '<p>' . $s1->getNameForHtmlDisplay() . '</p>';
                     echo '<input name="society_correctvalues_id[nom]" type="hidden" value="' . $s1->getId() . '">';
                 } elseif (! $s1->getName()) {
-                    echo '<h1>Nom</h1>';
+                    echo '<h1 class="bd-title">Nom</h1>';
                     echo '<p>' . $s2->getNameForHtmlDisplay() . '</p>';
                     echo '<input name="society_correctvalues_id[nom]" type="hidden" value="' . $s2->getId() . '">';
                 } else {
-                    echo '<h1>Quel nom ?</h1>';
+                    echo '<h1 class="bd-title">Quel nom ?</h1>';
                     echo '<div>';
                     echo '<input name="society_correctvalues_id[nom]" type="radio" value="' . $s1->getId() . '"';
                     if ($s1 === $oldest)
@@ -175,7 +175,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
                 }
             }
         } else {
-            echo '<h1>Nom</h1>';
+            echo '<h1 class="bd-title">Nom</h1>';
             echo '<p><small>Aucun nom connu</small></p>';
         }
         echo '<br/>';
@@ -187,19 +187,19 @@ $doc_title = 'Fusion de deux sociétés existantes';
          */
         if ($s1->getUrl() || $s2->getUrl()) {
             if (strcmp($s1->getUrl(), $s2->getUrl()) == 0) {
-                echo '<h1>Site web <small>(en commun)</small></h1>';
+                echo '<h1 class="bd-title">Site web <small>(en commun)</small></h1>';
                 echo '<p>' . $s1->getUrl() . '<p>';
             } else {
                 if (! $s2->getUrl()) {
-                    echo '<h1>Site web</h1>';
+                    echo '<h1 class="bd-title">Site web</h1>';
                     echo '<p>' . $s1->getUrl() . '</p>';
                     echo '<input name="society_correctvalues_id[url]" type="hidden" value="' . $s1->getId() . '">';
                 } elseif (! $s1->getUrl()) {
-                    echo '<h1>Site web</h1>';
+                    echo '<h1 class="bd-title">Site web</h1>';
                     echo '<p>' . $s2->getUrl() . ' <small>(un seul site web connu)</small></p>';
                     echo '<input name="society_correctvalues_id[url]" type="hidden" value="' . $s2->getId() . '">';
                 } else {
-                    echo '<h1>Quel site web ?</h1>';
+                    echo '<h1 class="bd-title">Quel site web ?</h1>';
                     echo '<div>';
                     echo '<input name="society_correctvalues_id[url]" type="radio" value="' . $s1->getId() . '"';
                     if ($s1 === $oldest)
@@ -217,7 +217,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
                 }
             }
         } else {
-            echo '<h1>Site web</h1>';
+            echo '<h1 class="bd-title">Site web</h1>';
             echo '<p><small>Aucun site web connu</small><p>';
         }
         echo '<br/>';
@@ -229,19 +229,19 @@ $doc_title = 'Fusion de deux sociétés existantes';
          */
         if ($s1->getPhone() || $s2->getPhone()) {
             if (strcmp($s1->getPhone(), $s2->getPhone()) == 0) {
-                echo '<h1>Téléphone <small>(en commun)</small></h1>';
+                echo '<h1 class="bd-title">Téléphone <small>(en commun)</small></h1>';
                 echo '<p>' . $s1->getPhone() . '<p>';
             } else {
                 if (! $s2->getPhone()) {
-                    echo '<h1>Téléphone</h1>';
+                    echo '<h1 class="bd-title">Téléphone</h1>';
                     echo '<p>' . $s1->getPhone() . '</p>';
                     echo '<input name="society_correctvalues_id[phone]" type="hidden" value="' . $s1->getId() . '">';
                 } elseif (! $s1->getPhone()) {
-                    echo '<h1>Téléphone</h1>';
+                    echo '<h1 class="bd-title">Téléphone</h1>';
                     echo '<p>' . $s2->getPhone() . '</p>';
                     echo '<input name="society_correctvalues_id[phone]" type="hidden" value="' . $s2->getId() . '">';
                 } else {
-                    echo '<h1>Quel téléphone ?</h1>';
+                    echo '<h1 class="bd-title">Quel téléphone ?</h1>';
                     echo '<div>';
                     echo '<input name="society_correctvalues_id[phone]" type="radio" value="' . $s1->getId() . '"';
                     if ($s1 === $oldest)
@@ -259,7 +259,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
                 }
             }
         } else {
-            echo '<h1>Téléphone</h1>';
+            echo '<h1 class="bd-title">Téléphone</h1>';
             echo '<p><small>Aucun téléphone connu</small><p>';
         }
         echo '<br/>';
@@ -272,19 +272,19 @@ $doc_title = 'Fusion de deux sociétés existantes';
         // street
         if ($s1->getStreet() || $s2->getStreet()) {
             if ($s1->getStreet() == $s2->getStreet()) {
-                echo '<h1>Rue <small>(en commun)</small></h1>';
+                echo '<h1 class="bd-title">Rue <small>(en commun)</small></h1>';
                 echo '<p>' . $s1->getStreet() . '<p>';
             } else {
                 if (! $s2->getStreet()) {
-                    echo '<h1>Rue</h1>';
+                    echo '<h1 class="bd-title">Rue</h1>';
                     echo '<p>' . $s1->getStreet() . '</p>';
                     echo '<input name="society_correctvalues_id[street]" type="hidden" value="' . $s1->getId() . '">';
                 } elseif (! $s1->getStreet()) {
-                    echo '<h1>Adresse postale</h1>';
+                    echo '<h1 class="bd-title">Adresse postale</h1>';
                     echo '<p>' . $s2->getStreet() . '</p>';
                     echo '<input name="society_correctvalues_id[street]" type="hidden" value="' . $s2->getId() . '">';
                 } else {
-                    echo '<h1>Quelle adresse postale ?</h1>';
+                    echo '<h1 class="bd-title">Quelle adresse postale ?</h1>';
                     echo '<table>';
                     echo '<tr>';
                     echo '<td style="vertical-align:top">';
@@ -310,7 +310,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
                 }
             }
         } else {
-            echo '<h1>Rue</h1>';
+            echo '<h1 class="bd-title">Rue</h1>';
             echo '<p><small>Aucun rue indiquée</small><p>';
         }
         echo '<br/>';
@@ -318,19 +318,19 @@ $doc_title = 'Fusion de deux sociétés existantes';
         // postal code
         if ($s1->getPostalCode() || $s2->getPostalCode()) {
             if ($s1->getPostalCode() == $s2->getPostalCode()) {
-                echo '<h1>code postal <small>(en commun)</small></h1>';
+                echo '<h1 class="bd-title">code postal <small>(en commun)</small></h1>';
                 echo '<p>' . $s1->getPostalCode() . '<p>';
             } else {
                 if (! $s2->getPostalCode()) {
-                    echo '<h1>Code postal</h1>';
+                    echo '<h1 class="bd-title">Code postal</h1>';
                     echo '<p>' . $s1->getPostalCode() . '</p>';
                     echo '<input name="society_correctvalues_id[postalcode]" type="hidden" value="' . $s1->getId() . '">';
                 } elseif (! $s1->getPostalCode()) {
-                    echo '<h1>Code postal</h1>';
+                    echo '<h1 class="bd-title">Code postal</h1>';
                     echo '<p>' . $s2->getPostalCode() . '</p>';
                     echo '<input name="society_correctvalues_id[postalcode]" type="hidden" value="' . $s2->getId() . '">';
                 } else {
-                    echo '<h1>Quelle adresse postale ?</h1>';
+                    echo '<h1 class="bd-title">Quelle adresse postale ?</h1>';
                     echo '<table>';
                     echo '<tr>';
                     echo '<td style="vertical-align:top">';
@@ -356,7 +356,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
                 }
             }
         } else {
-            echo '<h1>Code postal</h1>';
+            echo '<h1 class="bd-title">Code postal</h1>';
             echo '<p><small>Aucun code postal indiqué</small><p>';
         }
         echo '<br/>';
@@ -364,19 +364,19 @@ $doc_title = 'Fusion de deux sociétés existantes';
         // city
         if ($s1->getCity() || $s2->getCity()) {
             if ($s1->getCity() == $s2->getCity()) {
-                echo '<h1>ville <small>(en commun)</small></h1>';
+                echo '<h1 class="bd-title">ville <small>(en commun)</small></h1>';
                 echo '<p>' . $s1->getCity() . '<p>';
             } else {
                 if (! $s2->getCity()) {
-                    echo '<h1>Ville</h1>';
+                    echo '<h1 class="bd-title">Ville</h1>';
                     echo '<p>' . $s1->getCity() . '</p>';
                     echo '<input name="society_correctvalues_id[city]" type="hidden" value="' . $s1->getId() . '">';
                 } elseif (! $s1->getCity()) {
-                    echo '<h1>Code postal</h1>';
+                    echo '<h1 class="bd-title">Code postal</h1>';
                     echo '<p>' . $s2->getCity() . '</p>';
                     echo '<input name="society_correctvalues_id[city]" type="hidden" value="' . $s2->getId() . '">';
                 } else {
-                    echo '<h1>Quelle adresse postale ?</h1>';
+                    echo '<h1 class="bd-title">Quelle adresse postale ?</h1>';
                     echo '<table>';
                     echo '<tr>';
                     echo '<td style="vertical-align:top">';
@@ -402,7 +402,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
                 }
             }
         } else {
-            echo '<h1>Ville</h1>';
+            echo '<h1 class="bd-title">Ville</h1>';
             echo '<p><small>Aucune ville indiquée</small><p>';
         }
         echo '<br/>';
@@ -414,19 +414,19 @@ $doc_title = 'Fusion de deux sociétés existantes';
          */
         if ($s1->getDescription() || $s2->getDescription()) {
             if (strcmp($s1->getDescription(), $s2->getDescription()) == 0) {
-                echo '<h1>Description <small>(en commun)</small></h1>';
+                echo '<h1 class="bd-title">Description <small>(en commun)</small></h1>';
                 echo '<p>' . nl2br($s1->getDescription()) . '</p>';
             } else {
                 if (! $s2->getDescription()) {
-                    echo '<h1>Description</h1>';
+                    echo '<h1 class="bd-title">Description</h1>';
                     echo '<p>' . $s1->getDescription() . '</p>';
                     echo '<input name="society_correctvalues_id[description]" type="hidden" value="' . $s1->getId() . '">';
                 } elseif (! $s1->getDescription()) {
-                    echo '<h1>Description</h1>';
+                    echo '<h1 class="bd-title">Description</h1>';
                     echo '<p>' . $s2->getDescription() . '</p>';
                     echo '<input name="society_correctvalues_id[commentaire]" type="hidden" value="' . $s2->getId() . '">';
                 } else {
-                    echo '<h1>Quelle description ?</h1>';
+                    echo '<h1 class="bd-title">Quelle description ?</h1>';
                     echo '<table>';
                     echo '<tr>';
                     echo '<td style="vertical-align:top">';
@@ -452,7 +452,7 @@ $doc_title = 'Fusion de deux sociétés existantes';
                 }
             }
         } else {
-            echo '<h1>Description</h1>';
+            echo '<h1 class="bd-title">Description</h1>';
             echo '<p><small>Aucune description indiquée</small></p>';
         }
         echo '<br />';

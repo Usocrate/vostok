@@ -127,7 +127,7 @@ $doc_title = 'Une piste';
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
     	<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
     		<input name="lead_id" type="hidden" value="<?php if ($lead->getId()) echo $lead->getId() ?>" />
     		<div>

@@ -628,7 +628,8 @@ class System {
 	 * @return IndividualCollection
 	 */	
 	public function getLastPinnedIndividuals($nb = 12) {
-		try {
+	    global $system;
+	    try {
 			$criteria = array (
 				'everPinned' => true
 			);

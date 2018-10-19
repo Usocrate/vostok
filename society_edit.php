@@ -100,7 +100,7 @@ if (isset($_POST['task'])) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-    <h1><?php echo $h1_content ?></h1>
+    <h1 class="bd-title"><?php echo $h1_content ?></h1>
     
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     	<?php

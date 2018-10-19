@@ -98,7 +98,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 <body id="societiesListDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php"><i class="fas fa-plus"></i></a></small></h1>
+	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php"><i class="fas fa-plus"></i></a></small></h1>
 	<section>
 	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
 			<div class="form-group m-2">

@@ -23,10 +23,12 @@
 }
 
 /* Bootstrap */
+
 .badge-info {
 	color: #fff;
 	background-color: #777;
 }
+
 .tab-content {
 	padding:1em;
 }
@@ -82,18 +84,17 @@ DD {
 	margin: .3em .6em;
 	padding: .3em;
 }
-A {
-	#da8055;
-}
-A:hover {
-	#da8055;
-}
 A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 	color: inherit;
 }
 SMALL {
 	font-size : 1em;
 	color : #bbb;
+}
+.bd-title {
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+    font-weight: 300;
 }
 H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
 	font-size: .6em;
@@ -117,16 +118,16 @@ A > I:hover {
 	font-family: 'Open Sans';
 }
 .tag {
-	color: #fff;
 	display:inline-block;
-	background-color: #777;
 	text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
     border-radius: .25em;
-    padding:.2em .6em .3em;
+	padding:.2em .6em .3em;
+	font-weight: normal;
+	font-size:100%;
 }
-.tag>A {
+.tag >A {
     color: inherit;
     font-size: inherit;
     font-weight: inherit;

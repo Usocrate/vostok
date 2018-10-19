@@ -116,7 +116,7 @@ $doc_title = 'Les gens';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	
-	<h1><?php echo ToolBox::toHtml($doc_title); ?><small><a href="individual_edit.php"> <i class="fas fa-plus"></i></a></small></h1>
+	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?><small><a href="individual_edit.php"> <i class="fas fa-plus"></i></a></small></h1>
 	
 	<?php
         if (count($messages) > 0) {

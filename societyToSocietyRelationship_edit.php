@@ -112,7 +112,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo $h1_content ?></h1>
+	<h1 class="bd-title"><?php echo $h1_content ?></h1>
 	<section>
 		<form id="relationship_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 			<input name="item0_class" type="hidden" value="Society" />

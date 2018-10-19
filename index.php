@@ -112,7 +112,7 @@ $doc_title = 'Accueil';
 								$r = ($weight - $minWeight) / ($maxWeight - $minWeight);
 								$em = round($minEm + ($r * ($maxEm - $minEm)),1);
 							}
-							echo '<span class="tag" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
+							echo '<span class="badge badge-secondary tag" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
 							echo '<a href="societies_list.php?society_newsearch=1&industry_id='.$item['industry']->getId().'">';
 							echo ToolBox::toHtml( $item['industry']->getName() );
 							echo '</a></span>';

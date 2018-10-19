@@ -1,6 +1,19 @@
 $theme-colors: (
-  "primary": #da8055,
-  "secondary": #6a453b
+  "primary": #da8055
 );
+
+$white:    #fff !default;
+$gray-100: #faf8f8 !default;
+$gray-200: #efeae9 !default;
+$gray-300: #e6e0de !default;
+$gray-400: #dad1ce !default;
+$gray-500: #bdb0ad !default;
+$gray-600: #7d6f6c !default;
+$gray-700: #574c49 !default;
+$gray-800: #403734 !default;
+$gray-900: #292321 !default;
+$black:    #000 !default;
+
+$font-family-sans-serif : "Open Sans";
 
 @import "../vendor/twbs/bootstrap/scss/bootstrap";

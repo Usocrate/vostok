@@ -109,7 +109,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1>Les pistes <span class="badge badge-info"><?php echo $leads_nb ?></span> <small><a href="lead_edit.php"><i class="fas fa-plus"></i></a></small></h1>
+	<h1 class="bd-title">Les pistes <span class="badge badge-secondary"><?php echo $leads_nb ?></span> <small><a href="lead_edit.php"><i class="fas fa-plus"></i></a></small></h1>
 	<section>
     	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group m-2">

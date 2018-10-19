@@ -76,7 +76,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 		
-	<h1><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><?php echo ToolBox::toHtml($doc_title); ?></a></h1>
+	<h1 class="bd-title"><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><?php echo ToolBox::toHtml($doc_title); ?></a></h1>
 	
 	<?php
         if (count($messages) > 0) {

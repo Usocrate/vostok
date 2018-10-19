@@ -67,7 +67,7 @@ $doc_title = 'Les activités';
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<div class="row">
@@ -93,7 +93,7 @@ $doc_title = 'Les activités';
         					echo '</a>';
         					echo '</td>';
         					echo '<td>';
-        					echo '<span class="badge badge-info">';
+        					echo '<span class="badge badge-secondary">';
         					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id=' . $i->getId () . '">';
         					echo $i->getSocietiesNb ();
         					echo '</span>';
