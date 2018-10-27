@@ -150,10 +150,12 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								echo '<h3>';
 								echo $s->getHtmlLinkToSociety();
 								
-								echo ' <small>';
 								if ($ms->getTitle()) {
-									echo ' (<a href="membership_edit.php?membership_id='.$ms->getId().'">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>)';
+									echo ' <small>';
+									echo ' (<a href="title.php?title='.urlencode($ms->getTitle()).'" class="implicit">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>)';
+									echo ' </small>';
 								}
+								echo ' <small>';
 								echo ' <a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';	
 								echo ' </small>';
 								

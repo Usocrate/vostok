@@ -212,7 +212,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 							echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
 							$position_elt = array();
 							if ($ms->getDepartment()) $position_elt[] = ToolBox::toHtml($ms->getDepartment());
-							if ($ms->getTitle()) $position_elt[] = ToolBox::toHtml($ms->getTitle());
+							if ($ms->getTitle()) $position_elt[] = '<a href="title.php?title='.urlencode($ms->getTitle()).'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
 							
 							$smallTag_elt = array();
 							
