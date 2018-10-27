@@ -400,6 +400,10 @@ class System {
 			if (isset ( $criteria ['society_id'] )) {
 				$where [] = 'm.society_id = :society_id';
 			}
+
+			if (isset ( $criteria ['title'] )) {
+				$where [] = 'm.title = :title';
+			}
 			
 			if ( isset($criteria['active']) && $criteria['active']===true ) {
 				$where [] = 'm.end_year IS NULL';
@@ -432,7 +436,10 @@ class System {
 					break;
 				case 'Last pinned first' :
 					$sql .= ' ORDER BY i.individual_lastPin_date DESC';
-					break;					
+					break;
+				case 'Alphabetical' :
+					$sql .= ' ORDER BY i.individual_lastName ASC, i.individual_firstName ASC';
+					break;
 			}
 
 			// LIMIT
@@ -448,6 +455,9 @@ class System {
 			if (isset ($criteria ['society_id'])) {
 				$statement->bindValue(':society_id', $criteria['society_id'], PDO::PARAM_INT);
 			}
+			if (isset ($criteria ['title'])) {
+				$statement->bindValue(':title', $criteria['title'], PDO::PARAM_STR);
+			}			
 			if (isset ($criteria ['society_name_like_pattern'])) {
 				$statement->bindValue(':society_name_like_pattern', '%'.$criteria['society_name_like_pattern'].'%', PDO::PARAM_STR);
 			}			
@@ -499,7 +509,14 @@ class System {
 		} catch (Exception $e) {
 			$this->reportException($e, __METHOD__);
 		}
-	}	
+	}
+	/**
+	 * @since 10/2018
+	 */	
+	public function getMembershipHavingThatTitle($title) {
+		$criteria = array('title'=>$title);
+		return $this->getMemberships($criteria, 'Alphabetical');
+	}
 	/**
 	 * @since 08/2014
 	 * @version 12/2016
@@ -626,7 +643,7 @@ class System {
 	 *
 	 * @since 07/2018
 	 * @return IndividualCollection
-	 */	
+	 */
 	public function getLastPinnedIndividuals($nb = 12) {
 	    global $system;
 	    try {
@@ -640,7 +657,7 @@ class System {
 		} catch ( Exception $e ) {
 			$system->reportException($e);
 		}
-	}	
+	}
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
 	 *

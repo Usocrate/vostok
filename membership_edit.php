@@ -240,7 +240,13 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
     		<?php endif; ?>
     	</form>
 	</section>
-
+	
+	<?php
+		if (!empty($membership->getTitle())) {
+			echo '<nav>Voir tous les gens ayant comme fonction "<a href="title.php?title='.urlencode($membership->getTitle()).'">'.ToolBox::toHtml($membership->getTitle()).'".</a></nav>';
+		}
+	?>
+	
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$('#s_name_i').autocomplete({
