@@ -130,11 +130,10 @@ class Membership {
 	}
 	/**
 	 * @since 01/2017
-	 * @version 07/2018
 	 */
 	public function getPeriod() {
 		$p = new Period($this->init_year, $this->end_year);
-		return $p->toString();
+		return ucfirst($p->toString());
 	}
 	/**
 	 * Renvoie l'email utilisé dans le cadre de cette participation.

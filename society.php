@@ -161,9 +161,8 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societies-tab">
-			<h2>Sociétés liées<small><a href="societyToSocietyRelationship_edit.php?item0_id=<?php echo $society->getId() ?>"> <i class="fas fa-plus"></i></a></a></small></h2>
 			<?php if (isset($relatedSocieties)): ?>
-			<ul class="list-group">
+			<ul class="list-group list-group-flush">
 				<?php
 				foreach ($relatedSocieties as $item) {
 					// $item[0] : Société
@@ -171,7 +170,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					// $item[2] : Rôle
 					// $item[3] : Description
 					echo '<li class="list-group-item">';
-					echo '<h3>';
+					echo '<h2>';
 					echo '<a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a>';
 					echo ' <small>(';
 					echo '<a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'">';
@@ -180,7 +179,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					echo ')';
 					echo ' <a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
 					echo '</small>';
-					echo '</h3>';
+					echo '</h2>';
 					if (!empty($item[3])) {
 						echo '<p>';
 						echo ToolBox::toHtml($item[3]);
@@ -188,6 +187,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					}
 					echo '</li>';
 				}
+				echo '<li class="list-group-item"><a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 				?>
 			</ul>
 			<?php endif; ?>
@@ -219,13 +219,13 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 							if (count($position_elt)>0) {
 								$smallTag_elt[] = implode(' / ', $position_elt);
 							}
-							if ( $ms->getPeriod() ) $smallTag_elt[] = '('.$ms->getPeriod().')';
+							if ( $ms->getPeriod() ) $smallTag_elt[] = $ms->getPeriod();
 							
 							if (count($smallTag_elt)>0) {
-								echo '<div><small>'.implode(' ', $smallTag_elt).'</small></div>';
+								echo '<div><small>'.implode('<br>', $smallTag_elt).'</small></div>';
 							}					
 							echo '</h3>';
-							echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><i class="fas fa-edit"></i> édition</a></p>';
+                            echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
 						echo '</div>';
 						echo '</div>';
 				  	}
@@ -234,44 +234,44 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 			?>
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leads-tab">
-			<h2>Les pistes<small><a href="lead_edit.php?society_id=<?php echo $society->getId() ?>"> <i class="fas fa-plus"></i></a></small></h2>
 			<?php if ($leads): ?>
-			<ul class="list-group">
+			<ul class="list-group list-group-flush">
 				<?php
 				foreach ($leads as $l) {
 					echo '<li class="list-group-item">';
-					echo '<h3>';
+					echo '<h2>';
 					echo '<a href="lead_edit.php?lead_id='.$l->getId().'">';
 					echo $l->getShortDescription() ? ToolBox::toHtml($l->getShortDescription()) : 'Piste n°'.$l->getId();
 					echo '</a>';
 					if ($l->getCreationDate()) echo ' <small>('.ToolBox::toHtml($l->getCreationDateFr()).')';
 					echo ' <a href="lead_edit.php?lead_id='.$l->getId().'"><i class="fas fa-edit"></i></a>';
 					echo '</small>';
-					echo '</h3>';
+					echo '</h2>';
 					echo '</li>';
 				}
+				echo '<li class="list-group-item"><a href="lead_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 				?>
 			</ul>
 			<?php endif; ?>
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onEvents')==0) echo ' active' ?>" id="events-tab">
-			<h2>Évènements<small><a href="society_event_edit.php?society_id=<?php echo $society->getId() ?>"> <i class="fas fa-plus"></i></a></small></h2>
 			<?php if ($events): ?>
-			<ul class="list-group">
+			<ul class="list-group list-group-flush">
 				<?php
 				foreach ($events as $e) {
 					echo '<li class="list-group-item">';
-					echo '<h3>';
+					echo '<h2>';
 					echo '<a href="society_event_edit.php?event_id='.$e->getId().'">';
 					echo date("d/m/Y", ToolBox::mktimeFromMySqlDatetime($e->getDatetime()));
 					echo '</a>';
 					echo ' <small>('.ToolBox::toHtml(ucfirst($e->getType())).')';
 					echo ' <a href="society_event_edit.php?event_id='.$e->getId().'"><i class="fas fa-edit"></i></a>';					
 					echo '</small>';
-					echo '</h3>';
+					echo '</h2>';
 					echo '<p>'.nl2br(ToolBox::toHtml($e->getComment())).'</p>';
 					echo '</li>';
 				}
+				echo '<li class="list-group-item"><a href="society_event_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 				?>
 			</ul>
 			<?php endif; ?>

@@ -332,13 +332,13 @@ class Individual {
 	 * @since 08/2018
 	 */
 	public function getHtmlLinkToTwitter() {
-		return '<a href="https://twitter.com/'.$this->getTwitterId().'" target="_blank"><i class="fab fa-twitter"></i> '.$this->getTwitterId().'</a>';		
+		return '<i class="fab fa-twitter"></i> <a href="https://twitter.com/'.$this->getTwitterId().'" target="_blank">'.$this->getTwitterId().'</a>';		
 	}
 	/**
 	 * @since 08/2018
 	 */
 	public function getHtmlLinkToLinkedin() {
-		return '<a href="https://Linkedin.com/in/'.$this->getLinkedinId().'/" target="_blank"><i class="fab fa-linkedin"></i> '.$this->getLinkedinId().'</a>';		
+		return '<i class="fab fa-linkedin"></i> <a href="https://Linkedin.com/in/'.$this->getLinkedinId().'/" target="_blank">'.$this->getLinkedinId().'</a>';		
 	}
 	/**
 	 * @since 08/2018

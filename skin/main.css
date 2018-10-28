@@ -96,17 +96,12 @@ SMALL {
     margin-bottom: .5rem;
     font-weight: 300;
 }
+
 H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
 	font-size: .6em;
 }
-H1 SMALL A:hover, H2 SMALL A:hover, H3 SMALL A:hover {
-	color: #999;
-}
-A > I {
+SMALL A I {
 	color:#bbb;
-}
-A > I:hover {
-	color:#999;
 }
 
 /* autres styles génériques */

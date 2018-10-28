@@ -104,7 +104,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				if (count($links) > 0) {
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($links as $l) {
-						echo '<li class="list-group-item">'.$l.'</li>';
+						echo '<li class="list-group-item"><small>'.$l.'</small></li>';
 					}
 					echo '</ul>';
 				}
@@ -140,34 +140,28 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 		  		<!-- Tab panes -->
 				<div class="tab-content">
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onMemberships')==0) echo 'active' ?>" id="memberships-tab">
-						<h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><i class="fas fa-plus"></i></a></small></h2>
+						<!-- <h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><i class="fas fa-plus"></i></a></small></h2>-->
 						<?php
 						if (isset($memberships)){
 							echo '<ul class="list-group list-group-flush">';
 							foreach ($memberships as $ms) {
 								$s = $ms->getSociety();
 								echo '<li class="list-group-item">';
-								echo '<h3>';
+								echo '<h2>';
 								echo $s->getHtmlLinkToSociety();
-								
-								if ($ms->getTitle()) {
-									echo ' <small>';
-									echo ' (<a href="title.php?title='.urlencode($ms->getTitle()).'" class="implicit">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>)';
-									echo ' </small>';
-								}
-								echo ' <small>';
-								echo ' <a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';	
-								echo ' </small>';
-								
-								echo '</h3>';
+								echo ' <small><a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a></small>';
+								echo '</h2>';
 								
 								$more = array();
+								if ($ms->getDepartment()) {
+								    $more[] = $ms->getDepartment();
+								}
+								if ($ms->getTitle()) {
+								    $more[] = '<a href="title.php?title='.urlencode($ms->getTitle()).'" class="implicit">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>';
+								}
 								if ($ms->getPeriod()) {
 									$more[] = $ms->getPeriod();
 															
-								}
-								if ($ms->getDepartment()) {
-									$more[] = $ms->getDepartment();
 								}
 								if (count($more)>0) {
 									echo '<div><small>'.implode(' - ', $more).'</small></div>';
@@ -190,12 +184,12 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								}
 								echo '</li>';
 							}
+							echo '<li class="list-group-item"><a href="membership_edit.php?individual_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 							echo '</ul>';
 						}
 						?>
 				    </div>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo 'active' ?>" id="relations-tab">
-						<h2>Relations <small><a href="individualToIndividualRelationship_edit.php?item0_id=<?php echo $individual->getId() ?>"> <i class="fas fa-plus"></i></a></a></small></h2>
 						<?php if (isset($relatedIndividuals)): ?>
 						<ul class="list-group list-group-flush">
 							<?php
@@ -206,7 +200,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								// $item[3] : Description
 								// $item[4] : Period object
 								echo '<li class="list-group-item">';
-								echo '<h3>';
+								echo '<h2>';
 								echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
 								echo ' <small>(';
 								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'">';
@@ -215,7 +209,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								echo ')';
 								echo ' <a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
 								echo '</small>';
-								echo '</h3>';
+								echo '</h2>';
 								if ($item[4]->isDefined()) {
 									echo '<div><small>'.$item[4]->toString().'</small></div>';
 								}
@@ -226,6 +220,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								}
 								echo '</li>';
 							}
+							echo '<li class="list-group-item"><a href="individualToIndividualRelationship_edit.php?item0_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 							?>
 						</ul>	    	
 						<?php endif; ?>
