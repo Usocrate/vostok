@@ -161,7 +161,6 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societies-tab">
-			<?php if (isset($relatedSocieties)): ?>
 			<ul class="list-group list-group-flush">
 				<?php
 				foreach ($relatedSocieties as $item) {
@@ -190,7 +189,6 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				echo '<li class="list-group-item"><a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 				?>
 			</ul>
-			<?php endif; ?>
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individuals-tab">
 			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <i class="fas fa-plus"></i></a></small></h2>
@@ -234,7 +232,6 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 			?>
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leads-tab">
-			<?php if ($leads): ?>
 			<ul class="list-group list-group-flush">
 				<?php
 				foreach ($leads as $l) {
@@ -252,10 +249,8 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				echo '<li class="list-group-item"><a href="lead_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 				?>
 			</ul>
-			<?php endif; ?>
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onEvents')==0) echo ' active' ?>" id="events-tab">
-			<?php if ($events): ?>
 			<ul class="list-group list-group-flush">
 				<?php
 				foreach ($events as $e) {
@@ -274,7 +269,6 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				echo '<li class="list-group-item"><a href="society_event_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
 				?>
 			</ul>
-			<?php endif; ?>
 	    </div>
 	  </div>
 	</div>
