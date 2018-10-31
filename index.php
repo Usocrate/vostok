@@ -218,7 +218,7 @@ $doc_title = 'Accueil';
 		
 										if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
 									echo '</div>';
-									echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i> édition</a></p>';
+									echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
 								echo '</div>';
 								echo '</div>';
 						  	}
