@@ -168,7 +168,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								}					
 								
 								if ($ms->getDescription()) {
-									echo '<p>'.$ms->getDescription().'</p>';
+									echo '<p>'.ToolBox::toHtml($ms->getDescription()).'</p>';
 								}
 								
 								if ($ms->getUrl()) {
