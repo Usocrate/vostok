@@ -243,10 +243,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 						$contact_data[] = $individual->getAddress();
 					}
 					if ($individual->getPhoneNumber()) {
-						$contact_data[] = $individual->getPhoneNumber();
+						$contact_data[] = $individual->getHtmlLinkToPhoneCall();
 					}
 					if ($individual->getMobilePhoneNumber()) {
-						$contact_data[] = $individual->getMobilePhoneNumber();
+						$contact_data[] = $individual->getHtmlLinkToMobilePhoneCall();
 					}
 					if ($individual->getEmailAddress()) {
 						$contact_data[] = $individual->getEmailHtml();

@@ -328,6 +328,12 @@ class Individual {
 	public function getHtmlLinkToIndividual() {
 		return '<a href="individual.php?individual_id='.$this->getId().'/">'.ToolBox::toHtml($this->getWholeName()).'</a>';
 	}
+	public function getHtmlLinkToPhoneCall() {
+		return '<a href="tel:'.$this->getPhoneNumber().'">'.$this->getPhoneNumber().'</a>';
+	}
+	public function getHtmlLinkToMobilePhoneCall() {
+		return '<a href="tel:'.$this->getMobilePhoneNumber().'">'.$this->getMobilePhoneNumber().'</a>';
+	}	
 	/**
 	 * @since 08/2018
 	 */
