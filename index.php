@@ -125,7 +125,7 @@ $doc_title = 'Accueil';
 					<form method="post" action="individuals.php" class="form-inline">
 						<div class="form-group m-2">
 							<label for="individual_lastName_i" class="mr-2">Qui ?</label>
-							<input id="individual_lastName_i" name="individual_lastName" type="text" placeholder="nom de famille" class="form-control" />
+							<input id="individual_wholeName_i" name="individual_wholeName" type="text" placeholder="prénom, nom" class="form-control" />
 						</div>
 						<button type="submit" name="individual_newsearch" value="1" class="btn btn-default m-2">Retrouver</button>
 					</form>

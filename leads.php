@@ -28,7 +28,7 @@ $page_items_nb = 20;
 
 // si ordre d'effectuer une nouvelle recherche,
 // les données propres à la sélection de leads courante sont réinitialisées
-if (isset ($_REQUEST['lead_newsearch_order']) || empty ($_SESSION['lead_search'])) {
+if (isset ($_REQUEST['lead_newsearch']) || empty ($_SESSION['lead_search'])) {
 	ToolBox::formatUserPost($_REQUEST);
 	$_SESSION['lead_search'] = array ();
 	if (isset ($_REQUEST['lead_type']) && strcmp($_REQUEST['lead_type'],'-1')!=0) {
@@ -139,7 +139,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
         			?>
         		</select>
     		</div>
-    		<button type="submit" name="lead_newsearch_order" value="1" class="btn btn-default m-2">Filtrer</button>
+    		<button type="submit" name="lead_newsearch" value="1" class="btn btn-default m-2">Filtrer</button>
     	</form>
 	</section>
 	<section>

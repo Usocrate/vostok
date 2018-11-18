@@ -50,6 +50,9 @@ if (isset($_REQUEST['individual_task_id'])) {
 // les données propres à la sélection de individuals courante sont réinitialisées
 if (isset($_REQUEST['individual_newsearch']) || empty($_SESSION['individual_search'])) {
     $_SESSION['individual_search'] = array();
+    if (isset($_REQUEST['individual_wholeName'])) {
+        $_SESSION['individual_search']['wholeName'] = $_REQUEST['individual_wholeName'];
+    }
     if (isset($_REQUEST['individual_lastName'])) {
         $_SESSION['individual_search']['lastName'] = $_REQUEST['individual_lastName'];
     }
@@ -65,6 +68,9 @@ if (! isset($_SESSION['individual_search'])) {
     
 // critères de filtrage
 $criteria = array();
+if (! empty($_SESSION['individual_search']['wholeName'])) {
+    $criteria['individual_wholename_like_pattern'] = $_SESSION['individual_search']['wholeName'];
+}
 if (! empty($_SESSION['individual_search']['lastName'])) {
     $criteria['individual_lastname_like_pattern'] = $_SESSION['individual_search']['lastName'];
 }
@@ -130,8 +136,8 @@ $doc_title = 'Les gens';
 	
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
 		<div class="form-group m-2">
-			<label for="individual_lastName_i" class="mr-2">Nom</label>
-			<input id="individual_lastName_i" name="individual_lastName" type="text" value="<?php if (isset($_SESSION['individual_search']['lastName'])) echo $_SESSION['individual_search']['lastName'] ?>" placeholder="nom de famille" class="form-control" />
+			<label for="individual_wholeName_i" class="mr-2">Qui ?</label>
+			<input id="individual_wholeName_i" name="individual_wholeName" type="text" value="<?php if (isset($_SESSION['individual_search']['wholeName'])) echo $_SESSION['individual_search']['wholeName'] ?>" placeholder="prénom, nom" class="form-control" />
 		</div>
 		<div class="checkbox m-2">
             <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> class="mr-2" /> Sans société</label>

@@ -7,9 +7,9 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
 		<li class="nav-item"><a class="nav-link" href="lead_edit.php">Nouvelle piste</a></li>
-		<li class="nav-item"><a class="nav-link" href="leads.php?lead_newsearch_order=1">Les pistes</a></li>
-		<li class="nav-item"><a class="nav-link" href="societies_list.php">Les sociétés</a></li>
-		<li class="nav-item"><a class="nav-link" href="individuals.php">Les gens</a></li>	
+		<li class="nav-item"><a class="nav-link" href="leads.php?lead_newsearch">Les pistes</a></li>
+		<li class="nav-item"><a class="nav-link" href="societies_list.php?society_newsearch">Les sociétés</a></li>
+		<li class="nav-item"><a class="nav-link" href="individuals.php?individual_newsearch">Les gens</a></li>	
 		<li class="nav-item dropdown">
 			<a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">

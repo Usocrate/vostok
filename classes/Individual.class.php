@@ -294,20 +294,14 @@ class Individual {
 	 * @return string
 	 */
 	public function getWholeName() {
-		if (! isset ( $this->salutation ) || ! isset ( $this->firstName ) || ! isset ( $this->lastName )) {
+		if (! isset ( $this->firstName ) || ! isset ( $this->lastName )) {
 			$dataset = $this->getDataFromBase ( array (
-					'individual_salutation',
 					'individual_firstName',
 					'individual_lastName' 
 			) );
 			$this->feed ( $dataset );
 		}
 		$pieces = array ();
-		/*
-		if (! empty ( $this->salutation )) {
-			$pieces [] = ucfirst ( $this->salutation );
-		}
-		*/
 		if (! empty ( $this->firstName )) {
 			$pieces [] = ucfirst ( $this->firstName );
 		}
@@ -319,6 +313,30 @@ class Individual {
 		}
 		return implode ( ' ', $pieces );
 	}
+	/**
+	 * @since 11/2018
+	 */
+	private static function getKnownWholeNames($substring = NULL) {
+	    global $system;
+	    $wholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
+		$sql = 'SELECT '.$wholeNameSqlSelectPattern.' FROM individual';
+		if (isset ( $substring )) {
+			$sql .= ' WHERE '.$wholeNameSqlSelectPattern.' LIKE :pattern';
+		}
+		$statement = $system->getPdo()->prepare($sql);
+		if (isset ( $substring )) {
+		    $statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
+		}
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_COLUMN);
+	}
+	/**
+	 * @since 11/2018
+	 */
+	public static function knownWholeNamesToJson($substring = NULL) {
+		$output = '{"names":' . json_encode ( self::getKnownWholeNames ( $substring ) ) . '}';
+		return $output;
+	}	
 	/**
 	 * Obtenir le lien vers l'écran dédié à l'individu.
 	 *

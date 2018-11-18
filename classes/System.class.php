@@ -293,13 +293,13 @@ class System {
 	}
 	/**
 	 * @since 08/2014
-	 * @version 07/2018
+	 * @version 11/2018
 	 */
 	public function getIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
 		global $system;
 		try {
-			
-			$sql = 'SELECT *, DATE_FORMAT(individual_creation_date, "%d/%m/%Y") AS individual_creation_date_fr';
+			$wholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
+			$sql = 'SELECT *,DATE_FORMAT(individual_creation_date, "%d/%m/%Y") AS individual_creation_date_fr';
 			$sql .= ' FROM individual';
 			
 			// WHERE
@@ -311,6 +311,10 @@ class System {
 			
 			if (isset ( $criteria ['individual_lastname_like_pattern'] )) {
 				$where [] = 'individual_lastname LIKE :lastname_like';
+			}
+			
+			if (isset ( $criteria ['individual_wholename_like_pattern'] )) {
+				$where [] = $wholeNameSqlSelectPattern.' LIKE :wholename_like';
 			}
 			
 			if (isset ( $criteria ['individual_birth_date_distance_max'] )) {
@@ -357,6 +361,9 @@ class System {
 			}
 			if (isset ( $criteria ['individual_lastname_like_pattern'] )) {
 				$statement->bindValue ( ':lastname_like', '%' . $criteria ['individual_lastname_like_pattern'] . '%', PDO::PARAM_STR );
+			}
+			if (isset ( $criteria ['individual_wholename_like_pattern'] )) {
+				$statement->bindValue ( ':wholename_like', '%' . $criteria ['individual_wholename_like_pattern'] . '%', PDO::PARAM_STR );
 			}
 			if (isset ( $criteria ['individual_birth_date_distance_max'] )) {
 				$statement->bindValue ( ':birthdate_distance', ( int ) $criteria ['individual_birth_date_distance_max'], PDO::PARAM_INT );
@@ -524,12 +531,16 @@ class System {
 	public static function getAloneIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
 		global $system;
 		try {
+			$wholeNameSqlSelectPattern = 'IF((i.individual_lastname IS NOT NULL AND i.individual_firstname IS NOT NULL), CONCAT(i.individual_firstname, " ", i.individual_lastName), IF(i.individual_lastname IS NOT NULL, i.individual_lastname, i.individual_firstname))';
 			$sql = 'SELECT i.*, DATE_FORMAT(individual_creation_date, "%d/%m/%Y") AS individual_creation_date_fr';
 			$sql .= ' FROM individual AS i LEFT OUTER JOIN membership AS ms ON ms.individual_id = i.individual_id';
 			
 			// WHERE
 			$where = array ();
 			
+			if (isset ( $criteria ['individual_wholename_like_pattern'] )) {
+				$where [] = $wholeNameSqlSelectPattern.' LIKE :wholename_like';
+			}
 			if (isset ( $criteria ['individual_lastname_like_pattern'] )) {
 				$where [] = 'i.individual_lastname LIKE :lastname_like';
 			}
@@ -558,6 +569,9 @@ class System {
 			/*
 			 * Rattachement des variables
 			 */
+			if (isset ( $criteria ['individual_wholename_like_pattern'] )) {
+				$statement->bindValue ( ':wholename_like', '%' . $criteria ['individual_wholename_like_pattern'] . '%', PDO::PARAM_STR );
+			}
 			if (isset ( $criteria ['individual_lastname_like_pattern'] )) {
 				$statement->bindValue ( ':lastname_like', '%' . $criteria ['individual_lastname_like_pattern'] . '%', PDO::PARAM_STR );
 			}
@@ -575,16 +589,21 @@ class System {
 		}
 	}
 	/**
-	 *
-	 * @since 04/08/2014
+	 * @since 08/2014
+	 * @version 11/2018
 	 */
 	public function countIndividuals($criteria) {
 		global $system;
 		try {
+			$wholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
 			$sql = 'SELECT COUNT(*) FROM individual';
 			
 			$where = array ();
-			
+
+			if (isset ( $criteria ['individual_wholename_like_pattern'] )) {
+				$where [] = $wholeNameSqlSelectPattern.' LIKE :wholename_like';
+			}
+
 			if (isset ( $criteria ['individual_lastname_like_pattern'] )) {
 				$where [] = 'individual_lastname LIKE :lastname_like';
 			}
@@ -595,6 +614,9 @@ class System {
 			
 			$statement = $system->getPdo ()->prepare ( $sql );
 			
+			if (isset ( $criteria ['individual_wholename_like_pattern'] )) {
+				$statement->bindValue ( ':wholename_like', '%' . $criteria ['individual_wholename_like_pattern'] . '%', PDO::PARAM_STR );
+			}
 			if (isset ( $criteria ['individual_lastname_like_pattern'] )) {
 				$statement->bindValue ( ':lastname_like', '%' . $criteria ['individual_lastname_like_pattern'] . '%', PDO::PARAM_STR );
 			}
