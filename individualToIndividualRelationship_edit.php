@@ -122,62 +122,70 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			<?php
 			if ($relationship->getId ())
 				echo '<input name="relationship_id" type="hidden" value="' . $relationship->getId () . '" />';
-
+			?>
+			<?php
 			if (! isset ( $item0 ) || ! $item0->getId ()) {
 				// la première personne est à définir
-				echo '<div class="form-group">';
-			    echo '<label for="i1_firstname_i">Prénom de la première personne</label>';
-				echo '<input id="i1_firstname_i" name="item0_firstname" type="text" maxlength="255" class="form-control" />';
+				echo '<div class="form-row">';
+				echo '<div class="form-group col-md-3">';
+			    echo '<label for="item0_firstname_i">Prénom</label>';
+				echo '<input id="item0_firstname_i" name="item0_firstname" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
-				echo '<div class="form-group">';
-			    echo '<label for="s1_lastname_i">Son nom</label>';
-				echo '<input id="s1_lastname_i" name="item0_lastname" type="text" maxlength="255" class="form-control" />';				
+				echo '<div class="form-group col-md-3">';
+			    echo '<label for="item0_lastname_i">Nom</label>';
+				echo '<input id="item0_lastname_i" name="item0_lastname" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
-				echo '<div class="form-group">';
-    			echo '<label>Son rôle</label>';
-    			echo '<input id="i1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+				echo '<div class="form-group col-md-6">';
+    			echo '<label for="item0_role_i">Son rôle dans la relation</label>';
+    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+				echo '</div>';
 				echo '</div>';
 			} else {
 				// la première personne est définie
 				echo '<div class="form-group">';
 				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
-    			echo '<label>Rôle '. $item0->getHtmlLinkToIndividual() . '</label>';
-    			echo '<input id="i1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+    			echo '<label for="item0_role_i">Rôle de '. $item0->getHtmlLinkToIndividual() . '</label>';
+    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
+			?>
+			<?php
 			if (! isset ( $item1 )) {
 				// la deuxième personne est à définir
 				$item1 = new Individual();
-				echo '<div class="form-group">';
-				echo '<label for="i2_firstname_i">Prénom de la deuxième personne</label>';
-				echo '<input id="i2_firstname_i" name="item1_firstname" type="text" maxlength="255" class="form-control" />';
+				echo '<div class="form-row">';
+				echo '<div class="form-group col-md-3">';
+			    echo '<label for="item1_firstname_i">Prénom</label>';
+				echo '<input id="item1_firstname_i" name="item1_firstname" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
-				echo '<div class="form-group">';
-				echo '<label for="i2_lastname_i">Son nom</label>';
-				echo '<input id="i2_lastname_i" name="item1_lastname" type="text" maxlength="255" class="form-control" />';				
+				echo '<div class="form-group col-md-3">';
+			    echo '<label for="item1_lastname_i">Nom</label>';
+				echo '<input id="item1_lastname_i" name="item1_lastname" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
-				echo '<div class="form-group">';
-    			echo '<label>Son rôle</label>';
-    			echo '<input id="i2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+				echo '<div class="form-group col-md-6">';
+    			echo '<label for="item1_role_i">Son rôle dans la relation</label>';
+    			echo '<input id="item1_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+				echo '</div>';
 				echo '</div>';				
 			} else {
 				// la deuxième personne est définie
 				echo '<div class="form-group">';
 				echo '<input name="item1_id" type="hidden" value="' . $item1->getId () . '"/>';
-    			echo '<label>Rôle '. $item1->getHtmlLinkToIndividual() . '</label>';
-    			echo '<input id="i2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+    			echo '<label for="item1_role_i">Rôle de '. $item1->getHtmlLinkToIndividual() . '</label>';
+    			echo '<input id="item1_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
 			?>
-
-			<div class="form-group">
+			<div class="form-row">
+			<div class="form-group col-md-6">
     			<label>Année de démarrage</label>
     			<input name="init_year" type="text" value="<?php echo $relationship->getAttribute('init_year'); ?>" size="4" class="form-control" />
 			</div>
 			
-			<div class="form-group">
+			<div class="form-group col-md-6">
     			<label>Année de clôture</label>
     			<input name="end_year" type="text" value="<?php echo $relationship->getAttribute('end_year'); ?>" size="4" class="form-control" />
+			</div>
 			</div>
 			
 			<div class="form-group">
@@ -200,7 +208,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 </div>
 <script type="text/javascript">
 	$(document).ready(function(){
-	    $('#i1_role_i').autocomplete({
+	    $('#item0_role_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
 	            $.ajax({
@@ -220,18 +228,18 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	         	})
 	   		},
 	        focus: function( event, ui ) {
-				$('#i1_role_i').val( ui.item.value );
+				$('#item0_role_i').val( ui.item.value );
 	        	return false;
 	        },
 	        select: function( event, ui ) {
-				$('#i1_role_i').val( ui.item.value );
+				$('#item0_role_i').val( ui.item.value );
 	        	return false;
 	        },
 	        _renderItem: function( ul, item ) {
 		    	return $( "<li>" ).append(item.label).appendTo( ul );
 	    	}
 	   	});
-	    $('#i2_role_i').autocomplete({
+	    $('#item1_role_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
 	            $.ajax({
@@ -251,11 +259,11 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	         	})
 	   		},
 	        focus: function( event, ui ) {
-				$('#i2_role_i').val( ui.item.value );
+				$('#item1_role_i').val( ui.item.value );
 	        	return false;
 	        },
 	        select: function( event, ui ) {
-				$('#i2_role_i').val( ui.item.value );
+				$('#item1_role_i').val( ui.item.value );
 	        	return false;
 	        },
 	        _renderItem: function( ul, item ) {
