@@ -525,6 +525,38 @@ class System {
 		return $this->getMemberships($criteria, 'Alphabetical');
 	}
 	/**
+	 * @since 12/2018
+	 */
+	public function getMembershipTitles($sort = 'Alphabetical') {
+		global $system;
+		try {
+			$sql = 'SELECT title, COUNT(*) AS nb FROM membership WHERE title IS NOT NULL GROUP BY title';
+
+			// ORDER
+			switch ($sort) {
+				case 'Most used first' : 
+					$sql .= ' ORDER BY nb DESC';
+					break;
+				case 'Alphabetical' :
+					$sql .= ' ORDER BY title ASC';
+					break;
+			}
+
+			$statement = $system->getPdo()->prepare($sql);
+
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$statement->execute();
+
+			$output = array();
+			foreach ( $statement->fetchAll() as $data ) {
+				$output[] = array('label' => $data['title'], 'count' => $data['nb']);
+			}
+			return $output;			
+		} catch (Exception $e) {
+			$this->reportException($e, __METHOD__);
+		}
+	}	
+	/**
 	 * @since 08/2014
 	 * @version 12/2016
 	 */

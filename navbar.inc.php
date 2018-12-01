@@ -20,6 +20,7 @@
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Les gens</h6>
 				<a class="dropdown-item" href="individual_edit.php">Introduire un nouvel individu</a>
+				<a class="dropdown-item" href="titles.php">Les rôles</a>
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Les pistes</h6>
 				<a class="dropdown-item" href="leads.php?lead_newsearch_order=1&amp;lead_status=suivie">Suivies</a>
