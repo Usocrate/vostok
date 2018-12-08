@@ -154,14 +154,13 @@ if (isset($_POST['task'])) {
         		
         		<div class="form-group">
         			<label>Description</label>
-            		<textarea name="society_description" cols="51" rows="10" class="form-control"><?php echo $society->getDescription(); ?></textarea>
+            		<textarea name="society_description" cols="51" rows="5" class="form-control"><?php echo $society->getDescription(); ?></textarea>
             	</div>
     		</div>
     	</div>
    	
-    	<button name="task" type="submit" value="registration" class="btn btn-default">Enregistrer</button>
+    	<button name="task" type="submit" value="registration" class="btn btn-primary">Enregistrer</button>
     	<button name="task" type="submit" value="deletion" class="btn btn-default">Supprimer</button>
-    	<a href="society.php?society_id=<?php echo $society->getId() ?>">Annuler</a>
     </form>
 </div>
 <script type="text/javascript">

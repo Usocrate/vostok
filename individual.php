@@ -101,10 +101,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				if ($individual->getCvUrl()) {
 					$links[] = '<a href="'.$individual->getCvUrl().'">cv</a>';
 				}
-				//$links[] = $individual->getHtmlLinkToGoogleSearch();
-				$links[] = '<a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.Toolbox::toHtml($individual->hasFirstName() ? $individual->getFirstName() : $individual->getWholeName()).' chez Google</a>';
-				$links[] = '<a href="'.$individual->getGoogleQueryUrl('vidéos').'" target="_blank">En vidéo</a>';
-
 				if (count($links) > 0) {
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($links as $l) {
@@ -146,7 +142,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								echo '<li class="list-group-item">';
 								echo '<h2>';
 								echo $s->getHtmlLinkToSociety();
-								echo ' <small><a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a></small>';
+								echo ' <small>';
+								echo '<a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';
+								echo ' <a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'"><i class="fab fa-google"></i></a>';
+								echo '</small>';
 								echo '</h2>';
 								
 								$more = array();
@@ -179,10 +178,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								if (count($data)>0) {
 									echo '<p>'.implode('<span> | </span>', $data).'</p>';
 								}
-								
-								$url = ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"');
-								echo '<p><a href="'.$url.'" target="_blank">Chez Google</a></p>';
-
 								echo '</li>';
 							}
 							echo '<li class="list-group-item"><a href="membership_edit.php?individual_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
@@ -203,24 +198,25 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								echo '<li class="list-group-item">';
 								echo '<h2>';
 								echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
-								echo ' <small>(';
-								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'">';
-								echo empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
-								echo '</a>';
-								echo ')';
-								echo ' <a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
+								echo ' <small>';
+								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
+								echo ' <a href="'.ToolBox::getGoogleQueryUrl('"'.$item[0]->getWholeName().'" "'.$individual->getWholeName().'"').'" target="_blank"><i class="fab fa-google"></i></a>';
 								echo '</small>';
 								echo '</h2>';
+
+								$baseline = array();
+								$baseline[] = empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
 								if ($item[4]->isDefined()) {
-									echo '<div><small>'.$item[4]->toString().'</small></div>';
+									$baseline[] = $item[4]->toString();
+									
 								}
+								echo '<div><small>'.implode(' - ',$baseline).'</small></div>';
+
 								if (!empty($item[3])) {
 									echo '<p>';
 									echo ToolBox::toHtml($item[3]);
 									echo '</p>';
 								}
-								$url = ToolBox::getGoogleQueryUrl('"'.$item[0]->getWholeName().'" "'.$individual->getWholeName().'"');
-								echo '<p><a href="'.$url.'" target="_blank">Chez Google</a></p>';
 								echo '</li>';
 							}
 							echo '<li class="list-group-item"><a href="individualToIndividualRelationship_edit.php?item0_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
@@ -238,35 +234,45 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	    </div>
 	    <div class="col-lg-3">
 	    	<div class="card">
-	    		<div class="card-header">Coordonnées</div>
-	    		<?php
-					// coordonnées
-					$contact_data = array();
-					if ($individual->getAddress()) {
-						$contact_data[] = $individual->getAddress();
-					}
-					if ($individual->getPhoneNumber()) {
-						$contact_data[] = $individual->getHtmlLinkToPhoneCall();
-					}
-					if ($individual->getMobilePhoneNumber()) {
-						$contact_data[] = $individual->getHtmlLinkToMobilePhoneCall();
-					}
-					if ($individual->getEmailAddress()) {
-						$contact_data[] = $individual->getEmailHtml();
-					}
-					if (count($contact_data) >0) {
-						echo '<ul class="list-group list-group-flush">';
-						foreach ($contact_data as $d) {
-							echo '<li class="list-group-item">'.$d.'</li>';
+	    		<div class="card-header text-center"><i class="fab fa-google"></i></div>
+	    		<ul class="list-group list-group-flush">
+	    			<?php
+	    				$links = array();
+						$links[] = '<a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.Toolbox::toHtml($individual->hasFirstName() ? $individual->getFirstName() : $individual->getWholeName()).' chez Google</a>';
+						$links[] = '<a href="'.$individual->getGoogleQueryUrl('vidéos').'" target="_blank">En vidéo</a>';
+						$links[] = '<a href="'.$individual->getGoogleQueryUrl('actualités').'" target="_blank">Actualités</a>';
+						foreach ($links as $l) {
+							echo '<li class="list-group-item"><small>'.$l.'</small></li>';
 						}
-						echo '</ul>';
-					} else {
-						echo '<div class="card-body"><p>A renseigner</p>';
-						echo '<a class="card-link" href="individual_edit.php?individual_id='.$individual->getId().'"><i class="fas fa-edit"></i> Renseigner</a>';
-						echo '</div>';
-					}
-				?>
+	    			?>
+	    		</ul>
 			</div>
+	    	
+    		<?php
+				// coordonnées
+				$contact_data = array();
+				if ($individual->getAddress()) {
+					$contact_data[] = $individual->getAddress();
+				}
+				if ($individual->getPhoneNumber()) {
+					$contact_data[] = $individual->getHtmlLinkToPhoneCall();
+				}
+				if ($individual->getMobilePhoneNumber()) {
+					$contact_data[] = $individual->getHtmlLinkToMobilePhoneCall();
+				}
+				if ($individual->getEmailAddress()) {
+					$contact_data[] = $individual->getEmailHtml();
+				}
+				if (count($contact_data) >0) {
+					echo '<div class="card"><div class="card-header">Coordonnées</div>';
+					echo '<ul class="list-group list-group-flush">';
+					foreach ($contact_data as $d) {
+						echo '<li class="list-group-item">'.$d.'</li>';
+					}
+					echo '</ul></div>';
+				}
+			?>
+			
 	    </div>
   	</div>
 

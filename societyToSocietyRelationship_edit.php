@@ -123,51 +123,56 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 
 			if (! isset ( $item0 ) || ! $item0->getId ()) {
 				// la première société est à définir
-				echo '<div class="form-group">';
+				echo '<div class="form-row">';
+				echo '<div class="form-group col-md-6">';
 			    echo '<label for="s1_name_i">Nom de la première société</label>';
 				echo '<input id="s1_name_i" name="item0_name" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
-				echo '<div class="form-group">';
-    			echo '<label>Son rôle</label>';
+				echo '<div class="form-group col-md-6">';
+    			echo '<label for="s1_role_i">Son rôle</label>';
     			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+				echo '</div>';
 				echo '</div>';
 			} else {
 				// la première société est définie
 				echo '<div class="form-group">';
 				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
-    			echo '<label>Rôle '. $item0->getHtmlLinkToSociety() . '</label>';
+    			echo '<label for="s1_role_i">Rôle '. $item0->getHtmlLinkToSociety() . '</label>';
     			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
 			if (! isset ( $item1 )) {
 				// la deuxième société est à définir
 				$item1 = new Society();
-				echo '<div class="form-group">';
+				echo '<div class="form-row">';
+				echo '<div class="form-group col-md-6">';
 				echo '<label for="s2_name_i">Nom de la deuxième société</label>';
 				echo '<input id="s2_name_i" name="item1_name" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
-				echo '<div class="form-group">';
-    			echo '<label>Son rôle</label>';
+				echo '<div class="form-group col-md-6">';
+    			echo '<label for="s2_role_i">Son rôle</label>';
     			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
-				echo '</div>';				
+				echo '</div>';
+				echo '</div>';
 			} else {
 				// la deuxième société est définie
 				echo '<div class="form-group">';
 				echo '<input name="item1_id" type="hidden" value="' . $item1->getId () . '"/>';
-    			echo '<label>Rôle '. $item1->getHtmlLinkToSociety() . '</label>';
+    			echo '<label for="s2_role_i">Rôle '. $item1->getHtmlLinkToSociety() . '</label>';
     			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
 			?>
-
-			<div class="form-group">
-    			<label>Année de démarrage</label>
-    			<input name="init_year" type="text" value="<?php echo $relationship->getAttribute('init_year'); ?>" size="4" class="form-control" />
-			</div>
-			
-			<div class="form-group">
-    			<label>Année de clôture</label>
-    			<input name="end_year" type="text" value="<?php echo $relationship->getAttribute('end_year'); ?>" size="4" class="form-control" />
+			<div class="form-row">
+				<div class="form-group col-md-3">
+	    			<label for="init_year_i">Année de démarrage</label>
+	    			<input id="init_year_i" name="init_year" type="text" value="<?php echo $relationship->getAttribute('init_year'); ?>" size="4" class="form-control" />
+				</div>
+				
+				<div class="form-group col-md-3">
+	    			<label for="end_year_i">Année de clôture</label>
+	    			<input id="end_year_i" name="end_year" type="text" value="<?php echo $relationship->getAttribute('end_year'); ?>" size="4" class="form-control" />
+				</div>
 			</div>
 			
 			<div class="form-group">
@@ -181,7 +186,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
     			<a id="relationship_web_link" href="#" style="display: none">[voir]</a>
 			</div>
 			
-			<button name="relationship_submission" type="submit" value="1" class="btn btn-default">Enregistrer</button>
+			<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 			<?php if ($relationship->getId()) : ?>
 				<button name="relationship_deletion" type="submit" value="1" class="btn btn-default">Supprimer</button>
 			<?php endif; ?>

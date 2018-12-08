@@ -59,7 +59,7 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 		$relationship->setItem ($item0, 0);
 	}
 	if (isset ( $_REQUEST ['item1_id'] )) {
-		$item1 = new Individual ( $_REQUEST ['item1_id'] );
+		$item1 = new Individual($_REQUEST['item1_id'] );
 		$item1->feed();
 		$relationship->setItem($item1, 1);
 	}
@@ -92,9 +92,9 @@ if (isset ( $_POST ['relationship_submission'] )) {
 	}
 }
 if (isset ( $item0 ) && isset ( $item1 )) {
-	$h1_content = 'Une relation entre ' . $item0->getHtmlLinkToIndividual() . ' et ' . $item1->getHtmlLinkToIndividual();
+	$h1_content = 'Une relation entre ' . $item1->getHtmlLinkToIndividual() . ' et ' . $item0->getHtmlLinkToIndividual();
 } else {
-	$h1_content = isset ( $item0 ) && $item0->getId() ? 'Une relation individuelle de ' . $item0->getHtmlLinkToIndividual() : 'Une relation individuelle';
+	$h1_content = isset ( $item0 ) && $item0->getId() ? 'Une relation de ' . $item0->getHtmlLinkToIndividual() : 'Une relation individuelle';
 }
 ?>
 <!doctype html>
@@ -119,36 +119,12 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 		<form id="relationship_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 			<input name="item0_class" type="hidden" value="Individual" />
 			<input name="item1_class" type="hidden" value="Individual" />
+
 			<?php
 			if ($relationship->getId ())
 				echo '<input name="relationship_id" type="hidden" value="' . $relationship->getId () . '" />';
 			?>
-			<?php
-			if (! isset ( $item0 ) || ! $item0->getId ()) {
-				// la première personne est à définir
-				echo '<div class="form-row">';
-				echo '<div class="form-group col-md-3">';
-			    echo '<label for="item0_firstname_i">Prénom</label>';
-				echo '<input id="item0_firstname_i" name="item0_firstname" type="text" maxlength="255" class="form-control" />';
-				echo '</div>';
-				echo '<div class="form-group col-md-3">';
-			    echo '<label for="item0_lastname_i">Nom</label>';
-				echo '<input id="item0_lastname_i" name="item0_lastname" type="text" maxlength="255" class="form-control" />';
-				echo '</div>';
-				echo '<div class="form-group col-md-6">';
-    			echo '<label for="item0_role_i">Son rôle dans la relation</label>';
-    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
-				echo '</div>';
-				echo '</div>';
-			} else {
-				// la première personne est définie
-				echo '<div class="form-group">';
-				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
-    			echo '<label for="item0_role_i">Rôle de '. $item0->getHtmlLinkToIndividual() . '</label>';
-    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
-				echo '</div>';
-			}
-			?>
+
 			<?php
 			if (! isset ( $item1 )) {
 				// la deuxième personne est à définir
@@ -176,13 +152,40 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 				echo '</div>';
 			}
 			?>
+
+			<?php
+			if (! isset ( $item0 ) || ! $item0->getId ()) {
+				// la première personne est à définir
+				echo '<div class="form-row">';
+				echo '<div class="form-group col-md-3">';
+			    echo '<label for="item0_firstname_i">Prénom</label>';
+				echo '<input id="item0_firstname_i" name="item0_firstname" type="text" maxlength="255" class="form-control" />';
+				echo '</div>';
+				echo '<div class="form-group col-md-3">';
+			    echo '<label for="item0_lastname_i">Nom</label>';
+				echo '<input id="item0_lastname_i" name="item0_lastname" type="text" maxlength="255" class="form-control" />';
+				echo '</div>';
+				echo '<div class="form-group col-md-6">';
+    			echo '<label for="item0_role_i">Son rôle dans la relation</label>';
+    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+				echo '</div>';
+				echo '</div>';
+			} else {
+				// la première personne est définie
+				echo '<div class="form-group">';
+				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
+    			echo '<label for="item0_role_i">Rôle de '. $item0->getHtmlLinkToIndividual() . '</label>';
+    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+				echo '</div>';
+			}
+			?>
 			<div class="form-row">
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-3">
     			<label>Année de démarrage</label>
     			<input name="init_year" type="text" value="<?php echo $relationship->getAttribute('init_year'); ?>" size="4" class="form-control" />
 			</div>
 			
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-3">
     			<label>Année de clôture</label>
     			<input name="end_year" type="text" value="<?php echo $relationship->getAttribute('end_year'); ?>" size="4" class="form-control" />
 			</div>
@@ -199,7 +202,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
     			<a id="relationship_web_link" href="#" style="display: none">[voir]</a>
 			</div>
 			
-			<button name="relationship_submission" type="submit" value="1" class="btn btn-default">Enregistrer</button>
+			<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 			<?php if ($relationship->getId()) : ?>
 				<button name="relationship_deletion" type="submit" value="1" class="btn btn-default">Supprimer</button>
 			<?php endif; ?>

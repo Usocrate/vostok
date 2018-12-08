@@ -227,7 +227,8 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 		
 								if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
 							echo '</div>';
-							echo '<p><a href="membership_edit.php?membership_id='.$ms->getId().'" title="éditer la participation de '.ToolBox::toHtml($i->getWholeName()).'"><i class="fas fa-edit"></i> édition</a></p>';
+							
+							echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary">Editer</a>';
 						echo '</div>';
 						echo '</div>';
 				  	}

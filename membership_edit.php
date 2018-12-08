@@ -138,103 +138,101 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
     			echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />';
     		}
     		?>
-    		<p>
-    			<?php
-    			if (!isset($society) || !$society->getId()) {
-    				echo '<div class="form-group">';
-    				echo '<label for="s_name_i">Nom de la Société</label>';
-    				echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35" />';
-    				echo '</div>';
-    			} else {
-    				echo '<div class="form-group">';
-    				echo '<label for="newsociety_id">Transférer dans une société liée</label>';
-    				echo '<select name="newsociety_id" class="form-control">';
-    				echo '<option value="">-- choisir --</option>';
-    				echo $society->getRelatedSocietiesOptionsTags();
-    				echo '</select>';
-    				echo '</div>';
-    			}
-    			?>
-    		</p>
-    		<div class="row">
-    			<div class="col-md-6">
-    				<?php
-    				if (!isset($individual)) {
-    					$individual = new Individual();
-    					echo '<fieldset>';
-    					echo '<legend>Qui ?</legend>';
-    					echo '<div class="form-group">';
-    					echo '<label for="individual_salutation_i">Civilité</label>';
-    					echo '<select id="individual_salutation_i" name="individual_salutation" class="form-control">';
-    					echo '<option value="">-- choisis --</option>';
-    					echo $individual->getSalutationOptionsTags();
-    					echo '</select>';
-    					echo '</div>';
-    					echo '<div class="form-group">';
-    					echo '<label for="individual_firstName_i">Prénom</label>';
-    					echo '<input id="individual_firstName_i" name="individual_firstName" type="text" maxlength="255" class="form-control" />';
-    					echo '</div>';
-    					echo '<div class="form-group">';
-    					echo '<label for="individual_lastName_i">Nom</label>';
-    					echo '<input id="individual_lastName_i" name="individual_lastName" type="text" maxlength="255" class="form-control" />';
-    					echo '</div>';
-    					echo '</fieldset>';
-    				}
-    				?>
-    				<fieldset>
-    					<legend>Activité</legend>
-    					
-    					<div class="form-group">
-        					<label for="department_i">Service</label>
-        					<input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" class="form-control" /> 
-    					</div>
-    					
-    					<div class="form-group">
-        					<label for="title_i">Fonction</label>
-        					<input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" class="form-control" /> 
-    					</div>
-    					
-    					<div class="form-group">
-        					<label for="membership_url_i">Sur le web</label>
-        					<input id="membership_url_i" name="url" type="url" value="<?php echo $membership->getUrl(); ?>" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_i', 'membership_url_link');" />
-        					<a id="membership_url_link" href="#" style="display: none">[voir]</a>
-    					</div>
-    					
-    				</fieldset>
-    
-    				<fieldset>
-    					<legend>Contact</legend>
-    					
-    					<div class="form-group">
-        					<label for="phone_i">Téléphone</label>
-        					<input id="phone_i" name="phone" type="tel" value="<?php echo $membership->getPhone(); ?>" size="15" maxlength="255" class="form-control" />
-    					</div>
-    					
-    					<div class="form-group">
-    						<label>Mél</label>
-    						<input name="email" type="email" value="<?php echo $membership->getEmail(); ?>" size="35" maxlength="255" class="form-control" />
-    					</div>
-     				</fieldset>
-    			</div>
-    			<div class="col-md-6">
-    				<fieldset>
-    					<legend>Période</legend>
-    					<div class="form-group">
-    						<label for="init_year_i">Année d'ouverture</label>
-    						<input id="init_year_i" name="init_year" type="text" value="<?php echo $membership->getAttribute('init_year'); ?>" size="20" class="form-control" />
-						</div>
-						<div class="form-group">
-							<label for="end_year_i">Année de clôture</label>
-							<input id="end_year_i" name="end_year" type="text" value="<?php echo $membership->getAttribute('end_year'); ?>" size="20" class="form-control" />
-						</div>
-    				</fieldset>
-    				<div class="form-group">
-    					<label for="comment_i">Commentaire</label>
-    					<textarea id="comment_i" name="description" cols="51" rows="5" class="form-control"><?php echo $membership->getDescription(); ?></textarea>
-    				</div>
-    			</div>
-    		</div>
-    		<button name="task" type="submit" value="membership_submission" class="btn btn-default">Enregistrer</button>
+    		
+			<?php
+			if (!isset($society) || !$society->getId()) {
+				echo '<div class="form-group">';
+				echo '<label for="s_name_i">Nom de la Société</label>';
+				echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35" />';
+				echo '</div>';
+			} else {
+				if (isset($individual)) {
+					$relatedSocieties = $society->getRelatedSocieties();
+					if (count($relatedSocieties)>0) {
+						echo '<div class="form-group">';
+						echo '<label for="newsociety_id">Transférer dans une société liée</label>';
+						echo '<select name="newsociety_id" class="form-control">';
+						echo '<option value="">-- choisir --</option>';
+						echo $society->getRelatedSocietiesOptionsTags();
+						echo '</select>';
+						echo '</div>';
+					}
+				}	
+			}
+			?>
+
+
+			<?php
+			if (!isset($individual)) {
+				$individual = new Individual();
+				//echo '<fieldset>';
+				//echo '<legend>Qui ?</legend>';
+				echo '<div class="form-row">';
+				echo '<div class="form-group col-md-2">';
+				echo '<label for="individual_salutation_i">Civilité</label>';
+				echo '<select id="individual_salutation_i" name="individual_salutation" class="form-control">';
+				echo '<option value="">-- choisis --</option>';
+				echo $individual->getSalutationOptionsTags();
+				echo '</select>';
+				echo '</div>';
+				echo '<div class="form-group col-md-4">';
+				echo '<label for="individual_firstName_i">Prénom</label>';
+				echo '<input id="individual_firstName_i" name="individual_firstName" type="text" maxlength="255" class="form-control" />';
+				echo '</div>';
+				echo '<div class="form-group col-md-6">';
+				echo '<label for="individual_lastName_i">Nom</label>';
+				echo '<input id="individual_lastName_i" name="individual_lastName" type="text" maxlength="255" class="form-control" />';
+				echo '</div>';
+				echo '</div>';
+				//echo '</fieldset>';
+			}
+			?>
+
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="department_i">Service</label>
+					<input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" class="form-control" /> 
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="title_i">Fonction</label>
+					<input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" class="form-control" /> 
+				</div>
+				<div class="form-group col-md-2">
+					<label for="init_year_i">Année d'ouverture</label>
+					<input id="init_year_i" name="init_year" type="text" value="<?php echo $membership->getAttribute('init_year'); ?>" size="20" class="form-control" />
+				</div>
+				<div class="form-group col-md-2">
+					<label for="end_year_i">Année de clôture</label>
+					<input id="end_year_i" name="end_year" type="text" value="<?php echo $membership->getAttribute('end_year'); ?>" size="20" class="form-control" />
+				</div>
+			</div>
+			
+    		<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="phone_i">Téléphone</label>
+					<input id="phone_i" name="phone" type="tel" value="<?php echo $membership->getPhone(); ?>" size="15" maxlength="255" class="form-control" />
+				</div>
+				
+				<div class="form-group col-md-8">
+					<label for="email_i">Mél</label>
+					<input id="email_i" name="email" type="email" value="<?php echo $membership->getEmail(); ?>" size="35" maxlength="255" class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="comment_i">Commentaire</label>
+				<textarea id="comment_i" name="description" cols="51" rows="5" class="form-control"><?php echo $membership->getDescription(); ?></textarea>
+			</div>
+			
+			<div class="form-group">
+				<label for="membership_url_i">Sur le web</label>
+				<input id="membership_url_i" name="url" type="url" value="<?php echo $membership->getUrl(); ?>" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_i', 'membership_url_link');" />
+				<a id="membership_url_link" href="#" style="display: none">[voir]</a>
+			</div>
+
+
+    		<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
     		<?php if ($membership->getId()) : ?>
     			<button name="task" type="submit" value="membership_deletion" class="btn btn-default">Supprimer</button>
     		<?php endif; ?>
@@ -243,7 +241,7 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 	
 	<?php
 		if (!empty($membership->getTitle())) {
-			echo '<nav>Voir tous les gens ayant comme fonction "<a href="title.php?title='.urlencode($membership->getTitle()).'">'.ToolBox::toHtml($membership->getTitle()).'".</a></nav>';
+			echo '<nav><p>Voir tous les gens ayant comme fonction <a href="title.php?title='.urlencode($membership->getTitle()).'">'.ToolBox::toHtml($membership->getTitle()).'</a>.</p></nav>';
 		}
 	?>
 	

@@ -201,7 +201,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 						$i->feed();
 						echo '<div class="card">';
 						if ($i->getPhotoUrl()) {
+							echo '<a href="individual.php?individual_id='.$i->getId().'">';
 							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+							echo '</a>';
 						} else {
 							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
 						}

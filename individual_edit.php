@@ -76,7 +76,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 		
-	<h1 class="bd-title"><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><?php echo ToolBox::toHtml($doc_title); ?></a></h1>
+	<h1 class="bd-title"><a href="individual.php?individual_id=<?php echo $individual->getId() ?>"><?php echo ToolBox::toHtml($doc_title); ?></a></h1>
 	
 	<?php
         if (count($messages) > 0) {
@@ -87,59 +87,62 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
             echo '</div>';
         }
     ?>
-    
-	<blockquote>Les informations suivantes concernent la personne d&rsquo;un point de vue strictement individuel, hors toute société.</blockquote>
+  
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
 		<?php if (isset($_REQUEST['society_id'])) echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />'?>
 		<input name="individual_id" type="hidden" value="<?php echo $individual->getId() ?>" />
+		<div class="form-row">
+			<div class="form-group col-md-3">
+				<label for="individual_firstname_i">Prénom</label>
+				<input id="individual_firstname_i" type="text" name="individual_firstName" value="<?php echo ToolBox::toHtml($individual->getFirstName()) ?>" size="25" class="form-control" /> 
+			</div>
+		
+			<div class="form-group col-md-3">
+				<label for="individual_lastname_i">Nom</label>
+				<input id="individual_lastname_i" type="text" name="individual_lastName" value="<?php echo ToolBox::toHtml($individual->getLastName()) ?>" size="25"  class="form-control" />
+			</div>
+			<div class="form-group col-md-6">
+				<label for="individual_photo_file_i">Photo</label>
+				<input id="individual_photo_file_i" type="file" name="individual_photo_file" size="55" class="form-control-file"></input>
+	
+				<small id="passwordHelpBlock" class="form-text text-muted">
+				<?php if ($individual->getGoogleQueryUrl('images')) : ?>
+						<a href="<?php echo $individual->getGoogleQueryUrl('images') ?>">Une photo chez Google ?</a>
+					<?php endif; ?>
+				</small>
+	
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="form-group col-md-4">
+				<label for="individual_twitter_id_i" class="sr-only">Compte Twitter</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+				      <div class="input-group-text"><i class="fab fa-twitter"></i></div>
+				    </div>
+					<input type="text" id="individual_twitter_id_i" name="individual_twitter_id" value="<?php echo $individual->getTwitterId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant Twitter" />
+				</div>
+			</div>
+			
+			<div class="form-group col-md-4">
+				<label for="individual_Linkedin_id_i" class="sr-only">Compte Linkedin</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+				      <div class="input-group-text"><i class="fab fa-linkedin"></i></div>
+				    </div>
+					<input type="text" id="individual_Linkedin_id_i" name="individual_linkedin_id" value="<?php echo $individual->getLinkedinId(); ?>" size="15" maxlength="255" class="form-control" placeholder="Person ID Linkedin" />
+				</div>
+			</div>			
+		</div>
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col">
 				<fieldset>
-					<legend>identité</legend>
-					
-					<div class="form-group">
-						<label for="individual_salutation_i">Civilité</label>
-						<select id="individual_salutation_i" name="individual_salutation" class="form-control">
-							<option value="">-- choisir --</option>
-							<?php echo $individual->getSalutationOptionsTags($individual->getSalutation()); ?>
-						</select>
-					</div>
-					
-					<div class="form-group">
-						<label for="individual_firstname_i">Prénom</label>
-						<input id="individual_firstname_i" type="text" name="individual_firstName" value="<?php echo ToolBox::toHtml($individual->getFirstName()) ?>" size="25" class="form-control" /> 
-					</div>
-				
-					<div class="form-group">
-						<label for="individual_lastname_i">Nom</label>
-						<input id="individual_lastname_i" type="text" name="individual_lastName" value="<?php echo ToolBox::toHtml($individual->getLastName()) ?>" size="25"  class="form-control" />
-					</div>
-					
+					<legend>Infos complémentaires</legend>
 					<div class="form-group">	
 						<label for="individual_birth_date_i">Date de naissance</label>
 						<input id="individual_birth_date_i" type="text" name="individual_birth_date" value="<?php echo ToolBox::toHtml($individual->getBirthDate()) ?>" size="10" class="form-control" />
 					</div>
-					
-					<div class="form-group">
-						<label for="individual_photo_file_i">Photo</label>
-						<input id="individual_photo_file_i" type="file" name="individual_photo_file" size="55" class="form-control"></input>
-					</div>
-					
-					<ul>
-					<?php if ($individual->getGoogleQueryUrl()) : ?>
-						<li><a href="<?php echo $individual->getGoogleQueryUrl() ?>"><?php echo $individual->getWholeName() ?> dans Google</a></li>
-					<?php endif; ?>
-					
-					<?php if ($individual->getGoogleQueryUrl('images')) : ?>
-						<li><a href="<?php echo $individual->getGoogleQueryUrl('images') ?>">La photo de <?php echo $individual->getWholeName() ?> dans Google ?</a></li>
-					<?php endif; ?>
-					</ul>
-					
-					</fieldset>
-			</div>
-			<div class="col-md-4">
-				<fieldset>
-					<legend>Infos complémentaires</legend>
 					<div class="form-group">
     					<label for="individual_description_i">Description</label>
     					<textarea id="individual_description_i" cols="51" rows="5" name="individual_description" class="form-control"><?php echo $individual->getDescription(); ?></textarea>
@@ -150,31 +153,9 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 						<input type="text" id="individual_web_input" name="individual_web" value="<?php echo $individual->getWeb(); ?>" size="55" maxlength="255" class="form-control" onchange="checkUrlInput('individual_web_input', 'individual_web_link');" /> 
 						<a id="individual_web_link" href="#" style="display: none">[voir]</a>
 					</div>
-					
-					<div class="form-group">
-						<label for="individual_twitter_id_i" class="sr-only">Compte Twitter</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-						      <div class="input-group-text"><i class="fab fa-twitter"></i></div>
-						    </div>
-							<input type="text" id="individual_twitter_id_i" name="individual_twitter_id" value="<?php echo $individual->getTwitterId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant Twitter" />
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<label for="individual_Linkedin_id_i" class="sr-only">Compte Linkedin</label>
-						<div class="input-group">
-							<div class="input-group-prepend">
-						      <div class="input-group-text"><i class="fab fa-linkedin"></i></div>
-						    </div>
-							<input type="text" id="individual_Linkedin_id_i" name="individual_linkedin_id" value="<?php echo $individual->getLinkedinId(); ?>" size="15" maxlength="255" class="form-control" placeholder="Person ID Linkedin" />
-						</div>
-					</div>
-
-					
 				</fieldset>
 			</div>
-			<div class="col-md-4">
+			<div class="col">
 				<fieldset>
 					<legend>Coordonnées (perso)</legend>
 					<div class="form-group">
@@ -200,10 +181,8 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 				</fieldset>
 			</div>
 		</div>
-		<div>
-			<button name="toDB_order" type="submit" value="1" class="btn btn-default">enregistrer</button>
-			<button name="deletion_order" type="submit" value="1" class="btn btn-default">supprimer</button>
-		</div>
+		<button name="toDB_order" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
+		<button name="deletion_order" type="submit" value="1" class="btn btn-default">Supprimer</button>
 	</form>
 </div>
 </body>

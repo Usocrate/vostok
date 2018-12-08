@@ -826,8 +826,8 @@ class Society {
 	 * Obtient la liste des sociétés en relation.
 	 *
 	 * @return array
-	 * @since 27/08/2006
-	 * @version 20/12/2016
+	 * @since 08/2006
+	 * @version 12/2016
 	 */
 	public function getRelatedSocieties() {
 		global $system;
@@ -856,7 +856,7 @@ class Society {
 		foreach ( $data as $row ) {
 			$s = new Society ();
 			$s->feed ( $row );
-			$output [] = array($s, $row['relationship_id'], $row['relatedsociety_role'], $row['description']);
+			$output[] = array($s, $row['relationship_id'], $row['relatedsociety_role'], $row['description']);
 		}
 		return $output;
 	}
