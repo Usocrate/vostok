@@ -136,6 +136,12 @@ class Individual {
 		return !empty($this->twitter_id);
 	}
 	/**
+	 * @since 12/2018
+	 */
+	public function hasFirstName() {
+		return !empty($this->firstName);
+	}	
+	/**
 	 * @since 08/2018
 	 */
 	public function getLinkedinId() {
@@ -365,6 +371,28 @@ class Individual {
 		return '<i class="fab fa-linkedin"></i> <a href="https://Linkedin.com/in/'.$this->getLinkedinId().'/" target="_blank">'.$this->getLinkedinId().'</a>';		
 	}
 	/**
+	 * @since 12/2018
+	 */
+	public function getHtmlLinkToGoogleSearch($type=null) {
+		$out = '<i class="fab fa-google"></i> ';
+		$out.= ' <a href="'.Toolbox::getGoogleQueryUrl($type).'" target="_blank">';
+		switch($type) {
+			case 'actualités':
+				$out.= 'Actualités';
+				break;
+			case 'images':
+				$out.= 'Images';
+				break;
+			case 'vidéos':
+				$out.= 'Vidéo';
+				break;
+			default :
+				$out.= 'Chez Google';
+		}
+		$out.= '</a>';
+		return $out; 
+	}	
+	/**
 	 * @since 08/2018
 	 */
 	public function embedTwitterTimeline() {
@@ -582,35 +610,11 @@ class Individual {
 	 * Obtient l'URL permettant de googliser la personne.
 	 *
 	 * @return string
-	 * @since 29/10/2007
+	 * @since 10/2007
+	 * @version 12/2018
 	 */
-	public function getGoogleQueryUrl($type = 'search') {
-		$params = array ();
-		if (isset ( $this->firstName )) {
-			$params [] = $this->firstName;
-		}
-		if (isset ( $this->lastName )) {
-			$params [] = $this->lastName;
-		}
-		if (count ( $params ) > 0) {
-			$query = '?q=' . urlencode ( implode ( '+', $params ) );
-			switch ($type) {
-				case 'images' :
-					$url = 'http://images.google.com/images';
-					break;
-				case 'news' :
-					$url = 'http://news.google.com/news';
-					break;
-				case 'groups' :
-					$url = 'http://groups.google.com/groups';
-					break;
-				default :
-					$url = 'http://www.google.com/search';
-			}
-			return $url . $query;
-		} else {
-			return NULL;
-		}
+	public function getGoogleQueryUrl($type = null) {
+		return Toolbox::getGoogleQueryUrl('"'.$this->getWholeName().'"', $type);
 	}
 	public function getAddressFromGoogle($input = NULL) {
 		global $system;

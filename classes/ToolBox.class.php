@@ -1,20 +1,15 @@
 <?php
 
-class ToolBox
-{
+class ToolBox {
 
-    public function _construct()
-    {}
+    public function _construct(){}
 
     /**
-     *
-     * @version 01/08/2014
+     * @version 08/2014
      */
-    public static function toHtml($input)
-    {
+    public static function toHtml($input) {
         return nl2br( htmlentities($input, ENT_HTML5, 'UTF-8') );
     }
-
     /**
      * @version 08/2018
      */
@@ -74,56 +69,43 @@ class ToolBox
         }
         return '<ul class="pagination">' . implode('', $nav_items) . '</ul>';
     }
-
     /**
      * Transforme un tableau en chaîne de paramètres à intégrer dans une url.
      *
-     * @param $array
-     * @return string
-     * @version 2009-04-17
+     * @version 12/2018
      */
-    public static function arrayToUrlParam($array)
-    {
-        if (is_array($array)) {
-            $params = array();
-            foreach ($array as $clé => $valeur) {
-                if (isset($valeur))
-                    $params[] = $clé . '=' . urlencode($valeur);
-            }
-            return implode('&', $params);
-        }
-        return false;
+    public static function arrayToUrlParam(Array $in) {
+        $count = 0;
+		do {
+			$out = $count>0 ? $out.'&'.key($in).'='.urlencode(current($in)) : key($in).'='.urlencode(current($in));
+			$count++;
+		} while (next($in));
+        return $out;
     }
-
     /**
      * Remplace tous les caractères accentués d'une chaîne.
      *
      * @param string $input            
      * @return string
      */
-    public static function sans_accent($input)
-    {
+    public static function sans_accent($input) {
         $input = utf8_decode($input);
         $accent = utf8_decode("ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿ");
         $noaccent = "aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyyby";
         return strtr(trim($input), $accent, $noaccent);
     }
-
     /**
      * Elimine les caractères indésirables pour qu'une chaîne de caractère devienne utilisable comme nom de fichier.
      *
      * @return string
      */
-    public static function formatForFileName($input)
-    {
+    public static function formatForFileName($input) {
         $input = self::sans_accent($input);
         $input = strtolower($input);
         $input = str_replace(' ', '-', $input);
         return $input;
     }
-
-    public static function formatUserPost(&$data)
-    {
+    public static function formatUserPost(&$data) {
         if (is_array($data)) {
             foreach ($data as &$item) {
                 self::formatUserPost($item);
@@ -134,28 +116,49 @@ class ToolBox
             $data = trim($data);
         }
     }
-
     /**
      * Obtient le timestamp Unix correspondant à un datetime (format Mysql)
      *
      * @param string $input            
      */
-    public static function mktimeFromMySqlDatetime($input)
-    {
+    public static function mktimeFromMySqlDatetime($input) {
         list ($date, $time) = explode(' ', $input);
         list ($year, $month, $day) = explode('-', $date);
         list ($hour, $min, $sec) = explode(':', $time);
         return mktime(intval($hour), intval($min), intval($sec), intval($month), intval($day), intval($year));
     }
-
     /**
      * Ajoute un répertoire dans la liste des répertoires utilisés dans la recherche de fichiers à inclure.
      *
-     * @since 27/12/2010
+     * @since 12/2010
      */
-    public static function addIncludePath($input)
-    {
+    public static function addIncludePath($input) {
         return ini_set('include_path', $input . PATH_SEPARATOR . ini_get('include_path'));
     }
+    /**
+     * @since 12/2018
+     */
+	public static function getGoogleQueryUrl($query, $type = null) {
+
+		$params = array ();
+
+		$url = 'https://www.google.com/search?';
+
+		switch ($type) {
+			case 'images' :
+				$params['tbm'] = 'isch';
+				break;
+			case 'vidéos' :
+				$params['tbm'] = 'vid';
+				break;					
+			case 'actualités' :
+				$params['tbm'] = 'nws';
+				break;
+		}
+
+		$params['q'] = $query;
+		
+		return $url.self::arrayToUrlParam($params);
+	}	
 }
 ?>

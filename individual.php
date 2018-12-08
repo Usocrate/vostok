@@ -101,6 +101,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				if ($individual->getCvUrl()) {
 					$links[] = '<a href="'.$individual->getCvUrl().'">cv</a>';
 				}
+				//$links[] = $individual->getHtmlLinkToGoogleSearch();
+				$links[] = '<a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.Toolbox::toHtml($individual->hasFirstName() ? $individual->getFirstName() : $individual->getWholeName()).' chez Google</a>';
+				$links[] = '<a href="'.$individual->getGoogleQueryUrl('vidéos').'" target="_blank">En vidéo</a>';
+
 				if (count($links) > 0) {
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($links as $l) {
@@ -109,13 +113,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 					echo '</ul>';
 				}
 			?>			
-			<div class="card-footer text-muted">
-			    <?php
-					if ($individual->getGoogleQueryUrl()) {
-						echo '<p><a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.$individual->getWholeName().' dans Google</a></p>';
-					}			    
-			    ?>
-			</div>
 		</div>
     	</div>
 	    <div class="col-lg">
@@ -182,6 +179,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								if (count($data)>0) {
 									echo '<p>'.implode('<span> | </span>', $data).'</p>';
 								}
+								
+								$url = ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"');
+								echo '<p><a href="'.$url.'" target="_blank">Chez Google</a></p>';
+
 								echo '</li>';
 							}
 							echo '<li class="list-group-item"><a href="membership_edit.php?individual_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
@@ -218,6 +219,8 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 									echo ToolBox::toHtml($item[3]);
 									echo '</p>';
 								}
+								$url = ToolBox::getGoogleQueryUrl('"'.$item[0]->getWholeName().'" "'.$individual->getWholeName().'"');
+								echo '<p><a href="'.$url.'" target="_blank">Chez Google</a></p>';
 								echo '</li>';
 							}
 							echo '<li class="list-group-item"><a href="individualToIndividualRelationship_edit.php?item0_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
