@@ -144,7 +144,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								echo $s->getHtmlLinkToSociety();
 								echo ' <small>';
 								echo '<a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';
-								echo ' <a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'"><i class="fab fa-google"></i></a>';
+								echo ' <a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'" target="_blank"><i class="fab fa-google"></i></a>';
 								echo '</small>';
 								echo '</h2>';
 								

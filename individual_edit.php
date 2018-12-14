@@ -107,7 +107,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 	
 				<small id="passwordHelpBlock" class="form-text text-muted">
 				<?php if ($individual->getGoogleQueryUrl('images')) : ?>
-						<a href="<?php echo $individual->getGoogleQueryUrl('images') ?>">Une photo chez Google ?</a>
+						<a href="<?php echo $individual->getGoogleQueryUrl('images') ?>" target="_blank">Une photo chez Google ?</a>
 					<?php endif; ?>
 				</small>
 	
@@ -151,7 +151,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 					<div class="form-group">
 						<label for="individual_web_input">Sur le web</label>
 						<input type="text" id="individual_web_input" name="individual_web" value="<?php echo $individual->getWeb(); ?>" size="55" maxlength="255" class="form-control" onchange="checkUrlInput('individual_web_input', 'individual_web_link');" /> 
-						<a id="individual_web_link" href="#" style="display: none">[voir]</a>
+						<a id="individual_web_link" href="#" target="_blank" style="display: none">[voir]</a>
 					</div>
 				</fieldset>
 			</div>
