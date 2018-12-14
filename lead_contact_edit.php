@@ -139,10 +139,7 @@ $doc_title = 'Une piste';
         				<label for="individual_salutation">civilité</label>
         				<select name="individual_salutation" class="form-control">
         					<option value="">-- choisis --</option>
-        					<?php
-        					$individual = new Individual();
-        					echo $individual->getSalutationOptionsTags();
-        					?>
+        					<?php echo Individual::getSalutationOptionsTags(); ?>
         				</select>
     				</div>
     				

@@ -30,7 +30,7 @@ class Society {
 	 * Tente d'indentifier la société par son nom.
 	 *
 	 * @return boolean
-	 * @version 20/12/2016
+	 * @version 12/2018
 	 */
 	public function identifyFromName() {
 		global $system;
@@ -38,8 +38,7 @@ class Society {
 		$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
 		$statement->execute();
 		$this->id = $statement->fetch(PDO::FETCH_COLUMN);
-		echo empty($this->id) ? $this->name.' non identifiée' : $this->name.' identifiée ('.$this->id.') ';
-		return ! empty($this->id);
+		return $this->id !== false;
 	}
 	/**
 	 * Obtient la valeur d'un attribut.

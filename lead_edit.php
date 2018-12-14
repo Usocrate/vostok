@@ -344,10 +344,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
             						<label for="i_salutation_s">civilité</label> 
             						<select id="i_salutation_s" name="individual_salutation" class="form-control">
             							<option value="">-- choisis --</option>
-            							<?php
-            							$individual = new Individual;
-            							echo $individual->getSalutationOptionsTags();
-            							?>
+            							<?php echo Individual::getSalutationOptionsTags(); ?>
             						</select>
         						</div>
         						

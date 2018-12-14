@@ -82,6 +82,12 @@ class Membership {
 		return $this->setAttribute('id', $input);
 	}
 	/**
+	 * @since 12/2018
+	 */
+	public function hasId() {
+		return isset($this->id);
+	}
+	/**
 	 * Renvoie la fonction exercée dans le cadre de cette participation.
 	 * @return string
 	 */
@@ -221,7 +227,6 @@ class Membership {
 	}
 	/**
 	 * Renvoie la société concernée.
-	 * @return Society|NULL
 	 */
 	public function getSociety() {
 		if (isset($this->society)) {
@@ -235,10 +240,22 @@ class Membership {
 	/**
 	 * Fixe la société concernée.
 	 * @param Society $input
-	 * @version 09/04/2006	 
+	 * @version 04/2006	 
 	 */	
 	public function setSociety($input) {
 		if (is_a($input, 'Society')) $this->society = $input;
+	}
+	/**
+	 * @since 12/2018
+	 */
+	public function isSocietyIdentified() {
+		return isset($this->society) && !empty($this->society->getId());
+	}
+	/**
+	 * @since 12/2018
+	 */
+	public function isIndividualIdentified() {
+		return isset($this->individual) && !empty($this->individual->getId());
 	}	
 	/**
 	 * Obtient l'Url décrivant la participation de la personne.
@@ -255,10 +272,26 @@ class Membership {
 	}	
 	/**
 	 * Obtient un lien HTML vers un contenu web décrivant la participation. 
-	 * @since 07/12/2006
+	 * @since 12/2006
 	 */
 	public function getHtmlLinkToWeb() {
 		return $this->getUrl() ? '<a href="'.$this->getUrl().'" title="'.$this->getUrl().'">[web]</a>' : NULL;	
+	}
+	/**
+	 * @since 12/2018
+	 */
+	public function getHtmlLinkToIndividual() {
+		if ($this->isIndividualIdentified()) {
+			return $this->individual->getHtmlLinkToIndividual();
+		}
+	}
+	/**
+	 * @since 12/2018
+	 */
+	public function getHtmlLinkToSociety() {
+		if ($this->isSocietyIdentified()) {
+			return $this->society->getHtmlLinkToSociety();
+		}
 	}	
 	/**
 	 * Enregistre en base de données les attributs de la participation.
@@ -394,7 +427,7 @@ class Membership {
 			$statement->bindValue(':id', $this->id, PDO::PARAM_STR);
 			$statement->execute();
 			$data = $statement->fetch(PDO::FETCH_ASSOC);
-			return $this->feed($data);
+			return $data ? $this->feed($data) : false;
 		}
 		return false;
 	}

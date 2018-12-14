@@ -216,17 +216,14 @@ class Individual {
 	/**
 	 * Obtient les options pour le champ salutation, au format HTML.
 	 *
-	 * @version 24/05/2006
+	 * @version 12/2018
 	 */
-	public function getSalutationOptionsTags($valueToSelect = NULL) {
+	public static function getSalutationOptionsTags($valueToSelect = NULL) {
 		$salutations = array (
 				'mlle' => 'Mlle',
 				'mme' => 'Mme',
 				'mr' => 'Mr' 
 		);
-		if (is_null ( $valueToSelect ) && isset ( $this->salutation )) {
-			$valueToSelect = $this->salutation;
-		}
 		$html = '';
 		foreach ( $salutations as $key => $value ) {
 			$html .= '<option ';

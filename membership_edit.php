@@ -23,86 +23,126 @@ if (empty ($_SESSION['user_id'])) {
 
 $membership = new Membership();
 
-// Formatage des données saisies par l'utilisateur
-if (isset($_POST)) ToolBox::formatUserPost($_POST);
+$fb = new UserFeedBack();
 
 if (!empty($_REQUEST['membership_id'])) {
 	//
 	// la participation à traiter est identifiée
 	//
 	$membership->setId($_REQUEST['membership_id']);
-	$membership->feed();
-
-	if (isset($_POST['task']) && strcmp($_POST['task'], 'membership_deletion')==0) {
-		// demande de suppression de la participation
-		$individual =& $membership->getIndividual();
-		$membership->delete();
-		header('location:individual.php?individual_id='.$individual->getId());
-		exit;
+	if ($membership->feed()) {
+		$membership->getIndividual()->feed();
+		$membership->getSociety()->feed();		
 	} else {
-		// récupération des données en base
-		$individual = $membership->getIndividual();
-		if (is_a($individual, 'Individual')) {
-			$individual->feed();
-		}
-		$society = $membership->getSociety();
-		if (is_a($society, 'Society')) {
-			$society->feed();
-		}
+		header('location:index.php');
+		exit;		
 	}
 } else {
 	//
 	// la participation est nouvelle
 	//
 	if (!empty($_REQUEST['individual_id'])) {
-		$individual = new Individual($_REQUEST['individual_id']);
-		$individual->feed();
-		$membership->setIndividual($individual);
+		$applicant = new Individual($_REQUEST['individual_id']);
+		$applicant->feed();
+		$membership->setIndividual($applicant);
 	}
 	if (!empty($_REQUEST['society_id'])) {
-		$society = new Society($_REQUEST['society_id']);
-		$society->feed();
-		$membership->setSociety($society);
+		$applicant = new Society($_REQUEST['society_id']);
+		$applicant->feed();
+		$membership->setSociety($applicant);
 	}
 }
 
-if (isset($_POST['task']) && strcmp($_POST['task'], 'membership_submission')==0) {
-	//
-	// enregistrement des données de la participation
-	//
-	$membership->feed($_POST);
-	if (isset($society) === false && !empty($_POST['society_name'])) {
-		// aucune société n'est encore déclarée comme contexte de la participation
-		$society = new Society();
-		$society->feed($_POST);
-		if (!$society->identifyFromName()) $society->toDB();
-		$membership->setSociety($society);
-	}
-	if (!empty($_POST['newsociety_id'])) {
-		// demande de transfert de la participation dans une autre société
-		$membership->setSociety(new Society($_POST['newsociety_id']));
-	}
-	if (isset($individual) === false && !empty($_POST['individual_lastName'])) {
-		// personne n'est déclaré comme participant
-		$individual = new Individual();
-		$individual->feed($_POST);
-		if (!$individual->identifyFromName()) $individual->toDB();
-		$membership->setIndividual($individual);
-	}
-	if ($membership->toDB()) {
-		// enregistrement effectif !
-		header('location:individual.php?individual_id='.$individual->getId());
-		exit;
+if (isset($_POST['task'])) {
+	
+	ToolBox::formatUserPost($_POST);
+	
+	switch($_POST['task']) {
+		case 'membership_submission':
+			//
+			// enregistrement des données de la participation
+			//
+			$membership->feed($_POST);
+			if (! is_a($membership->getSociety(), 'Society') && !empty($_POST['society_name'])) {
+				// aucune société n'est encore déclarée comme contexte de la participation
+				$s = new Society();
+				$s->feed($_POST);
+				if (!$s->identifyFromName()) $s->toDB();
+				$membership->setSociety($s);
+			}
+			if (!empty($_POST['newsociety_id'])) {
+				// demande de transfert de la participation dans une autre société
+				$membership->setSociety(new Society($_POST['newsociety_id']));
+			}
+			if (! is_a($membership->getIndividual(), 'Individual') && !empty($_POST['individual_lastName'])) {
+				// personne n'est déclaré comme participant
+				$i = new Individual();
+				$i->feed($_POST);
+				if (!$i->identifyFromName()) $i->toDB();
+				$membership->setIndividual($i);
+			}
+			if ($membership->toDB()) {
+				// enregistrement effectif !
+				if (isset($_REQUEST['serie']) && $_REQUEST['serie']==1) {
+					// enchaînement sur la déclaration d'une autre participation
+
+					$fb = new UserFeedBack();
+					
+					if (isset($applicant)) {
+						switch (get_class($applicant)) {
+							case 'Society' :
+								$fb->addSuccessMessage('La participation de '.$membership->getHtmlLinkToIndividual().' est enregistrée.');
+								$membership = new Membership();
+								$membership->setSociety($applicant);
+								break;
+							case 'Individual' :
+								$fb->addSuccessMessage('La participation à '.$membership->getHtmlLinkToSociety().' est enregistrée.');
+								$membership = new Membership();
+								$membership->setIndividual($applicant);
+								break;						
+						}
+					} else {
+						$fb->addSuccessMessage('Participation enregistrée.');
+					}
+					
+					// dans le cadre d'une série on propose de conserver la fonction de la particpation précédente
+					if (isset($_REQUEST['title'])) {
+						$membership->setTitle($_REQUEST['title']);
+					}
+
+				} else {
+					// pas de déclaration en série, redirection vers l'écran de l'entité à l'origine de la demande de déclaration
+					if (isset($applicant)) {
+						switch (get_class($applicant)) {
+							case 'Society' :
+								header('location:society.php?society_id='.$applicant->getId());
+								exit;
+							case 'Individual' :
+								header('location:individual.php?individual_id='.$applicant->getId());
+								exit;						
+						}
+					} else {
+						$fb->addSuccessMessage('Mise à jour de la participation effective.');
+					}
+				}
+			}			
+			break;
+		case 'membership_deletion':
+			// demande de suppression de la participation
+			$individual = $membership->getIndividual();
+			$membership->delete();
+			header('location:individual.php?individual_id='.$individual->getId());
+			exit;
 	}
 }
 
 // on détermine le titre de la page
-if (isset($individual) && isset($society) && $individual->getId() && $society->getId()) {
-	$h1_content = $individual->getHtmlLinkToIndividual(). ' <small>chez '.$society->getHtmlLinkToSociety().'</small>';
-} elseif (isset($individual) && $individual->getId()) {
-	$h1_content = 'Une participation de '.$individual->getHtmlLinkToIndividual();
-} elseif (isset($society) && $society->getId()) {
-	$h1_content = 'Une participation à '.$society->getHtmlLinkToSociety();
+if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified()) {
+	$h1_content = $membership->getHtmlLinkToIndividual(). ' <small>chez '.$membership->getHtmlLinkToSociety().'</small>';
+} elseif ($membership->isIndividualIdentified()) {
+	$h1_content = 'Une participation de '.$membership->getHtmlLinkToIndividual();
+} elseif ($membership->isSocietyIdentified()) {
+	$h1_content = 'Une participation à '.$membership->getHtmlLinkToSociety();
 } else {
 	$h1_content = 'Une participation';
 }
@@ -125,46 +165,46 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1 class="bd-title"><?php echo $h1_content ?></h1>
+	<?php echo $fb->toHtml() ?>
 	<section>
     	<form id="membership_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     		<?php
-    		if ($membership->getId()) {
+    		if ($membership->hasId()) {
     			echo '<input name="membership_id" type="hidden" value="'.$membership->getId().'" />';
     		}
-    		if (isset($_REQUEST['individual_id'])) {
-    			echo '<input name="individual_id" type="hidden" value="'.$_REQUEST['individual_id'].'" />';
+    		if (isset($applicant)) {
+    			switch (get_class($applicant)) {
+    				case 'Society':
+    					echo '<input name="society_id" type="hidden" value="'.$applicant->getId().'" />';
+    					break;
+    				case 'Individual' :
+    					echo '<input name="individual_id" type="hidden" value="'.$applicant->getId().'" />';
+    					break;
+    			}
+    			
     		}
-    		if (isset($_REQUEST['society_id'])) {
-    			echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />';
-    		}
-    		?>
-    		
-			<?php
-			if (!isset($society) || !$society->getId()) {
+
+			if (!$membership->isSocietyIdentified()) {
 				echo '<div class="form-group">';
 				echo '<label for="s_name_i">Nom de la Société</label>';
 				echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35" />';
 				echo '</div>';
 			} else {
-				if (isset($individual)) {
-					$relatedSocieties = $society->getRelatedSocieties();
+				if ($membership->isIndividualIdentified()) {
+					$relatedSocieties = $membership->getSociety()->getRelatedSocieties();
 					if (count($relatedSocieties)>0) {
 						echo '<div class="form-group">';
 						echo '<label for="newsociety_id">Transférer dans une société liée</label>';
 						echo '<select name="newsociety_id" class="form-control">';
 						echo '<option value="">-- choisir --</option>';
-						echo $society->getRelatedSocietiesOptionsTags();
+						echo $membership->getSociety()->getRelatedSocietiesOptionsTags();
 						echo '</select>';
 						echo '</div>';
 					}
 				}	
 			}
-			?>
 
-
-			<?php
-			if (!isset($individual)) {
-				$individual = new Individual();
+			if (!$membership->isIndividualIdentified()) {
 				//echo '<fieldset>';
 				//echo '<legend>Qui ?</legend>';
 				echo '<div class="form-row">';
@@ -172,7 +212,7 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 				echo '<label for="individual_salutation_i">Civilité</label>';
 				echo '<select id="individual_salutation_i" name="individual_salutation" class="form-control">';
 				echo '<option value="">-- choisis --</option>';
-				echo $individual->getSalutationOptionsTags();
+				echo Individual::getSalutationOptionsTags();
 				echo '</select>';
 				echo '</div>';
 				echo '<div class="form-group col-md-4">';
@@ -196,7 +236,7 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 				
 				<div class="form-group col-md-4">
 					<label for="title_i">Fonction</label>
-					<input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" class="form-control" /> 
+					<input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" class="form-control" />
 				</div>
 				<div class="form-group col-md-2">
 					<label for="init_year_i">Année d'ouverture</label>
@@ -231,9 +271,18 @@ if (isset($individual) && isset($society) && $individual->getId() && $society->g
 				<a id="membership_url_link" href="#" style="display: none">[voir]</a>
 			</div>
 
+			<?php if (!$membership->hasId()) : ?>
+			<div class="form-group">
+				<div class="form-check">
+				  <input class="form-check-input" type="checkbox" value="1" id="serie_i" name="serie" <?php if(isset($_REQUEST['serie']) && $_REQUEST['serie']==1) echo ' checked' ?>>
+				  <label class="form-check-label" for="serie_i">Enchaîner sur la déclaration d'une autre participation ?</label>
+				</div>
+			</div>
+			<?php endif; ?>
+			
+			<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
 
-    		<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
-    		<?php if ($membership->getId()) : ?>
+    		<?php if ($membership->hasId()) : ?>
     			<button name="task" type="submit" value="membership_deletion" class="btn btn-default">Supprimer</button>
     		<?php endif; ?>
     	</form>

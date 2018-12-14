@@ -1,9 +1,8 @@
-﻿<?php
-
+<?php
 /**
  * permet de gérer des messages à fournir aux utilisateur
  *
- * @since 21/03/2008
+ * @since 03/2008
  */
 class UserFeedBack {
 	private $messages;
@@ -18,8 +17,7 @@ class UserFeedBack {
 	/**
 	 * ajoute un message au feedback à fournir à l'utilisateur
 	 *
-	 * @since 2008-03-21
-	 * @author Flo
+	 * @since 03/2008
 	 */
 	private function addMessage($message, $type = 'notice') {
 		$this->messages [$type] [] = $message;
@@ -68,7 +66,7 @@ class UserFeedBack {
 		}
 		$html = '';
 		foreach ( $this->messages [$type] as $m ) {
-			$html .= '<div class="' . $css_class . '" role="alert">' . htmlentities ( $m ) . '</p>';
+			$html .= '<div class="' . $css_class . '">'.$m.'</div>';
 		}
 		return $html;
 	}
@@ -78,6 +76,12 @@ class UserFeedBack {
 		$html .= $this->SuccessMessagesToHtml ();
 		$html .= $this->InfoMessagesToHtml ();
 		return $html;
+	}
+	/**
+	 * @since 12/2018
+	 */
+	public function toHtml() {
+		return $this->AllMessagesToHtml();
 	}
 }
 ?>
