@@ -208,6 +208,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				//echo '<fieldset>';
 				//echo '<legend>Qui ?</legend>';
 				echo '<div class="form-row">';
+				/*
 				echo '<div class="form-group col-md-2">';
 				echo '<label for="individual_salutation_i">Civilité</label>';
 				echo '<select id="individual_salutation_i" name="individual_salutation" class="form-control">';
@@ -215,6 +216,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				echo Individual::getSalutationOptionsTags();
 				echo '</select>';
 				echo '</div>';
+				*/
 				echo '<div class="form-group col-md-4">';
 				echo '<label for="individual_firstName_i">Prénom</label>';
 				echo '<input id="individual_firstName_i" name="individual_firstName" type="text" maxlength="255" class="form-control" />';
@@ -296,6 +298,8 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
+			$('#individual_firstName_i').focus();
+
 			$('#s_name_i').autocomplete({
 				minLength: 2,
 		   		source: function( request, response ) {
