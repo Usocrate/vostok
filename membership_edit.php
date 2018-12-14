@@ -231,14 +231,13 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			?>
 
 			<div class="form-row">
-				<div class="form-group col-md-4">
-					<label for="department_i">Service</label>
-					<input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" class="form-control" /> 
-				</div>
-				
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-3">
 					<label for="title_i">Fonction</label>
 					<input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" class="form-control" />
+				</div>
+				<div class="form-group col-md-3">
+					<label for="department_i">Service</label>
+					<input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" class="form-control" /> 
 				</div>
 				<div class="form-group col-md-2">
 					<label for="init_year_i">Année d'ouverture</label>
