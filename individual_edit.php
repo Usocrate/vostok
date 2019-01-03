@@ -89,8 +89,14 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
     ?>
   
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
-		<?php if (isset($_REQUEST['society_id'])) echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />'?>
-		<input name="individual_id" type="hidden" value="<?php echo $individual->getId() ?>" />
+		<?php
+			if (isset($_REQUEST['society_id'])) {
+				echo '<input name="society_id" type="hidden" value="'.$_REQUEST['society_id'].'" />';
+			}
+			if ($individual->hasId()) {
+				echo '<input name="individual_id" type="hidden" value="'.$individual->getId().'" />';
+			}
+		?>
 		<div class="form-row">
 			<div class="form-group col-md-3">
 				<label for="individual_firstname_i">Prénom</label>
@@ -107,8 +113,8 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 	
 				<small id="passwordHelpBlock" class="form-text text-muted">
 				<?php if ($individual->getGoogleQueryUrl('images')) : ?>
-						<a href="<?php echo $individual->getGoogleQueryUrl('images') ?>" target="_blank">Une photo chez Google ?</a>
-					<?php endif; ?>
+					<a href="<?php echo $individual->getGoogleQueryUrl('images') ?>" target="_blank">Une photo chez Google ?</a>
+				<?php endif; ?>
 				</small>
 	
 			</div>

@@ -295,15 +295,19 @@ class Individual {
 	 * Obtenir le nom complet de l'individu, formatté pour l'affichage.
 	 *
 	 * @return string
+	 * @version 01/2019
 	 */
 	public function getWholeName() {
-		if (! isset ( $this->firstName ) || ! isset ( $this->lastName )) {
+		
+		// tentative de récupération des données en base
+		if ( (empty($this->firstName) && empty($this->lastName)) && $this->hasId() ) {
 			$dataset = $this->getDataFromBase ( array (
 					'individual_firstName',
 					'individual_lastName' 
 			) );
 			$this->feed ( $dataset );
 		}
+		
 		$pieces = array ();
 		if (! empty ( $this->firstName )) {
 			$pieces [] = ucfirst ( $this->firstName );
@@ -314,7 +318,7 @@ class Individual {
 		if (count ( $pieces ) == 0) {
 			return 'XXX';
 		}
-		return implode ( ' ', $pieces );
+		return implode (' ', $pieces);
 	}
 	/**
 	 * @since 11/2018
@@ -608,10 +612,11 @@ class Individual {
 	 *
 	 * @return string
 	 * @since 10/2007
-	 * @version 12/2018
+	 * @version 01/2019
 	 */
 	public function getGoogleQueryUrl($type = null) {
-		return Toolbox::getGoogleQueryUrl('"'.$this->getWholeName().'"', $type);
+		$var = $this->getWholeName();
+		return empty($var) ? null : Toolbox::getGoogleQueryUrl('"'.$var.'"', $type);
 	}
 	public function getAddressFromGoogle($input = NULL) {
 		global $system;
