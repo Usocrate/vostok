@@ -247,11 +247,11 @@ class System {
 	}
 	/**
 	 *
-	 * @version 04/08/2014
+	 * @version 08/2014
 	 * @return string
 	 */
 	public function getHtmlLink() {
-		return '<a href="' . $system->getAppliUrl () . '">' . ToolBox::toHtml( $this->getAppliName() ) . '</a>';
+		return '<a href="' . $this->getAppliUrl () . '">' . ToolBox::toHtml( $this->getAppliName() ) . '</a>';
 	}
 	
 	public function getHtmlHeadTagsForFavicon() {
@@ -273,15 +273,14 @@ class System {
 	 * Renvoie l'ensemble des utilisateurs accrédités.
 	 *
 	 * @return array
-	 * @since 26/02/2006
-	 * @version 04/08/2014
+	 * @since 02/2006
+	 * @version 08/2014
 	 */
 	public function getUsers() {
-		global $system;
 		try {
 			$output = array ();
 			$sql = 'SELECT * FROM user';
-			foreach ( $system->getPdo ()->query ( $sql ) as $data ) {
+			foreach ( $this->getPdo ()->query ( $sql ) as $data ) {
 				$u = new User ();
 				$u->feed ( $data );
 				array_push ( $output, $u );
@@ -296,7 +295,6 @@ class System {
 	 * @version 11/2018
 	 */
 	public function getIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
-		global $system;
 		try {
 			$wholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
 			$sql = 'SELECT *,DATE_FORMAT(individual_creation_date, "%d/%m/%Y") AS individual_creation_date_fr';
@@ -349,7 +347,7 @@ class System {
 				$sql .= isset ( $offset ) ? ' LIMIT :offset,:count' : ' LIMIT :count';
 			}
 			
-			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement = $this->getPdo ()->prepare ( $sql );
 			
 			// echo $sql;
 			
@@ -385,7 +383,6 @@ class System {
 	 * @since 05/2018
 	 */
 	public function getMemberships($criteria = NULL, $sort = 'Last updated first', $offset = 0, $count = NULL) {
-		global $system;
 		try {
 			$sql = 'SELECT m.membership_id AS id, m.individual_id, m.society_id, m.title, m.department, m.description, m.init_year, m.end_year, m.timestamp';
 			$sql.= ', i.individual_firstName, i.individual_lastName';
@@ -454,7 +451,7 @@ class System {
 				$sql .= isset ( $offset ) ? ' LIMIT :offset,:count' : ' LIMIT :count';
 			}			
 			
-			$statement = $system->getPdo()->prepare($sql);
+			$statement = $this->getPdo()->prepare($sql);
 
 			if (isset ($criteria ['individual_id'])) {
 				$statement->bindValue(':individual_id', $criteria['individual_id'], PDO::PARAM_INT);
@@ -528,7 +525,6 @@ class System {
 	 * @since 12/2018
 	 */
 	public function getMembershipTitles($sort = 'Alphabetical') {
-		global $system;
 		try {
 			$sql = 'SELECT title, COUNT(*) AS nb FROM membership WHERE title IS NOT NULL GROUP BY title';
 
@@ -542,7 +538,7 @@ class System {
 					break;
 			}
 
-			$statement = $system->getPdo()->prepare($sql);
+			$statement = $this->getPdo()->prepare($sql);
 
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
 			$statement->execute();
@@ -561,7 +557,6 @@ class System {
 	 * @version 12/2016
 	 */
 	public static function getAloneIndividualCollectionStatement($criteria = NULL, $sort = 'Name', $offset = 0, $count = NULL) {
-		global $system;
 		try {
 			$wholeNameSqlSelectPattern = 'IF((i.individual_lastname IS NOT NULL AND i.individual_firstname IS NOT NULL), CONCAT(i.individual_firstname, " ", i.individual_lastName), IF(i.individual_lastname IS NOT NULL, i.individual_lastname, i.individual_firstname))';
 			$sql = 'SELECT i.*, DATE_FORMAT(individual_creation_date, "%d/%m/%Y") AS individual_creation_date_fr';
@@ -596,7 +591,7 @@ class System {
 				$sql .= isset ( $offset ) ? ' LIMIT :offset,:count' : ' LIMIT :count';
 			}
 			
-			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement = $this->getPdo ()->prepare ( $sql );
 			
 			/*
 			 * Rattachement des variables
@@ -625,7 +620,6 @@ class System {
 	 * @version 11/2018
 	 */
 	public function countIndividuals($criteria) {
-		global $system;
 		try {
 			$wholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
 			$sql = 'SELECT COUNT(*) FROM individual';
@@ -644,7 +638,7 @@ class System {
 				$sql .= ' WHERE ' . implode ( ' AND ', $where );
 			}
 			
-			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement = $this->getPdo ()->prepare ( $sql );
 			
 			if (isset ( $criteria ['individual_wholename_like_pattern'] )) {
 				$statement->bindValue ( ':wholename_like', '%' . $criteria ['individual_wholename_like_pattern'] . '%', PDO::PARAM_STR );
@@ -656,27 +650,25 @@ class System {
 			$statement->execute ();
 			return $statement->fetchColumn ();
 		} catch ( Exception $e ) {
-			$system->reportException($e);
+			$this->reportException($e);
 		}
 	}
 	/**
-	 *
-	 * @since 04/08/2014
+	 * @since 08/2014
 	 */
 	public function countAloneIndividuals($criteria) {
-		global $system;
 		try {
 			$c = new IndividualCollection ( self::getAloneIndividualCollectionStatement ( $criteria ) );
 			return $c->getSize ();
 		} catch ( Exception $e ) {
-			$system->reportException($e);
+			$this->reportException($e);
 		}
 	}
 	/**
 	 * Obtient les personnes dont la date d'anniversaire est proche de la date courante.
 	 *
-	 * @since 22/12/2006
-	 * @version 04/08/2014
+	 * @since 12/2006
+	 * @version 08/2014
 	 * @return IndividualCollection
 	 */
 	public function getCloseToBirthDateIndividuals($distance = '5') {
@@ -689,7 +681,7 @@ class System {
 			$statement = $this->getIndividualCollectionStatement ( $criteria, $sort_key, $sort_order );
 			return new IndividualCollection ( $statement );
 		} catch ( Exception $e ) {
-			$system->reportException($e);
+			$this->reportException($e);
 		}
 	}
 	/**
@@ -699,7 +691,6 @@ class System {
 	 * @return IndividualCollection
 	 */
 	public function getLastPinnedIndividuals($nb = 12) {
-	    global $system;
 	    try {
 			$criteria = array (
 				'everPinned' => true
@@ -709,17 +700,15 @@ class System {
 			$statement = $this->getIndividualCollectionStatement ($criteria, $sort_key, $sort_order, $nb);
 			return new IndividualCollection ( $statement );
 		} catch ( Exception $e ) {
-			$system->reportException($e);
+			$this->reportException($e);
 		}
 	}
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
 	 *
-	 * @version 13/12/2016
+	 * @version 12/2016
 	 */
 	private function getSocietiesData($criteria = NULL, $sort = 'Last created first', $offset = 0, $nb = NULL) {
-		global $system;
-		
 		$sql = 'SELECT s.*, DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") AS society_creation_date_fr, UNIX_TIMESTAMP(s.society_creation_date) AS society_creation_timestamp';
 		$sql.= ' FROM society AS s LEFT OUTER JOIN society_industry AS si ON(si.society_id=s.society_id)';
 		if (isset ($criteria) && count ( $criteria ) > 0) {
@@ -748,7 +737,7 @@ class System {
 			$sql .= ' LIMIT :offset, :nb';
 		}
 		//echo $sql;
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		
 		if (isset ($criteria) && count ( $criteria ) > 0) {
 			if (isset ($criteria['name']) ) {
@@ -774,10 +763,9 @@ class System {
 	 * Renvoie le nombre de sociétés (avec critères éventuels)
 	 *
 	 * @return int
-	 * @version 23/11/2016
+	 * @version 11/2016
 	 */
 	public function getSocietiesNb($criteria = NULL) {
-		global $system;
 
 		$sql = 'SELECT COUNT(DISTINCT s.society_id) FROM society AS s LEFT OUTER JOIN society_industry AS si ON(si.society_id=s.society_id)';
 
@@ -795,7 +783,7 @@ class System {
 			$sql .= ' WHERE '.implode(' AND ', $sql_criteria);
 		}
 
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		
 		if (isset ($criteria) && count ( $criteria ) > 0) {
 			if (isset ($criteria['name']) ) {
@@ -848,11 +836,9 @@ class System {
 	 * Renvoie les pistes correspondant à certains critères (optionnels)
 	 *
 	 * @return resource
-	 * @version 03/06/2017
+	 * @version 06/2017
 	 */
 	public function getLeadsRowset($criteria = NULL, $sort = 'Last created first', $nb = NULL, $offset = 0) {
-		global $system;
-		
 		$sql = 'SELECT * FROM lead AS l';
 		$sql .= ' LEFT JOIN individual AS c USING (individual_id)';
 		$sql .= ' LEFT JOIN society AS a USING (society_id)';
@@ -880,7 +866,7 @@ class System {
 			$sql .= ' LIMIT :offset, :nb';
 		}		
 		
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		if (count ( $criteria ) > 0) {
 			if ($criteria['type']) {
 				$statement->bindValue(':type', $criteria['type'], PDO::PARAM_STR);
@@ -904,11 +890,10 @@ class System {
 	 * Renvoie le nombre de piste correspondant éventuellement à certains critères.
 	 *
 	 * @return int
-	 * @version 03/06/2017
+	 * @version 06/2017
 	 */
 	public function getLeadsNb($criteria = NULL) {
-		global $system;
-		
+
 		$sql = 'SELECT COUNT(*) AS nb FROM lead AS l';
 		//$sql .= ' LEFT JOIN individual AS c USING (individual_id)';
 		//$sql .= ' LEFT JOIN society AS a USING (society_id)';
@@ -926,7 +911,7 @@ class System {
 			$sql .= ' WHERE ' . implode ( ' AND ', $where );
 		}
 		
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		if (count ( $criteria ) > 0) {
 			if ($criteria['type']) {
 				$statement->bindValue(':type', $criteria['type'], PDO::PARAM_STR);
@@ -948,11 +933,10 @@ class System {
 	 *        	Le type de référence à conserver
 	 * @param string $type2
 	 *        	Le type à faire disparaître
-	 * @since 16/01/2006
+	 * @since 01/2006
 	 */
 	public function mergeLeadTypes($type1, $type2) {
-		global $system;
-		$statement = $system->getPdo()->prepare('UPDATE lead SET lead_type = :t1 WHERE lead_type = :t2');
+		$statement = $this->getPdo()->prepare('UPDATE lead SET lead_type = :t1 WHERE lead_type = :t2');
 		$statement->bindValue(':t1', $type1, PDO::PARAM_INT);
 		$statement->bindValue(':t2', $type2, PDO::PARAM_INT);
 		return $statement->execute();
@@ -965,8 +949,6 @@ class System {
 	 * @version 08/2018
 	 */
 	public function getIndustries($criteria = NULL, $sort = 'Most used first') {
-		global $system;
-
 		$output = array ();
 
 		$sql = 'SELECT i.*, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb FROM industry AS i';
@@ -997,7 +979,7 @@ class System {
 				$sql.= ' ORDER BY name ASC';
 		}
 		
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		
 		if (! is_null ( $criteria )) {
 			if ( isset($criteria['ids']) ) {
@@ -1020,10 +1002,9 @@ class System {
 	 * @since 05/2018
 	 */
 	public function getIndustryFromId($id) {
-		global $system;
 
 		$sql = 'SELECT * FROM industry WHERE id=?';
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		$statement->execute(array($id));
 		$data = $statement->fetch(PDO::FETCH_ASSOC);
 		if ($data) {
@@ -1036,10 +1017,9 @@ class System {
 	 * @since 05/2018
 	 */
 	public function getIndustryFromName($name) {
-		global $system;
 
 		$sql = 'SELECT * FROM industry WHERE name=?';
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		$statement->execute(array($name));
 		$data = $statement->fetch(PDO::FETCH_ASSOC);
 		if ($data) {
@@ -1054,14 +1034,13 @@ class System {
 	 * @since 02/2017
 	 */
 	public function getLastUsedIndustries($scope = 100) {
-		global $system;
 
 		$output = array ();
 		$sql = 'SELECT i.id, i.name, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT :scope) AS si';
 		$sql.= ' INNER JOIN industry AS i ON (i.id = si.industry_id)';
 		$sql.= ' GROUP BY i.name ASC, i.id';
 
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $this->getPdo()->prepare($sql);
 		$statement->bindParam(':scope', $scope, PDO::PARAM_INT);
 		$statement->execute();
 
@@ -1102,18 +1081,17 @@ class System {
 				return $b->transferSocieties($a) ? $b->delete() : false;
 			}			
 		} catch (Exception $e) {
-			$system->reportException($e);
+			$this->reportException($e);
 			exit;
 		}
 	}
 	/**
 	 * Obtient la liste des activités enregistrées sous forme de tags HTML 'option'.
 	 *
-	 * @since 16/07/2006
-	 * @version 03/06/2017
+	 * @since 07/2006
+	 * @version 06/2017
 	 */
 	public function getIndustryOptionsTags($toSelect = NULL) {
-		global $system;
 
 		$sql = 'SELECT i.id, i.name, COUNT(IF(si.society_id IS NOT NULL, 1, NULL)) AS societies_nb';
 		$sql.= ' FROM industry AS i LEFT OUTER JOIN society_industry AS si';
@@ -1122,7 +1100,7 @@ class System {
 		
 		$html = '';
 		
-		foreach  ($system->getPdo()->query($sql, PDO::FETCH_ASSOC) as $row) {
+		foreach  ($this->getPdo()->query($sql, PDO::FETCH_ASSOC) as $row) {
 			$i = new Industry ();
 			$i->feed ( $row );
 			$html .= '<option value="' . $i->getId () . '"';
