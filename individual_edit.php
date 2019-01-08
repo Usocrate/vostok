@@ -15,7 +15,7 @@ session_start();
 
 if (empty($_SESSION['user_id'])) {
     header('Location:login.php');
-    exit();
+    exit;
 } else {
     $user = new User($_SESSION['user_id']);
     $user->feed();
@@ -32,11 +32,14 @@ if (! empty($_REQUEST['individual_id'])) {
 if (isset($_POST['deletion_order'])) {
     $individual->delete();
     header('Location:individuals.php');
-    exit();
+    exit;
 } elseif (isset($_POST['toDB_order'])) {
+
     ToolBox::formatUserPost($_POST);
+    
     // enregistrement des données de l'individu
     $individual->feed($_POST);
+    
     if ( ! empty ( $_POST['individual_address'] ) ) {
     	$individual->getAddressFromGoogle($_POST['individual_address']);
     }
@@ -49,8 +52,10 @@ if (isset($_POST['deletion_order'])) {
     if ( ! empty ($_FILES['individual_photo_file']) ) {
         $messages[] = $individual->filePhoto($_FILES['individual_photo_file']) ? 'La photo est mise à jour' : 'Echec de la mise à jour de la photo';
     }
+
     header('Location:individual.php?individual_id=' . $individual->getId());
-    exit();
+    exit;
+
 } else {
     $individual->feed();
 }
@@ -147,7 +152,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 					<legend>Infos complémentaires</legend>
 					<div class="form-group">	
 						<label for="individual_birth_date_i">Date de naissance</label>
-						<input id="individual_birth_date_i" type="text" name="individual_birth_date" value="<?php echo ToolBox::toHtml($individual->getBirthDate()) ?>" size="10" class="form-control" />
+						<input id="individual_birth_date_i" type="date" name="individual_birth_date" value="<?php echo ToolBox::toHtml($individual->getBirthDate()) ?>" size="10" class="form-control" />
 					</div>
 					<div class="form-group">
     					<label for="individual_description_i">Description</label>

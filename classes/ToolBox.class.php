@@ -128,6 +128,15 @@ class ToolBox {
         return mktime(intval($hour), intval($min), intval($sec), intval($month), intval($day), intval($year));
     }
     /**
+     * Convertir une date au format local (fr) au format date mySQL
+     * 
+     * @since 01/2019
+     */
+    public static function convertDateFromLocalToMySqlFormat($input) {
+        list ($day, $month, $year) = explode('/', $input);
+        return $year.'-'.$month.'-'.$day;
+    }
+    /**
      * Ajoute un répertoire dans la liste des répertoires utilisés dans la recherche de fichiers à inclure.
      *
      * @since 12/2010

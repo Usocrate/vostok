@@ -83,7 +83,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				}
 				if ($individual->getBirthDate()) {
 					echo '<div class="card-body">';
-					echo '<p><small>naissance : </small>'.$individual->getBirthDate().'</p>';
+					echo '<p><small>naissance : </small>'.$individual->getBirthDateFr().'</p>';
 					echo '</div>';
 				}
 				

@@ -64,7 +64,7 @@ class Individual {
 	}
 	/**
 	 * Fixe la valeur d'un attribut.
-	 * @version 08/2018
+	 * @version 01/2019
 	 */
 	public function setAttribute($name, $value) {
 		$value = trim ( $value );
@@ -74,15 +74,19 @@ class Individual {
 			case 'birth_date' :
 				if ( strcmp($value, '0000-00-00') == 0 ) {
 					return false;	
+				} else {
+					return $this->{$name} = $value;	
 				}
 			case 'salutation' :
 				$salutations = array('mr', 'mme', 'mlle');
 				if ( !(in_array($value, $salutations) || empty($value)) ) {
 					return false;
+				} else {
+					return $this->{$name} = $value;
 				}
 			default :
 				// après gestion des cas particuliers, règle générale
-				return $this->{$name} = $value;			
+				return $this->{$name} = $value;
 		}
 	}
 	
@@ -166,7 +170,7 @@ class Individual {
 	 * Obtient la date de naissance.
 	 *
 	 * @since 01/2006
-	 * @version 05/03/2017
+	 * @version 03/2017
 	 */
 	public function getBirthDate() {
 		return isset ( $this->birth_date ) ? $this->birth_date : NULL;
@@ -174,8 +178,8 @@ class Individual {
 	/**
 	 * Obtient la date de naissance au timestamp unix.
 	 *
-	 * @since 21/01/2007
-	 * @version05/03/2017
+	 * @since 01/2007
+	 * @version 03/2017
 	 */
 	public function getBirthDateTimestamp() {
 		if ( isset ( $this->birth_date ) ) {
@@ -188,13 +192,13 @@ class Individual {
 	/**
 	 * Obtient la date de naissance au format français.
 	 *
-	 * @since 21/01/2007
+	 * @since 01/2007
 	 */
 	public function getBirthDateFr() {
 		return date ( 'd/m/Y', $this->getBirthDateTimestamp () );
 	}
 	/**
-	 * @version 05/03/2017
+	 * @version 03/2017
 	 */
 	public function identifyFromName() {
 		global $system;
@@ -1103,9 +1107,12 @@ class Individual {
 		if (is_array ( $array )) {
 			// les données de l'initialisation sont transmises
 			foreach ( $array as $key => $value ) {
+				
+				//echo $key.' : '.$value.'<br>';
+				
 				// NB : stricte correspondance entre les noms d'attribut de la classe une fois préfixe retiré
 				$items = explode ( '_', $key );
-				switch ($items [0]) {
+				switch ($items[0]) {
 					case 'individual' :
 						// pour les champs préfixés 'individual_', on supprime le préfixe
 						array_shift ( $items );
