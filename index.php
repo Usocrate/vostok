@@ -85,11 +85,11 @@ $doc_title = 'Accueil';
 		<h1 class="sr-only"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<div class="row justify-content-md-center">
 			<div class="col-md-10 col-md-offset-1">
-				<section>
-					<form method="post" action="societies_list.php" class="form-inline">
-						<div class="form-group m-2">
+				<section style="display:none">
+					<form method="post" action="societies_list.php" class="form-inline d-lg-flex">
+						<div class="form-group m-2 flex-lg-fill">
 							<label for="s_name_i" class="mr-2">Une société</label>
-							<input id="s_name_i" name="society_name" type="text" class="form-control" placeholder="nom" />
+							<input id="s_name_i" name="society_name" type="text" class="form-control flex-lg-fill" placeholder="nom" />
 						</div>
 						<button type="submit" name="society_newsearch" value="1" class="btn btn-default m-2">Retrouver</button>
 					</form>

@@ -4,8 +4,8 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+  <div class="collapse navbar-collapse d-lg-flex" id="navbarSupportedContent">
+    <ul class="navbar-nav flex-lg-fill">
 		<li class="nav-item"><a class="nav-link" href="lead_edit.php">Nouvelle piste</a></li>
 		<li class="nav-item"><a class="nav-link" href="leads.php?lead_newsearch">Les pistes</a></li>
 		<li class="nav-item"><a class="nav-link" href="societies_list.php?society_newsearch">Les sociétés</a></li>
@@ -32,9 +32,9 @@
 			</div>
 		</li>    	
     </ul>
-	<form class="form-inline my-2 my-lg-0" method="post" action="societies_list.php">
-		<input id="navbar_s_name_i" name="society_name" type="search" class="form-control mr-sm-2" placeholder="société..." />
-		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-outline-primary my-2 my-sm-0">Ok</button>
+	<form class="form-inline flex-lg-fill mx-lg-2" method="post" action="societies_list.php">
+		<input id="navbar_s_name_i" name="society_name" type="search" class="form-control flex-lg-fill mx-lg-1" placeholder="société..." />
+		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-outline-primary mx-lg-1">Ok</button>
 	</form>    
   </div>
 </nav>
