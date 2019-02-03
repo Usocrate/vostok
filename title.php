@@ -53,6 +53,13 @@ $doc_title = $title;
     <section>
         <?php
 			//print_r($memberships);
+			$data = $system->getMembershipTitleAverageDuration($title);
+			if ($data) {
+				echo '<p>Poste occupé en moyenne pendant ';
+				echo $data['avg'] > 1 ? $data['avg'].' ans' : $data['avg'].' an';
+				echo '.</p>';
+			}
+			
 			echo '<table class="table">';
 			echo '<thead><tr><th>Qui ?</th><th>Où ?</th><th>Quand ?</th><tr></thead>';
 			echo '<tbody>';

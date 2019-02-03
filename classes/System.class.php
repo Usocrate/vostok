@@ -551,7 +551,28 @@ class System {
 		} catch (Exception $e) {
 			$this->reportException($e, __METHOD__);
 		}
-	}	
+	}
+	/**
+	 * @since 02/2019
+	 */
+	public function getMembershipTitleAverageDuration($title) {
+		try {
+			$sql = 'SELECT ROUND(AVG(CAST(end_year AS UNSIGNED)-CAST(init_year AS UNSIGNED)+1)) AS avgDuration, COUNT(*) AS nb FROM membership WHERE init_year IS NOT NULL AND end_year IS NOT NULL AND title=:title GROUP BY title';
+
+			$statement = $this->getPdo()->prepare($sql);
+
+			$statement->bindValue(':title', $title, PDO::PARAM_STR);
+			
+			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			$statement->execute();
+
+			$output = array();
+			$data = $statement->fetch();
+			return $data ? array('avg' => $data['avgDuration'], 'count' => $data['nb']) : null;
+		} catch (Exception $e) {
+			$this->reportException($e, __METHOD__);
+		}		
+	}
 	/**
 	 * @since 08/2014
 	 * @version 12/2016
