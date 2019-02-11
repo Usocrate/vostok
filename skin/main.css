@@ -50,6 +50,9 @@
 }
 
 /* Balises HTML */
+BODY {
+	background-image: url("./images/bg.gif");
+}
 SECTION {
 	padding:1.1em 0.6em;
 }
@@ -92,8 +95,8 @@ SMALL {
 	color : #bbb;
 }
 .bd-title {
-    margin-top: 1rem;
-    margin-bottom: .5rem;
+	padding: 1rem 0;
+	margin: 0;
     font-weight: 300;
 }
 
@@ -103,7 +106,10 @@ H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
 SMALL A I {
 	color:#bbb;
 }
-
+/* autres styles génériques */
+.container-fluid, .container {
+	background-color: #fff;
+}
 /* autres styles génériques */
 .brand {
 	font-family: 'Sigmar one';
@@ -213,12 +219,17 @@ SMALL A I {
 	#indexDoc .card {
 		width: 290px;
 	}
+	.container, .container-fluid {
+		max-width:95%;
+		padding-left:2.5%;
+		padding-right:2.5%;
+	}
 }
 
 /* EID screen 2 */
 @media ( min-width : 1920px) {
 	#indexDoc .card {
-		width: 290px;
+		width: 320px;
 	}
 	#societyDoc .card {
 		width: 350px;

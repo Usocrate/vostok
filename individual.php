@@ -65,7 +65,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a></small></h1>
   	<div class="row">
     	<div class="col-lg-3">
-    		<div class="card">
+    		<div class="card" style="width:100%">
     		<?php
     			// photo
 				if ($individual->getPhotoUrl()) {
@@ -233,7 +233,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 			</div>
 	    </div>
 	    <div class="col-lg-3">
-	    	<div class="card">
+	    	<div class="card" style="width:100%">
 	    		<div class="card-header text-center"><i class="fab fa-google"></i></div>
 	    		<ul class="list-group list-group-flush">
 	    			<?php

@@ -84,7 +84,7 @@ $doc_title = 'Accueil';
     <div class="container-fluid">
 		<h1 class="sr-only"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<div class="row justify-content-md-center">
-			<div class="col-md-10 col-md-offset-1">
+			<div class="col-md-12">
 				<section style="display:none">
 					<form method="post" action="societies_list.php" class="form-inline d-lg-flex">
 						<div class="form-group m-2 flex-lg-fill">
@@ -117,8 +117,8 @@ $doc_title = 'Accueil';
 							echo ToolBox::toHtml( $item['industry']->getName() );
 							echo '</a></span>';
 						}
+						echo '<span class="seeMore" style="padding:0 1em"><a href="industries.php">Toutes les activités</a> <i class="fas fa-angle-right"></i></span>';
 						echo '</div>';
-						echo '<div class="seeMore"><a href="industries.php">Toutes les activités</a> <i class="fas fa-angle-right"></i></div>';
 					?>
 				</section>
 				<section>

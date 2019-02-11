@@ -121,7 +121,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 		</form>
    	</section>
    	<div class="row">
-		<div class="col-md-7">
+		<div class="col-md-7 col-lg-9">
 		   	<section>
 		       	<form method="post" action="societies_merge.php">
 		    		<div class="list-group">
@@ -176,7 +176,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 		    	</div>
 		    </section>
 	    </div>
-   		<div class="col-md-5">
+   		<div class="col-md-5 col-lg-3">
 			<section>
 				<?php
 				$criteria = array();
