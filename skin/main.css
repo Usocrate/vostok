@@ -199,7 +199,7 @@ SMALL A I {
 /* EID screen 1 */
 @media (min-width : 1349px) {
 	#indexDoc .card {
-		width: 345px;
+		width: 310px;
 	}
 	#societyDoc .card {
 		width: 300px;
