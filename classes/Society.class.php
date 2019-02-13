@@ -125,7 +125,7 @@ class Society {
 	}
 	/**
 	 *
-	 * @since 27/10/2012
+	 * @since 10/2012
 	 */
 	private static function getKnownNames($substring = NULL) {
 	    global $system;
@@ -142,7 +142,7 @@ class Society {
 	}
 	/**
 	 *
-	 * @since 27/10/2012
+	 * @since 10/2012
 	 */
 	public static function knownNamesToJson($substring = NULL) {
 		$output = '{"names":' . json_encode ( self::getKnownNames ( $substring ) ) . '}';
@@ -151,8 +151,8 @@ class Society {
 	/**
 	 * Obtient de la base de données les valeurs des champs demandés.
 	 *
-	 * @since 19/01/2009
-	 * @version 23/11/2016
+	 * @since 01/2009
+	 * @version 11/2016
 	 * @param $fields
 	 * @return array
 	 */

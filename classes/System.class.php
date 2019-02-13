@@ -836,7 +836,7 @@ class System {
 	/**
 	 * Retourne le nombre de sociétés groupées par ville.
 	 *
-	 * @version 03/06/2017
+	 * @version 06/2017
 	 */
 	public function getSocietyCountByCity($nb = NULL, $offset = 0) {
 		$sql = 'SELECT society_city AS city, COUNT(*) AS count FROM society';
@@ -854,9 +854,55 @@ class System {
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}	
 	/**
+	 * @since 02/2019
+	 */
+	public function getEntities($criteria = NULL, $sort = 'Alphabetical', $offset = 0, $nb = NULL) {
+	
+		if (isset ($criteria) && count ( $criteria ) > 0) {
+			
+			$society_criteria = array();
+			$individual_criteria = array();
+			
+			if (isset ($criteria['first letters in name']) ) {
+				$society_criteria[] = 'society_name LIKE :society_name_firstLetters';
+				$individual_criteria[] = '(individual_lastName LIKE :individual_lastName_firstLetters OR individual_firstName LIKE :individual_firstName_firstLetters)';
+			}
+		}
+
+		$sql = '(SELECT society_id AS id, society_name AS name, \'society\' AS type FROM society WHERE '.implode(' AND ', $society_criteria).')';
+		$individualWholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';		
+		$sql.= ' UNION (SELECT individual_id AS id, '.$individualWholeNameSqlSelectPattern.' AS name, \'individual\' AS type FROM individual WHERE '.implode(' AND ', $individual_criteria).')';
+
+		switch ($sort) {
+			default :
+				$sql .= ' ORDER BY name ASC';
+		}
+
+		if (isset ( $nb )) {
+			$sql .= ' LIMIT :offset, :nb';
+		}
+		//echo $sql;
+		$statement = $this->getPdo()->prepare($sql);
+		
+		if (isset ($criteria) && count ( $criteria ) > 0) {
+			if (isset ($criteria['first letters in name']) ) {
+				$statement->bindValue(':society_name_firstLetters', $criteria['first letters in name'].'%', PDO::PARAM_STR);
+				$statement->bindValue(':individual_lastName_firstLetters', $criteria['first letters in name'].'%', PDO::PARAM_STR);
+				$statement->bindValue(':individual_firstName_firstLetters', $criteria['first letters in name'].'%', PDO::PARAM_STR);
+			}
+		}
+
+		if (isset ( $nb )) {
+			$statement->bindValue(':offset', $offset, PDO::PARAM_INT);
+			$statement->bindValue(':nb', $nb, PDO::PARAM_INT);
+		}
+		
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
+	/**
 	 * Renvoie les pistes correspondant à certains critères (optionnels)
 	 *
-	 * @return resource
 	 * @version 06/2017
 	 */
 	public function getLeadsRowset($criteria = NULL, $sort = 'Last created first', $nb = NULL, $offset = 0) {
