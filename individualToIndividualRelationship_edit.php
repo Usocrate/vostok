@@ -216,7 +216,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'relationship_roles.json.php',
+	                url:'api/relationship_roles.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'searchPattern': request.term,
@@ -247,7 +247,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'relationship_roles.json.php',
+	                url:'api/relationship_roles.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'searchPattern': request.term,

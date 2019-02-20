@@ -246,7 +246,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'society_cities.json.php',
+	                url:'api/society_cities.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term

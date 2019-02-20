@@ -304,7 +304,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 		   		source: function( request, response ) {
 		            $.ajax({
 						method:'GET',
-		                url:'society_names.json.php',
+		                url:'api/society_names.json.php',
 		                dataType: 'json',
 		                data:{
 		                    'query': request.term
@@ -334,7 +334,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 		   		source: function( request, response ) {
 		            $.ajax({
 						method:'GET',
-		                url:'membership_titles.json.php',
+		                url:'api/membership_titles.json.php',
 		                dataType: 'json',
 		                data:{
 		                    'query': request.term
@@ -364,7 +364,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 		   		source: function( request, response ) {
 		            $.ajax({
 						method:'GET',
-		                url:'membership_departments.json.php',
+		                url:'api/membership_departments.json.php',
 		                dataType: 'json',
 		                data:{
 		                    'query': request.term

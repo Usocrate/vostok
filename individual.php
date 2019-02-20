@@ -295,7 +295,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				}
 	
 				$.ajax({
-					  url: 'session.ws.php?focus='+focus+'&scope='+scope,
+					  url: 'api/session.ws.php?focus='+focus+'&scope='+scope,
 					  beforeSend: function( xhr ) {
 					    xhr.overrideMimeType( "text/plain; charset=x-user-defined" );
 					  }

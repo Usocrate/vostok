@@ -46,7 +46,7 @@
    		source: function( request, response ) {
             $.ajax({
 				method:'GET',
-                url:'society_names.json.php',
+                url:'api/society_names.json.php',
                 dataType: 'json',
                 data:{
                     'query': request.term

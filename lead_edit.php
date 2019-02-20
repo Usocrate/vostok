@@ -444,7 +444,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'lead_types.json.php',
+	                url:'api/lead_types.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -474,7 +474,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'lead_sources.json.php',
+	                url:'api/lead_sources.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -505,7 +505,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'society_names.json.php',
+	                url:'api/society_names.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -536,7 +536,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'society_names.json.php',
+	                url:'api/society_names.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -568,7 +568,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'membership_titles.json.php',
+	                url:'api/membership_titles.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -598,7 +598,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'membership_departments.json.php',
+	                url:'api/membership_departments.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term

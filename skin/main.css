@@ -23,12 +23,10 @@
 }
 
 /* Bootstrap */
-
 .badge-info {
 	color: #fff;
 	background-color: #777;
 }
-
 .tab-content {
 	padding:1em;
 }
@@ -41,6 +39,14 @@
 }
 .card {
 	margin-bottom: 20px;
+}
+.container-fluid, .container {
+	background-color: #fff;
+	padding:1rem 1rem 2rem 1rem;
+}
+.container-fluid > H1, .container > H1 {
+	padding-top: 0;
+	margin-top: 0;
 }
 
 /* Masonry */
@@ -105,10 +111,6 @@ H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
 }
 SMALL A I {
 	color:#bbb;
-}
-/* autres styles génériques */
-.container-fluid, .container {
-	background-color: #fff;
 }
 /* autres styles génériques */
 .brand {
@@ -209,7 +211,7 @@ SMALL A I {
 	}
 }
 
-@media (min-width : 1520px) {
+@media (min-width : 1518px) {
 	#indexDoc .card {
 		width: 288px;
 	}
