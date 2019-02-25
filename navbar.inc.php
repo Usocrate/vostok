@@ -41,35 +41,25 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-    $('#navbar_s_name_i').autocomplete({
-		minLength: 2,
-   		source: function( request, response ) {
-            $.ajax({
-				method:'GET',
-                url:'api/society_names.json.php',
-                dataType: 'json',
-                data:{
-                    'query': request.term
-                 },
-                 dataFilter: function(data,type){
-                     return JSON.stringify(JSON.parse(data).names);
-                 },
-                 success : function(data, textStatus, jqXHR){
-					response(data);
-                 }
-         	})
-   		},
-        focus: function( event, ui ) {
-			$('#navbar_s_name_i').val( ui.item.value );
-        	return false;
-        },
-        select: function( event, ui ) {
-			$('#navbar_s_name_i').val( ui.item.value );
-        	return false;
-        },
-        _renderItem: function( ul, item ) {
-		    return $( "<li>" ).append(item.label).appendTo( ul );
-	    }
-   	});
-})
+	    $('#navbar_s_name_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'api/society_names.json.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).names);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+	                 	//console.log(JSON.stringify(data));
+						response(data);
+	                 }
+	         	})
+	   		}
+	   	});
+	})
 </script>

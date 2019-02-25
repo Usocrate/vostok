@@ -1,15 +1,15 @@
 <?php
 function __autoload($class_name) {
-	$path = './classes/';
+	$path = '../classes/';
 	if (is_file ( $path . $class_name . '.class.php' )) {
 		include_once $path . $class_name . '.class.php';
 	} elseif ($path . $class_name . '.interface.php') {
 		include_once $path . $class_name . '.interface.php';
 	}
 }
-$system = new System( './config/host.json' );
+$system = new System( '../config/host.json' );
 
-require 'config/boot.php';
+require '../config/boot.php';
 
 session_start();
 
@@ -19,6 +19,8 @@ if (empty($_SESSION['user_id'])) {
 
 $data = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntities(array("first letters in name"=>$_REQUEST['query']));
 
-echo '{"entities":' . json_encode ( $data ) . '}';
+//echo '{"entities":' . json_encode ( $data ) . '}';
+
+echo json_encode ( $data );
 
 ?>

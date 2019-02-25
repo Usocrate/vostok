@@ -85,13 +85,13 @@ $doc_title = 'Accueil';
 		<h1 class="sr-only"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<div class="row justify-content-md-center">
 			<div class="col-md-12">
-				<section style="display:none">
-					<form method="post" action="societies_list.php" class="form-inline d-lg-flex">
+				<section>
+					<form method="post" action="" class="form-inline d-lg-flex">
 						<div class="form-group m-2 flex-lg-fill">
-							<label for="s_name_i" class="mr-2">Une société</label>
-							<input id="s_name_i" name="society_name" type="text" class="form-control flex-lg-fill" placeholder="nom" />
+							<label for="entity_search_i" class="mr-2">Recherche</label>
+							<input id="entity_search_i" name="entity_name" type="text" class="form-control flex-lg-fill" placeholder="nom" />
 						</div>
-						<button type="submit" name="society_newsearch" value="1" class="btn btn-default m-2">Retrouver</button>
+						<button type="submit" name="society_newsearch" value="1" class="btn btn-default m-2">Valider</button>
 					</form>
 				</section>
 				<section>
@@ -192,12 +192,6 @@ $doc_title = 'Accueil';
 									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">';
 									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 									echo '</a>';
-								} else {
-									/*
-									echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
-									echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
-									echo '</a>';
-									*/
 								}
 								echo '<div class="card-body">';
 									echo '<h3 class="card-title">';
@@ -233,38 +227,28 @@ $doc_title = 'Accueil';
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
-		    $('#s_name_i').autocomplete({
+
+		    $('#entity_search_i').autocomplete({
 				minLength: 2,
 		   		source: function( request, response ) {
 		            $.ajax({
 						method:'GET',
-		                url:'api/society_names.json.php',
+		                url:'api/entities_names.json.php',
 		                dataType: 'json',
 		                data:{
 		                    'query': request.term
 		                 },
-		                 dataFilter: function(data,type){
-		                     return JSON.stringify(JSON.parse(data).names);
-		                 },
 		                 success : function(data, textStatus, jqXHR){
+		                 	console.log(JSON.stringify(data));
 							response(data);
 		                 }
 		         	})
-		   		},
-		        focus: function( event, ui ) {
-					$('#s_name_i').val( ui.item.value );
-		        	return false;
-		        },
-		        select: function( event, ui ) {
-					$('#s_name_i').val( ui.item.value );
-		        	return false;
-		        },
-		        _renderItem: function( ul, item ) {
-				    //alert(JSON.stringify(item));
-				    return $("<li>").append(item.label).appendTo(ul);
-			    }
-		   	});
-		    
+		   		}
+		   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		   		console.log('glop');
+		   		return $("<li>").attr( "data-value", item.id ).append("<div>"+item.name+"</div>").appendTo(ul);
+		    };
+
 			$('.il').masonry({
 				itemSelector: '.card',
 				columnWidth: '.card',
