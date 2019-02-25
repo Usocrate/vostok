@@ -212,18 +212,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s1_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s1_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-		    	return $( "<li>" ).append(item.label).appendTo( ul );
-	    	} 
+	   		}
 	   	});
 	    $('#s2_name_i').autocomplete({
 			minLength: 2,
@@ -242,18 +231,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s2_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s2_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-		    	return $( "<li>" ).append(item.label).appendTo( ul );
-	    	}
+	   		}
 	   	});	    
 	    $('#s1_role_i').autocomplete({
 			minLength: 2,
@@ -273,18 +251,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s1_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s1_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-		    	return $( "<li>" ).append(item.label).appendTo( ul );
-	    	}
+	   		}
 	   	});
 	    $('#s2_role_i').autocomplete({
 			minLength: 2,
@@ -304,18 +271,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s2_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s2_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.label).appendTo( ul );
-		    }
+	   		}
 	   	});	    
 	})
 </script>

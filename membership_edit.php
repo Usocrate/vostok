@@ -316,18 +316,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 							response(data);
 		                 }
 		         	})
-		   		},
-		        focus: function( event, ui ) {
-					$('#s_name_i').val( ui.item.value );
-		        	return false;
-		        },
-		        select: function( event, ui ) {
-					$('#s_name_i').val( ui.item.value );
-		        	return false;
-		        },
-		        _renderItem: function( ul, item ) {
-				    return $( "<li>" ).append(item.label).appendTo( ul );
-			    }
+		   		}
 		   	});
 		    $('#title_i').autocomplete({
 				minLength: 3,
@@ -346,18 +335,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 							response(data);
 		                 }
 		         	})
-		   		},
-		        focus: function( event, ui ) {
-					$('#title_i').val( ui.item.value );
-		        	return false;
-		        },
-		        select: function( event, ui ) {
-					$('#title_i').val( ui.item.value );
-		        	return false;
-		        },
-		        _renderItem: function( ul, item ) {
-				    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-			    }
+		   		}
 		   	});
 		    $('#department_i').autocomplete({
 				minLength: 3,
@@ -376,18 +354,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 							response(data);
 		                 }
 		         	})
-		   		},
-		        focus: function( event, ui ) {
-					$('#department_i').val( ui.item.value );
-		        	return false;
-		        },
-		        select: function( event, ui ) {
-					$('#department_i').val( ui.item.value );
-		        	return false;
-		        },
-		        _renderItem: function( ul, item ) {
-				    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-			    }
+		   		}
 		   	});	    		    
 		});
 	</script>

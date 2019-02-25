@@ -870,7 +870,7 @@ class System {
 		}
 
 		$sql = '(SELECT society_id AS id, society_name AS name, \'society\' AS type FROM society WHERE '.implode(' AND ', $society_criteria).')';
-		$individualWholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';		
+		$individualWholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
 		$sql.= ' UNION (SELECT individual_id AS id, '.$individualWholeNameSqlSelectPattern.' AS name, \'individual\' AS type FROM individual WHERE '.implode(' AND ', $individual_criteria).')';
 
 		switch ($sort) {

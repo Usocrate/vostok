@@ -229,18 +229,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#item0_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#item0_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-		    	return $( "<li>" ).append(item.label).appendTo( ul );
-	    	}
+	   		}
 	   	});
 	    $('#item1_role_i').autocomplete({
 			minLength: 2,
@@ -260,18 +249,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#item1_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#item1_role_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.label).appendTo( ul );
-		    }
+	   		}
 	   	});	    
 	})
 </script>

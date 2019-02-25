@@ -86,15 +86,6 @@ $doc_title = 'Accueil';
 		<div class="row justify-content-md-center">
 			<div class="col-md-12">
 				<section>
-					<form method="post" action="" class="form-inline d-lg-flex">
-						<div class="form-group m-2 flex-lg-fill">
-							<label for="entity_search_i" class="mr-2">Recherche</label>
-							<input id="entity_search_i" name="entity_name" type="text" class="form-control flex-lg-fill" placeholder="nom" />
-						</div>
-						<button type="submit" name="society_newsearch" value="1" class="btn btn-default m-2">Valider</button>
-					</form>
-				</section>
-				<section>
 					<?php
 						$industries = $system->getLastUsedIndustries(30);
 						$weights = array_column($industries, 'weight');
@@ -121,16 +112,6 @@ $doc_title = 'Accueil';
 						echo '</div>';
 					?>
 				</section>
-				<section>
-					<form method="post" action="individuals.php" class="form-inline">
-						<div class="form-group m-2">
-							<label for="individual_lastName_i" class="mr-2">Qui ?</label>
-							<input id="individual_wholeName_i" name="individual_wholeName" type="text" placeholder="prénom, nom" class="form-control" />
-						</div>
-						<button type="submit" name="individual_newsearch" value="1" class="btn btn-default m-2">Retrouver</button>
-					</form>
-				</section>
-				
 				<section>
 				<?php
 					switch($people_focus) {
@@ -227,28 +208,6 @@ $doc_title = 'Accueil';
 	</div>
 	<script type="text/javascript">
 		$(document).ready(function(){
-
-		    $('#entity_search_i').autocomplete({
-				minLength: 2,
-		   		source: function( request, response ) {
-		            $.ajax({
-						method:'GET',
-		                url:'api/entities_names.json.php',
-		                dataType: 'json',
-		                data:{
-		                    'query': request.term
-		                 },
-		                 success : function(data, textStatus, jqXHR){
-		                 	console.log(JSON.stringify(data));
-							response(data);
-		                 }
-		         	})
-		   		}
-		   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		   		console.log('glop');
-		   		return $("<li>").attr( "data-value", item.id ).append("<div>"+item.name+"</div>").appendTo(ul);
-		    };
-
 			$('.il').masonry({
 				itemSelector: '.card',
 				columnWidth: '.card',

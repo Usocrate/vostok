@@ -32,34 +32,54 @@
 			</div>
 		</li>    	
     </ul>
-	<form class="form-inline flex-lg-fill mx-lg-2" method="post" action="societies_list.php">
-		<input id="navbar_s_name_i" name="society_name" type="search" class="form-control flex-lg-fill mx-lg-1" placeholder="société..." />
-		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-outline-primary mx-lg-1">Ok</button>
+	<form class="form-inline flex-lg-fill mx-lg-2" method="post" action="entities.php">
+		<input id="entity_search_i" name="query" type="search" class="form-control flex-lg-fill mx-lg-1" placeholder="nom, prénom, société" />
+		<button type="submit" name="entity_newsearch" value="filtrer" class="btn btn-outline-primary mx-lg-1">Ok</button>
 	</form>    
   </div>
 </nav>
 
 <script type="text/javascript">
 	$(document).ready(function(){
-	    $('#navbar_s_name_i').autocomplete({
+
+	    $('#entity_search_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/society_names.json.php',
+	                url:'api/entities_names.json.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
 	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).names);
-	                 },
 	                 success : function(data, textStatus, jqXHR){
-	                 	//console.log(JSON.stringify(data));
+	                 	console.log(JSON.stringify(data));
 						response(data);
 	                 }
 	         	})
+	   		},
+	   		select: function( event, ui ) {
+	   			switch(ui.item.type){
+	   				case 'individual':
+	   					document.location.href = "individual.php?individual_id="+ ui.item.id;
+	   					break;
+					case 'society':
+	   					document.location.href = "society.php?society_id="+ ui.item.id;
+	   					break;
+	   			}
+	   			return false;
+	   		},
+	   		focus: function( event, ui ) {
+	   			$('#entity_search_i').val(ui.item.name);
+	   			return false;
 	   		}
-	   	});
+	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+	   		if (item.type == "individual") {
+	   			icon = '<i class="fas fa-user-circle colored"></i>';
+	   		} else if (item.type == "society") {
+	   			icon = '<i class="fas fa-users colored"></i>';
+	   		}
+	   		return $("<li>").attr( "data-value", item.id ).append("<div>"+icon+" "+item.name+"</div>").appendTo(ul);
+	    };
 	})
 </script>

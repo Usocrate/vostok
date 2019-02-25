@@ -182,18 +182,7 @@ if (isset($_POST['task'])) {
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s_parent_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s_parent_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.label).appendTo( ul );
-		    }
+	   		}
 	   	});	    
 	})
 </script>

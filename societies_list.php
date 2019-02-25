@@ -258,18 +258,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s_city_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s_city_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-		    }
+	   		}
 	   	});
 	    
 	    $('.il').masonry({

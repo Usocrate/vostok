@@ -456,18 +456,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#lead_type_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#lead_type_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-		    }
+	   		}
 	   	});
 	    $('#lead_source_i').autocomplete({
 			minLength: 2,
@@ -486,18 +475,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#lead_source_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#lead_source_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-		    }
+	   		}
 	   	});
 	    <?php if (!(isset($society) && $society->hasId())): ?>
 	    $('#s_name_i').autocomplete({
@@ -517,19 +495,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    //alert(JSON.stringify(item));
-			    return $( "<li>" ).append(item.label).appendTo( ul );
-		    }
+	   		}
 	   	});
 	    $('#s_parent_name_i').autocomplete({
 			minLength: 2,
@@ -548,19 +514,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s_parent_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#s_parent_name_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    //alert(JSON.stringify(item));
-			    return $( "<li>" ).append(item.label).appendTo( ul );
-		    }
+	   		}
 	   	});	    
 	    <?php endif; ?>
 	    $('#ms_title_i').autocomplete({
@@ -610,18 +564,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 						response(data);
 	                 }
 	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#ms_department_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#ms_department_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-		    }
+	   		}
 	   	});
 	})
 </script>
