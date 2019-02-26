@@ -22,7 +22,7 @@ if (empty ( $_SESSION ['user_id'] )) {
 }
 
 $doc_title = 'Résultat de la recherche';
-$entities = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntities(array("first letters in name"=>$_REQUEST['query']));
+$entities = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntities(array("name substring"=>$_REQUEST['query']));
 
 ?>
 <!doctype html>
@@ -50,12 +50,15 @@ $entities = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEnt
 		echo '<ul class="list-group">';
 		foreach ($entities as $e) {
 			echo '<li class="list-group-item">';
+			
+			$name = empty($_REQUEST['query']) ? ToolBox::toHtml($e['name']) : str_ireplace(ToolBox::toHtml($_REQUEST['query']), '<small>'.ToolBox::toHtml($_REQUEST['query']).'</small>', ToolBox::toHtml($e['name']));
+			
 			switch($e['type']) {
 				case 'individual':
-					echo '<i class="fas fa-user-circle colored"></i> <a href="individual.php?individual_id='.$e['id'].'">'.ToolBox::toHtml($e['name']).'</a>';
+					echo '<i class="fas fa-user-circle colored"></i> <a href="individual.php?individual_id='.$e['id'].'">'.$name.'</a>';
 					break;
 				case 'society':
-					echo '<i class="fas fa-users colored"></i> <a href="society.php?society_id='.$e['id'].'">'.ToolBox::toHtml($e['name']).'</a>';
+					echo '<i class="fas fa-users colored"></i> <a href="society.php?society_id='.$e['id'].'">'.$name.'</a>';
 					break;					
 			}
 			echo '</li>';

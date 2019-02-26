@@ -53,7 +53,7 @@
 	                    'query': request.term
 	                 },
 	                 success : function(data, textStatus, jqXHR){
-	                 	console.log(JSON.stringify(data));
+	                 	//console.log(JSON.stringify(data));
 						response(data);
 	                 }
 	         	})
@@ -75,11 +75,12 @@
 	   		}
 	   	}).autocomplete( "instance" )._renderItem = function( ul, item ) {
 	   		if (item.type == "individual") {
-	   			icon = '<i class="fas fa-user-circle colored"></i>';
+	   			var icon = '<i class="fas fa-user-circle colored"></i>';
 	   		} else if (item.type == "society") {
-	   			icon = '<i class="fas fa-users colored"></i>';
+	   			var icon = '<i class="fas fa-users colored"></i>';
 	   		}
-	   		return $("<li>").attr( "data-value", item.id ).append("<div>"+icon+" "+item.name+"</div>").appendTo(ul);
+	   		var nameWithSmallTerm = String(item.name).replace(new RegExp(this.term, "gi"),"<small>$&</small>");
+	   		return $("<li>").append("<div>"+icon+" "+nameWithSmallTerm+"</div>").appendTo(ul);
 	    };
 	})
 </script>

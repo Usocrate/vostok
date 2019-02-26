@@ -17,7 +17,7 @@ if (empty($_SESSION['user_id'])) {
 	exit;
 }
 
-$data = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntities(array("first letters in name"=>$_REQUEST['query']));
+$data = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntities(array("name substring"=>$_REQUEST['query']));
 
 //echo '{"entities":' . json_encode ( $data ) . '}';
 

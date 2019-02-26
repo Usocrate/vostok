@@ -863,8 +863,8 @@ class System {
 			$society_criteria = array();
 			$individual_criteria = array();
 			
-			if (isset ($criteria['first letters in name']) ) {
-				$society_criteria[] = 'society_name LIKE :society_name_firstLetters';
+			if (isset ($criteria['name substring']) ) {
+				$society_criteria[] = 'society_name LIKE :society_name_substring';
 				$individual_criteria[] = '(individual_lastName LIKE :individual_lastName_firstLetters OR individual_firstName LIKE :individual_firstName_firstLetters)';
 			}
 		}
@@ -885,10 +885,10 @@ class System {
 		$statement = $this->getPdo()->prepare($sql);
 		
 		if (isset ($criteria) && count ( $criteria ) > 0) {
-			if (isset ($criteria['first letters in name']) ) {
-				$statement->bindValue(':society_name_firstLetters', $criteria['first letters in name'].'%', PDO::PARAM_STR);
-				$statement->bindValue(':individual_lastName_firstLetters', $criteria['first letters in name'].'%', PDO::PARAM_STR);
-				$statement->bindValue(':individual_firstName_firstLetters', $criteria['first letters in name'].'%', PDO::PARAM_STR);
+			if (isset ($criteria['name substring']) ) {
+				$statement->bindValue(':society_name_substring', '%'.$criteria['name substring'].'%', PDO::PARAM_STR);
+				$statement->bindValue(':individual_lastName_firstLetters', $criteria['name substring'].'%', PDO::PARAM_STR);
+				$statement->bindValue(':individual_firstName_firstLetters', $criteria['name substring'].'%', PDO::PARAM_STR);
 			}
 		}
 
