@@ -85,35 +85,31 @@ $doc_title = 'Accueil';
 		<h1 class="sr-only"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<div class="row justify-content-md-center">
 			<div class="col-md-12">
-				<section>
-					<?php
-						$industries = $system->getLastUsedIndustries(30);
-						$weights = array_column($industries, 'weight');
-						$maxWeight = max($weights);
-						$minWeight = min($weights);
-						$minEm = 1;
-						$maxEm = 1.5;
-
-						echo '<div class="tagCloud">';
-						foreach($industries as $item) {
-							if ($maxWeight == $minWeight) {
-								$em = ($maxEm + $minEm) / 2;
-							} else {
-								$weight = $item['weight'];
-								$r = ($weight - $minWeight) / ($maxWeight - $minWeight);
-								$em = round($minEm + ($r * ($maxEm - $minEm)),1);
-							}
-							echo '<span class="badge badge-secondary tag" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
-							echo '<a href="societies_list.php?society_newsearch=1&industry_id='.$item['industry']->getId().'">';
-							echo ToolBox::toHtml( $item['industry']->getName() );
-							echo '</a></span>';
-						}
-						echo '<span class="seeMore" style="padding:0 1em"><a href="industries.php">Toutes les activités</a> <i class="fas fa-angle-right"></i></span>';
-						echo '</div>';
-					?>
-				</section>
-				<section>
 				<?php
+					$industries = $system->getLastUsedIndustries(30);
+					$weights = array_column($industries, 'weight');
+					$maxWeight = max($weights);
+					$minWeight = min($weights);
+					$minEm = 1;
+					$maxEm = 1.5;
+
+					echo '<div class="tagCloud">';
+					foreach($industries as $item) {
+						if ($maxWeight == $minWeight) {
+							$em = ($maxEm + $minEm) / 2;
+						} else {
+							$weight = $item['weight'];
+							$r = ($weight - $minWeight) / ($maxWeight - $minWeight);
+							$em = round($minEm + ($r * ($maxEm - $minEm)),1);
+						}
+						echo '<span class="badge badge-secondary tag" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
+						echo '<a href="societies_list.php?society_newsearch=1&industry_id='.$item['industry']->getId().'">';
+						echo ToolBox::toHtml( $item['industry']->getName() );
+						echo '</a></span>';
+					}
+					echo '<span class="seeMore" style="padding:0 1em"><a href="industries.php">Toutes les activités</a> <i class="fas fa-angle-right"></i></span>';
+					echo '</div>';
+
 					switch($people_focus) {
 						case 'onLastPinned' : 
 					  		echo '<div class="il">';
@@ -202,7 +198,6 @@ $doc_title = 'Accueil';
 							break;			
 					}
 				?>
-				</section>
 			</div>
 		</div>
 	</div>

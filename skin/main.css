@@ -184,7 +184,9 @@ SMALL A I {
 	border-style: dotted;
 	border-color: #999
 }
-
+#indexDoc DIV.il {
+	margin: 1em 0;
+}
 @media ( min-width : 768px) {
 	.card {
 		width: 340px;
@@ -206,7 +208,7 @@ SMALL A I {
 /* EID screen 1 */
 @media (min-width : 1349px) {
 	#indexDoc .card {
-		width: 310px;
+		width:314px;
 	}
 	#societyDoc .card {
 		width: 300px;
