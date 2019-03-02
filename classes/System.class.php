@@ -1042,8 +1042,8 @@ class System {
 			case 'Most used first':
 				$sql.= ' ORDER BY societies_nb DESC';
 				break;
-			default :
-				$sql.= ' ORDER BY name ASC';
+			case 'Alphabetical':
+			    $sql.= ' ORDER BY name ASC';
 		}
 		
 		$statement = $this->getPdo()->prepare($sql);
@@ -1117,7 +1117,25 @@ class System {
 			$output [] = array ('industry' => $i, 'weight' => $item['weight'] );
 		}
 		return $output;
-	}	
+	}
+	/**
+	 * @since 03/2019
+	 */
+	public function getMainIndustryMinWeight() {
+	    $sql = 'SELECT ROUND(AVG(inventory.weight) + STD(inventory.weight)) AS minWeight FROM (SELECT industry_id, COUNT(*) AS weight FROM society_industry GROUP BY industry_id) AS inventory';
+	    $statement = $this->getPdo()->prepare($sql);
+	    $statement->execute();
+	    return $statement->fetchColumn();
+	}
+	/**
+	 * @since 03/2019
+	 */
+	public function getNotMarginalIndustryMinWeight() {
+	    $sql = 'SELECT ROUND(AVG(inventory.weight) - STD(inventory.weight)) AS minWeight FROM (SELECT industry_id, COUNT(*) AS weight FROM society_industry GROUP BY industry_id) AS inventory';
+	    $statement = $this->getPdo()->prepare($sql);
+	    $statement->execute();
+	    return $statement->fetchColumn();
+	}
 	/**
 	 * Obtient la liste d'activités à partir de la liste de leur identifiant.
 	 *

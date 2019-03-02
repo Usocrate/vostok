@@ -47,6 +47,24 @@ if (isset ( $_POST ['task'] )) {
 			trigger_error ( 'La tâche à exécuter est inconnue' );
 	}
 }
+/*
+ * gestion du tri de la liste des activités
+ */
+if (isset($_REQUEST['newsort']) || empty($_SESSION['industries_list_sort'])) {
+
+    if (isset($_REQUEST['newsort'])) {
+        switch ($_REQUEST['newsort']) {
+            case 'alpha':
+                $_SESSION['industries_list_sort'] = 'Alphabetical';
+                break;
+            case 'count':
+                $_SESSION['industries_list_sort'] = 'Most used first';
+        }
+    } else {
+        $_SESSION['industries_list_sort'] = 'Most used first';
+    }
+}
+
 $doc_title = 'Les activités';
 ?>
 <!doctype html>
@@ -68,7 +86,6 @@ $doc_title = 'Les activités';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
-
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<div class="row">
 			<div class="col-md-6">
@@ -77,25 +94,49 @@ $doc_title = 'Les activités';
 					<thead>
 						<tr>
 							<th></th>
-							<th>Activité</th>
-							<th>Nombre</th>
+							<th><?php echo strcmp($_SESSION['industries_list_sort'], 'Alphabetical')==0 ? 'Activité' : 'Activité <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+							<th><?php echo strcmp($_SESSION['industries_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
 						</tr>
 					</thead>
 					<tbody>
         				<?php
-        				foreach ( $system->getIndustries () as $i ) {
+        				
+        				$mainIndustryMinWeight = $system->getMainIndustryMinWeight();
+        				$notMarginalIndustryMinWeight = $system->getNotMarginalIndustryMinWeight();
+        				
+        				foreach ( $system->getIndustries(null, $_SESSION['industries_list_sort']) as $i ) {
+      				    
+        				    $weight = $i->getSocietiesNb();
+        				    
+        				    if ($weight >= $mainIndustryMinWeight) {
+        				        $status = 'main';
+        				    } elseif($weight < $notMarginalIndustryMinWeight) {
+        				        $status = 'marginal';
+        				    } else {
+        				        $status = 'normal';
+        				    }
+        				    
         					echo '<tr>';
         					echo '<td><input name="industries_ids[]" type="checkbox" value="'.$i->getId().'" /></td>';
         					echo '<td>';
         					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id='.$i->getId().'">';
-        					echo $i->getName ();
+        					switch ($status) {
+        					    case 'main':
+        					        echo '<strong>'.ToolBox::toHtml($i->getName()).'</strong>';
+        					        break;
+        					    case 'marginal' :
+        					        echo '<small>'.ToolBox::toHtml($i->getName()).'</small>';
+        					        break;
+        					    default :
+        					        echo ToolBox::toHtml($i->getName());
+        					}
         					echo ' <small><a href="industry_edit.php?id='.$i->getId().'"><i class="fas fa-edit"></i></a></small>';
         					echo '</a>';
         					echo '</td>';
         					echo '<td>';
         					echo '<span class="badge badge-secondary">';
         					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id=' . $i->getId () . '">';
-        					echo $i->getSocietiesNb ();
+        					echo $weight;
         					echo '</span>';
         					echo '</td>';
         					echo '</tr>';
