@@ -33,8 +33,8 @@
 		</li>    	
     </ul>
 	<form class="form-inline flex-lg-fill mx-lg-2" method="post" action="entities.php">
-		<input id="entity_search_i" name="query" type="search" class="form-control flex-lg-fill mx-lg-1" placeholder="nom, prénom, société" />
-		<button type="submit" name="entity_newsearch" value="filtrer" class="btn btn-outline-primary mx-lg-1">Ok</button>
+		<input id="entity_search_i" name="query" type="search" class="form-control flex-lg-fill mx-lg-1  my-1" placeholder="nom, prénom, société" />
+		<button type="submit" name="entity_newsearch" value="filtrer" class="btn btn-outline-primary mx-lg-1 my-1">Ok</button>
 	</form>    
   </div>
 </nav>
