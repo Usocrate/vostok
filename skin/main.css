@@ -218,10 +218,14 @@ SMALL A I {
 	}
 }
 
+/* Chosta */
 @media (min-width : 1518px) {
 	#indexDoc .card {
-		width: 288px;
+		width: 281px;
 	}
+	#societyDoc .card {
+		width: 348px;
+	}	
 }
 
 @media ( min-width : 1600px) {
