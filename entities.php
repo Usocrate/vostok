@@ -45,25 +45,30 @@ $entities = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEnt
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	<?php
-		echo '<ul class="list-group">';
-		foreach ($entities as $e) {
-			echo '<li class="list-group-item">';
-			
-			$name = empty($_REQUEST['query']) ? ToolBox::toHtml($e['name']) : str_ireplace(ToolBox::toHtml($_REQUEST['query']), '<small>'.ToolBox::toHtml($_REQUEST['query']).'</small>', ToolBox::toHtml($e['name']));
-			
-			switch($e['type']) {
-				case 'individual':
-					echo '<i class="fas fa-user-circle colored"></i> <a href="individual.php?individual_id='.$e['id'].'">'.$name.'</a>';
-					break;
-				case 'society':
-					echo '<i class="fas fa-users colored"></i> <a href="society.php?society_id='.$e['id'].'">'.$name.'</a>';
-					break;					
+		if (count($entities)==0) {
+			echo '<h1 class="bd-title">Aucun résultat</h1>';
+			echo '<p>Introduire une <a href="society_edit.php?society_name='.urlencode(ucfirst($_REQUEST['query'])).'">nouvelle société</a> ou un <a href="individual_edit.php?individual_lastname='.urlencode(ucfirst($_REQUEST['query'])).'">nouvel individu</a>.</p>';
+		} else {
+			echo '<h1 class="bd-title">'.ToolBox::toHtml($doc_title).'</h1>';
+			echo '<ul class="list-group">';
+			foreach ($entities as $e) {
+				echo '<li class="list-group-item">';
+				
+				$name = empty($_REQUEST['query']) ? ToolBox::toHtml($e['name']) : str_ireplace(ToolBox::toHtml($_REQUEST['query']), '<small>'.ToolBox::toHtml($_REQUEST['query']).'</small>', ToolBox::toHtml($e['name']));
+				
+				switch($e['type']) {
+					case 'individual':
+						echo '<i class="fas fa-user-circle colored"></i> <a href="individual.php?individual_id='.$e['id'].'">'.$name.'</a>';
+						break;
+					case 'society':
+						echo '<i class="fas fa-users colored"></i> <a href="society.php?society_id='.$e['id'].'">'.$name.'</a>';
+						break;					
+				}
+				echo '</li>';
 			}
-			echo '</li>';
+			echo '</ul>';			
 		}
-		echo '</ul>';
 	?>
 </div>
 </body>

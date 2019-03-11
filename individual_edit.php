@@ -27,6 +27,9 @@ $individual = new Individual();
 
 if (! empty($_REQUEST['individual_id'])) {
     $individual->setId($_REQUEST['individual_id']);
+    $individual->feed();
+} elseif (! empty($_REQUEST['individual_lastname'])) {
+    $individual->setLastName($_REQUEST['individual_lastname']);
 }
 
 if (isset($_POST['deletion_order'])) {
@@ -56,9 +59,8 @@ if (isset($_POST['deletion_order'])) {
     header('Location:individual.php?individual_id=' . $individual->getId());
     exit;
 
-} else {
-    $individual->feed();
 }
+
 $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 ?>
 <!doctype html>
