@@ -7,14 +7,14 @@ class Individual {
 	protected $id;
 	
 	protected $twitter_id;
-	protected $Linkedin_id;
+	protected $linkedin_id;
 	
 	protected $firstName;
 	protected $lastName;
 	
 	protected $street;
 	protected $city;
-	protected $postalcode;
+	protected $postalCode;
 	protected $state;
 	protected $country;
 	
@@ -64,7 +64,7 @@ class Individual {
 	}
 	/**
 	 * Fixe la valeur d'un attribut.
-	 * @version 01/2019
+	 * @version 03/2019
 	 */
 	public function setAttribute($name, $value) {
 		$value = trim ( $value );
@@ -75,15 +75,20 @@ class Individual {
 				if ( strcmp($value, '0000-00-00') == 0 ) {
 					return false;	
 				} else {
-					return $this->{$name} = $value;	
+					return $this->birth_date = $value;	
 				}
+				break;
 			case 'salutation' :
 				$salutations = array('mr', 'mme', 'mlle');
 				if ( !(in_array($value, $salutations) || empty($value)) ) {
 					return false;
 				} else {
-					return $this->{$name} = $value;
+					return $this->salutation = $value;
 				}
+				break;
+			case 'postalCode':
+				return is_numeric($value) ? $this->postalCode = (int) $value : null;
+				break;
 			default :
 				// après gestion des cas particuliers, règle générale
 				return $this->{$name} = $value;
@@ -91,7 +96,7 @@ class Individual {
 	}
 	
 	public function getAttribute($name) {
-		return isset ( $this->$name ) ? $this->$name : NULL;
+		return isset ( $this->{$name} ) ? $this->{$name} : NULL;
 	}
 	
 	/**
@@ -639,7 +644,7 @@ class Individual {
 				$this->city = $c->long_name;
 			}
 			if (in_array('postal_code', $c->types)) {
-				$this->postalCode = $c->long_name;
+				$this->setAttribute('postalCode',$c->long_name);
 			}
 			if (in_array('administrative_area_level_1', $c->types)) {
 				$this->state = $c->long_name;
@@ -1036,7 +1041,7 @@ class Individual {
 		if (isset ( $this->city )) {
 			$statement->bindValue(':city', $this->city, PDO::PARAM_STR);
 		}
-		if (isset ( $this->postalCode )) {
+		if (isset($this->postalCode)) {
 			$statement->bindValue(':postalCode', $this->postalCode, PDO::PARAM_INT);
 		}
 		if (isset ( $this->state )) {
@@ -1101,7 +1106,7 @@ class Individual {
 	}
 	
 	/**
-	 * @version 08/2018
+	 * @version 03/2019
 	 */
 	public function feed($array = NULL) {
 		if (is_array ( $array )) {
