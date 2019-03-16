@@ -340,6 +340,16 @@ class Society {
 			return implode ( ',', $elements );
 	}
 	/**
+	 * Obtient l'URL permettant de googliser la société.
+	 *
+	 * @return string
+	 * @since 03/2019
+	 */
+	public function getGoogleQueryUrl($type = null) {
+		$var = $this->getName();
+		return empty($var) ? null : Toolbox::getGoogleQueryUrl('"'.$var.'"', $type);
+	}	
+	/**
 	 * Obtient les informations de localisation auprès de Google map et complète celles-ci si nécessaire
 	 *
 	 * @since 06/2007

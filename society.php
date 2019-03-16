@@ -78,7 +78,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 <body id="societyDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a></small></h1>
+	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a> <a href="<?php echo ToolBox::getGoogleQueryUrl($society->getName()) ?>" target="_blank"><i class="fab fa-google"></i></a></small></h1>
     <section>
         <?php
             //
