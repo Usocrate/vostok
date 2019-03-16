@@ -83,7 +83,7 @@ if (isset($_POST['task'])) {
 			}
 			if ($membership->toDB()) {
 				// enregistrement effectif !
-			    if (isset($_REQUEST['serie']) && $_REQUEST['serie']!=0) {
+			    if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'none')!=0) {
 					
 					// enchaînement sur la déclaration d'une autre participation
 					
@@ -102,7 +102,6 @@ if (isset($_POST['task'])) {
 								$fb->addSuccessMessage('La participation à '.$membership->getHtmlLinkToSociety().' est enregistrée.');
 								$membership = new Membership();
 								$membership->setIndividual($applicant);
-								break;						
 						}
 					} else {
 						$fb->addSuccessMessage('Participation enregistrée.');
@@ -111,11 +110,38 @@ if (isset($_POST['task'])) {
 					
 					
 					switch ($_REQUEST['serie']) {
-					    case '1' :
-					        // on demande a conserver les données pour la création d'une nouvelle participation sur le même modèle
+					    
+					    case 'similarMembershipInSociety' :
+					      
+					        // on demande a conserver les données pour la création d'une nouvelle participation à la même société sur le même modèle
+					        $membership->setSociety($lastSavedMembership->getSociety());
+					        
 					        if ($lastSavedMembership->hasTitle()) {
 					            $membership->setTitle($lastSavedMembership->getTitle());
 					        }
+					        if ($lastSavedMembership->hasDepartment()) {
+					            $membership->setDepartment($lastSavedMembership->getDepartment());
+					        }
+					        if ($lastSavedMembership->hasInitYear()) {
+					            $membership->setInitYear($lastSavedMembership->getInitYear());
+					        }
+					        if ($lastSavedMembership->hasEndYear()) {
+					            $membership->setEndYear($lastSavedMembership->getEndYear());
+					        }
+					        if ($lastSavedMembership->hasDescription()) {
+					            $membership->setDescription($lastSavedMembership->getDescription());
+					        }
+					        if ($lastSavedMembership->hasUrl()) {
+					            $membership->setUrl($lastSavedMembership->getUrl());
+					        }
+					        break;
+					        
+					    case 'anotherMembershipInSociety' :
+					        $membership->setSociety($lastSavedMembership->getSociety());
+					        break;
+					        
+					    case 'anotherIndividualMembership' :
+					        $membership->setIndividual($lastSavedMembership->getIndividual());
 					        break;
 					}
 
@@ -169,7 +195,8 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script></head>
+	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+</head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
@@ -250,11 +277,11 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				</div>
 				<div class="form-group col-md-2">
 					<label for="init_year_i">Année d'ouverture</label>
-					<input id="init_year_i" name="init_year" type="text" value="<?php echo $membership->getAttribute('init_year'); ?>" size="20" class="form-control" />
+					<input id="init_year_i" name="init_year" type="text" value="<?php echo $membership->getInitYear(); ?>" size="20" class="form-control" />
 				</div>
 				<div class="form-group col-md-2">
 					<label for="end_year_i">Année de clôture</label>
-					<input id="end_year_i" name="end_year" type="text" value="<?php echo $membership->getAttribute('end_year'); ?>" size="20" class="form-control" />
+					<input id="end_year_i" name="end_year" type="text" value="<?php echo $membership->getEndYear(); ?>" size="20" class="form-control" />
 				</div>
 			</div>
 			
@@ -281,22 +308,30 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				<a id="membership_url_link" href="#" style="display: none">[voir]</a>
 			</div>
 
-			<?php if (!$membership->hasId()) : ?>
+			<?php if($membership->isIndividualIdentified() || $membership->isSocietyIdentified()): ?>
 			<div class="form-group">
     			<div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="serie" id="serie_opt1" value="0" <?php if (!isset($_REQUEST['serie']) || $_REQUEST['serie']==0) echo ' checked' ?>>
+                  <input class="form-check-input" type="radio" name="serie" id="serie_opt1" value="none" <?php if (!isset($_REQUEST['serie']) || strcmp($_REQUEST['serie'],'none')==0) echo ' checked' ?>>
                   <label class="form-check-label" for="serie_opt1">Ne pas enchaîner</label>
                 </div>
+                <?php if($membership->isSocietyIdentified()): ?>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="serie" id="serie_opt2" value="1" <?php if (isset($_REQUEST['serie']) && $_REQUEST['serie']==1) echo ' checked' ?>>
-                  <label class="form-check-label" for="serie_opt2">Enchaîner par une participation similaire</label>
+                  <input class="form-check-input" type="radio" name="serie" id="serie_opt2" value="similarMembershipInSociety" <?php if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'similarMembershipInSociety')==0) echo ' checked' ?>>
+                  <label class="form-check-label" for="serie_opt2">Enchaîner par une participation similaire chez <?php echo $membership->getHtmlLinkToSociety() ?></label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="serie" id="serie_opt3" value="2" <?php if (isset($_REQUEST['serie']) && $_REQUEST['serie']==2) echo ' checked' ?>>
-                  <label class="form-check-label" for="serie_opt3">Enchaîner</label>
+                  <input class="form-check-input" type="radio" name="serie" id="serie_opt3" value="anotherMembershipInSociety" <?php if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'anotherMembershipInSociety')==0) echo ' checked' ?>>
+                  <label class="form-check-label" for="serie_opt3">Enchaîner par une autre participation chez  <?php echo $membership->getHtmlLinkToSociety() ?></label>
                 </div>
+                <?php endif; ?>                
+                <?php if($membership->isIndividualIdentified()): ?>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="serie" id="serie_opt4" value="anotherIndividualMembership" <?php if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'anotherIndividualMembership')==0) echo ' checked' ?>>
+                  <label class="form-check-label" for="serie_opt4">Enchaîner par une autre participation de <?php echo $membership->getHtmlLinkToIndividual() ?></label>
+                </div>
+                <?php endif; ?>       
             </div>
-			<?php endif; ?>
+            <?php endif; ?>
 			
 			<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
 

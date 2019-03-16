@@ -48,21 +48,55 @@ class Membership {
 		return $this->description = $input;
 	}	
 	/**
+	 * @version 03/2019
 	 * @since 01/2017
 	 */
 	public function setInitYear($input) {
 		if ( is_numeric($input) && strlen($input)==4 ) {
 			$this->init_year = $input;
+		} else {
+		    return false;
 		}
 	}
 	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function getInitYear() {
+	    return $this->init_year;
+	}
+	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function hasInitYear() {
+	    return !empty($this->init_year);
+	}
+	/**
+	 * @version 03/2019 
 	 * @since 01/2017
 	 **/	
 	public function setEndYear($input) {
 		if ( is_numeric($input) && strlen($input)==4 ) {
 			$this->end_year = $input;
+		} else {
+		    return false;
 		}
-	}	
+	}
+	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function getEndYear() {
+	    return $this->end_year;
+	}
+	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function hasEndYear() {
+	    return !empty($this->end_year);
+	}
 	public function getAttribute($name)	{
 		return isset($this->$name) ? $this->$name : NULL;
 	}
@@ -142,6 +176,13 @@ class Membership {
 		return $this->getAttribute('description');
 	}
 	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function hasDescription() {
+	    return !empty($this->description);
+	}
+	/**
 	 * @since 01/2017
 	 */
 	public function getPeriod() {
@@ -172,6 +213,13 @@ class Membership {
 	 */
 	public function getDepartment() {
 		return $this->getAttribute('department');
+	}
+	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function hasDepartment() {
+	    return !empty($this->department);
 	}
 	/**
 	 * @since 27/10/2012
@@ -207,7 +255,7 @@ class Membership {
 	}
 	/**
 	 * Renvoie la personne impliquée.
-	 * @version 06/03/2017
+	 * @version 03/2017
 	 * @return Individual|NULL
 	 */
 	public function getIndividual()	{
@@ -266,10 +314,17 @@ class Membership {
 	}	
 	/**
 	 * Obtient l'Url décrivant la participation de la personne.
-	 * @since 07/01/2006
+	 * @since 01/2006
 	 */
 	public function getUrl() {
 		return isset($this->url) ? $this->url : NULL;
+	}
+	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function hasUrl() {
+	    return !empty($this->url);
 	}
 	/**
 	 * @since 08/2018
