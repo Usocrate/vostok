@@ -95,6 +95,13 @@ class Membership {
 		return $this->getAttribute('title');
 	}
 	/**
+	 * @since 03/2019
+	 * @return boolean
+	 */
+	public function hasTitle() {
+	    return !empty($this->title);
+	}
+	/**
 	 * @since 27/10/2012
 	 */
 	private static function getKnownTitles($substring = NULL) {

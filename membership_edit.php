@@ -83,10 +83,13 @@ if (isset($_POST['task'])) {
 			}
 			if ($membership->toDB()) {
 				// enregistrement effectif !
-				if (isset($_REQUEST['serie']) && $_REQUEST['serie']==1) {
+			    if (isset($_REQUEST['serie']) && $_REQUEST['serie']!=0) {
+					
 					// enchaînement sur la déclaration d'une autre participation
-
-					$fb = new UserFeedBack();
+					
+			        $fb = new UserFeedBack();
+			        
+			        $lastSavedMembership = clone $membership;
 					
 					if (isset($applicant)) {
 						switch (get_class($applicant)) {
@@ -103,11 +106,17 @@ if (isset($_POST['task'])) {
 						}
 					} else {
 						$fb->addSuccessMessage('Participation enregistrée.');
+						$membership = new Membership();
 					}
 					
-					// dans le cadre d'une série on propose de conserver la fonction de la particpation précédente
-					if (isset($_REQUEST['title'])) {
-						$membership->setTitle($_REQUEST['title']);
+					
+					switch ($_REQUEST['serie']) {
+					    case '1' :
+					        // on demande a conserver les données pour la création d'une nouvelle participation sur le même modèle
+					        if ($lastSavedMembership->hasTitle()) {
+					            $membership->setTitle($lastSavedMembership->getTitle());
+					        }
+					        break;
 					}
 
 				} else {
@@ -274,11 +283,19 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 
 			<?php if (!$membership->hasId()) : ?>
 			<div class="form-group">
-				<div class="form-check">
-				  <input class="form-check-input" type="checkbox" value="1" id="serie_i" name="serie" <?php if(isset($_REQUEST['serie']) && $_REQUEST['serie']==1) echo ' checked' ?>>
-				  <label class="form-check-label" for="serie_i">Enchaîner sur la déclaration d'une autre participation ?</label>
-				</div>
-			</div>
+    			<div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="serie" id="serie_opt1" value="0" <?php if (!isset($_REQUEST['serie']) || $_REQUEST['serie']==0) echo ' checked' ?>>
+                  <label class="form-check-label" for="serie_opt1">Ne pas enchaîner</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="serie" id="serie_opt2" value="1" <?php if (isset($_REQUEST['serie']) && $_REQUEST['serie']==1) echo ' checked' ?>>
+                  <label class="form-check-label" for="serie_opt2">Enchaîner par une participation similaire</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="serie" id="serie_opt3" value="2" <?php if (isset($_REQUEST['serie']) && $_REQUEST['serie']==2) echo ' checked' ?>>
+                  <label class="form-check-label" for="serie_opt3">Enchaîner</label>
+                </div>
+            </div>
 			<?php endif; ?>
 			
 			<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
