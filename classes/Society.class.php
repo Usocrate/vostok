@@ -442,15 +442,22 @@ class Society {
 	 *
 	 * @return string
 	 * @since 12/2016
-	 * @version 07/2018
+	 * @version 03/2019
 	 */
 	public function getHtmlLinkToSociety($focus = null) {
-		$href = "society.php?";
-		$href.= 'society_id='.$this->getId();
-		if (isset($focus)) {
-			$href.= '&focus='.$focus; 	
-		}
-		return '<a href="'.$href.'">'.$this->getNameForHtmlDisplay().'</a>';
+	    return '<a href="'.$this->getDisplayUrl().'">'.$this->getNameForHtmlDisplay().'</a>';
+	}
+	/**
+	 * @since 03/2019
+	 * @return string
+	 */
+	public function getDisplayUrl($focus = null) {
+	    $href = "society.php?";
+	    $href.= 'society_id='.$this->getId();
+	    if (isset($focus)) {
+	        $href.= '&focus='.$focus;
+	    }
+	    return $href;
 	}
 	/**
 	 * Indique si la miniature du site web de la société a déjà été enregistré.

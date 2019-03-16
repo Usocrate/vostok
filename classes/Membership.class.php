@@ -342,9 +342,9 @@ class Membership {
 	/**
 	 * @since 12/2018
 	 */
-	public function getHtmlLinkToIndividual() {
+	public function getHtmlLinkToIndividual($mode = 'normal') {
 		if ($this->isIndividualIdentified()) {
-			return $this->individual->getHtmlLinkToIndividual();
+			return $this->individual->getHtmlLinkToIndividual($mode);
 		}
 	}
 	/**

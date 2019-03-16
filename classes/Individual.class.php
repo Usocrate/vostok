@@ -357,10 +357,25 @@ class Individual {
 	 * Obtenir le lien vers l'écran dédié à l'individu.
 	 *
 	 * @return string
-	 * @since 09/12/2016
+	 * @version 03/2019
+	 * @since 12/2016
 	 */
-	public function getHtmlLinkToIndividual() {
-		return '<a href="individual.php?individual_id='.$this->getId().'/">'.ToolBox::toHtml($this->getWholeName()).'</a>';
+	public function getHtmlLinkToIndividual($mode = 'normal') {
+	    switch ($mode) {
+		    case 'friendly':
+		        $label = empty($this->firstName) ? $this->getWholeName() : $this->firstName;
+		        break;
+		    default :
+		        $label = $this->getWholeName();
+		}
+		return '<a href="'.$this->getDisplayUrl().'">'.ToolBox::toHtml($label).'</a>';
+	}
+	/**
+	 * @since 03/2019
+	 * @return string
+	 */
+	public function getDisplayUrl() {
+	    return 'individual.php?individual_id='.$this->getId();
 	}
 	public function getHtmlLinkToPhoneCall() {
 		return '<a href="tel:'.$this->getPhoneNumber().'">'.$this->getPhoneNumber().'</a>';

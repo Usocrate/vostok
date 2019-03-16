@@ -143,8 +143,12 @@ if (isset($_POST['task'])) {
 					    case 'anotherIndividualMembership' :
 					        $membership->setIndividual($lastSavedMembership->getIndividual());
 					        break;
+					        
+					    case 'anotherIndividualMembershipInSociety' :
+					        $membership->setSociety($lastSavedMembership->getSociety());
+					        $membership->setIndividual($lastSavedMembership->getIndividual());
+					        break;
 					}
-
 				} else {
 					// pas de déclaration en série, redirection vers l'écran de l'entité à l'origine de la demande de déclaration
 					if (isset($applicant)) {
@@ -308,32 +312,62 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				<a id="membership_url_link" href="#" style="display: none">[voir]</a>
 			</div>
 
-			<?php if($membership->isIndividualIdentified() || $membership->isSocietyIdentified()): ?>
-			<div class="form-group">
-    			<div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="serie" id="serie_opt1" value="none" <?php if (!isset($_REQUEST['serie']) || strcmp($_REQUEST['serie'],'none')==0) echo ' checked' ?>>
-                  <label class="form-check-label" for="serie_opt1">Ne pas enchaîner</label>
-                </div>
-                <?php if($membership->isSocietyIdentified()): ?>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="serie" id="serie_opt2" value="similarMembershipInSociety" <?php if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'similarMembershipInSociety')==0) echo ' checked' ?>>
-                  <label class="form-check-label" for="serie_opt2">Enchaîner par une participation similaire chez <?php echo $membership->getHtmlLinkToSociety() ?></label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="serie" id="serie_opt3" value="anotherMembershipInSociety" <?php if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'anotherMembershipInSociety')==0) echo ' checked' ?>>
-                  <label class="form-check-label" for="serie_opt3">Enchaîner par une autre participation chez  <?php echo $membership->getHtmlLinkToSociety() ?></label>
-                </div>
-                <?php endif; ?>                
-                <?php if($membership->isIndividualIdentified()): ?>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="serie" id="serie_opt4" value="anotherIndividualMembership" <?php if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'anotherIndividualMembership')==0) echo ' checked' ?>>
-                  <label class="form-check-label" for="serie_opt4">Enchaîner par une autre participation de <?php echo $membership->getHtmlLinkToIndividual() ?></label>
-                </div>
-                <?php endif; ?>       
-            </div>
-            <?php endif; ?>
+			<?php
+			    $serie_options = array();
+			    
+			    if (isset($applicant)) {
+			        
+			        $serie_options['none'] = 'Ne pas enchaîner';
+			        
+			        switch (get_class($applicant)) {
+			            case 'Society':
+			                $serie_options['similarMembershipInSociety'] = 'Enchaîner avec une participation similaire';
+			                $serie_options['anotherMembershipInSociety'] = 'Enchaîner avec une autre participation';
+			                break;
+			            case 'Individual' :
+			                $serie_options['anotherIndividualMembership'] = 'Enchaîner avec '.$membership->getHtmlLinkToIndividual('friendly').' dans une autre société';
+			                $serie_options['anotherIndividualMembershipInSociety'] = 'Enchaîner avec une autre participation';
+			                break;
+			        }
+			        
+			    }
+			    		    
+			    $toCheck = empty($_REQUEST['serie']) ? 'none' : $_REQUEST['serie'];
+			    
+			    if (count($serie_options)>1) {
+			        echo '<div class="form-group">';
+			        $i = 0;
+			        foreach ($serie_options as $v=>$l) {
+			            $i++;
+			            echo '<div class="form-check form-check-inline">';
+			            echo '<input class="form-check-input" type="radio" name="serie" id="serie_opt'.$i.'" value="'.$v.'"';
+			            if (strcmp($toCheck,$v)==0) {
+			                echo ' checked';
+			            }
+			            echo '>';
+			            echo '<label class="form-check-label" for="serie_opt'.$i.'">'.$l.'</label>';
+			            echo '</div>';
+			        }
+			        echo '</div>';
+			    }
+			?>
 			
 			<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
+			
+			<?php
+    			if (isset($applicant)) {
+
+    			    switch (get_class($applicant)) {
+    			        case 'Society':
+    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-default">Quitter</a>';
+    			            break;
+    			        case 'Individual' :
+    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-default">Quitter</a>';
+    			            break;
+    			    }
+    			    
+    			}
+			?>
 
     		<?php if ($membership->hasId()) : ?>
     			<button name="task" type="submit" value="membership_deletion" class="btn btn-default">Supprimer</button>
