@@ -42,7 +42,7 @@ class Relationship {
 	}
 	/*
 	 * Fixe la valeur d'un attribut.	
-	 * @since 30/03/2006	
+	 * @since 03/2006	
 	 */
 	public function getAttribute($name)	{
 		return isset($this->$name) ? $this->$name : NULL;
@@ -50,43 +50,91 @@ class Relationship {
 	/**
 	 * Obtient l'identifiant de la relation.
 	 * @return int
-	 * @since 30/03/2006	 
+	 * @since 03/2006	 
 	 */	
-	public function getId()
-	{
+	public function getId()	{
 		return $this->getAttribute('id');
 	}
 	/**
 	 * Fixe l'identifiant de la relation.
 	 * @param int $input
-	 * @since 30/03/2006
+	 * @since 03/2006
 	 */
-	public function setId($input)
-	{
+	public function setId($input) {
 		return $this->setAttribute('id', $input);
 	}
 	/**
+	 * @since 03/2019
+	 */
+	public function getInitYear()	{
+		return $this->getAttribute('init_year');
+	}
+	/**
+	 * @since 03/2019
+	 */	
+	public function setInitYear($input) {
+		return $this->setAttribute('init_year', $input);
+	}	
+	/**
+	 * @since 03/2019
+	 */
+	public function getEndYear()	{
+		return $this->getAttribute('end_year');
+	}
+	/**
+	 * @since 03/2019
+	 */	
+	public function setEndYear($input) {
+		return $this->setAttribute('end_year', $input);
+	}	
+	/**
+	 * Obtient l'Url décrivant la relation.
+	 * @since 03/2019
+	 */
+	public function getDescription() {
+		return $this->getAttribute('description');
+	}
+	/**
+	 * @since 03/2019
+	 */	
+	public function setDescription($input) {
+		return $this->setAttribute('description', $input);
+	}	
+	/**
 	 * Fixe un item.
 	 * @param object $input
-	 * @since 30/03/2006	 
+	 * @since 03/2006	 
 	 */	
-	public function setItem($input, $rang)
-	{
+	public function setItem($input, $rang) {
 		if (is_object($input) && in_array(get_class($input), $this->item_class_options)) {
 			$this->items[$rang] = $input;
+			return true;
 		}
+		return false;
 	}
+	/**
+	 * @since 03/2019
+	 */
+	public function areItemsBothKnown() {
+		return isset($this->items) && count($this->items)==2 && $this->items[0]->hasId() && $this->items[1]->hasId();
+	}
+	/**
+	 * @since 03/2019
+	 */	
+	public function isItemKnown($rang) {
+		return isset($this->items[$rang]) && $this->items[$rang]->hasId();
+	}	
 	/**
 	 * Fixe le rôle d'un item.
 	 * @param string $input
-	 * @since 09/04/2006	 
+	 * @since 04/2006	 
 	 */	
 	public function setItemRole($input, $rang) {
 		$this->items_roles[$rang] = $input;
 	}	
 	/**
 	 * Obtient le role d'un item.
-	 * @since 09/04/2006
+	 * @since 04/2006
 	 */	
 	public function getItemRole($rang) {
 		return isset($this->items_roles[$rang]) ? $this->items_roles[$rang] : NULL;
@@ -152,10 +200,10 @@ class Relationship {
 	}	
 	/**
 	 * Obtient l'Url décrivant la relation.
-	 * @since 30/03/2006
+	 * @since 03/2006
 	 */
 	public function getUrl() {
-		return isset($this->url) ? $this->url : NULL;
+		return $this->getAttribute('url');
 	}
 	/**
 	 * Enregistre en base de données les valeurs des attributs de la relation.
@@ -246,8 +294,8 @@ class Relationship {
 	}
 	/**
 	 * Fixe les valeurs des attributs de la relation à partir d'un tableau dont les clefs sont normalisées.
-	 * @since 30/03/2006
-	 * @version 20/12/2016
+	 * @since 03/2006
+	 * @version 12/2016
 	 */
 	public function feed($array = NULL) {
 		global $system;

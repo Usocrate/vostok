@@ -13,6 +13,8 @@ require_once 'config/boot.php';
 
 session_start ();
 
+//print_r($_POST);
+
 if (empty ( $_SESSION ['user_id'] )) {
 	header ( 'Location:login.php' );
 	exit ();
@@ -21,7 +23,7 @@ if (empty ( $_SESSION ['user_id'] )) {
 	$user->feed ();
 }
 
-$relationship = new Relationship ();
+$relationship = new Relationship();
 
 // Formatage des données saisies par l'utilisateur
 if (isset ( $_POST )) {
@@ -44,10 +46,13 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 		$item0 = $relationship->getItem ( 0 );
 		if (is_object ( $item0 )) {
 			$item0->feed ();
+			$relationship->setItem($item0,0);
 		}
+		
 		$item1 = $relationship->getItem ( 1 );
 		if (is_object ( $item1 )) {
 			$item1->feed ();
+			$relationship->setItem($item1,1);
 		}
 	}
 } else {
@@ -71,7 +76,7 @@ if (isset ( $_POST ['relationship_submission'] )) {
 	if (empty($item0) && !empty($_POST['item0_name'])) {
 		$item0 = new Society ();
 		$item0->setName ( $_POST ['item0_name'] );
-		if (! $item0->identifyFromName ()) {
+		if (! $item0->identifyFromName()) {
 			$item0->toDB ();
 		}
 		$relationship->setItem($item0,0);
@@ -85,14 +90,33 @@ if (isset ( $_POST ['relationship_submission'] )) {
 		$relationship->setItem($item1,1);
 	}
 	if ($relationship->toDB ()) {
-		header ( 'location:society.php?society_id=' . $item0->getId () );
-		exit ();
+		if (isset($_POST['serie']) && strcmp($_POST['serie'],'none')!=0) {
+			$lastSavedRelationship = clone $relationship;
+			$relationship = new Relationship();
+
+			switch ($_POST['serie']) {
+				case 'similarRelationship':
+					$relationship->setItem ($lastSavedRelationship->getItem(0), 0);
+					$relationship->setItemRole($lastSavedRelationship->getItemRole(0),0);
+					$relationship->setItemRole($lastSavedRelationship->getItemRole(1),1);
+					$relationship->setInitYear($lastSavedRelationship->getInitYear());
+					$relationship->setEndYear($lastSavedRelationship->getEndYear());
+					$relationship->setDescription($lastSavedRelationship->getDescription());
+					$relationship->setUrl($lastSavedRelationship->getUrl());
+					break;
+				case 'anotherRelationship':
+					$relationship->setItem ($lastSavedRelationship->getItem(0), 0);
+			}
+		} else {
+			header ( 'location:society.php?society_id=' . $relationship->getItem(0)->getId () );
+			exit;
+		}
 	}
 }
-if (isset ( $item0 ) && isset ( $item1 )) {
+if ($relationship->areItemsBothKnown()) {
 	$h1_content = 'Une relation entre ' . $item0->getHtmlLinkToSociety() . ' et ' . $item1->getHtmlLinkToSociety();
 } else {
-	$h1_content = isset ( $item0 ) && $item0->getId() ? 'Une relation de ' . $item0->getHtmlLinkToSociety() : 'Une relation';
+	$h1_content = $relationship->isItemKnown(0) ? 'Une relation de ' . $relationship->getItem(0)->getHtmlLinkToSociety() : 'Une relation';
 }
 ?>
 <!doctype html>
@@ -121,7 +145,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			if ($relationship->getId ())
 				echo '<input name="relationship_id" type="hidden" value="' . $relationship->getId () . '" />';
 
-			if (! isset ( $item0 ) || ! $item0->getId ()) {
+			if (!$relationship->isItemKnown(0)) {
 				// la première société est à définir
 				echo '<div class="form-row">';
 				echo '<div class="form-group col-md-6">';
@@ -136,14 +160,13 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			} else {
 				// la première société est définie
 				echo '<div class="form-group">';
-				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
-    			echo '<label for="s1_role_i">Rôle '. $item0->getHtmlLinkToSociety() . '</label>';
+				echo '<input name="item0_id" type="hidden" value="' . $relationship->getItem(0)->getId () . '"/>';
+    			echo '<label for="s1_role_i">Rôle '. $relationship->getItem(0)->getHtmlLinkToSociety() . '</label>';
     			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
-			if (! isset ( $item1 )) {
+			if (!$relationship->isItemKnown(1)) {
 				// la deuxième société est à définir
-				$item1 = new Society();
 				echo '<div class="form-row">';
 				echo '<div class="form-group col-md-6">';
 				echo '<label for="s2_name_i">Nom de la deuxième société</label>';
@@ -157,8 +180,8 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			} else {
 				// la deuxième société est définie
 				echo '<div class="form-group">';
-				echo '<input name="item1_id" type="hidden" value="' . $item1->getId () . '"/>';
-    			echo '<label for="s2_role_i">Rôle '. $item1->getHtmlLinkToSociety() . '</label>';
+				echo '<input name="item1_id" type="hidden" value="' . $relationship->getItem(1)->getId () . '"/>';
+    			echo '<label for="s2_role_i">Rôle '. $relationship->getItem(1)->getHtmlLinkToSociety() . '</label>';
     			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
@@ -186,10 +209,44 @@ if (isset ( $item0 ) && isset ( $item1 )) {
     			<a id="relationship_web_link" href="#" style="display: none">[voir]</a>
 			</div>
 			
+			<?php
+			    $serie_options = array();
+			    
+		        $serie_options['none'] = 'Ne pas enchaîner';
+                $serie_options['similarRelationship'] = 'Enchaîner avec une relation similaire';
+                $serie_options['anotherRelationship'] = 'Enchaîner avec une autre relation';
+		        
+
+			    $toCheck = empty($_POST['serie']) ? 'none' : $_POST['serie'];
+			    
+			    if (count($serie_options)>1) {
+			        echo '<div class="form-group">';
+			        $i = 0;
+			        foreach ($serie_options as $v=>$l) {
+			            $i++;
+			            echo '<div class="form-check form-check-inline">';
+			            echo '<input class="form-check-input" type="radio" name="serie" id="serie_opt'.$i.'" value="'.$v.'"';
+			            if (strcmp($toCheck,$v)==0) {
+			                echo ' checked';
+			            }
+			            echo '>';
+			            echo '<label class="form-check-label" for="serie_opt'.$i.'">'.$l.'</label>';
+			            echo '</div>';
+			        }
+			        echo '</div>';
+			    }
+			?>
+			
 			<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 			<?php if ($relationship->getId()) : ?>
 				<button name="relationship_deletion" type="submit" value="1" class="btn btn-default">Supprimer</button>
 			<?php endif; ?>
+			
+			<?php
+    			if ($relationship->isItemKnown(0)) {
+					echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-default">Quitter</a>';
+    			}
+			?>
 		</form>
 	</section>
 </div>
