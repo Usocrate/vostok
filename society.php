@@ -79,68 +79,68 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a> <a href="<?php echo ToolBox::getGoogleQueryUrl($society->getName()) ?>" target="_blank"><i class="fab fa-google"></i></a></small></h1>
-    <section>
-        <?php
-            //
-            // adresse physique et url
-            //
-            $address_elt = array();
-            if ($society->getStreet() || $society->getCity() || $society->getPostalcode()){
-                $geo_elt = array();
-                if ($society->getStreet()) {
-                    $geo_elt[] = ToolBox::toHtml($society->getStreet());
-                }
-                if ($society->getPostalCode()) {
-                    $geo_elt[] = $society->getPostalCode();
-                }
-                if ($society->getCity()) {
-                    $geo_elt[] = '<a href="societies_list.php?society_newsearch=1&society_city='.urlencode($society->getCity()).'" class="implicit">'.ToolBox::toHtml($society->getCity()).'</a>';
-                }
-                if (count($geo_elt)>0) {
-                    $address_elt[] = implode(' ', $geo_elt);
-                }
+    <?php
+    	$html = '';
+        //
+        // adresse physique et url
+        //
+        $address_elt = array();
+        if ($society->getStreet() || $society->getCity() || $society->getPostalcode()){
+            $geo_elt = array();
+            if ($society->getStreet()) {
+                $geo_elt[] = ToolBox::toHtml($society->getStreet());
             }
-            if ($society->getUrl()) {
-                $address_elt [] = '<a href="'.$society->getUrl().'" target="_blank">'.$society->getUrl().'</a>';
+            if ($society->getPostalCode()) {
+                $geo_elt[] = $society->getPostalCode();
             }
-            if (count($address_elt)>0) {
-                echo '<address>'.implode(' <small>-</small> ', $address_elt).'</address>';
+            if ($society->getCity()) {
+                $geo_elt[] = '<a href="societies_list.php?society_newsearch=1&society_city='.urlencode($society->getCity()).'" class="implicit">'.ToolBox::toHtml($society->getCity()).'</a>';
             }
-            //
-            // description
-            //
-            if ($society->getDescription()) {
-                echo '<blockquote>'.ToolBox::toHtml($society->getDescription()).'</blockquote>';
+            if (count($geo_elt)>0) {
+                $address_elt[] = implode(' ', $geo_elt);
             }
-            //
-            // activités
-            //
-            $industries = $society->getIndustries();
-            if (count($industries)>0) {
-                echo '<div>';
-                foreach ($industries as $i) {
-                    echo '<span class="badge badge-secondary tag">'.$i->getHtmlLink().'</span> ';
-                }
-                echo '<div>';
-                
-				
-				$inSameIndustrySocieties = $society->getInSameIndustrySocieties();
-				if (count($inSameIndustrySocieties) > 0) {
-					echo '<div>';
-					echo '<p>';
-					echo '<small>Similaire à : </small>';
-					$links = array();
-					foreach($inSameIndustrySocieties as $item) {
-						$links[] = '<a href="./society.php?society_id='.$item->getId().'">'.$item->getName().'</a>';
-					}
-					echo implode($links, ', ');
-					echo '</p>';
-					echo '</div>';
+        }
+        if ($society->getUrl()) {
+            $address_elt [] = '<a href="'.$society->getUrl().'" target="_blank">'.$society->getUrl().'</a>';
+        }
+        if (count($address_elt)>0) {
+            $html.= '<address>'.implode(' <small>-</small> ', $address_elt).'</address>';
+        }
+        //
+        // description
+        //
+        if ($society->getDescription()) {
+            $html.= '<blockquote>'.ToolBox::toHtml($society->getDescription()).'</blockquote>';
+        }
+        //
+        // activités
+        //
+        $industries = $society->getIndustries();
+        if (count($industries)>0) {
+            $html.= '<div>';
+            foreach ($industries as $i) {
+                $html.= '<span class="badge badge-secondary tag">'.$i->getHtmlLink().'</span> ';
+            }
+            $html.= '</div>';
+
+			$inSameIndustrySocieties = $society->getInSameIndustrySocieties();
+			if (count($inSameIndustrySocieties) > 0) {
+				$html.= '<div>';
+				$html.= '<p><small>Similaire à : </small>';
+				$links = array();
+				foreach($inSameIndustrySocieties as $item) {
+					$links[] = '<a href="./society.php?society_id='.$item->getId().'">'.$item->getName().'</a>';
 				}
-            }
-        ?>
-	</section>
-	
+				$html.= implode($links, ', ');
+				$html.= '</p>';
+				$html.= '</div>';
+			}
+        }
+        if (!empty($html)) {
+        	echo '<section>'.$html.'</section>';
+        }
+    ?>
+
 	<div>
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs">
