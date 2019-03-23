@@ -2,7 +2,7 @@
 /**
  * @package usocrate.vostok
  * @author Florent Chanavat
- * @since 30/03/2006 
+ * @since 03/2006 
  */
 class Relationship {
 	private $id;
@@ -88,7 +88,7 @@ class Relationship {
 		return $this->setAttribute('end_year', $input);
 	}	
 	/**
-	 * Obtient l'Url décrivant la relation.
+	 * Obtient la description décrivant la relation.
 	 * @since 03/2019
 	 */
 	public function getDescription() {
@@ -99,7 +99,19 @@ class Relationship {
 	 */	
 	public function setDescription($input) {
 		return $this->setAttribute('description', $input);
-	}	
+	}
+	/**
+	 * @since 03/2019
+	 */
+	public function getUrl()	{
+		return $this->getAttribute('url');
+	}
+	/**
+	 * @since 03/2019
+	 */	
+	public function setUrl($input) {
+		return $this->setAttribute('url', $input);
+	}		
 	/**
 	 * Fixe un item.
 	 * @param object $input
