@@ -101,17 +101,18 @@ class Relationship {
 		return $this->setAttribute('description', $input);
 	}
 	/**
-	 * @since 03/2019
+	 * Obtient l'Url décrivant la relation.
+	 * @since 03/2006
 	 */
-	public function getUrl()	{
+	public function getUrl() {
 		return $this->getAttribute('url');
-	}
+	}	
 	/**
 	 * @since 03/2019
 	 */	
 	public function setUrl($input) {
 		return $this->setAttribute('url', $input);
-	}		
+	}
 	/**
 	 * Fixe un item.
 	 * @param object $input
@@ -210,13 +211,6 @@ class Relationship {
 		$output = '{"roles":' . json_encode ( self::getKnownRoles ( $substring, $roleType ) ) . '}';
 		return $output;
 	}	
-	/**
-	 * Obtient l'Url décrivant la relation.
-	 * @since 03/2006
-	 */
-	public function getUrl() {
-		return $this->getAttribute('url');
-	}
 	/**
 	 * Enregistre en base de données les valeurs des attributs de la relation.
 	 * @since 03/2006
