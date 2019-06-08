@@ -239,7 +239,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 						    echo '<div class="card-body">';
 						    echo $card_title_tag;
 						    echo '<p>';
-						    echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
+						    echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
 						    if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
 						    echo '</p>';
 						    if ( current($memberships)->hasDescription() ) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDescription()).'</small></p>';
