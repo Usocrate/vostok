@@ -77,14 +77,15 @@ header ( 'charset=utf-8' );
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="description" content="<?php echo $system->getAppliDescription() ?>" />
 <title><?php echo $system->getAppliName().' : '.$system->getappliDescription() ?></title>
+<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>main.css"></link>
 <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />
 <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 <script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
-<body class="container" class="container">
-	<header>
-		<h1 class="bd-title">Configuration</h1>
-	</header>
+<body>
+<?php require 'navbar.inc.php'; ?>
+<div class="container-fluid">
+	<h1>Configuration</h1>
 	<?php
 	if (isset ( $fb )) {
 		echo '<div>';
@@ -138,8 +139,8 @@ header ( 'charset=utf-8' );
 				</fieldset>
 			</div>
 			<button name="task_id" type="submit" value="save" class="btn btn-default">Enregistrer</button>
-			<a href="<?php echo $system->getAppliUrl(); ?>">Quitter</a>
 		</div>
 	</form>
+</div>
 </body>
 </html>

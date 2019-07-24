@@ -28,6 +28,7 @@
 				<a class="dropdown-item" href="leads.php?lead_newsearch_order=1&amp;lead_status=<?php echo urlencode('à suivre') ?>">A suivre</a>
 				<a class="dropdown-item" href="lead_types_admin.php">Gérer les types</a>
 				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="./admin/config.php">Admin</a>
 				<a class="dropdown-item" href="login.php?anonymat_submission=1">Se déconnecter</a>
 			</div>
 		</li>    	
