@@ -21,14 +21,12 @@ if (empty ($_SESSION['user_id'])) {
 	$user->feed();
 }
 
-$title = empty($_REQUEST['title']) ? null : $_REQUEST['title'];
+$role = empty($_REQUEST['role']) ? null : $_REQUEST['role'];
 
-$memberships = $system->getMembershipHavingThatTitle($title);
+$societies = $system->getSocietiesHavingThatRole($role);
 
-$doc_title = $title;
+$doc_title = $role;
 
-//print_r($_SESSION);
-//print_r($preferences);
 ?>
 <!doctype html>
 <html lang="fr">
@@ -52,26 +50,13 @@ $doc_title = $title;
 	<h1 class="bd-title"><?php echo ToolBox::toHtml(ucfirst($doc_title)); ?></h1>
     <section>
         <?php
-			//print_r($memberships);
-			$data = $system->getMembershipTitleAverageDuration($title);
-			if ($data) {
-				echo '<p>Poste occupé en moyenne pendant ';
-				echo $data['avg'] > 1 ? $data['avg'].' ans' : $data['avg'].' an';
-				echo '.</p>';
-			}
-			
-			echo '<table class="table">';
-			echo '<thead><tr><th>Qui ?</th><th>Où ?</th><th>Quand ?</th><tr></thead>';
-			echo '<tbody>';
-			foreach ($memberships as $m) {
-				echo '<tr>';
-				echo '<td>'.$m->getIndividual()->getHtmlLinkToIndividual().'</td>';
-				echo '<td>'.$m->getSociety()->getHtmlLinkToSociety().'</td>';
-				echo '<td>'.$m->getPeriod().'</td>';
-				echo '</tr>';
-			}
-			echo '</tbody>';
-			echo '</table>';
+        echo '<ul>';
+        foreach ($societies as $s) {
+            echo '<li>';
+            echo $s->getHtmlLinkToSociety();
+            echo '</li>';
+        }
+        echo '</ul>';
         ?>
 	</section>
 </div>

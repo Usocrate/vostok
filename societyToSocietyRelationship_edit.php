@@ -309,7 +309,10 @@ if ($relationship->areItemsBothKnown()) {
 	                 }
 	         	})
 	   		}
-	   	});
+	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
+		   	var a = '<small><a href="societiesHavingThatRole.php?role='+item.value+'">(voir)</a></small>';
+		   	return $( "<li>" ).append( item.value).appendTo( ul );
+		};
 	    $('#s2_role_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {

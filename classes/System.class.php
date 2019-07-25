@@ -852,7 +852,33 @@ class System {
 		}
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
-	}	
+	}
+	/**
+	 * @since 07/2019
+	 */
+	public function getSocietiesHavingThatRole($role) {
+	    $sql = 'SELECT DISTINCT(t.id), t.name FROM ';
+	    $sql.= '(';
+	    $sql.= 'SELECT s.society_id AS id, s.society_name AS name FROM relationship AS r INNER JOIN society AS s ON(s.society_id = r.item0_id) WHERE r.item0_class=:item0_class AND r.item0_role=:item0_role';
+	    $sql.= ' UNION ';
+	    $sql.= 'SELECT s.society_id AS id, s.society_name AS name FROM relationship AS r INNER JOIN society AS s ON(s.society_id = r.item1_id) WHERE item1_class=:item1_class AND r.item1_role=:item1_role';
+	    $sql.= ') AS t';
+	    $sql.= ' ORDER BY t.name ASC';
+	    $statement = $this->getPdo()->prepare($sql);
+	    $statement->bindValue(':item0_role', $role, PDO::PARAM_STR);
+	    $statement->bindValue(':item0_class', 'society', PDO::PARAM_STR);
+	    $statement->bindValue(':item1_role', $role, PDO::PARAM_STR);
+	    $statement->bindValue(':item1_class', 'society', PDO::PARAM_STR);
+	    $statement->execute();
+	    $output = array();
+	    foreach ($statement->fetchAll(PDO::FETCH_ASSOC) AS $i) {
+	        $s = new Society();
+	        $s->setId($i['id']);
+	        $s->setName($i['name']);
+	        $output[$i['id']] = $s;
+	    }
+	    return $output;
+	}
 	/**
 	 * @since 02/2019
 	 */
