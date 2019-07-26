@@ -16,11 +16,12 @@
 				<h6 class="dropdown-header">Les sociétés</h6>
 				<a class="dropdown-item" href="cities.php">Par ville</a>
 				<a class="dropdown-item" href="industries.php">Par activité</a>
+				<a class="dropdown-item" href="societies_roles.php">Les rôles</a>
 				<a class="dropdown-item" href="society_edit.php">Nouvelle société</a>
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Les gens</h6>
-				<a class="dropdown-item" href="individual_edit.php">Introduire un nouvel individu</a>
 				<a class="dropdown-item" href="titles.php">Les rôles</a>
+				<a class="dropdown-item" href="individual_edit.php">Introduire un nouvel individu</a>
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Les pistes</h6>
 				<a class="dropdown-item" href="leads.php?lead_newsearch_order=1&amp;lead_status=suivie">Suivies</a>
