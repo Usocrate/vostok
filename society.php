@@ -94,7 +94,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
                 $geo_elt[] = $society->getPostalCode();
             }
             if ($society->getCity()) {
-                $geo_elt[] = '<a href="societies_list.php?society_newsearch=1&society_city='.urlencode($society->getCity()).'" class="implicit">'.ToolBox::toHtml($society->getCity()).'</a>';
+                $geo_elt[] = '<a href="societies.php?society_newsearch=1&society_city='.urlencode($society->getCity()).'" class="implicit">'.ToolBox::toHtml($society->getCity()).'</a>';
             }
             if (count($geo_elt)>0) {
                 $address_elt[] = implode(' ', $geo_elt);
@@ -172,7 +172,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					echo '<h2>';
 					echo '<a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a>';
 					echo ' <small>(';
-					echo '<a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'">';
+					echo '<a href="societiesHavingThatRole.php?role='.$item[2].'">';
 					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
 					echo '</a>';
 					echo ')';

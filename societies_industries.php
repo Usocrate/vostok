@@ -65,7 +65,7 @@ if (isset($_REQUEST['newsort']) || empty($_SESSION['industries_list_sort'])) {
     }
 }
 
-$doc_title = 'Les activités';
+$doc_title = 'Les activités exercées';
 ?>
 <!doctype html>
 <html lang="fr">
@@ -119,7 +119,7 @@ $doc_title = 'Les activités';
         					echo '<tr>';
         					echo '<td><input name="industries_ids[]" type="checkbox" value="'.$i->getId().'" /></td>';
         					echo '<td>';
-        					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id='.$i->getId().'">';
+        					echo '<a href="societies.php?society_newsearch=1&amp;industry_id='.$i->getId().'">';
         					switch ($status) {
         					    case 'main':
         					        echo '<strong>'.ToolBox::toHtml($i->getName()).'</strong>';
@@ -135,7 +135,7 @@ $doc_title = 'Les activités';
         					echo '</td>';
         					echo '<td>';
         					echo '<span class="badge badge-secondary">';
-        					echo '<a href="societies_list.php?society_newsearch=1&amp;industry_id=' . $i->getId () . '">';
+        					echo '<a href="societies.php?society_newsearch=1&amp;industry_id=' . $i->getId () . '">';
         					echo $weight;
         					echo '</span>';
         					echo '</td>';

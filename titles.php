@@ -91,7 +91,7 @@ $doc_title = 'Les rôles';
 				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
 				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
 			</tr>
-		</thead>		
+		</thead>
 		<tbody>
 			<?php
 			foreach ( $system->getMembershipTitles($_SESSION['role_list_sort']) as $i ) {

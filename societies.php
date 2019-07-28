@@ -117,7 +117,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 	    		<input id="s_city_i" name="society_city" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
 			</div>
 	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-default m-2">Filtrer</button>
-	   		<?php if( count($_SESSION['society_search']['criteria']) > 0) echo ' <a href="societies_list.php?society_newsearch=1">Toutes les sociétés</a>'  ?>
+	   		<?php if( count($_SESSION['society_search']['criteria']) > 0) echo ' <a href="societies.php?society_newsearch=1">Toutes les sociétés</a>'  ?>
 		</form>
    	</section>
    	<div class="row">

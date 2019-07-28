@@ -36,7 +36,7 @@ if (isset($_POST['task'])) {
 	switch ($_POST['task']) {
 		case 'deletion':
 			if (!$society->delete()) trigger_error('échec de la suppression de la société');
-			header('Location:societies_list.php');
+			header('Location:societies.php');
 			exit;
 			break;
 		case 'registration':

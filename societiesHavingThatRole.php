@@ -23,7 +23,19 @@ if (empty ($_SESSION['user_id'])) {
 
 $role = empty($_REQUEST['role']) ? null : $_REQUEST['role'];
 
-$societies = $system->getSocietiesHavingThatRole($role);
+if (isset($_REQUEST['newsort']) || empty($_SESSION['societiesHavingThatRole_list_sort'])) {
+    if (isset($_REQUEST['newsort'])) {
+        switch ($_REQUEST['newsort']) {
+            case 'alpha':
+                $_SESSION['societiesHavingThatRole_list_sort'] = 'Alphabetical';
+                break;
+            case 'count':
+                $_SESSION['societiesHavingThatRole_list_sort'] = 'Most used first';
+        }
+    } else {
+        $_SESSION['societiesHavingThatRole_list_sort'] = 'Most used first';
+    }
+}
 
 $doc_title = $role;
 
@@ -46,18 +58,39 @@ $doc_title = $role;
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
+<nav>
+  <ol class="breadcrumb mb-0">
+    <li class="breadcrumb-item"><a href="societies_roles.php">Les relations entre sociétés</a></li>
+    <li class="breadcrumb-item active"><?php echo ToolBox::toHtml($role) ?></li>
+  </ol>
+</nav>
+
 <div class="container-fluid">
 	<h1 class="bd-title"><?php echo ToolBox::toHtml(ucfirst($doc_title)); ?></h1>
     <section>
+    	<table class="table">
+    	<thead>
+			<tr>
+				<th style="display:none"></th>
+				<th><?php echo strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Alphabetical')==0 ? 'Nom de la société' : 'Nom de la société <a href="'.$_SERVER['PHP_SELF'].'?role='.$role.'&newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Most used first')==0 ? 'Nombre de sociétés auprès desquelles le rôle est assumé' : 'Nombre de sociétés auprès desquelles le rôle est assumé <a href="'.$_SERVER['PHP_SELF'].'?role='.$role.'&newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+			</tr>
+		</thead>
+    	<tbody>
         <?php
-        echo '<ul>';
-        foreach ($societies as $s) {
-            echo '<li>';
-            echo $s->getHtmlLinkToSociety();
-            echo '</li>';
+        foreach ($system->getSocietiesHavingThatRole($role, $_SESSION['societiesHavingThatRole_list_sort']) as $item) {
+            echo '<tr>';
+            echo '<td>';
+            echo $item['society']->getHtmlLinkToSociety();
+            echo '</td>';
+            echo '<td>';
+            if (isset($item['count'])) echo $item['count'];
+            echo '</td>';
+            echo '</tr>';
         }
-        echo '</ul>';
         ?>
+        </tbody>
+        </table>
 	</section>
 </div>
 <script type="text/javascript">

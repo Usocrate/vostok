@@ -308,10 +308,18 @@ if ($relationship->areItemsBothKnown()) {
 						response(data);
 	                 }
 	         	})
-	   		}
+	   		},
+	        focus: function( event, ui ) {
+				$('#s1_role_i').val( ui.item.role);
+	        	return false;
+	        },
+	        select: function( event, ui ) {
+	        	$('#s1_role_i').val( ui.item.role);
+	        	return false;
+	        }
 	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
-		   	var a = '<small><a href="societiesHavingThatRole.php?role='+item.value+'">(voir)</a></small>';
-		   	return $( "<li>" ).append( item.value).appendTo( ul );
+		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
+		   	return $( "<li>" ).append(content).appendTo( ul );
 		};
 	    $('#s2_role_i').autocomplete({
 			minLength: 2,
@@ -331,8 +339,19 @@ if ($relationship->areItemsBothKnown()) {
 						response(data);
 	                 }
 	         	})
-	   		}
-	   	});	    
+	   		},
+            focus: function( event, ui ) {
+    			$('#s2_role_i').val( ui.item.role);
+            	return false;
+            },
+            select: function( event, ui ) {
+            	$('#s2_role_i').val( ui.item.role);
+            	return false;
+            }
+	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
+		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
+		   	return $( "<li>" ).append(content).appendTo( ul );
+		};	    
 	})
 </script>
 </body>

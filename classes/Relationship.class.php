@@ -158,7 +158,7 @@ class Relationship {
 	/**
 	 * @version 07/2018
 	 */
-	public static function getKnownRoles($substring = null, $type = null)	{
+	public static function getKnownRoles($substring = null, $type = null, $sort='Alphabetical')	{
 		global $system;
 
 		if (isset($type)) {
@@ -171,7 +171,7 @@ class Relationship {
 					break;					
 			}
 		}
-		$sql = 'SELECT DISTINCT(role) FROM (SELECT item0_role AS role FROM relationship';
+		$sql = 'SELECT t.role, COUNT(*) AS nb FROM (SELECT item0_role AS role FROM relationship';
 		$where = array();
 		if (!empty($substring)) {
 			$where[] = 'item0_role LIKE :item0_role_pattern';
@@ -182,7 +182,7 @@ class Relationship {
 		if (count($where)>0) {
 			$sql.= ' WHERE '.implode(' AND ', $where);
 		}
-		$sql.= ' UNION SELECT item1_role AS role FROM relationship';
+		$sql.= ' UNION ALL SELECT item1_role AS role FROM relationship';
 		$where = array();
 		if (!empty($substring)) {
 			$where[] = 'item1_role LIKE :item1_role_pattern';
@@ -193,8 +193,20 @@ class Relationship {
 		if (count($where)>0) {
 			$sql.= ' WHERE '.implode(' AND ', $where);
 		}		
-		$sql.= ') AS t ORDER BY role';
+		$sql.= ') AS t GROUP BY role ASC';
+		
+		// ORDER
+		switch ($sort) {
+		    case 'Most used first' :
+		        $sql.= ' ORDER BY nb DESC';
+		        break;
+		    case 'Alphabetical' :
+		        $sql.= ' ORDER BY role ASC';
+		        break;
+		}
+		
 		$statement = $system->getPDO()->prepare($sql);
+		
 		if (!empty($substring)) {
 			$statement->bindValue(':item0_role_pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		    $statement->bindValue(':item1_role_pattern', '%'.$substring.'%', PDO::PARAM_STR);
@@ -205,7 +217,7 @@ class Relationship {
 		}		    
 		
 		$statement->execute();
-		return $statement->fetchAll(PDO::FETCH_COLUMN);
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 	public static function knownRolesToJson($substring = null, $roleType = null) {
 		$output = '{"roles":' . json_encode ( self::getKnownRoles ( $substring, $roleType ) ) . '}';

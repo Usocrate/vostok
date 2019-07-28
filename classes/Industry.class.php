@@ -110,7 +110,7 @@ class Industry {
 	 * @since 19/08/2006
 	 */
 	public function getHtmlLink() {
-		return '<a href="societies_list.php?society_newsearch=1&amp;industry_id='.$this->id.'">'.$this->name.'</a>';
+		return '<a href="societies.php?society_newsearch=1&amp;industry_id='.$this->id.'">'.$this->name.'</a>';
 	}
 	/**
 	 * Fixe les attributs de l'activité à partir d'un tableau aux clefs normalisées.

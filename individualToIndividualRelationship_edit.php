@@ -229,8 +229,19 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		}
-	   	});
+	   		},
+            focus: function( event, ui ) {
+    			$('#item0_role_i').val( ui.item.role);
+            	return false;
+            },
+            select: function( event, ui ) {
+            	$('#item0_role_i').val( ui.item.role);
+            	return false;
+            }
+	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
+		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
+		   	return $( "<li>" ).append(content).appendTo( ul );
+		};
 	    $('#item1_role_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
@@ -249,8 +260,19 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 						response(data);
 	                 }
 	         	})
-	   		}
-	   	});	    
+	   		},
+            focus: function( event, ui ) {
+    			$('#item1_role_i').val( ui.item.role);
+            	return false;
+            },
+            select: function( event, ui ) {
+            	$('#item1_role_i').val( ui.item.role);
+            	return false;
+            }
+	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
+		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
+		   	return $( "<li>" ).append(content).appendTo( ul );
+		};	    
 	})
 </script>
 </body>

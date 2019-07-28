@@ -856,14 +856,22 @@ class System {
 	/**
 	 * @since 07/2019
 	 */
-	public function getSocietiesHavingThatRole($role) {
-	    $sql = 'SELECT DISTINCT(t.id), t.name FROM ';
+	public function getSocietiesHavingThatRole($role, $sort='Alphabetical') {
+	    $sql = 'SELECT t.id, t.name, COUNT(*) as nb FROM ';
 	    $sql.= '(';
 	    $sql.= 'SELECT s.society_id AS id, s.society_name AS name FROM relationship AS r INNER JOIN society AS s ON(s.society_id = r.item0_id) WHERE r.item0_class=:item0_class AND r.item0_role=:item0_role';
-	    $sql.= ' UNION ';
-	    $sql.= 'SELECT s.society_id AS id, s.society_name AS name FROM relationship AS r INNER JOIN society AS s ON(s.society_id = r.item1_id) WHERE item1_class=:item1_class AND r.item1_role=:item1_role';
+	    $sql.= ' UNION ALL SELECT s.society_id, s.society_name FROM relationship AS r INNER JOIN society AS s ON(s.society_id = r.item1_id) WHERE item1_class=:item1_class AND r.item1_role=:item1_role';
 	    $sql.= ') AS t';
-	    $sql.= ' ORDER BY t.name ASC';
+	    $sql.= ' GROUP BY t.id';
+	    // ORDER
+	    switch ($sort) {
+	        case 'Most used first' :
+	            $sql.= ' ORDER BY nb DESC';
+	            break;
+	        case 'Alphabetical' :
+	            $sql.= ' ORDER BY name ASC';
+	            break;
+	    }
 	    $statement = $this->getPdo()->prepare($sql);
 	    $statement->bindValue(':item0_role', $role, PDO::PARAM_STR);
 	    $statement->bindValue(':item0_class', 'society', PDO::PARAM_STR);
@@ -875,8 +883,9 @@ class System {
 	        $s = new Society();
 	        $s->setId($i['id']);
 	        $s->setName($i['name']);
-	        $output[$i['id']] = $s;
+	        $output[] = array('society'=>$s, 'count'=>$i['nb']) ;
 	    }
+	    //$statement->debugDumpParams();
 	    return $output;
 	}
 	/**

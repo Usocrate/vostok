@@ -42,7 +42,21 @@ if (isset ( $_POST ['task'] )) {
 	}
 }
 
-$doc_title = 'Les rôles des sociétés';
+if (isset($_REQUEST['newsort']) || empty($_SESSION['societies_roles_sort'])) {
+    if (isset($_REQUEST['newsort'])) {
+        switch ($_REQUEST['newsort']) {
+            case 'alpha':
+                $_SESSION['societies_roles_sort'] = 'Alphabetical';
+                break;
+            case 'count':
+                $_SESSION['societies_roles_sort'] = 'Most used first';
+        }
+    } else {
+        $_SESSION['societies_roles_sort'] = 'Most used first';
+    }
+}
+
+$doc_title = 'Les relations entre sociétés';
 ?>
 <!doctype html>
 <html lang="fr">
@@ -61,7 +75,14 @@ $doc_title = 'Les rôles des sociétés';
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
+<nav style="display:none">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="societies.php">Les sociétés</a></li>
+    <li class="breadcrumb-item active">Les relations entre sociétés</li>
+  </ol>
+</nav>
 <div class="container-fluid">
+
 	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
@@ -70,16 +91,21 @@ $doc_title = 'Les rôles des sociétés';
 		<thead>
 			<tr>
 				<th style="display:none"></th>
-				<th><?php echo isset($_SESSION['role_list_sort']) && strcmp($_SESSION['role_list_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION['societies_roles_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION['societies_roles_sort'], 'Most used first')==0 ? 'Nombre de sociétés assumant ce rôle' : 'Nombre de sociétés assumant ce rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
 			</tr>
 		</thead>		
 		<tbody>
 			<?php
-			foreach ( Relationship::getKnownRoles(null,'societyRole') as $r) {
+			foreach ( Relationship::getKnownRoles(null,'societyRole',$_SESSION['societies_roles_sort']) as $item) {
+			    //print_r($r);
 				echo '<tr>';
-				echo '<td style="display:none"><input name="roles[]" type="checkbox" value="'.ToolBox::toHtml($r).'" /></td>';
+				echo '<td style="display:none"><input name="roles[]" type="checkbox" value="'.ToolBox::toHtml($item['role']).'" /></td>';
 				echo '<td>';
-				echo empty($r) ? '<a href="societiesHavingThatRole.php?role=">Indéterminé</a>' : '<a href="societiesHavingThatRole.php?role='.urlencode($r).'">'.ToolBox::toHtml($r).'</a>';
+				echo empty($item['role']) ? '<small>n.c.</small>' : '<a href="societiesHavingThatRole.php?role='.urlencode($item['role']).'">'.ToolBox::toHtml($item['role']).'</a>';
+				echo '</td>';
+				echo '<td>';
+				echo $item['nb'];
 				echo '</td>';
 				echo '</tr>';
 			}

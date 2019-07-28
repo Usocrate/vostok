@@ -8,15 +8,15 @@
     <ul class="navbar-nav flex-lg-fill">
 		<li class="nav-item"><a class="nav-link" href="lead_edit.php">Nouvelle piste</a></li>
 		<li class="nav-item"><a class="nav-link" href="leads.php?lead_newsearch">Les pistes</a></li>
-		<li class="nav-item"><a class="nav-link" href="societies_list.php?society_newsearch">Les sociétés</a></li>
+		<li class="nav-item"><a class="nav-link" href="societies.php?society_newsearch">Les sociétés</a></li>
 		<li class="nav-item"><a class="nav-link" href="individuals.php?individual_newsearch">Les gens</a></li>	
 		<li class="nav-item dropdown">
 			<a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plus</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<h6 class="dropdown-header">Les sociétés</h6>
-				<a class="dropdown-item" href="cities.php">Par ville</a>
-				<a class="dropdown-item" href="industries.php">Par activité</a>
-				<a class="dropdown-item" href="societies_roles.php">Les rôles</a>
+				<a class="dropdown-item" href="societies_cities.php">Les villes d'implantation</a>
+				<a class="dropdown-item" href="societies_industries.php">Les activités exercées</a>
+				<a class="dropdown-item" href="societies_roles.php">Les relations entre sociétés</a>
 				<a class="dropdown-item" href="society_edit.php">Nouvelle société</a>
 				<div class="dropdown-divider"></div>
 				<h6 class="dropdown-header">Les gens</h6>
