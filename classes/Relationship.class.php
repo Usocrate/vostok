@@ -222,7 +222,52 @@ class Relationship {
 	public static function knownRolesToJson($substring = null, $roleType = null) {
 		$output = '{"roles":' . json_encode ( self::getKnownRoles ( $substring, $roleType ) ) . '}';
 		return $output;
-	}	
+	}
+	/**
+	 * @param 07/19
+	 */
+	public static function getMatchingRoles($role, $rolePlayerClass = null)	{
+	    global $system;
+	    
+	    if (isset($rolePlayerClass)) {
+	        switch($rolePlayerClass) {
+	            case 'society':
+	                $classFilter = 'society';
+	                break;
+	            case 'individual':
+	                $classFilter = 'individual';
+	                break;
+	        }
+	    }
+	    
+	    $where1 = array('item1_role = :item1_role');
+	    if (isset($classFilter)) {
+	        $where1[] = 'item1_class = :item1_class';
+	    }
+
+	    $where2 = array('item0_role = :item0_role');
+	    if (isset($classFilter)) {
+	        $where2[] = 'item0_class = :item0_class';
+	    }
+	    
+	    $sql = 'SELECT t.role, COUNT(*) AS nb FROM (';
+	    $sql.= 'SELECT item0_role AS role FROM relationship WHERE '.implode(' AND ', $where1);
+	    $sql.= ' UNION ALL SELECT item1_role AS role FROM relationship WHERE '.implode(' AND ', $where2);
+	    $sql.= ') AS t GROUP BY role';
+	    $sql.= ' ORDER BY nb DESC';
+	    
+	    $statement = $system->getPDO()->prepare($sql);
+	    
+	    $statement->bindValue(':item1_role', $role, PDO::PARAM_STR);
+	    $statement->bindValue(':item0_role', $role, PDO::PARAM_STR);
+	    if (isset($classFilter)) {
+	        $statement->bindValue(':item1_class', $classFilter, PDO::PARAM_STR);
+	        $statement->bindValue(':item0_class', $classFilter, PDO::PARAM_STR);
+	    }
+	    
+	    $statement->execute();
+	    return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
 	/**
 	 * Enregistre en base de données les valeurs des attributs de la relation.
 	 * @since 03/2006

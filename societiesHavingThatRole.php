@@ -67,32 +67,52 @@ $doc_title = $role;
 
 <div class="container-fluid">
 	<h1 class="bd-title"><?php echo ToolBox::toHtml(ucfirst($doc_title)); ?></h1>
-    <section>
-    	<table class="table">
-    	<thead>
-			<tr>
-				<th style="display:none"></th>
-				<th><?php echo strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Alphabetical')==0 ? 'Nom de la société' : 'Nom de la société <a href="'.$_SERVER['PHP_SELF'].'?role='.$role.'&newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
-				<th><?php echo strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Most used first')==0 ? 'Nombre de sociétés auprès desquelles le rôle est assumé' : 'Nombre de sociétés auprès desquelles le rôle est assumé <a href="'.$_SERVER['PHP_SELF'].'?role='.$role.'&newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
-			</tr>
-		</thead>
-    	<tbody>
-        <?php
-        foreach ($system->getSocietiesHavingThatRole($role, $_SESSION['societiesHavingThatRole_list_sort']) as $item) {
-            echo '<tr>';
-            echo '<td>';
-            echo $item['society']->getHtmlLinkToSociety();
-            echo '</td>';
-            echo '<td>';
-            if (isset($item['count'])) echo $item['count'];
-            echo '</td>';
-            echo '</tr>';
-        }
-        ?>
-        </tbody>
-        </table>
-	</section>
+    <div class="row">
+        <div class="col-md-8">
+        	<table class="table">
+        	<thead>
+    			<tr>
+    				<th style="display:none"></th>
+    				<th><?php echo strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Alphabetical')==0 ? 'Nom de la société' : 'Nom de la société <a href="'.$_SERVER['PHP_SELF'].'?role='.$role.'&newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+    				<th><?php echo strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Most used first')==0 ? 'Nombre de sociétés auprès desquelles le rôle est assumé' : 'Nombre de sociétés auprès desquelles le rôle est assumé <a href="'.$_SERVER['PHP_SELF'].'?role='.$role.'&newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+    			</tr>
+    		</thead>
+        	<tbody>
+            <?php
+            foreach ($system->getSocietiesHavingThatRole($role, $_SESSION['societiesHavingThatRole_list_sort']) as $item) {
+                echo '<tr>';
+                echo '<td>';
+                echo $item['society']->getHtmlLinkToSociety();
+                echo '</td>';
+                echo '<td>';
+                if (isset($item['count'])) echo $item['count'];
+                echo '</td>';
+                echo '</tr>';
+            }
+            ?>
+            </tbody>
+            </table>
+        </div>
+        <div class="col-md-4">
+        	<div class="card">
+        	<div class="card-body">
+        	<h2 class="card-title">Les rôles associés</h2>
+        	<?php
+        	   $matchingRoles = Relationship::getMatchingRoles($role);
+        	   if ($matchingRoles > 0) {
+        	       echo '<ol>';
+        	       foreach($matchingRoles as $item) {
+        	           echo '<li><a href="'.$_SERVER['PHP_SELF'].'?role='.$item['role'].'">'.ToolBox::toHtml($item['role']).'</a> <small>('.$item['nb'].')</small></li>';
+        	       }
+        	       echo '</ol>';
+        	   }
+        	?>
+        	</div>
+        	</div>
+        </div>
+	</div>
 </div>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 	});
