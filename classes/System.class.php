@@ -869,7 +869,7 @@ class System {
 	    $sql.= ' INNER JOIN society AS s2 ON(s2.society_id = r.item0_id)';
 	    $sql.= ' WHERE item1_class=:item1_class AND r.item1_role=:item1_role';
 	    $sql.= ') AS t';
-	    $sql.= ' GROUP BY t.id';
+	    $sql.= ' GROUP BY t.id, t.name';
 	    // ORDER
 	    switch ($sort) {
 	        case 'Most used first' :
