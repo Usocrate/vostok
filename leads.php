@@ -139,7 +139,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
         			?>
         		</select>
     		</div>
-    		<button type="submit" name="lead_newsearch" value="1" class="btn btn-default m-2">Filtrer</button>
+    		<button type="submit" name="lead_newsearch" value="1" class="btn btn-secondary m-2">Filtrer</button>
     	</form>
 	</section>
 	<section>

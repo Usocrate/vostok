@@ -416,14 +416,14 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
           </div>
         </div>
 		<div class="btn-group">
-			<button name="toDB_order" type="submit" value="1" class="btn btn-default">enregistrer</button>
+			<button name="toDB_order" type="submit" value="1" class="btn btn-secondary">enregistrer</button>
 			
 			<?php if ($lead->hasId()): ?>
-			<button name="deletion_order" type="submit" value="1" class="btn btn-default">supprimer</button>
+			<button name="deletion_order" type="submit" value="1" class="btn btn-secondary">supprimer</button>
 			<?php endif; ?>
 			
 			<?php if ( $lead->hasId() && isset($society) && $society->hasId() ): ?>
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Transférer <span class="caret"></span></span></button>
+			<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Transférer <span class="caret"></span></span></button>
 		 	<ul class="dropdown-menu">
 		  	<?php
 		  		$data = $society->getRelatedSocieties();

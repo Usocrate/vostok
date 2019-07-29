@@ -172,7 +172,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					echo '<h2>';
 					echo '<a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a>';
 					echo ' <small>(';
-					echo '<a href="societiesHavingThatRole.php?role='.$item[2].'">';
+					echo '<a href="relationshipSocietyRole.php?role='.$item[2].'">';
 					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
 					echo '</a>';
 					echo ')';

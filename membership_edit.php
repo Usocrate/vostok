@@ -359,10 +359,10 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 
     			    switch (get_class($applicant)) {
     			        case 'Society':
-    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-default">Quitter</a>';
+    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-secondary">Quitter</a>';
     			            break;
     			        case 'Individual' :
-    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-default">Quitter</a>';
+    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-secondary">Quitter</a>';
     			            break;
     			    }
     			    
@@ -370,7 +370,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			?>
 
     		<?php if ($membership->hasId()) : ?>
-    			<button name="task" type="submit" value="membership_deletion" class="btn btn-default">Supprimer</button>
+    			<button name="task" type="submit" value="membership_deletion" class="btn btn-secondary">Supprimer</button>
     		<?php endif; ?>
     	</form>
 	</section>

@@ -1,7 +1,5 @@
 <?php
-iconv_set_encoding ( 'internal_encoding', 'UTF-8' );
-iconv_set_encoding ( 'input_encoding', 'UTF-8' );
-iconv_set_encoding ( 'output_encoding', 'UTF-8' );
+ini_set('default_charset', 'UTF-8');
 
 // Bootstrap
 //define ( 'BOOTSTRAP_CSS_URI', 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css');

@@ -97,12 +97,12 @@ $doc_title = 'Les relations entre sociétés';
 		</thead>		
 		<tbody>
 			<?php
-			foreach ( Relationship::getKnownRoles(null,'societyRole',$_SESSION['societies_roles_sort']) as $item) {
+			foreach ( Relationship::getKnownRoles(null,'society',$_SESSION['societies_roles_sort']) as $item) {
 			    //print_r($r);
 				echo '<tr>';
 				echo '<td style="display:none"><input name="roles[]" type="checkbox" value="'.ToolBox::toHtml($item['role']).'" /></td>';
 				echo '<td>';
-				echo empty($item['role']) ? '<small>n.c.</small>' : '<a href="societiesHavingThatRole.php?role='.urlencode($item['role']).'">'.ToolBox::toHtml($item['role']).'</a>';
+				echo empty($item['role']) ? '<small>n.c.</small>' : '<a href="relationshipSocietyRole.php?role='.urlencode($item['role']).'">'.ToolBox::toHtml($item['role']).'</a>';
 				echo '</td>';
 				echo '<td>';
 				echo $item['nb'];
@@ -114,7 +114,7 @@ $doc_title = 'Les relations entre sociétés';
 		<tfoot style="display:none">
 			<tr>
 				<td colspan="2">
-					<button type="submit" name="task" value="titles_merge" class="btn btn-default">Fusionner</button>
+					<button type="submit" name="task" value="titles_merge" class="btn btn-secondary">Fusionner</button>
 				</td>
 			</tr>
 		</tfoot>

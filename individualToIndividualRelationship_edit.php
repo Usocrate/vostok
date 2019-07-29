@@ -204,7 +204,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			
 			<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 			<?php if ($relationship->getId()) : ?>
-				<button name="relationship_deletion" type="submit" value="1" class="btn btn-default">Supprimer</button>
+				<button name="relationship_deletion" type="submit" value="1" class="btn btn-secondary">Supprimer</button>
 			<?php endif; ?>
 		</form>
 	</section>

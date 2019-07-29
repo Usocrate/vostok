@@ -133,6 +133,7 @@ if ($relationship->areItemsBothKnown()) {
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+</head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
@@ -239,12 +240,12 @@ if ($relationship->areItemsBothKnown()) {
 			
 			<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 			<?php if ($relationship->getId()) : ?>
-				<button name="relationship_deletion" type="submit" value="1" class="btn btn-default">Supprimer</button>
+				<button name="relationship_deletion" type="submit" value="1" class="btn btn-secondary">Supprimer</button>
 			<?php endif; ?>
 			
 			<?php
     			if ($relationship->isItemKnown(0)) {
-					echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-default">Quitter</a>';
+					echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-secondary">Quitter</a>';
     			}
 			?>
 		</form>
@@ -299,7 +300,7 @@ if ($relationship->areItemsBothKnown()) {
 	                dataType: 'json',
 	                data:{
 	                    'searchPattern': request.term,
-	                    'roleType': 'societyRole'
+	                    'rolePlayerClass': 'society'
 	                 },
 	                 dataFilter: function(data,type){
 	                     return JSON.stringify(JSON.parse(data).roles);
@@ -330,7 +331,7 @@ if ($relationship->areItemsBothKnown()) {
 	                dataType: 'json',
 	                data:{
 	                    'searchPattern': request.term,
-	                    'roleType': 'societyRole'
+	                    'rolePlayerClass': 'society'
 	                 },
 	                 dataFilter: function(data,type){
 	                     return JSON.stringify(JSON.parse(data).roles);

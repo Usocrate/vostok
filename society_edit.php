@@ -160,7 +160,7 @@ if (isset($_POST['task'])) {
     	</div>
    	
     	<button name="task" type="submit" value="registration" class="btn btn-primary">Enregistrer</button>
-    	<button name="task" type="submit" value="deletion" class="btn btn-default">Supprimer</button>
+    	<button name="task" type="submit" value="deletion" class="btn btn-secondary">Supprimer</button>
     </form>
 </div>
 <script type="text/javascript">

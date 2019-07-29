@@ -18,9 +18,9 @@ if (empty($_SESSION['user_id'])) {
 }
 
 $searchPattern = isset($_REQUEST['searchPattern']) ? $_REQUEST['searchPattern'] : null;
-$roleType = isset($_REQUEST['roleType']) ? $_REQUEST['roleType'] : null;
+$rolePlayerClass = isset($_REQUEST['rolePlayerClass']) ? $_REQUEST['rolePlayerClass'] : null;
 
 //var_dump($_REQUEST);
 
-echo Relationship::knownRolesToJson($searchPattern, $roleType);
+echo Relationship::knownRolesToJson($searchPattern, $rolePlayerClass);
 ?>

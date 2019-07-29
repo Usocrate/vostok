@@ -112,7 +112,7 @@ $doc_title = 'Les rôles';
 		<tfoot style="display:none">
 			<tr>
 				<td colspan="3">
-					<button type="submit" name="task" value="titles_merge" class="btn btn-default">Fusionner</button>
+					<button type="submit" name="task" value="titles_merge" class="btn btn-secondary">Fusionner</button>
 				</td>
 			</tr>
 		</tfoot>

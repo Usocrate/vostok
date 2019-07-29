@@ -203,8 +203,8 @@ $doc_title = 'Une piste';
     		}
     		?>
     		<hr />
-    		<button name="toDB_order" type="submit" value="1" class="btn btn-default">enregistrer</button>
-    		<button name="deletion_order" type="submit" value="1" class="btn btn-default">supprimer</button>
+    		<button name="toDB_order" type="submit" value="1" class="btn btn-secondary">enregistrer</button>
+    		<button name="deletion_order" type="submit" value="1" class="btn btn-secondary">supprimer</button>
     	</form>
 </div>	
 </body>

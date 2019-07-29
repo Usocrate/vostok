@@ -857,10 +857,17 @@ class System {
 	 * @since 07/2019
 	 */
 	public function getSocietiesHavingThatRole($role, $sort='Alphabetical') {
-	    $sql = 'SELECT t.id, t.name, COUNT(*) as nb FROM ';
+	    $sql = 'SELECT t.id, t.name, COUNT(*) AS nb, JSON_ARRAYAGG(relatedSociety_id) AS relatedSocieties_ids, JSON_ARRAYAGG(relatedSociety_name) AS relatedSocieties_names FROM ';
 	    $sql.= '(';
-	    $sql.= 'SELECT s.society_id AS id, s.society_name AS name FROM relationship AS r INNER JOIN society AS s ON(s.society_id = r.item0_id) WHERE r.item0_class=:item0_class AND r.item0_role=:item0_role';
-	    $sql.= ' UNION ALL SELECT s.society_id, s.society_name FROM relationship AS r INNER JOIN society AS s ON(s.society_id = r.item1_id) WHERE item1_class=:item1_class AND r.item1_role=:item1_role';
+	    $sql.= 'SELECT s.society_id AS id, s.society_name AS name, s2.society_id AS relatedSociety_id, s2.society_name AS relatedSociety_name FROM relationship AS r';
+	    $sql.= ' INNER JOIN society AS s ON(s.society_id = r.item0_id)';
+	    $sql.= ' INNER JOIN society AS s2 ON(s2.society_id = r.item1_id)';
+	    $sql.= ' WHERE r.item0_class=:item0_class AND r.item0_role=:item0_role';
+	    $sql.= ' UNION ALL ';
+	    $sql.= 'SELECT s.society_id, s.society_name, s2.society_id, s2.society_name FROM relationship AS r';
+	    $sql.= ' INNER JOIN society AS s ON(s.society_id = r.item1_id)';
+	    $sql.= ' INNER JOIN society AS s2 ON(s2.society_id = r.item0_id)';
+	    $sql.= ' WHERE item1_class=:item1_class AND r.item1_role=:item1_role';
 	    $sql.= ') AS t';
 	    $sql.= ' GROUP BY t.id';
 	    // ORDER
@@ -880,10 +887,12 @@ class System {
 	    $statement->execute();
 	    $output = array();
 	    foreach ($statement->fetchAll(PDO::FETCH_ASSOC) AS $i) {
+	        //print_r($i);
 	        $s = new Society();
 	        $s->setId($i['id']);
 	        $s->setName($i['name']);
-	        $output[] = array('society'=>$s, 'count'=>$i['nb']) ;
+	        $relatedSocieties = array_combine(json_decode($i['relatedSocieties_ids']),json_decode($i['relatedSocieties_names']));
+	        $output[] = array('society'=>$s, 'count'=>$i['nb'], 'relatedSocieties'=>$relatedSocieties) ;
 	    }
 	    //$statement->debugDumpParams();
 	    return $output;

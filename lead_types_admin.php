@@ -82,7 +82,7 @@ if (isset ( $_POST ['task'] )) {
         		</select>
     		</div>
     		<input name="task" type="hidden" value="lead_types_merge" />
-    		<button type="submit" class="btn btn-default">Ok</button>
+    		<button type="submit" class="btn btn-secondary">Ok</button>
     	</form>
 	</section>
 </div>	
