@@ -31,8 +31,8 @@ if (!empty($_REQUEST['membership_id'])) {
 	//
 	$membership->setId($_REQUEST['membership_id']);
 	if ($membership->feed()) {
-		$membership->getIndividual()->feed();
-		$membership->getSociety()->feed();		
+		$membership->feedIndividual();
+		$membership->feedSociety();		
 	} else {
 		header('location:index.php');
 		exit;		

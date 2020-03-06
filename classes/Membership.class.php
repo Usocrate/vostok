@@ -268,6 +268,14 @@ class Membership {
 		return NULL;
 	}
 	/**
+	 * @since 03/2020
+	 */
+	public function feedIndividual() {
+	    if (isset($this->individual)) {
+	        return $this->individual->feed();
+	    }
+	}
+	/**
 	 * Renvoie l'id de la personne impliquée.
 	 */
 	public function getIndividualId() {
@@ -291,6 +299,14 @@ class Membership {
 			return $this->society;
 		}
 		return NULL;
+	}
+	/**
+	 * @since 03/2020
+	 */
+	public function feedSociety() {
+	    if (isset($this->society)) {
+	        return $this->society->feed();
+	    }
 	}
 	/**
 	 * Fixe la société concernée.
