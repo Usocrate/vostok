@@ -468,37 +468,7 @@ class Society {
 	public function hasThumbnail() {
 		return is_file ( self::getThumbnailsDirectoryPath () . '/' . $this->getThumbnailFileName () );
 	}
-	/**
-	 * Obtient le fichier image représentant l'interface web de la ressource depuis le site Bluga.net.
-	 *
-	 * @return bool
-	 * @since 27/12/2010
-	 */
-	public function getThumbnailFromBluga() {
-		try {
-			if (! defined ( 'WEBTHUMB_KEY' ) || ! defined ( 'WEBTHUMB_USER_ID' )) {
-				throw new Exception ( 'Absence d\'identifiants Bluga' );
-			}
-
-			ToolBox::addIncludePath ( BLUGA_DIR );
-			include_once 'Autoload.php';
-
-			$webthumb = new Bluga_Webthumb ();
-			$webthumb->setApiKey ( WEBTHUMB_KEY );
-			$job = $webthumb->addUrl ( $this->getUrl (), 'medium2', 1024, 768 );
-			$webthumb->submitRequests ();
-
-			while ( ! $webthumb->readyToDownload () ) {
-				sleep ( 2 );
-				$webthumb->checkJobStatus ();
-			}
-			$webthumb->fetchToFile ( $job, $this->getThumbnailFileName (), NULL, self::getThumbnailsDirectoryPath () );
-			return $this->hasThumbnail ();
-		} catch ( Exception $e ) {
-			return false;
-		}
-	}
-	/**
+/**
 	 * Obtient le nom du fichier où est stockée la miniature du site web.
 	 *
 	 * @return string
@@ -971,8 +941,7 @@ class Society {
 	/**
 	 * Obtient les pistes associées à la société.
 	 *
-	 * @return array
-	 * @version 18/06/2017
+	 * @version 03/2020
 	 */
 	public function getLeads() {
 		global $system;
@@ -980,9 +949,9 @@ class Society {
 		if (! isset ( $this->leads )) {
 			$this->leads = array ();
 			
-			$sql = 'SELECT *, DATE_FORMAT(lead_creation_date, "%d/%m/%Y") as lead_creation_date_fr FROM lead';
-			$sql .= ' WHERE society_id=:id';
-			$sql .= ' ORDER BY lead_creation_date DESC';
+			$sql = 'SELECT *, DATE_FORMAT(lead_creation_date, "%d/%m/%Y") as lead_creation_date_fr FROM `lead`';
+			$sql.= ' WHERE society_id=:id';
+			$sql.= ' ORDER BY lead_creation_date DESC';
 			
 			$statement = $system->getPdo()->prepare($sql);
 			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
@@ -991,7 +960,7 @@ class Society {
 			foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
 				$lead = new Lead ();
 				$lead->feed ( $row );
-				$this->leads [] = $lead;
+				$this->leads[] = $lead;
 			}
 		}
 		return $this->leads;
@@ -1000,8 +969,8 @@ class Society {
 	 * Obtient les évènements associés à la société.
 	 *
 	 * @return array
-	 * @since 2009-01-19
-	 * @version 03/06/2017
+	 * @since 01/2009
+	 * @version 06/2017
 	 */
 	public function getEvents() {
 		global $system;
@@ -1012,12 +981,12 @@ class Society {
 	/**
 	 * Transfére les pistes liées à la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
 	 *
-	 * @version 24/11/2016
+	 * @version 11/2016
 	 */
 	public function transferLeads($society) {
 		global $system;
 		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id )) return false;
-		$statement = $system->getPdo()->prepare('UPDATE lead SET society_id = :target_id WHERE society_id = :id');
+		$statement = $system->getPdo()->prepare('UPDATE `lead` SET society_id = :target_id WHERE society_id = :id');
 		$statement->bindValue(':target_id', $society->getId (), PDO::PARAM_INT);
 		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 		return $statement->execute();
@@ -1025,20 +994,20 @@ class Society {
 	/**
 	 * Supprime de la base de données toutes les pistes rattachées à la société.
 	 *
-	 * @since 15/08/2006
-	 * @version 24/11/2016
+	 * @since 08/2006
+	 * @version 11/2016
 	 */
 	public function deleteLeads() {
 		global $system;
 		if (empty ( $this->id )) return false;
-		$statement = $system->getPdo()->prepare('DELETE FROM lead WHERE society_id = :id');
+		$statement = $system->getPdo()->prepare('DELETE FROM `lead` WHERE society_id = :id');
 		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 		return $statement->execute();
 	}
 	/**
 	 * Fixe les attributs de la société à partir d'un tableau aux clefs normalisées
 	 *
-	 * @version 09/04/2006
+	 * @version 04/2006
 	 */
 	public function feed($array = NULL, $prefix = 'society_') {
 		if (is_null ( $array )) {

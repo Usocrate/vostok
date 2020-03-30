@@ -727,7 +727,7 @@ class System {
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
 	 *
-	 * @version 12/2016
+	 * @version 03/2020
 	 */
 	private function getSocietiesData($criteria = NULL, $sort = 'Last created first', $offset = 0, $nb = NULL) {
 		$sql = 'SELECT s.*, DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") AS society_creation_date_fr, UNIX_TIMESTAMP(s.society_creation_date) AS society_creation_timestamp';
@@ -748,10 +748,12 @@ class System {
 
 		switch ($sort) {
 			case 'Last created first' :
-				$sql .= ' GROUP BY society_creation_timestamp DESC, s.society_id';
+				$sql.= ' GROUP BY society_creation_timestamp, s.society_id';
+				$sql.= ' ORDER BY society_creation_timestamp DESC';
 				break;
 			default :
-				$sql .= ' GROUP BY s.society_name ASC, s.society_id';
+				$sql.= ' GROUP BY s.society_name, s.society_id';
+				$sql.= ' ORDER BY s.society_name ASC';
 		}
 
 		if (isset ( $nb )) {
@@ -950,7 +952,7 @@ class System {
 	 * @version 06/2017
 	 */
 	public function getLeadsRowset($criteria = NULL, $sort = 'Last created first', $nb = NULL, $offset = 0) {
-		$sql = 'SELECT * FROM lead AS l';
+		$sql = 'SELECT * FROM `lead` AS l';
 		$sql .= ' LEFT JOIN individual AS c USING (individual_id)';
 		$sql .= ' LEFT JOIN society AS a USING (society_id)';
 		if (count ( $criteria ) > 0) {
@@ -1005,7 +1007,7 @@ class System {
 	 */
 	public function getLeadsNb($criteria = NULL) {
 
-		$sql = 'SELECT COUNT(*) AS nb FROM lead AS l';
+		$sql = 'SELECT COUNT(*) AS nb FROM `lead` AS l';
 		//$sql .= ' LEFT JOIN individual AS c USING (individual_id)';
 		//$sql .= ' LEFT JOIN society AS a USING (society_id)';
 		if (count ( $criteria ) > 0) {
@@ -1047,7 +1049,7 @@ class System {
 	 * @since 01/2006
 	 */
 	public function mergeLeadTypes($type1, $type2) {
-		$statement = $this->getPdo()->prepare('UPDATE lead SET lead_type = :t1 WHERE lead_type = :t2');
+		$statement = $this->getPdo()->prepare('UPDATE `lead` SET lead_type = :t1 WHERE lead_type = :t2');
 		$statement->bindValue(':t1', $type1, PDO::PARAM_INT);
 		$statement->bindValue(':t2', $type2, PDO::PARAM_INT);
 		return $statement->execute();
@@ -1143,13 +1145,15 @@ class System {
 	 * Obtient la liste pondérée des dernières activités utilisées pour qualifier une société.
 	 * 
 	 * @since 02/2017
+	 * @version 03/2020
 	 */
 	public function getLastUsedIndustries($scope = 100) {
 
 		$output = array ();
 		$sql = 'SELECT i.id, i.name, COUNT(*) AS weight FROM (SELECT * FROM society_industry ORDER BY timestamp DESC LIMIT :scope) AS si';
 		$sql.= ' INNER JOIN industry AS i ON (i.id = si.industry_id)';
-		$sql.= ' GROUP BY i.name ASC, i.id';
+		$sql.= ' GROUP BY i.name, i.id';
+		$sql.= ' ORDER BY i.name ASC';
 
 		$statement = $this->getPdo()->prepare($sql);
 		$statement->bindParam(':scope', $scope, PDO::PARAM_INT);
@@ -1252,9 +1256,8 @@ class System {
 		if (!empty($comment)) {
 			$toDisplay.= ' ('.$comment.')';
 		}
-		// echo '<p>' . ToolBox::toHtml ( $toDisplay ) . '</p>';
-		trigger_error($toDisplay);
-		//error_log( $toDisplay );
+		//echo '<p>' . ToolBox::toHtml ( $toDisplay ) . '</p>';
+		error_log( $toDisplay );
 	}
 	/**
 	 * Obtient la liste des derniers évènements enregistrés à l'historique.

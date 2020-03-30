@@ -13,8 +13,6 @@ class CollectionIterator implements Iterator {
 
  /**
  * Remet le focus sur le premier élément de la collection
- *
- * @return unknown
  */
  public function rewind() {
  return reset($this->var);

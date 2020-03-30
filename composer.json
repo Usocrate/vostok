@@ -1,7 +1,19 @@
 {
-    "require": {
-        "twbs/bootstrap": "4.1.3",
-        "google/apiclient": "^2.2",
-        "vladkens/autoprefixer": "^0.1.0"
-    }
+	"require" : {
+		"twbs/bootstrap" : "4.1.3",
+		"google/apiclient" : "^2.2",
+		"vladkens/autoprefixer" : "^0.1.0"
+	},
+	"name" : "Vostok",
+	"authors" : [{
+			"name" : "Florent Chanavat",
+			"email" : "florent@usocrate.fr",
+			"homepage" : "https://usocrate.fr",
+			"role" : "Creator"
+		}
+	],
+	"homepage" : "https://usocrate.fr/vostok",
+	"support" : {
+		"email" : "florent@usocrate.fr"
+	}
 }

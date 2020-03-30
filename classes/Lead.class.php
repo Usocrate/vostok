@@ -217,15 +217,14 @@ class Lead
     /**
      * Récupère l'ensemble des types déjà présents en base de données
      *
-     * @param
-     *            $label_substring
-     * @return return array
-     * @since 13/07/2009
+     * @param $label_substring
+     * @return array
+     * @since 07/2009
      */
     private static function getKnownTypes($label_substring = NULL)
     {
         global $system;
-        $sql = 'SELECT lead_type AS value, COUNT(*) AS count FROM lead WHERE lead_type IS NOT NULL';
+        $sql = 'SELECT lead_type AS value, COUNT(*) AS count FROM `lead` WHERE lead_type IS NOT NULL';
         if (isset($label_substring)) {
             $sql .= ' AND lead_type LIKE :pattern';
         }
@@ -265,10 +264,9 @@ class Lead
     /**
      * Obtient la liste des types déjà présents en base de données sous format json.
      *
-     * @param
-     *            $label_substring
-     * @return return string
-     * @since 13/07/2009
+     * @param $label_substring
+     * @return string
+     * @since 07/2009
      */
     public static function knownTypesToJson($label_substring = NULL)
     {
@@ -312,15 +310,14 @@ class Lead
     /**
      * Récupère l'ensemble des sources déjà présentes en base de données
      *
-     * @param
-     *            $label_substring
-     * @return return array
-     * @since 13/07/2009
+     * @param $label_substring
+     * @return array
+     * @since 07/2009
      */
     private static function getKnownSources($label_substring = NULL)
     {
         global $system;
-        $sql = 'SELECT lead_source AS value, COUNT(*) AS count FROM lead WHERE lead_source IS NOT NULL';
+        $sql = 'SELECT lead_source AS value, COUNT(*) AS count FROM `lead` WHERE lead_source IS NOT NULL';
         if (isset($label_substring)) {
             $sql .= ' AND lead_source LIKE :pattern';
         }
@@ -336,9 +333,8 @@ class Lead
     /**
      * Obtient la liste des sources déjà présentes en base de données sous format json.
      *
-     * @param
-     *            $label_substring
-     * @return return string
+     * @param $label_substring
+     * @return string
      * @since 13/07/2009
      */
     public static function knownSourcesToJson($label_substring = NULL)
@@ -551,7 +547,7 @@ class Lead
     {
         global $system;
         if (! $this->id) return false;
-        $statement = $system->getPdo()->prepare('DELETE FROM lead WHERE lead_id=:id');
+        $statement = $system->getPdo()->prepare('DELETE FROM `lead` WHERE lead_id=:id');
         $statement->bindValue(':id', (int) $this->id, PDO::PARAM_INT);        
         return $statement->execute();
     }
@@ -586,7 +582,7 @@ class Lead
             }
             return true;
         } elseif (! empty($this->id)) {
-            $sql = 'SELECT * FROM lead AS l';
+            $sql = 'SELECT * FROM `lead` AS l';
             $sql .= ' LEFT JOIN individual AS c ON l.individual_id=c.individual_id';
             $sql .= ' LEFT JOIN society AS a ON l.society_id=a.society_id';
             $sql .= ' WHERE lead_id=:id';
