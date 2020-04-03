@@ -208,6 +208,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     <script type="text/javascript" src="js/controls.js"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
 	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script type="text/javascript" src="<?php echo POPPER_JS_URI ?>" integrity="<?php echo POPPER_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="leadEditDoc" >
@@ -423,16 +424,16 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 			<?php endif; ?>
 			
 			<?php if ( $lead->hasId() && isset($society) && $society->hasId() ): ?>
-			<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Transférer <span class="caret"></span></span></button>
-		 	<ul class="dropdown-menu">
+			<button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Transférer</button>
+		 	<div class="dropdown-menu">
 		  	<?php
 		  		$data = $society->getRelatedSocieties();
 		  		foreach($data as $d) {
-		  			echo '<li><a href="lead_transfer.php?lead_id='.$lead->getId().'&cmd=transfer&targetSociety_id='.$d[0]->getId().'">'.$d[0]->getName().'</a></li>';
+		  			echo '<a class="dropdown-item" href="lead_transfer.php?lead_id='.$lead->getId().'&cmd=transfer&targetSociety_id='.$d[0]->getId().'">'.$d[0]->getName().'</a>';
 		  		}
 		  	?>
-		  	</ul>
-			<?php endif; ?>
+		  	</div>
+			<?php endif; ?>			
 		</div>
 	</form>
 </div>

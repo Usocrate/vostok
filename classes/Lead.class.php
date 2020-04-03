@@ -57,7 +57,7 @@ class Lead
     /**
      * Fixe l'identifiant de la piste.
      *
-     * @param int $input            
+     * @param int $input
      */
     public function setId($input)
     {
@@ -68,12 +68,16 @@ class Lead
     {
         return $this->getAttribute('id');
     }
+
     /**
+     *
      * @since 06/2017
      */
-    public function hasId() {
-        return !empty($this->id);
+    public function hasId()
+    {
+        return ! empty($this->id);
     }
+
     /**
      * Obtient le statut de la piste
      *
@@ -217,7 +221,8 @@ class Lead
     /**
      * Récupère l'ensemble des types déjà présents en base de données
      *
-     * @param $label_substring
+     * @param
+     *            $label_substring
      * @return array
      * @since 07/2009
      */
@@ -264,7 +269,8 @@ class Lead
     /**
      * Obtient la liste des types déjà présents en base de données sous format json.
      *
-     * @param $label_substring
+     * @param
+     *            $label_substring
      * @return string
      * @since 07/2009
      */
@@ -310,7 +316,8 @@ class Lead
     /**
      * Récupère l'ensemble des sources déjà présentes en base de données
      *
-     * @param $label_substring
+     * @param
+     *            $label_substring
      * @return array
      * @since 07/2009
      */
@@ -333,7 +340,8 @@ class Lead
     /**
      * Obtient la liste des sources déjà présentes en base de données sous format json.
      *
-     * @param $label_substring
+     * @param
+     *            $label_substring
      * @return string
      * @since 13/07/2009
      */
@@ -406,7 +414,7 @@ class Lead
     /**
      * Fixe la personne liée à la piste
      *
-     * @param Individual $input            
+     * @param Individual $input
      * @version 29/01/2006
      */
     public function setIndividual($input)
@@ -428,7 +436,7 @@ class Lead
     /**
      * Fixe la société liée à la piste
      *
-     * @param Society $input            
+     * @param Society $input
      * @version 09/04/2006
      */
     public function setSociety($input)
@@ -455,9 +463,9 @@ class Lead
     public function toDB()
     {
         global $system;
-        
+
         $new = ! isset($this->id) || empty($this->id);
-        
+
         /*
          * Construction requête sql
          */
@@ -492,15 +500,15 @@ class Lead
         } else {
             $settings[] = 'lead_lastModification_user_id=:user_id';
         }
-        
+
         $sql = $new ? 'INSERT INTO' : 'UPDATE';
-        $sql .= ' lead SET ';
+        $sql .= ' `lead` SET ';
         $sql .= implode(', ', $settings);
         if (! $new) {
             $sql .= ' WHERE lead_id=:id';
         }
-        //echo '<p>'.$sql.'< /p>';
-        
+        // echo '<p>'.$sql.'< /p>';
+
         $statement = $system->getPdo()->prepare($sql);
         /*
          * Binding
@@ -546,9 +554,10 @@ class Lead
     public function delete()
     {
         global $system;
-        if (! $this->id) return false;
+        if (! $this->id)
+            return false;
         $statement = $system->getPdo()->prepare('DELETE FROM `lead` WHERE lead_id=:id');
-        $statement->bindValue(':id', (int) $this->id, PDO::PARAM_INT);        
+        $statement->bindValue(':id', (int) $this->id, PDO::PARAM_INT);
         return $statement->execute();
     }
 
@@ -556,17 +565,18 @@ class Lead
      *
      * @version 03/01/2017
      */
-    public function feed($data = NULL) {
+    public function feed($data = NULL)
+    {
         global $system;
         if (is_array($data)) {
             // compte
             $this->society = new Society();
             $this->society->feed($data);
-            
+
             // individual
             $this->individual = new Individual();
             $this->individual->feed($data);
-            
+
             // les données de l'initialisation sont transmises
             foreach ($data as $key => $value) {
                 // NB : stricte correspondance entre les noms d'attribut de la classe
