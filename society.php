@@ -207,51 +207,118 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				    }
 				    unset($memberships);
 				    
-			  		echo '<div class="il">';
-			  		echo '<div class="masonryGutterSizer"></div>';
-			  		foreach ($members as $id=>$memberships) {
-						$i = new Individual($id);
-						$i->feed();
-						echo '<div class="card">';
-						if ($i->getPhotoUrl()) {
-							echo '<a href="individual.php?individual_id='.$i->getId().'">';
-							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
-							echo '</a>';
-						} else {
-							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
-						}
-						
-						$card_title_tag = '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
-						
-						if (count($memberships)>1) {
-						    echo '<div class="card-body">'.$card_title_tag.'</div>';
-						    echo '<ul class="list-group list-group-flush">';
-						    foreach ($memberships as $ms) {
-						        echo '<li class="list-group-item">';
-						        echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
-						        if ( $ms->getPeriod() ) echo ' <small>('.$ms->getPeriod().')</small>';
-						        if ( $ms->hasDescription() ) echo '<p><small>'.ToolBox::toHtml($ms->getDescription()).'</small></p>';
-						        //if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
-						        echo '</li>';
-						    }
-						    echo '</ul>';
-						} else {
-						    echo '<div class="card-body">';
-						    echo $card_title_tag;
-						    echo '<p>';
-						    echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
-						    if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
-						    echo '</p>';
-						    if ( current($memberships)->hasDescription() ) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDescription()).'</small></p>';
-						    //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
-						    
-						    echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
-						    echo '</div>';
-						}
-						
-						echo '</div>';
-				  	}
-					echo '</div>';				  	
+				    
+				    $actualMembers = array();
+				    $formerMembers = array();
+				    
+				    foreach ($members as $id=>$memberships) {
+				        $pastMembershipCount = 0;
+				        foreach ($memberships as $ms) {
+				            if ($ms->hasEndYear()) {
+				                $pastMembershipCount++;
+				            }
+				        }
+				        count($memberships) == $pastMembershipCount ? $formerMembers[$id]=$memberships : $actualMembers[$id]=$memberships;
+				    }
+				    
+				    if (count($actualMembers)>0) {
+    			  		echo '<div class="il">';
+    			  		echo '<div class="masonryGutterSizer"></div>';
+    			  		foreach ($actualMembers as $id=>$memberships) {
+    						$i = new Individual($id);
+    						$i->feed();
+    						echo '<div class="card">';
+    						if ($i->getPhotoUrl()) {
+    							echo '<a href="individual.php?individual_id='.$i->getId().'">';
+    							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+    							echo '</a>';
+    						} else {
+    							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+    						}
+    						
+    						$card_title_tag = '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
+    						
+    						if (count($memberships)>1) {
+    						    echo '<div class="card-body">'.$card_title_tag.'</div>';
+    						    echo '<ul class="list-group list-group-flush">';
+    						    foreach ($memberships as $ms) {
+    						        echo '<li class="list-group-item">';
+    						        echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
+    						        if ( $ms->getPeriod() ) echo ' <small>('.$ms->getPeriod().')</small>';
+    						        if ( $ms->hasDescription() ) echo '<p><small>'.ToolBox::toHtml($ms->getDescription()).'</small></p>';
+    						        //if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
+    						        echo '</li>';
+    						    }
+    						    echo '</ul>';
+    						} else {
+    						    echo '<div class="card-body">';
+    						    echo $card_title_tag;
+    						    echo '<p>';
+    						    echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
+    						    if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
+    						    echo '</p>';
+    						    if ( current($memberships)->hasDescription() ) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDescription()).'</small></p>';
+    						    //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
+    						    
+    						    echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
+    						    echo '</div>';
+    						}
+    						
+    						echo '</div>';
+    				  	}
+    					echo '</div>';
+				    }
+					
+					if (count($formerMembers)>0) {
+    					echo '<h3>';
+    					echo count($formerMembers) > 1 ? 'Ont quitté '.$society->getHtmlLinkToSociety():'A quitté '.$society->getHtmlLinkToSociety();
+    					echo '</h3>';
+    					echo '<div class="il">';
+    					echo '<div class="masonryGutterSizer"></div>';
+    					foreach ($formerMembers as $id=>$memberships) {
+    					    $i = new Individual($id);
+    					    $i->feed();
+    					    echo '<div class="card">';
+    					    if ($i->getPhotoUrl()) {
+    					        echo '<a href="individual.php?individual_id='.$i->getId().'">';
+    					        echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+    					        echo '</a>';
+    					    } else {
+    					        //echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+    					    }
+    					    
+    					    $card_title_tag = '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
+    					    
+    					    if (count($memberships)>1) {
+    					        echo '<div class="card-body">'.$card_title_tag.'</div>';
+    					        echo '<ul class="list-group list-group-flush">';
+    					        foreach ($memberships as $ms) {
+    					            echo '<li class="list-group-item">';
+    					            echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
+    					            if ( $ms->getPeriod() ) echo ' <small>('.$ms->getPeriod().')</small>';
+    					            if ( $ms->hasDescription() ) echo '<p><small>'.ToolBox::toHtml($ms->getDescription()).'</small></p>';
+    					            //if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
+    					            echo '</li>';
+    					        }
+    					        echo '</ul>';
+    					    } else {
+    					        echo '<div class="card-body">';
+    					        echo $card_title_tag;
+    					        echo '<p>';
+    					        echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
+    					        if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
+    					        echo '</p>';
+    					        if ( current($memberships)->hasDescription() ) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDescription()).'</small></p>';
+    					        //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
+    					        
+    					        echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
+    					        echo '</div>';
+    					    }
+    					    
+    					    echo '</div>';
+    					}
+    					echo '</div>';
+					}
 				}
 			?>
 	    </div>
