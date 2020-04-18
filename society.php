@@ -270,9 +270,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				    }
 					
 					if (count($formerMembers)>0) {
-    					echo '<h3>';
-    					echo count($formerMembers) > 1 ? 'Ont quitté '.$society->getHtmlLinkToSociety():'A quitté '.$society->getHtmlLinkToSociety();
-    					echo '</h3>';
+    					echo '<div class="il-legend">';
+    					echo count($formerMembers) > 1 ? 'Ont quitté '.$society->getHtmlLinkToSociety().'...':'A quitté '.$society->getHtmlLinkToSociety().'...';
+    					echo '</div>';
     					echo '<div class="il">';
     					echo '<div class="masonryGutterSizer"></div>';
     					foreach ($formerMembers as $id=>$memberships) {

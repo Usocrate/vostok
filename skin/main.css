@@ -151,6 +151,18 @@ SMALL A I {
 	font-family: 'Open Sans';
 }
 
+.il-legend {
+	display:block;
+	font-size:1.1rem;
+	font-weight:bold;
+	color: #bbb;
+	padding: 1rem 0 1.2rem 0;
+}
+
+.il-legend A {
+	color: inherit;
+}
+
 .tag {
 	display: inline-block;
 	text-align: center;
