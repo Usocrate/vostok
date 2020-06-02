@@ -48,12 +48,14 @@ class Membership {
 		return $this->description = $input;
 	}	
 	/**
-	 * @version 03/2019
+	 * @version 06/2020
 	 * @since 01/2017
 	 */
 	public function setInitYear($input) {
 		if ( is_numeric($input) && strlen($input)==4 ) {
 			$this->init_year = $input;
+		} elseif (empty($input)) {
+			$this->init_year = '';
 		} else {
 		    return false;
 		}
@@ -73,14 +75,16 @@ class Membership {
 	    return !empty($this->init_year);
 	}
 	/**
-	 * @version 03/2019 
+	 * @version 06/2020
 	 * @since 01/2017
 	 **/	
 	public function setEndYear($input) {
 		if ( is_numeric($input) && strlen($input)==4 ) {
 			$this->end_year = $input;
+		} elseif (empty($input)) {
+			$this->end_year = '';
 		} else {
-		    return false;
+			return false;
 		}
 	}
 	/**

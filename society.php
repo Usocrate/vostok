@@ -263,10 +263,13 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						    echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
     						    echo '</div>';
     						}
-    						
     						echo '</div>';
     				  	}
     					echo '</div>';
+
+    					if (count($relatedSocieties)>0 && count($actualMembers)>1) {
+    						echo '<div><a href="society_individual_transfer.php?society_id='.$society->getId().'">Transférer des gens</a></div>';
+    					}
 				    }
 					
 					if (count($formerMembers)>0) {
