@@ -29,6 +29,34 @@ $society->initFromDB();
 
 // participations
 $memberships = $society->getMemberships();
+if ($memberships) {
+	// regroupement des participations par individu
+	$members = array();
+	foreach ($memberships as $ms) {
+		$i = $ms->getIndividual();
+		$key = $i->getId();
+		if( isset($members[$key]) ) {
+			array_push($members[$key], $ms);
+		} else {
+			$members[$key] = array($ms);
+		}
+	}
+	unset($memberships);
+	
+	
+	$actualMembers = array();
+	$formerMembers = array();
+	
+	foreach ($members as $id=>$memberships) {
+		$pastMembershipCount = 0;
+		foreach ($memberships as $ms) {
+			if ($ms->hasEndYear()) {
+				$pastMembershipCount++;
+			}
+		}
+		count($memberships) == $pastMembershipCount ? $formerMembers[$id]=$memberships : $actualMembers[$id]=$memberships;
+	}
+}
 
 // participations
 $relatedSocieties = $society->getRelatedSocieties();
@@ -148,7 +176,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	    	<a class="nav-link <?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge badge-secondary"><?php echo count($relatedSocieties) ?></span></a>
     	</li>
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge badge-secondary"><?php echo count($memberships) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge badge-secondary"><?php echo count($members) ?></span></a>
     	</li>
 	    <li class="nav-item">
 	    	<a class="nav-link <?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge badge-secondary"><?php echo count($leads) ?></span></a>
@@ -193,34 +221,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individuals-tab">
 			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <i class="fas fa-plus"></i></a></small></h2>
 			<?php
-				if ($memberships) {
-				    // regroupement des participations par individu
-				    $members = array();
-				    foreach ($memberships as $ms) {
-				        $i = $ms->getIndividual();
-				        $key = $i->getId();
-				        if( isset($members[$key]) ) {
-				            array_push($members[$key], $ms);
-				        } else {
-				            $members[$key] = array($ms);
-				        }
-				    }
-				    unset($memberships);
-				    
-				    
-				    $actualMembers = array();
-				    $formerMembers = array();
-				    
-				    foreach ($members as $id=>$memberships) {
-				        $pastMembershipCount = 0;
-				        foreach ($memberships as $ms) {
-				            if ($ms->hasEndYear()) {
-				                $pastMembershipCount++;
-				            }
-				        }
-				        count($memberships) == $pastMembershipCount ? $formerMembers[$id]=$memberships : $actualMembers[$id]=$memberships;
-				    }
-				    
+				if (isset($members)) {
 				    if (count($actualMembers)>0) {
     			  		echo '<div class="il">';
     			  		echo '<div class="masonryGutterSizer"></div>';
