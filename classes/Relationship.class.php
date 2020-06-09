@@ -225,7 +225,7 @@ class Relationship
 
     /**
      *
-     * @version 07/2018
+     * @version 06/2020
      */
     public static function getKnownRoles($substring = null, $rolePlayerClass = null, $sort = 'Alphabetical')
     {
@@ -263,7 +263,7 @@ class Relationship
         if (count($where) > 0) {
             $sql .= ' WHERE ' . implode(' AND ', $where);
         }
-        $sql .= ') AS t GROUP BY role ASC';
+        $sql .= ') AS t GROUP BY role';
 
         // ORDER
         switch ($sort) {
