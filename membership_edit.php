@@ -215,10 +215,10 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
     		if (isset($applicant)) {
     			switch (get_class($applicant)) {
     				case 'Society':
-    					echo '<input name="society_id" type="hidden" value="'.$applicant->getId().'" />';
+    					echo '<input id="society_id_i" name="society_id" type="hidden" value="'.$applicant->getId().'" />';
     					break;
     				case 'Individual' :
-    					echo '<input name="individual_id" type="hidden" value="'.$applicant->getId().'" />';
+    					echo '<input id="individual_id_i" name="individual_id" type="hidden" value="'.$applicant->getId().'" />';
     					break;
     			}
     			
@@ -248,7 +248,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			if (!$membership->isIndividualIdentified()) {
 				//echo '<fieldset>';
 				//echo '<legend>Qui ?</legend>';
-				echo '<div class="form-row">';
+				echo '<div id="individual-form-row" class="form-row">';
 				/*
 				echo '<div class="form-group col-md-2">';
 				echo '<label for="individual_salutation_i">Civilité</label>';
@@ -384,6 +384,63 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 	
 	<script type="text/javascript">
 		$(document).ready(function(){
+
+			function checkIndividualMemberships() {
+				removeFormerAlerts();
+
+				var exe_condition = $('#individual_firstName_i').val().length>0 && $('#individual_lastName_i').val().length>0;
+				if (exe_condition == false) return false;  
+				
+				$.ajax({
+				  method: "GET",
+				  url: "api/memberships.php",
+				  dataType: "json",
+				  data: {
+					  individual_firstName: $("#individual_firstName_i").val(),
+					  individual_lastName: $("#individual_lastName_i").val(),
+					  society_id: $("#society_id_i").val()}
+				}).done(function( r ) {
+					var titles=[];
+					for (const m of r) {
+						titles.push(m.title);
+					}
+					var html = '';
+					html+= $('#individual_firstName_i').val()+" "+$('#individual_lastName_i').val()+" est déjà ";
+					for (i=0;i<titles.length;i++) {
+						html+= titles[i];
+						if (i < (titles.length-2)) {
+							html+=', ';
+						} else if(i < (titles.length-1)) {
+							html+=' et ';
+						}
+					}
+					html+='.<br>';
+					
+					displayAlert('individual-form-row', html);
+					//alert(JSON.stringify(r));
+				});
+			};
+
+			function displayAlert(id, value) {
+				var i = $('#'+id);
+				var aid = id+'_a';
+				if (value !== null && value !== undefined && value.length>0) {
+			        if ($('#'+aid)) {
+			        	$('#'+aid).slideUp('slow').remove();
+			        }
+			        var html = '<div id="'+aid+'" class="alert alert-info">'+value+'</div>';
+			        i.after(html);
+				} else {
+			        if ($('#'+aid)) {
+			        	$('#'+aid).slideUp('slow').remove();
+			        }
+				}
+			};
+		
+			function removeFormerAlerts() {
+				$('.alert').slideUp('slow').remove();
+			};
+			
 			$('#individual_firstName_i').focus();
 
 			$('#s_name_i').autocomplete({
@@ -442,7 +499,10 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 		                 }
 		         	})
 		   		}
-		   	});	    		    
+		   	});
+		   	
+		    $('#individual_lastName_i').change(checkIndividualMemberships);
+		    $('#individual_firstName_i').change(checkIndividualMemberships);		   	
 		});
 	</script>
 </div>

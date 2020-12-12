@@ -718,7 +718,7 @@ class Individual {
 	 * @since 01/2006
 	 * @since 07/2017
 	 */
-	public function getMemberships($society = NULL) {
+	public function getMemberships(Society $society = NULL) {
 		global $system;
 		try {
 			if (! isset ( $this->memberships )) {
@@ -742,6 +742,7 @@ class Individual {
 
 				$statement = $system->getPdo ()->prepare ( $sql );
 				$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+				
 				if (isset ( $society )) {
 					$statement->bindValue ( ':society_id', $society->getId, PDO::PARAM_INT );
 				}
@@ -774,6 +775,14 @@ class Individual {
 		} catch ( Exception $e ) {
 			$system->reportException ( $e, __METHOD__ );
 		}
+	}
+	/**
+	 *
+	 * @param Society $society
+	 * @since 12/2020
+	 */
+	public function getMembershipsToJson(Society $society = NULL) {
+		
 	}
 	/**
 	 * Obtient les participations de l'individu aux sociétés liées à une société donnée

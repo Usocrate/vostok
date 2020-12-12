@@ -158,7 +158,7 @@ class Membership {
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 	/**
-	 * @since 27/10/2012
+	 * @since 10/2012
 	 */
 	public static function knownTitlesToJson($substring = NULL) {
 		$output = '{"titles":[';

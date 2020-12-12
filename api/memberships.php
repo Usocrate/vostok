@@ -21,17 +21,16 @@ $criteria = array ();
 
 //var_dump($_GET);
 
-if (isset ( $_GET ['individual_id'] ) && ! empty ( $_GET ['individual_id'] )) {
+if (isset ( $_GET ['individual_id'] ) && !empty ( $_GET ['individual_id'] )) {
 	$criteria ['individual_id'] = $_GET ['individual_id'];
-} elseif (isset($_GET ['individual_firstname']) && isset($_GET ['individual_lastname'])) {
-	$i = new Individual();
-	$i->setFirstName(urldecode($_GET ['individual_firstname']));
-	$i->setLastName(urldecode($_GET ['individual_lastname']));
-	$i->identifyFromName();
-	if ($i->hasId()) {
-		$criteria ['individual_id'] = $i->getId();
-	}
-	unset($i);
+}
+
+if (isset ( $_GET ['individual_lastName'] ) && !empty ( $_GET ['individual_lastName'] )) {
+	$criteria ['individual_lastName'] = $_GET ['individual_lastName'];
+}
+
+if (isset ( $_GET ['individual_firstName'] ) && !empty ( $_GET ['individual_firstName'] )) {
+	$criteria ['individual_firstName'] = $_GET ['individual_firstName'];
 }
 
 if (isset ( $_GET ['society_id'] ) && ! empty ( $_GET ['society_id'] )) {
@@ -39,6 +38,4 @@ if (isset ( $_GET ['society_id'] ) && ! empty ( $_GET ['society_id'] )) {
 }
 
 $data = $system->getMemberships ( $criteria );
-
-//header ( 'charset=utf-8' );
 echo json_encode ( $data, JSON_UNESCAPED_UNICODE);

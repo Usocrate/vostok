@@ -423,6 +423,14 @@ class System {
 			if (isset ( $criteria ['society_city'] )) {
 				$where [] = 's.society_city = :society_city';
 			}
+
+			if (isset ( $criteria ['individual_lastName'] )) {
+				$where [] = 'i.individual_lastName = :individual_lastName';
+			}
+			
+			if (isset ( $criteria ['individual_firstName'] )) {
+				$where [] = 'i.individual_firstName = :individual_firstName';
+			}
 			
 			if (isset ($criteria ['everPinnedIndividual']) && $criteria ['everPinnedIndividual']===true) {
 				$where [] = 'i.individual_lastPin_date IS NOT NULL';
@@ -471,6 +479,12 @@ class System {
 			if (isset ($criteria ['society_city'])) {
 				$statement->bindValue(':society_city', $criteria['society_city'], PDO::PARAM_STR);
 			}
+			if (isset ($criteria ['individual_lastName'])) {
+				$statement->bindValue(':individual_lastName', $criteria['individual_lastName'], PDO::PARAM_STR);
+			}
+			if (isset ($criteria ['individual_firstName'])) {
+				$statement->bindValue(':individual_firstName', $criteria['individual_firstName'], PDO::PARAM_STR);
+			}
 			if (isset ($criteria ['industry_id'])) {
 				$statement->bindValue(':industry_id', $criteria['industry_id'], PDO::PARAM_INT);
 			}			
@@ -514,7 +528,9 @@ class System {
 				$m->setInitYear($data['init_year']);
 				$m->setEndYear($data['end_year']);
 				//$m->setTimestamp($data['timestamp']);
-				$memberships[$data['id']] = $m;
+				
+				//$memberships[$data['id']] = $m;
+				$memberships[] = $m;
 			}
 			return $memberships;			
 		} catch (Exception $e) {
