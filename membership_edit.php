@@ -113,7 +113,7 @@ if (isset($_POST['task'])) {
 					    
 					    case 'similarMembershipInSociety' :
 					      
-					        // on demande a conserver les données pour la création d'une nouvelle participation à la même société sur le même modèle
+					        // on demande à conserver les données pour la création d'une nouvelle participation à la même société sur le même modèle
 					        $membership->setSociety($lastSavedMembership->getSociety());
 					        
 					        if ($lastSavedMembership->hasTitle()) {
@@ -227,7 +227,8 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			if (!$membership->isSocietyIdentified()) {
 				echo '<div class="form-group">';
 				echo '<label for="s_name_i">Nom de la Société</label>';
-				echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35" />';
+				echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35"';
+				echo '/>';
 				echo '</div>';
 			} else {
 				if ($membership->isIndividualIdentified()) {

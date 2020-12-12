@@ -5,9 +5,7 @@
  */
 class Society {
 	public $id;
-
 	protected $industries;
-
 	protected $street;
 	protected $city;
 	protected $postalcode;
@@ -22,7 +20,6 @@ class Society {
 	protected $latitude;
 	protected $altitude;
 	protected $parent;
-
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
@@ -34,10 +31,10 @@ class Society {
 	 */
 	public function identifyFromName() {
 		global $system;
-		$statement = $system->getPdo()->prepare('SELECT society_id FROM society WHERE society_name=:name');
-		$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
-		$statement->execute();
-		$this->id = $statement->fetch(PDO::FETCH_COLUMN);
+		$statement = $system->getPdo ()->prepare ( 'SELECT society_id FROM society WHERE society_name=:name' );
+		$statement->bindValue ( ':name', $this->name, PDO::PARAM_STR );
+		$statement->execute ();
+		$this->id = $statement->fetch ( PDO::FETCH_COLUMN );
 		return $this->id !== false;
 	}
 	/**
@@ -128,17 +125,17 @@ class Society {
 	 * @since 10/2012
 	 */
 	private static function getKnownNames($substring = NULL) {
-	    global $system;
+		global $system;
 		$sql = 'SELECT society_name FROM society WHERE society_name IS NOT NULL';
 		if (isset ( $substring )) {
 			$sql .= ' AND society_name LIKE :pattern';
 		}
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $system->getPdo ()->prepare ( $sql );
 		if (isset ( $substring )) {
-		    $statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
+			$statement->bindValue ( ':pattern', '%' . $substring . '%', PDO::PARAM_STR );
 		}
-		$statement->execute();
-		return $statement->fetchAll(PDO::FETCH_COLUMN);
+		$statement->execute ();
+		return $statement->fetchAll ( PDO::FETCH_COLUMN );
 	}
 	/**
 	 *
@@ -153,7 +150,8 @@ class Society {
 	 *
 	 * @since 01/2009
 	 * @version 11/2016
-	 * @param $fields
+	 * @param
+	 *        	$fields
 	 * @return array
 	 */
 	private function getDataFromBase($fields = NULL) {
@@ -168,10 +166,10 @@ class Society {
 				);
 			}
 			$sql = 'SELECT ' . implode ( ',', $fields ) . ' FROM society WHERE society_id=:id';
-			$statement = $system->getPdo()->prepare($sql);
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			$statement->execute();
-			return $statement->fetch(PDO::FETCH_ASSOC);
+			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			$statement->execute ();
+			return $statement->fetch ( PDO::FETCH_ASSOC );
 		} catch ( Exception $e ) {
 			echo $e->getMessage ();
 		}
@@ -268,18 +266,18 @@ class Society {
 		return $this->getAttribute ( 'city' );
 	}
 	private static function getKnownCities($substring = NULL) {
-	    global $system;
+		global $system;
 		$sql = 'SELECT society_city AS value, COUNT(*) AS count FROM society WHERE society_city IS NOT NULL';
 		if (isset ( $substring )) {
 			$sql .= ' AND society_city LIKE :pattern';
 		}
 		$sql .= ' GROUP BY society_city ASC';
-		$statement = $system->getPdo()->prepare($sql);
+		$statement = $system->getPdo ()->prepare ( $sql );
 		if (isset ( $substring )) {
-		    $statement->bindValue(':pattern', $substring.'%', PDO::PARAM_STR);
+			$statement->bindValue ( ':pattern', $substring . '%', PDO::PARAM_STR );
 		}
-		$statement->execute();
-		return $statement->fetchAll(PDO::FETCH_ASSOC);
+		$statement->execute ();
+		return $statement->fetchAll ( PDO::FETCH_ASSOC );
 	}
 	public static function knownCitiesToJson($substring = NULL) {
 		$output = '{"cities":' . json_encode ( self::getKnownCities ( $substring ) ) . '}';
@@ -346,9 +344,9 @@ class Society {
 	 * @since 03/2019
 	 */
 	public function getGoogleQueryUrl($type = null) {
-		$var = $this->getName();
-		return empty($var) ? null : Toolbox::getGoogleQueryUrl('"'.$var.'"', $type);
-	}	
+		$var = $this->getName ();
+		return empty ( $var ) ? null : Toolbox::getGoogleQueryUrl ( '"' . $var . '"', $type );
+	}
 	/**
 	 * Obtient les informations de localisation auprès de Google map et complète celles-ci si nécessaire
 	 *
@@ -358,43 +356,44 @@ class Society {
 	public function getAddressFromGoogle($input = NULL) {
 		try {
 			global $system;
-			if ( empty($input) ) $input = $this->getAddress();
-			$json = $system->getGoogleGeocodeAsJson($input);
-			$data = json_decode($json);
-			if (empty($data->{'results'}[0])) {
-				throw new Exception ('Pas de résultat GoogleGeocode : '.$json);
+			if (empty ( $input ))
+				$input = $this->getAddress ();
+			$json = $system->getGoogleGeocodeAsJson ( $input );
+			$data = json_decode ( $json );
+			if (empty ( $data->{'results'} [0] )) {
+				throw new Exception ( 'Pas de résultat GoogleGeocode : ' . $json );
 			}
-			$street = array();
-			foreach ($data->{'results'}[0]->{'address_components'} as $c) {
-				if (in_array('street_number', $c->types)) {
-					$street['number'] = $c->long_name;
+			$street = array ();
+			foreach ( $data->{'results'} [0]->{'address_components'} as $c ) {
+				if (in_array ( 'street_number', $c->types )) {
+					$street ['number'] = $c->long_name;
 				}
-				if (in_array('route', $c->types)) {
-					$street['route'] = $c->long_name;
+				if (in_array ( 'route', $c->types )) {
+					$street ['route'] = $c->long_name;
 				}
-				if (in_array('locality', $c->types)) {
+				if (in_array ( 'locality', $c->types )) {
 					$this->city = $c->long_name;
 				}
-				if (in_array('postal_code', $c->types)) {
+				if (in_array ( 'postal_code', $c->types )) {
 					$this->postalcode = $c->long_name;
 				}
-				if (in_array('administrative_area_level_1', $c->types)) {
+				if (in_array ( 'administrative_area_level_1', $c->types )) {
 					$this->administrativeAreaName = $c->long_name;
 				}
-				if (in_array('administrative_area_level_2', $c->types)) {
+				if (in_array ( 'administrative_area_level_2', $c->types )) {
 					$this->subAdministrativeAreaName = $c->long_name;
 				}
-				if (in_array('country', $c->types)) {
+				if (in_array ( 'country', $c->types )) {
 					$this->countryNameCode = $c->short_name;
 				}
 			}
-			if (isset($street['number']) && isset($street['route'])) {
-				$this->street = $street['number'].' '.$street['route'];
+			if (isset ( $street ['number'] ) && isset ( $street ['route'] )) {
+				$this->street = $street ['number'] . ' ' . $street ['route'];
 			}
-			$this->latitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
-			$this->longitude = $data->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};
-		} catch (Exception $e) {
-			$system->reportException($e);
+			$this->latitude = $data->{'results'} [0]->{'geometry'}->{'location'}->{'lat'};
+			$this->longitude = $data->{'results'} [0]->{'geometry'}->{'location'}->{'lng'};
+		} catch ( Exception $e ) {
+			$system->reportException ( $e );
 			return false;
 		}
 	}
@@ -445,19 +444,20 @@ class Society {
 	 * @version 03/2019
 	 */
 	public function getHtmlLinkToSociety($focus = null) {
-	    return '<a href="'.$this->getDisplayUrl().'">'.$this->getNameForHtmlDisplay().'</a>';
+		return '<a href="' . $this->getDisplayUrl () . '">' . $this->getNameForHtmlDisplay () . '</a>';
 	}
 	/**
+	 *
 	 * @since 03/2019
 	 * @return string
 	 */
 	public function getDisplayUrl($focus = null) {
-	    $href = "society.php?";
-	    $href.= 'society_id='.$this->getId();
-	    if (isset($focus)) {
-	        $href.= '&focus='.$focus;
-	    }
-	    return $href;
+		$href = "society.php?";
+		$href .= 'society_id=' . $this->getId ();
+		if (isset ( $focus )) {
+			$href .= '&focus=' . $focus;
+		}
+		return $href;
 	}
 	/**
 	 * Indique si la miniature du site web de la société a déjà été enregistré.
@@ -468,7 +468,7 @@ class Society {
 	public function hasThumbnail() {
 		return is_file ( self::getThumbnailsDirectoryPath () . '/' . $this->getThumbnailFileName () );
 	}
-/**
+	/**
 	 * Obtient le nom du fichier où est stockée la miniature du site web.
 	 *
 	 * @return string
@@ -544,14 +544,15 @@ class Society {
 
 			$this->industries = array ();
 
-			if (empty ( $this->id )) return NULL;
+			if (empty ( $this->id ))
+				return NULL;
 
 			$sql = 'SELECT i.* FROM society_industry AS si INNER JOIN industry AS i ON (i.id=si.industry_id)';
 			$sql .= ' WHERE si.society_id=:id';
-			$statement = $system->getPdo()->prepare($sql);
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			$statement->execute();
-			$data = $statement->fetchAll(PDO::FETCH_ASSOC);
+			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			$statement->execute ();
+			$data = $statement->fetchAll ( PDO::FETCH_ASSOC );
 			foreach ( $data as $row ) {
 				$i = new Industry ();
 				$i->feed ( $row );
@@ -591,8 +592,8 @@ class Society {
 	/**
 	 * Ajoute une activité é la liste existante.
 	 *
-	 * @since 16/07/2006
-	 * @todo substituer é setIndustry()
+	 * @since 07/2006
+	 * @todo substituer à setIndustry()
 	 */
 	public function addIndustry($input) {
 		if (! $this->isIndustry ( $input ))
@@ -634,11 +635,11 @@ class Society {
 		if (! empty ( $this->id ) && isset ( $this->industries )) {
 			if ($this->deleteIndustries ()) {
 				$errorless = true;
-				$statement = $system->getPdo()->prepare('INSERT INTO society_industry SET society_id=:society_id, industry_id=:industry_id');
-				$statement->bindValue(':society_id', $this->id, PDO::PARAM_INT);
+				$statement = $system->getPdo ()->prepare ( 'INSERT INTO society_industry SET society_id=:society_id, industry_id=:industry_id' );
+				$statement->bindValue ( ':society_id', $this->id, PDO::PARAM_INT );
 				foreach ( $this->industries as $i ) {
-					$statement->bindValue(':industry_id', $i->getId(), PDO::PARAM_INT);
-					$errorless = $errorless && $statement->execute();
+					$statement->bindValue ( ':industry_id', $i->getId (), PDO::PARAM_INT );
+					$errorless = $errorless && $statement->execute ();
 				}
 				return $errorless;
 			}
@@ -648,15 +649,16 @@ class Society {
 	/**
 	 * Supprime de la base de données la liste des activités déclarées de la société.
 	 *
-	 * @since 15/08/2006
-	 * @version 20/12/2016
+	 * @since 08/2006
+	 * @version 12/2016
 	 */
 	public function deleteIndustries() {
 		global $system;
-		if (empty ( $this->id )) return false;
-		$statement = $system->getPdo()->prepare('DELETE FROM society_industry WHERE society_id=:id');
-		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-		return $statement->execute();
+		if (empty ( $this->id ))
+			return false;
+		$statement = $system->getPdo ()->prepare ( 'DELETE FROM society_industry WHERE society_id=:id' );
+		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+		return $statement->execute ();
 	}
 	/**
 	 * Fixe l'activité de la société.
@@ -682,13 +684,14 @@ class Society {
 	 * Obtient les participations associées à la société.
 	 *
 	 * @return array
-	 * @version 03/06/2017
+	 * @version 06/2017
 	 */
 	public function getMemberships() {
 		global $system;
+
 		if (! isset ( $this->memberships )) {
 			$this->memberships = array ();
-			
+
 			$sql = 'SELECT *, DATE_FORMAT(i.individual_creation_date, "%d/%m/%Y")';
 			// FROM
 			$sql .= ' FROM membership AS ms';
@@ -699,11 +702,13 @@ class Society {
 			// ORDER BY
 			$sql .= ' ORDER BY i.individual_lastName ASC';
 
-			$statement = $system->getPdo()->prepare($sql);
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			$statement->execute();
-			
-			foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
+			$statement = $system->getPdo ()->prepare ( $sql );
+
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+
+			$statement->execute ();
+
+			foreach ( $statement->fetchAll ( PDO::FETCH_ASSOC ) as $row ) {
 				$ms = new Membership ();
 				$ms->feed ( $row );
 				$this->memberships [] = $ms;
@@ -712,24 +717,47 @@ class Society {
 		return $this->memberships;
 	}
 	/**
+	 * Obtient les participations d'un individu dans la société
+	 *
+	 * @since 12/2020
+	 */
+	public function getIndividualMemberships(Individual $individual) {
+		global $system;
+		try {
+			if (empty ( $this->id )) {
+				throw new Exception ( __METHOD__ . ' : la société doit être identifiée.' );
+			}
+			if (! $individual->hasId ()) {
+				throw new Exception ( __METHOD__ . ' : l\'individu doit être identifié.' );
+			}
+			$criteria = array (
+					'society_id' => $this->getId (),
+					'individual_id' => $individual->getId ()
+			);
+			return $system->getMemberships ( $criteria );
+		} catch ( Exception $e ) {
+			$system->reportException ( $e );
+		}
+	}
+	/**
 	 * Transfére les participations de membres au sein de la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
 	 *
-	 * @version 03/06/2017
+	 * @version 06/2017
 	 */
 	public function transferMemberships($society) {
 		global $system;
 		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id )) {
 			return false;
 		}
-		$statement = $system->getPdo()->prepare('UPDATE membership SET society_id=:target_id WHERE society_id=:id');
-		$statement->bindValue(':target_id', $society->getId(), PDO::PARAM_INT);
-		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-		return $statement->execute();
+		$statement = $system->getPdo ()->prepare ( 'UPDATE membership SET society_id=:target_id WHERE society_id=:id' );
+		$statement->bindValue ( ':target_id', $society->getId (), PDO::PARAM_INT );
+		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+		return $statement->execute ();
 	}
 	/**
 	 * Supprime de la base de données les enregistrements des participations (les personnes associées sont supprimées si elles n'ont pas d'autres participations).
 	 *
-	 * @since 15/08/2006
+	 * @since 15/Bonne journé08/2006
 	 */
 	public function deleteMemberships() {
 		$errorless = true;
@@ -766,21 +794,21 @@ class Society {
 	 *
 	 * @return array
 	 * @since 03/2006
-	 * @version 20/12/2016
+	 * @version 12/2016
 	 */
 	public function getRelationships() {
 		global $system;
 		if (! isset ( $this->relationships )) {
 			$this->relationships = array ();
 			$sql = 'SELECT * FROM relationship AS rs ';
-			$sql.= ' WHERE (rs.item0_id=:item0_id AND rs.item0_class=:item0_class) OR (rs.item1_id=:item1_id AND rs.item1_class=:item1_class)';
-			$statement = $system->getPdo()->prepare($sql);
-			$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
-			$statement->bindValue(':item0_class', get_class ( $this ), PDO::PARAM_STR);
-			$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
-			$statement->bindValue(':item1_class', get_class ( $this ), PDO::PARAM_STR);
-			$statement->execute();
-			$rowset =  $statement->fetchAll(PDO::FETCH_ASSOC);
+			$sql .= ' WHERE (rs.item0_id=:item0_id AND rs.item0_class=:item0_class) OR (rs.item1_id=:item1_id AND rs.item1_class=:item1_class)';
+			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
+			$statement->bindValue ( ':item0_class', get_class ( $this ), PDO::PARAM_STR );
+			$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
+			$statement->bindValue ( ':item1_class', get_class ( $this ), PDO::PARAM_STR );
+			$statement->execute ();
+			$rowset = $statement->fetchAll ( PDO::FETCH_ASSOC );
 			foreach ( $rowset as $row ) {
 				$rs = new Relationship ();
 				$rs->feed ( $row );
@@ -796,12 +824,12 @@ class Society {
 	 * @version 20/12/2016
 	 */
 	public function getParentSociety() {
-		$data = $this->getRelatedSocieties();
-		if (isset($data)) {
-			foreach ($data as $item) {
-				$role = $item[2];
-				$society = $item[0];
-				if (isset ( $role ) && strcasecmp ( $role , 'Maison-mère' ) == 0) {
+		$data = $this->getRelatedSocieties ();
+		if (isset ( $data )) {
+			foreach ( $data as $item ) {
+				$role = $item [2];
+				$society = $item [0];
+				if (isset ( $role ) && strcasecmp ( $role, 'Maison-mère' ) == 0) {
 					return $society;
 				}
 			}
@@ -822,7 +850,7 @@ class Society {
 			return NULL;
 		}
 
-		$output = array();
+		$output = array ();
 
 		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
@@ -833,41 +861,49 @@ class Society {
 		$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
 		$sql .= ' ORDER BY society_name ASC';
 
-		$statement = $system->getPdo()->prepare($sql);
-		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
-		$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
-		$statement->execute();
-		$data = $statement->fetchAll(PDO::FETCH_ASSOC);
+		$statement = $system->getPdo ()->prepare ( $sql );
+		$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
+		$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
+		$statement->execute ();
+		$data = $statement->fetchAll ( PDO::FETCH_ASSOC );
 
 		foreach ( $data as $row ) {
 			$s = new Society ();
 			$s->feed ( $row );
-			$output[] = array($s, $row['relationship_id'], $row['relatedsociety_role'], $row['description']);
+			$output [] = array (
+					$s,
+					$row ['relationship_id'],
+					$row ['relatedsociety_role'],
+					$row ['description']
+			);
 		}
 		return $output;
 	}
 	/**
 	 * Obtient les sociétés à l'activité proche
+	 *
 	 * @since 07/2018
 	 */
 	public function getInSameIndustrySocieties() {
 		global $system;
 		$sql = 'SELECT s.society_id, s.society_name, COUNT(i2.industry_id) AS similarity_indicator';
-		$sql.= ' FROM society_industry AS i INNER JOIN society_industry AS i2 USING (industry_id)';
-		$sql.= ' INNER JOIN society AS s ON s.society_id = i2.society_id';
-		$sql.= ' WHERE i.society_id = ? AND i2.society_id <> i.society_id';
-		$sql.= ' GROUP BY i.society_id, i2.society_id';
-		$sql.= ' HAVING similarity_indicator > 1';
-		$sql.= ' ORDER BY similarity_indicator DESC';
-		$sql.= ' LIMIT 0,7';
-		$statement = $system->getPdo()->prepare($sql);
-		$statement->execute(array($this->id));
-		$data = $statement->fetchAll(PDO::FETCH_ASSOC);
-		$output = array();
+		$sql .= ' FROM society_industry AS i INNER JOIN society_industry AS i2 USING (industry_id)';
+		$sql .= ' INNER JOIN society AS s ON s.society_id = i2.society_id';
+		$sql .= ' WHERE i.society_id = ? AND i2.society_id <> i.society_id';
+		$sql .= ' GROUP BY i.society_id, i2.society_id';
+		$sql .= ' HAVING similarity_indicator > 1';
+		$sql .= ' ORDER BY similarity_indicator DESC';
+		$sql .= ' LIMIT 0,7';
+		$statement = $system->getPdo ()->prepare ( $sql );
+		$statement->execute ( array (
+				$this->id
+		) );
+		$data = $statement->fetchAll ( PDO::FETCH_ASSOC );
+		$output = array ();
 		foreach ( $data as $row ) {
-			$s = new Society($row['society_id']);
-			$s->setName($row['society_name']);
-			$output[$row['society_id']] = $s;
+			$s = new Society ( $row ['society_id'] );
+			$s->setName ( $row ['society_name'] );
+			$output [$row ['society_id']] = $s;
 		}
 		return $output;
 	}
@@ -880,8 +916,8 @@ class Society {
 	public function getRelatedSocietiesOptionsTags($valueToSelect = NULL) {
 		$html = '';
 		foreach ( $this->getRelatedSocieties () as $item ) {
-			$society = $item[0];
-			$html .= '<option value="' . $society->getId() . '"';
+			$society = $item [0];
+			$html .= '<option value="' . $society->getId () . '"';
 			if (isset ( $valueToSelect ) && strcasecmp ( $society->getId (), $valueToSelect ) == 0) {
 				$html .= ' selected="selected"';
 			}
@@ -898,22 +934,22 @@ class Society {
 	 */
 	public function transferRelationships($society) {
 		global $system;
-		
+
 		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id ))
 			return false;
-		
-		$statementA = $system->getPdo()->prepare('UPDATE relationship SET item0_id=:target_id WHERE item0_id=:id AND item0_class=:class');
-		$statementB = $system->getPdo()->prepare('UPDATE relationship SET item1_id=:target_id WHERE item1_id=:id AND item1_class=:class');
-		
-		$statementA->bindValue(':target_id', $society->getId(), PDO::PARAM_INT);
-		$statementA->bindValue(':id', $this->id, PDO::PARAM_INT);
-		$statementA->bindValue(':class', get_class($this), PDO::PARAM_STR);
-		
-		$statementB->bindValue(':target_id', $society->getId(), PDO::PARAM_INT);
-		$statementB->bindValue(':id', $this->id, PDO::PARAM_INT);
-		$statementB->bindValue(':class', get_class($this), PDO::PARAM_STR);
 
-		return $statementA->execute() && $statementB->execute();
+		$statementA = $system->getPdo ()->prepare ( 'UPDATE relationship SET item0_id=:target_id WHERE item0_id=:id AND item0_class=:class' );
+		$statementB = $system->getPdo ()->prepare ( 'UPDATE relationship SET item1_id=:target_id WHERE item1_id=:id AND item1_class=:class' );
+
+		$statementA->bindValue ( ':target_id', $society->getId (), PDO::PARAM_INT );
+		$statementA->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+		$statementA->bindValue ( ':class', get_class ( $this ), PDO::PARAM_STR );
+
+		$statementB->bindValue ( ':target_id', $society->getId (), PDO::PARAM_INT );
+		$statementB->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+		$statementB->bindValue ( ':class', get_class ( $this ), PDO::PARAM_STR );
+
+		return $statementA->execute () && $statementB->execute ();
 	}
 	/**
 	 * Supprime de la base de données les enregistrements des relations avec des personnes ou d'autres sociétés.
@@ -927,16 +963,16 @@ class Society {
 			return false;
 		}
 		$sql = 'DELETE FROM relationship';
-		$sql.= ' WHERE (item0_id=:item0_id AND item0_class=:item0_class)';
-		$sql.= ' OR (item1_id=:item1_id AND item1_class=:item1_class)';
-		
-		$statement = $system->getPdo()->prepare($sql);
-		$statement->bindValue(':item0_id', $this->id, PDO::PARAM_INT);
-		$statement->bindValue(':item0_class', get_class($this), PDO::PARAM_STR);
-		$statement->bindValue(':item1_id', $this->id, PDO::PARAM_INT);
-		$statement->bindValue(':item1_class', get_class($this), PDO::PARAM_STR);
+		$sql .= ' WHERE (item0_id=:item0_id AND item0_class=:item0_class)';
+		$sql .= ' OR (item1_id=:item1_id AND item1_class=:item1_class)';
 
-		return $statement->execute();
+		$statement = $system->getPdo ()->prepare ( $sql );
+		$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
+		$statement->bindValue ( ':item0_class', get_class ( $this ), PDO::PARAM_STR );
+		$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
+		$statement->bindValue ( ':item1_class', get_class ( $this ), PDO::PARAM_STR );
+
+		return $statement->execute ();
 	}
 	/**
 	 * Obtient les pistes associées à la société.
@@ -945,22 +981,22 @@ class Society {
 	 */
 	public function getLeads() {
 		global $system;
-		
+
 		if (! isset ( $this->leads )) {
 			$this->leads = array ();
-			
-			$sql = 'SELECT *, DATE_FORMAT(lead_creation_date, "%d/%m/%Y") as lead_creation_date_fr FROM `lead`';
-			$sql.= ' WHERE society_id=:id';
-			$sql.= ' ORDER BY lead_creation_date DESC';
-			
-			$statement = $system->getPdo()->prepare($sql);
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			$statement->execute();
 
-			foreach ( $statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
+			$sql = 'SELECT *, DATE_FORMAT(lead_creation_date, "%d/%m/%Y") as lead_creation_date_fr FROM `lead`';
+			$sql .= ' WHERE society_id=:id';
+			$sql .= ' ORDER BY lead_creation_date DESC';
+
+			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			$statement->execute ();
+
+			foreach ( $statement->fetchAll ( PDO::FETCH_ASSOC ) as $row ) {
 				$lead = new Lead ();
 				$lead->feed ( $row );
-				$this->leads[] = $lead;
+				$this->leads [] = $lead;
 			}
 		}
 		return $this->leads;
@@ -974,9 +1010,9 @@ class Society {
 	 */
 	public function getEvents() {
 		global $system;
-		$criteria = array();
-		$criteria['society_id'] = $this->id;
-		return $system->getEvents($criteria);
+		$criteria = array ();
+		$criteria ['society_id'] = $this->id;
+		return $system->getEvents ( $criteria );
 	}
 	/**
 	 * Transfére les pistes liées à la société vers une autre société (dans le cadre d'une fusion de sociétés notamment).
@@ -985,11 +1021,12 @@ class Society {
 	 */
 	public function transferLeads($society) {
 		global $system;
-		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id )) return false;
-		$statement = $system->getPdo()->prepare('UPDATE `lead` SET society_id = :target_id WHERE society_id = :id');
-		$statement->bindValue(':target_id', $society->getId (), PDO::PARAM_INT);
-		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-		return $statement->execute();
+		if (! is_a ( $society, 'Society' ) || ! $society->getId () || empty ( $this->id ))
+			return false;
+		$statement = $system->getPdo ()->prepare ( 'UPDATE `lead` SET society_id = :target_id WHERE society_id = :id' );
+		$statement->bindValue ( ':target_id', $society->getId (), PDO::PARAM_INT );
+		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+		return $statement->execute ();
 	}
 	/**
 	 * Supprime de la base de données toutes les pistes rattachées à la société.
@@ -999,10 +1036,11 @@ class Society {
 	 */
 	public function deleteLeads() {
 		global $system;
-		if (empty ( $this->id )) return false;
-		$statement = $system->getPdo()->prepare('DELETE FROM `lead` WHERE society_id = :id');
-		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-		return $statement->execute();
+		if (empty ( $this->id ))
+			return false;
+		$statement = $system->getPdo ()->prepare ( 'DELETE FROM `lead` WHERE society_id = :id' );
+		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+		return $statement->execute ();
 	}
 	/**
 	 * Fixe les attributs de la société à partir d'un tableau aux clefs normalisées
@@ -1020,7 +1058,7 @@ class Society {
 					// on ne traite que les clés avec le préfixe spécifié
 					if (strcmp ( iconv_substr ( $clé, 0, iconv_strlen ( $prefix ) ), $prefix ) != 0)
 						continue;
-						// on retire le préfixe
+					// on retire le préfixe
 					$clé = iconv_substr ( $clé, iconv_strlen ( $prefix ) );
 				}
 				// echo $clé.': '.$valeur.'<br />';
@@ -1037,10 +1075,10 @@ class Society {
 	public function initFromDB() {
 		global $system;
 		if ($this->getId ()) {
-			$statement = $system->getPdo()->prepare('SELECT * FROM society WHERE society_id=:id');
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			$statement->execute();
-			return $this->feed ( $statement->fetch(PDO::FETCH_ASSOC) );
+			$statement = $system->getPdo ()->prepare ( 'SELECT * FROM society WHERE society_id=:id' );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			$statement->execute ();
+			return $this->feed ( $statement->fetch ( PDO::FETCH_ASSOC ) );
 		}
 		return false;
 	}
@@ -1107,63 +1145,63 @@ class Society {
 		$sql = $new ? 'INSERT INTO' : 'UPDATE';
 		$sql .= ' society SET ';
 		$sql .= implode ( ', ', $settings );
-		if (! $new)	{
+		if (! $new) {
 			$sql .= ' WHERE society_id=:id';
 		}
 
-		$statement = $system->getPDO()->prepare($sql);
+		$statement = $system->getPDO ()->prepare ( $sql );
 
 		if (isset ( $this->name )) {
-			$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
+			$statement->bindValue ( ':name', $this->name, PDO::PARAM_STR );
 		}
 		if (isset ( $this->description )) {
-			$statement->bindValue(':description', $this->description, PDO::PARAM_STR);
+			$statement->bindValue ( ':description', $this->description, PDO::PARAM_STR );
 		}
 		if (isset ( $this->phone )) {
-			$statement->bindValue(':phone', $this->phone, PDO::PARAM_STR);
+			$statement->bindValue ( ':phone', $this->phone, PDO::PARAM_STR );
 		}
 		if (isset ( $this->street )) {
-			$statement->bindValue(':street', $this->street, PDO::PARAM_STR);
+			$statement->bindValue ( ':street', $this->street, PDO::PARAM_STR );
 		}
 		if (isset ( $this->postalcode )) {
-			$statement->bindValue(':postalcode', $this->postalcode, PDO::PARAM_INT);
+			$statement->bindValue ( ':postalcode', $this->postalcode, PDO::PARAM_INT );
 		}
 		if (isset ( $this->city )) {
-			$statement->bindValue(':city', $this->city, PDO::PARAM_STR);
+			$statement->bindValue ( ':city', $this->city, PDO::PARAM_STR );
 		}
 		if (isset ( $this->administrativeAreaName )) {
-			$statement->bindValue(':administrativeAreaName', $this->administrativeAreaName, PDO::PARAM_STR);
+			$statement->bindValue ( ':administrativeAreaName', $this->administrativeAreaName, PDO::PARAM_STR );
 		}
 		if (isset ( $this->subAdministrativeAreaName )) {
-			$statement->bindValue(':subAdministrativeAreaName', $this->subAdministrativeAreaName, PDO::PARAM_STR);
+			$statement->bindValue ( ':subAdministrativeAreaName', $this->subAdministrativeAreaName, PDO::PARAM_STR );
 		}
 		if (isset ( $this->countryNameCode )) {
-			$statement->bindValue(':countryNameCode', $this->countryNameCode, PDO::PARAM_STR);
+			$statement->bindValue ( ':countryNameCode', $this->countryNameCode, PDO::PARAM_STR );
 		}
 		if (isset ( $this->url )) {
-			$statement->bindValue(':url', $this->url, PDO::PARAM_STR);
+			$statement->bindValue ( ':url', $this->url, PDO::PARAM_STR );
 		}
 		if (isset ( $this->longitude ) && isset ( $this->latitude )) {
-			$statement->bindValue(':longitude', $this->longitude, PDO::PARAM_STR);
-			$statement->bindValue(':latitude', $this->latitude, PDO::PARAM_STR);
+			$statement->bindValue ( ':longitude', $this->longitude, PDO::PARAM_STR );
+			$statement->bindValue ( ':latitude', $this->latitude, PDO::PARAM_STR );
 		}
 		if (isset ( $this->altitude )) {
-			$statement->bindValue(':altitude', $this->altitude, PDO::PARAM_STR);
+			$statement->bindValue ( ':altitude', $this->altitude, PDO::PARAM_STR );
 		}
 
 		if (isset ( $_SESSION ['user_id'] )) {
-			$statement->bindValue(':user_id', $_SESSION ['user_id'], PDO::PARAM_INT);
+			$statement->bindValue ( ':user_id', $_SESSION ['user_id'], PDO::PARAM_INT );
 		}
 
-		if (! $new)	{
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+		if (! $new) {
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
 		}
 
-		$result = $statement->execute();
+		$result = $statement->execute ();
 
 		if ($result && $new) {
-	    	$this->id = $system->getPdo()->lastInsertId();
-	    }
+			$this->id = $system->getPdo ()->lastInsertId ();
+		}
 
 		return $result;
 	}
@@ -1175,10 +1213,11 @@ class Society {
 	 */
 	protected function deleteRow() {
 		global $system;
-		if (empty ( $this->id )) return false;
-		$statement = $system->getPdo()->prepare('DELETE FROM society WHERE society_id = :id');
-		$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-		return $statement->execute();
+		if (empty ( $this->id ))
+			return false;
+		$statement = $system->getPdo ()->prepare ( 'DELETE FROM society WHERE society_id = :id' );
+		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+		return $statement->execute ();
 	}
 	/**
 	 * Supprime la société de la base de données ainsi que toutes les données associées (pistes, participations, etc).

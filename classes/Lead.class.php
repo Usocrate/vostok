@@ -269,8 +269,7 @@ class Lead
     /**
      * Obtient la liste des types déjà présents en base de données sous format json.
      *
-     * @param
-     *            $label_substring
+     * @param $label_substring
      * @return string
      * @since 07/2009
      */

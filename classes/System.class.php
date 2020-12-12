@@ -380,6 +380,9 @@ class System {
 		}
 	}
 	/**
+	 * Obtient les participations des individus aux sociétés
+	 * 
+	 * @return array
 	 * @since 05/2018
 	 */
 	public function getMemberships($criteria = NULL, $sort = 'Last updated first', $offset = 0, $count = NULL) {
@@ -480,7 +483,11 @@ class System {
 			}
 			
 			$statement->setFetchMode(PDO::FETCH_ASSOC);
+			
 			$statement->execute();
+			
+			//$statement->debugDumpParams();
+			//echo '<hr>';
 
 			$memberships = array ();
 			foreach ( $statement->fetchAll() as $data ) {
@@ -1278,7 +1285,7 @@ class System {
 	}	
 	/**
 	 * Obtient la liste des prochains évènements enregistrés au planning.
-	 * @version 01/06/2017 
+	 * @version 06/2017 
 	 */
 	public function getNextPlanningEvents($nb=7) {
 		$criteria = array();
@@ -1286,7 +1293,7 @@ class System {
 		return $this->getEvents($criteria, 'Last created first', $nb);		
 	}
 	/**
-	 * @since 01/06/2017
+	 * @since 06/2017
 	 */
 	public function getEvents($criteria = NULL, $sort = 'Last created first', $nb = NULL, $offset = 0) {
 		$output = array();
@@ -1298,7 +1305,7 @@ class System {
 		return $output;
 	}
 	/**
-	 * @version 01/06/2017
+	 * @version 06/2017
 	 */	
 	private function getEventsData($criteria=null, $sort='Last created first', $nb = NULL, $offset = 0) {
 		try {

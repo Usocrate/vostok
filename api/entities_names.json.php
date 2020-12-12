@@ -21,6 +21,6 @@ $data = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntitie
 
 //echo '{"entities":' . json_encode ( $data ) . '}';
 
-echo json_encode ( $data );
+echo json_encode ( $data, JSON_UNESCAPED_UNICODE);
 
 ?>

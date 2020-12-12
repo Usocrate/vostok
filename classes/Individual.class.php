@@ -4,11 +4,11 @@
  * @author Florent Chanavat
  */
 class Individual {
-	protected $id;
+	public $id;
 	protected $twitter_id;
 	protected $linkedin_id;
-	protected $firstName;
-	protected $lastName;
+	public $firstName;
+	public $lastName;
 	protected $street;
 	protected $city;
 	protected $postalCode;
@@ -21,7 +21,7 @@ class Individual {
 	}
 	/**
 	 *
-	 * @version 03/01/2017
+	 * @version 01/2017
 	 */
 	public function isEventInvolved(Event $event) {
 		global $system;
@@ -41,7 +41,7 @@ class Individual {
 	}
 	/**
 	 *
-	 * @version 03/01/2017
+	 * @version 01/2017
 	 */
 	public function deleteEventInvolvement(Event $event) {
 		global $system;
@@ -776,6 +776,72 @@ class Individual {
 		}
 	}
 	/**
+	 * Obtient les participations de l'individu aux sociétés liées à une société donnée
+	 *
+	 * @since 06/2020
+	 */
+	public function getMembershipsInRelatedSociety(Society $society) {
+		global $system;
+		try {
+			if (empty ( $this->id ))
+				throw new Exception ( 'Récupérer les participations d\'un individu exige que celui-ci soit identifié.' );
+
+			$criteria = array ();
+
+			$criteria [] = 'm.individual_id=:id';
+
+			if (isset ( $society )) {
+				$criteria [] = 'm.society_id=:society_id';
+			}
+
+			$sql = 'SELECT t.*';
+			$sql .= ' FROM (';
+			
+			// la liste des sociétés liées (sous-requête)
+			$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
+			$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
+			$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
+			$sql .= ' UNION';
+			$sql .= ' SELECT s.*, r.relationship_id, r.item0_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
+			$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
+			$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
+			$sql .= ' ORDER BY society_name ASC';
+			$sql .= ') AS t';
+
+			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			if (isset ( $society )) {
+				$statement->bindValue ( ':society_id', $society->getId, PDO::PARAM_INT );
+			}
+			$statement->setFetchMode ( PDO::FETCH_ASSOC );
+			$statement->execute ();
+
+			$this->memberships = array ();
+			foreach ( $statement->fetchAll () as $data ) {
+				// society
+				$s = new Society ();
+				$s->setId ( $data ['society_id'] );
+				$s->setName ( $data ['society_name'] );
+				$s->setCity ( $data ['society_city'] );
+
+				// membership
+				$m = new Membership ();
+				$m->setId ( $data ['id'] );
+				$m->setSociety ( $s );
+				$m->setTitle ( $data ['title'] );
+				$m->setDepartment ( $data ['department'] );
+				$m->setDescription ( $data ['description'] );
+				$m->setUrl ( $data ['url'] );
+				$m->setInitYear ( $data ['init_year'] );
+				$m->setEndYear ( $data ['end_year'] );
+
+				$this->memberships [$m->getId ()] = $m;
+			}
+		} catch ( Exception $e ) {
+			$system->reportException ( $e, __METHOD__ );
+		}
+	}
+	/**
 	 *
 	 * @since 07/2018
 	 */
@@ -863,7 +929,7 @@ class Individual {
 	}
 	/**
 	 * Met un terme aux participations de l'individu pour une société donnée
-	 * 
+	 *
 	 * @since 06/2020
 	 */
 	public function endSocietyMemberships(Society $society, $year = NULL) {
