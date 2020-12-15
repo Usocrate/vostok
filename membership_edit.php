@@ -404,20 +404,22 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 					for (const m of r) {
 						titles.push(m.title);
 					}
-					var html = '';
-					html+= $('#individual_firstName_i').val()+" "+$('#individual_lastName_i').val()+" est déjà ";
-					for (i=0;i<titles.length;i++) {
-						html+= titles[i];
-						if (i < (titles.length-2)) {
-							html+=', ';
-						} else if(i < (titles.length-1)) {
-							html+=' et ';
+					if (titles.length>0) {
+						var html = '';
+						html+= $('#individual_firstName_i').val()+" "+$('#individual_lastName_i').val()+" est déjà ";
+						for (i=0;i<titles.length;i++) {
+							html+= titles[i];
+							if (i < (titles.length-2)) {
+								html+=', ';
+							} else if(i < (titles.length-1)) {
+								html+=' et ';
+							}
 						}
+						html+='.<br>';
+						
+						displayAlert('individual-form-row', html);
+						//alert(JSON.stringify(r));
 					}
-					html+='.<br>';
-					
-					displayAlert('individual-form-row', html);
-					//alert(JSON.stringify(r));
 				});
 			};
 
