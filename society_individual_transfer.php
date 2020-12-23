@@ -73,7 +73,7 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 <link type="text/css" rel="stylesheet"
 	href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
 <link type="text/css" rel="stylesheet"
-	href="<?php echo $system->getSkinUrl() ?>main.css"></link>
+	href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>    
     <script type="text/javascript" src="js/controls.js"></script>
 <script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
