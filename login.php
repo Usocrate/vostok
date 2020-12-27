@@ -57,7 +57,7 @@ $doc_title = $system->getAppliName();
 	<h1 class="brand"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<div>
-		<p><strong><?php echo ToolBox::toHtml($system->getAppliName()); ?> </strong> est l'outil de prospection <a href="http://www.usocrate.fr" title="Lien vers maison-mère">Usocrate.fr</a>.</p>
+		<p><strong><?php echo ToolBox::toHtml($system->getAppliName()); ?> </strong> est l'outil de prospection <a href="https://www.usocrate.fr" title="Lien vers maison-mère">Usocrate.fr</a>.</p>
 		<?php echo $fb->toHtml() ?>
 	</div>
 	
@@ -70,7 +70,7 @@ $doc_title = $system->getAppliName();
     		<label for="user_password_i">Mot de passe</label>
     		<input id="user_password_i" name="user_password" type="password" class="form-control" />
 		</div>
-		<button name="login_submission" type="submit" value="1" class="btn">Lancement</button>
+		<button name="login_submission" type="submit" value="1" class="btn btn-primary">Lancement</button>
 	</form>
 	
 	<footer><q>Reçu. Sens bien, excellent état d'esprit, prêt à y aller</q><br /> <cite>Youri Gagarine, 12 avril 1961</cite></footer>
