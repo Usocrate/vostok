@@ -173,16 +173,16 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	  <!-- Nav tabs -->
 	  <ul class="nav nav-tabs">
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge badge-secondary"><?php echo count($relatedSocieties) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societiesTabSelector" href="#societies-tab" data-toggle="tab">Sociétés liées <span class="badge badge-secondary"><?php echo isset($relatedSocieties) ? count($relatedSocieties) : '0' ?></span></a>
     	</li>
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge badge-secondary"><?php echo count($members) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individualsTabSelector" href="#individuals-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Gens <span class="badge badge-secondary"><?php echo isset($members) ? count($members) : '0' ?></span></a>
     	</li>
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge badge-secondary"><?php echo count($leads) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onLeads')==0) echo ' active' ?>" id="leadsTabSelector" href="#leads-tab" aria-controls="leads-tab" role="tab" data-toggle="tab">Pistes <span class="badge badge-secondary"><?php echo isset($leads) ? count($leads) : '0' ?></span></a>
     	</li>
 	    <li class="nav-item">
-	    	<a class="nav-link <?php if (strcmp($focus,'onEvents')==0) echo ' active' ?>" id="eventsTabSelector" href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge badge-secondary"><?php echo count($events) ?></span></a>
+	    	<a class="nav-link <?php if (strcmp($focus,'onEvents')==0) echo ' active' ?>" id="eventsTabSelector" href="#events-tab" aria-controls="events-tab" role="tab" data-toggle="tab">Evénements <span class="badge badge-secondary"><?php echo isset($events) ? count($events) : '0' ?></span></a>
 	    </li>
 	  </ul>
 	  

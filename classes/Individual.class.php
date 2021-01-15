@@ -516,7 +516,7 @@ class Individual {
 	/**
 	 * Obtient l'Url de la photographie de la personne.
 	 *
-	 * @version 06/03/2017
+	 * @version 01/2021
 	 * @return string
 	 */
 	public function getPhotoUrl() {
@@ -525,12 +525,7 @@ class Individual {
 			if (isset ( $this->photo_url )) {
 				return $this->photo_url;
 			} else {
-				$file_extensions = array (
-						'jpg',
-						'jpeg',
-						'gif',
-						'png'
-				);
+				$file_extensions = $system->getImageFileExtensions ();
 
 				// recherche d'un fichier construit à partir de l'id de l'individu.
 				foreach ( $file_extensions as $e ) {
@@ -557,25 +552,25 @@ class Individual {
 		}
 	}
 	/**
-	 * Obtient le chemin d'accès au fichier.
+	 * Obtient le chemin d'accès au fichier photo.
 	 *
+	 * @version 01/2021
 	 * @return string
 	 */
 	public function getPhotoFilePath() {
 		global $system;
-		$file_extensions = array (
-				'jpg',
-				'jpeg',
-				'gif',
-				'png'
-		);
-		$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
+		$file_extensions = $system->getImageFileExtensions ();
+
 		foreach ( $file_extensions as $e ) {
-			$file_name = $file_basename . '.' . $e;
+			$file_name = $this->getId () . '.' . $e;
 			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
 				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name;
 			}
-			$file_name = $this->getId () . '.' . $e;
+		}
+
+		$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
+		foreach ( $file_extensions as $e ) {
+			$file_name = $file_basename . '.' . $e;
 			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
 				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name;
 			}
@@ -584,13 +579,33 @@ class Individual {
 	/**
 	 * Supprime le fichier photo.
 	 *
-	 * @since 02/12/2006
+	 * @since 12/2006
+	 * @version 01/2021
 	 */
 	private function deletePhotoFile() {
-		return unlink ( $this->getPhotoFilePath () );
+		global $system;
+		
+		try {
+			$file_extensions = $system->getImageFileExtensions ();
+			
+			$file_name_patterns = array();
+			$file_name_patterns [] = $this->getId ();
+			$file_name_patterns [] = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
+			
+			foreach ( $file_extensions as $ext ) {
+				foreach ( $file_name_patterns as $file_name_pattern ) {
+					$file_path = $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name_pattern . '.' . $ext;
+					if (is_file ( $file_path )) {
+						unlink ( $file_path );
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$system->reportException ( $e, __METHOD__ );
+			return false;
+		}
 	}
 	/**
-	 *
 	 * @since 08/2014
 	 */
 	public function filePhoto(array $uploadedFile) {
@@ -613,7 +628,7 @@ class Individual {
 	/**
 	 * Indique si une photo est associée à l'individu.
 	 *
-	 * @since 02/12/2006
+	 * @since 12/2006
 	 */
 	private function hasPhoto() {
 		return is_file ( $this->getPhotoFilePath () );
@@ -742,7 +757,7 @@ class Individual {
 
 				$statement = $system->getPdo ()->prepare ( $sql );
 				$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
-				
+
 				if (isset ( $society )) {
 					$statement->bindValue ( ':society_id', $society->getId, PDO::PARAM_INT );
 				}
@@ -782,7 +797,6 @@ class Individual {
 	 * @since 12/2020
 	 */
 	public function getMembershipsToJson(Society $society = NULL) {
-		
 	}
 	/**
 	 * Obtient les participations de l'individu aux sociétés liées à une société donnée
@@ -805,7 +819,7 @@ class Individual {
 
 			$sql = 'SELECT t.*';
 			$sql .= ' FROM (';
-			
+
 			// la liste des sociétés liées (sous-requête)
 			$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 			$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
