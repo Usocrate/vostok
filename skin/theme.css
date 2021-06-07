@@ -9969,7 +9969,8 @@ BUTTON SMALL, A.btn SMALL {
 }
 
 BODY {
-  background-image: url("./images/bg.gif");
+  background-color: #efeae9;
+  background-image: url("./images/bg.svg");
 }
 
 SECTION {

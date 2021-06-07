@@ -487,41 +487,7 @@ class Society {
 		global $system;
 		return $system->getDataDirPath () . DIRECTORY_SEPARATOR . 'thumbnails';
 	}
-	/**
-	 * Obtient un la miniature du site web de la société sous forme de balise Html <img>
-	 *
-	 * @param string $size
-	 * @return string
-	 * @since 27/12/2010
-	 */
-	public function getThumbnailImgTag() {
-		if ($this->hasThumbnail () === false) {
-			$this->getThumbnailFromBluga ();
-		}
-		if ($this->hasThumbnail ()) {
-			$url = '/thumbnails/' . $this->id . '.jpg';
-			return '<img src="' . ToolBox::toHtml ( $url ) . '" />';
-		}
-	}
-	/**
-	 * Obtient un lien vers le site web de la société sous forme de miniature.
-	 *
-	 * @param string $target
-	 * @param string $size
-	 * @return string
-	 * @since 27/12/2010
-	 */
-	public function getHtmlThumbnailLink($target = "_blank") {
-		$html = '<div class="thumbnail">';
-		$html .= '<a';
-		$html .= ' href="' . $this->getUrl () . '"';
-		$html .= ' target="' . $target . '"';
-		$html .= '>';
-		$html .= $this->getThumbnailImgTag ();
-		$html .= '</a>';
-		$html .= '</div>';
-		return $html;
-	}
+
 	/**
 	 * Obtient les données de la société au format JSON
 	 *

@@ -13,6 +13,8 @@ $black:    #000 !default;
 $primary: #da8055;
 $secondary: #7d6f6c;
 
+$bg: $gray-200;
+
 $font-family-sans-serif : "Open Sans";
 $headings-font-family: "Oswald";
 $btn-font-family: "Oswald";
@@ -93,7 +95,8 @@ BUTTON SMALL, A.btn SMALL {
 }
 
 BODY {
-	background-image: url("./images/bg.gif");
+	background-color: $bg;
+	background-image: url('./images/bg.svg');
 }
 
 SECTION {
