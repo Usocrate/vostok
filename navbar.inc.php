@@ -41,7 +41,7 @@
   </div>
 </nav>
 
-<script type="text/javascript">
+<script>
 	$(document).ready(function(){
 
 	    $('#entity_search_i').autocomplete({

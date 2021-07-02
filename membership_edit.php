@@ -194,12 +194,12 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
     <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
-    <script type="text/javascript" src="js/controls.js"></script>
+    <script src="js/controls.js"></script>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
-	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+	<script src="<?php echo JQUERY_URI; ?>"></script>
+	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -382,7 +382,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 		}
 	?>
 	
-	<script type="text/javascript">
+	<script>
 		$(document).ready(function(){
 
 			function checkIndividualMemberships() {

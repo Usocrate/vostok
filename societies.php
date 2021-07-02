@@ -89,11 +89,11 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
     <script type="application/javascript" src="js/controls.js"></script>
-	<script type="text/javascript" src="<?php echo JQUERY_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo MASONRY_URI; ?>"></script>
-	<script type="text/javascript" src="<?php echo IMAGESLOADED_URI ?>"></script>
-	<script type="text/javascript" src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+	<script src="<?php echo JQUERY_URI; ?>"></script>
+	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script src="<?php echo MASONRY_URI; ?>"></script>
+	<script src="<?php echo IMAGESLOADED_URI ?>"></script>
+	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="societiesListDoc">
 <?php include 'navbar.inc.php'; ?>
@@ -239,7 +239,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 		</div>	    
     </div>
 </div>
-<script type="text/javascript">
+<script>
 	$(document).ready(function(){
 		$('#s_city_i').autocomplete({
 			minLength: 1,
