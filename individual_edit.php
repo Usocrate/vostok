@@ -51,14 +51,15 @@ if (isset($_POST['deletion_order'])) {
     if ( ! empty( $_POST['society_id'] ) ) {
         $individual->addMembershipRow($_POST['society_id']);
     }
-    // upload d'un fichier image (à terminer)
+    // upload d'un fichier image
     if ( ! empty ($_FILES['individual_photo_file']) ) {
-        $messages[] = $individual->filePhoto($_FILES['individual_photo_file']) ? 'La photo est mise à jour' : 'Echec de la mise à jour de la photo';
+    	if ($individual->filePhoto($_FILES['individual_photo_file'])) {
+    		header('Location:individual.php?individual_id=' . $individual->getId());
+    		exit;
+    	} else {
+        	$messages[] = 'Echec de la mise à jour de la photo';
+    	}
     }
-
-    header('Location:individual.php?individual_id=' . $individual->getId());
-    exit;
-
 }
 
 $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';

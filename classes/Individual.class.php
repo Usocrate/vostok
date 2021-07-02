@@ -586,7 +586,7 @@ class Individual {
 		global $system;
 		
 		try {
-			$file_extensions = $system->getImageFileExtensions ();
+			$file_extensions = $system->getImageFileExtensions();
 			
 			$file_name_patterns = array();
 			$file_name_patterns [] = $this->getId ();
@@ -607,17 +607,19 @@ class Individual {
 	}
 	/**
 	 * @since 08/2014
+	 * @version 07/2021
 	 */
 	public function filePhoto(array $uploadedFile) {
 		global $system;
 		try {
 			if ($uploadedFile ['size'] > 0) {
+				// nettoyage
+				$this->deletePhotoFile();
+				
+				// enregistrement
 				$a = explode ( '.', $uploadedFile ['name'] );
 				$ext = end ( $a );
 				$targetFilePath = $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $this->getId () . '.' . $ext;
-				if (is_file ( $targetFilePath )) {
-					unlink ( $targetFilePath );
-				}
 				return copy ( $uploadedFile ['tmp_name'], $targetFilePath );
 			}
 		} catch ( Exception $e ) {
