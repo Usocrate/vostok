@@ -57,7 +57,7 @@ $btn-font-size: 1.1rem;
 }
 
 .navbar-brand {
-	color: #da8055 !important;
+	color: $primary !important;
 	font-family: "Sigmar one";
 }
 
@@ -158,7 +158,7 @@ SMALL A I {
 /* autres styles génériques */
 .brand {
 	font-family: 'Sigmar one';
-	color: #da8055;
+	color: $primary;
 }
 
 .brand SMALL {
@@ -217,13 +217,9 @@ SMALL A I {
 	background-color: #eee;
 }
 
-#loginDoc {
-	background-image: url("./images/bg.gif");
-}
-
 #loginDoc div.container {
 	max-width: 496px;
-	background-color: #fff;
+	background-color: $white;
 }
 
 #loginDoc FORM {

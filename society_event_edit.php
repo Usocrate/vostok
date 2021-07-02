@@ -65,7 +65,7 @@ $doc_title = 'Un évènement chez ' . $society->getName();
 <head>
     <title><?php echo ToolBox::toHtml(strip_tags($doc_title)); ?></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
     <script type="text/javascript" src="js/controls.js"></script>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
