@@ -1149,7 +1149,7 @@ class System {
 			$sql .= ' WHERE ' . implode ( ' AND ', $conditions );
 		}
 
-		$sql .= ' GROUP BY i.id ASC';
+		$sql .= ' GROUP BY i.id';
 
 		switch ($sort) {
 			case 'Most used first' :
@@ -1169,7 +1169,7 @@ class System {
 			}
 		}
 
-		$statement->execute ();
+ 		$statement->execute ();
 
 		foreach ( $statement->fetchAll ( PDO::FETCH_ASSOC ) as $item ) {
 			$i = new Industry ();
