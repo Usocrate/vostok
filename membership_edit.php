@@ -290,6 +290,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				</div>
 			</div>
 			
+			<?php if ( empty($_REQUEST['serie']) || strcmp($_REQUEST['serie'], 'similarMembershipInSociety')!=0 || ($lastSavedMembership->hasPhone() || $lastSavedMembership->hasEmail()) ) : ?>
     		<div class="form-row">
 				<div class="form-group col-md-4">
 					<label for="phone_i">Téléphone</label>
@@ -301,6 +302,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 					<input id="email_i" name="email" type="email" value="<?php echo $membership->getEmail(); ?>" size="35" maxlength="255" class="form-control" />
 				</div>
 			</div>
+			<?php endif; ?>
 
 			<div class="form-group">
 				<label for="comment_i">Commentaire</label>

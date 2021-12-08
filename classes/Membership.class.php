@@ -140,7 +140,21 @@ class Membership {
 	    return !empty($this->title);
 	}
 	/**
-	 * @since 27/10/2012
+	 * @since 12/2021
+	 * @return boolean
+	 */
+	public function hasPhone() {
+		return !empty($this->phone);
+	}
+	/**
+	 * @since 12/2021
+	 * @return boolean
+	 */
+	public function hasEmail() {
+		return !empty($this->email);
+	}
+	/**
+	 * @since 10/2012
 	 */
 	private static function getKnownTitles($substring = NULL) {
 		global $system;
