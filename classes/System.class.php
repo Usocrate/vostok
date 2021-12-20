@@ -149,6 +149,7 @@ class System {
 		}
 	}
 	/**
+	 *
 	 * @version 01/2021
 	 */
 	public function getTrombiDirPath() {
@@ -1169,7 +1170,8 @@ class System {
 			}
 		}
 
- 		$statement->execute ();
+		$statement->execute ();
+		// $statement->debugDumpParams();
 
 		foreach ( $statement->fetchAll ( PDO::FETCH_ASSOC ) as $item ) {
 			$i = new Industry ();
@@ -1263,8 +1265,7 @@ class System {
 	 * Obtient la liste d'activités à partir de la liste de leur identifiant.
 	 *
 	 * @return array
-	 * @param
-	 *        	ids array
+	 * @param ids array
 	 * @since 08/2006
 	 * @version 12/2016
 	 */
@@ -1278,7 +1279,7 @@ class System {
 	 *
 	 * @return Industry
 	 * @since 08/2006
-	 * @version 05/2018
+	 * @version 12/2021
 	 */
 	public function mergeIndustries($a, $b) {
 		try {
@@ -1290,9 +1291,13 @@ class System {
 				throw new Exception ( 'On fusionne 2 activités différentes !' );
 
 			if ($b->getSocietiesNb () > $a->getSocietiesNb ()) {
-				return $a->transferSocieties ( $b ) ? $a->delete () : false;
+				if ($a->transferSocieties ( $b ) && $a->delete ()) {
+					return $b;
+				}
 			} else {
-				return $b->transferSocieties ( $a ) ? $b->delete () : false;
+				if ($b->transferSocieties ( $a ) && $b->delete ()) {
+					return $a;
+				}
 			}
 		} catch ( Exception $e ) {
 			$this->reportException ( $e );

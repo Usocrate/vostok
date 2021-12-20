@@ -42,14 +42,14 @@ if (isset($_REQUEST['id'])) {
 						$system->mergeIndustries($industry, $i);
 					}
 				}
-				header('Location:industries.php');
+				header('Location:societies_industries.php');
 				exit;
 			default :
 				trigger_error('La tâche à éxécuter est inconnue');
 		}
 	}
 } else {
-	header('Location:industries.php');
+	header('Location:societies_industries.php');
 	exit;
 }
 
@@ -85,10 +85,12 @@ $h1_content = 'Une activité';
         		</div>
     		</div>
     	</div>
-   	
-    	<button name="task" type="submit" value="registration" class="btn btn-secondary">Enregistrer</button>
-    	<!-- <button name="task" type="submit" value="deletion" class="btn btn-secondary">Supprimer</button> -->
-    	<a href="industries.php">Annuler</a>
+
+		<div>   	
+	    	<a href="societies_industries.php" class="btn btn-link">quitter</a>
+	    	<button name="task" type="submit" value="deletion" class="btn  btn-outline-secondary">supprimer</button>
+	    	<button name="task" type="submit" value="registration" class="btn btn-primary">enregistrer</button>
+    	</div>
     </form>
 </div>
 </body>

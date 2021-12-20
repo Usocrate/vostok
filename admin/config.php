@@ -138,7 +138,8 @@ header ( 'charset=utf-8' );
 					</div>
 				</fieldset>
 			</div>
-			<button name="task_id" type="submit" value="save" class="btn btn-secondary">Enregistrer</button>
+			<a href="../index.php" class="btn btn-link">Quitter</a>
+			<button name="task_id" type="submit" value="save" class="btn btn-primary">Enregistrer</button>
 		</div>
 	</form>
 </div>

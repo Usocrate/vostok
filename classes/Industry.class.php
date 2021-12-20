@@ -72,36 +72,51 @@ class Industry {
 	}
 	/**
 	 * Associe les sociétés exerçant l'activité courante à une autre activité.
-	 * @since 19/08/2006
-	 * @version 23/12/2013
+	 * @since 08/2006
+	 * @version 12/2021
 	 */
 	public function transferSocieties($targetIndustry) {
 		global $system;
 		try {
 			if ( ! is_a($targetIndustry, 'Industry') || ! $targetIndustry->getId() || empty($this->id) ) return false;
 			
-			// seules les sociétés qui ne sont pas déjà associées à l'activité seront transférées
+			$system->getPdo()->beginTransaction();
 			
-			$statement = $system->getPdo()->prepare('SELECT society_id FROM society_industry WHERE industry_id=:targetIndustry_id');
+			// les sociétés déjà enregistrées dans l'activité cible.
+			$sql = 'SELECT society_id FROM society_industry WHERE industry_id=:targetIndustry_id';
+			$statement = $system->getPdo()->prepare($sql);
 			$statement->bindValue(':targetIndustry_id', $targetIndustry->getId(), PDO::PARAM_INT);
 			$statement->execute();
 			$alreadyInIndustry = $statement->fetchAll(PDO::FETCH_COLUMN);
-			
 			$vars = array();
 			for($i=0; $i<count($alreadyInIndustry); $i++) {
 				$vars[':id'.$i] = $alreadyInIndustry[$i];
 			}
-
-			$sql = 'UPDATE society_industry SET industry_id=:targetIndustry_id WHERE industry_id=:id AND society_id NOT IN ('.implode(',', array_keys($vars)).')';
+			
+			// transfert de l'ancienne vers la nouvelle activité à l'exclusion des sociétés qui y sont déjà associées
+			$sql = 'UPDATE society_industry SET industry_id=:targetIndustry_id WHERE industry_id=:id';
+			if (count($vars)>0) {
+				$sql.= ' AND society_id NOT IN ('.implode(',', array_keys($vars)).')';
+			}
 			$statement = $system->getPdo()->prepare($sql);
 			$statement->bindValue(':targetIndustry_id', $targetIndustry->getId(), PDO::PARAM_INT);
 			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
 			foreach ($vars as $key=>$value) {
-				$statement->bindValue($key, $value, PDO::PARAM_INT);	
+				$statement->bindValue($key, $value, PDO::PARAM_INT);
 			}
-			return $statement->execute();
+			$statement->execute();
+			
+			// suppression de l'association des sociétés exclues du transfert à l'ancienne activité
+			$sql = 'DELETE FROM society_industry WHERE industry_id=:id';
+			$statement = $system->getPdo()->prepare($sql);
+			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->execute();
+			
+			return $system->getPdo()->commit();
+
 		} catch (Exception $e) {
 			$system->reportException($e);
+			//$statement->debugDumpParams();
 			exit;
 		}
 	}

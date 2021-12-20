@@ -214,8 +214,7 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 						<input name="targetTitle" type="text" class="form-control"
 							id="title_i" value="membre">
 					</div>
-					<button name="cmd" type="submit" value="transfer"
-						class="btn btn-primary">Lancer le transfert</button>
+					<button name="cmd" type="submit" value="transfer" class="btn btn-primary">lancer le transfert</button>
 				</div>
 			</div>
 		</form>

@@ -24,6 +24,9 @@ if (empty ( $_SESSION ['user_id'] )) {
 if (isset ( $_POST ['task'] )) {
 	ToolBox::formatUserPost($_POST);
 	//print_r($_POST);
+	
+	$fb = new UserFeedBack();
+	
 	switch ($_POST ['task']) {
 		case 'newindustry' :
 			if (! empty ( $_POST ['newindustry_name'] )) {
@@ -35,12 +38,13 @@ if (isset ( $_POST ['task'] )) {
 		case 'industries_merge' :
 			if (isset ( $_POST ['industries_ids'] )) {
 				$industriesToMerge = $system->getIndustriesFromIds($_POST['industries_ids']);
-				//print_r($industriesToMerge);
-				while ( count($industriesToMerge) > 1 ) {
-					$result = array ();
-					$result[] = $system->mergeIndustries(current($industriesToMerge), next($industriesToMerge));
-					array_splice($industriesToMerge, 0, 2, $result);
+				$nb = count($industriesToMerge);
+				$result = null;
+				while (count($industriesToMerge) > 1 ) {
+					$result = $system->mergeIndustries(current($industriesToMerge), next($industriesToMerge));
+					array_splice($industriesToMerge, 0, 2, array ($result));
 				}
+				$fb->addSuccessMessage('Les '.$nb.' activités sélectionnées sont fusionnées ('.$industriesToMerge[0]->getName().')');
 			}
 			break;
 		default :
@@ -86,6 +90,11 @@ $doc_title = 'Les activités exercées';
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<?php 
+	if (isset($fb)) {
+		echo $fb->toHtml(); 
+	}
+	?>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<div class="row">
 			<div class="col-md-6">
@@ -146,7 +155,7 @@ $doc_title = 'Les activités exercées';
 					<tfoot>
 						<tr>
 							<td colspan="3">
-								<button type="submit" name="task" value="industries_merge" class="btn btn-secondary">Fusionner</button>
+								<button type="submit" name="task" value="industries_merge" class="btn btn-primary">fusionner</button>
 							</td>
 						</tr>
 					</tfoot>

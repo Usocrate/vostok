@@ -238,16 +238,18 @@ if ($relationship->areItemsBothKnown()) {
 			    }
 			?>
 			
-			<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
-			<?php if ($relationship->getId()) : ?>
-				<button name="relationship_deletion" type="submit" value="1" class="btn btn-secondary">Supprimer</button>
-			<?php endif; ?>
+			<div>
+				<?php
+	    			if ($relationship->isItemKnown(0)) {
+						echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-link">quitter</a>';
+	    			}
+				?>
+				<?php if ($relationship->getId()) : ?>
+					<button name="relationship_deletion" type="submit" value="1" class="btn btn-outline-secondary">supprimer</button>
+				<?php endif; ?>
+				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+			</div>
 			
-			<?php
-    			if ($relationship->isItemKnown(0)) {
-					echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-secondary">Quitter</a>';
-    			}
-			?>
 		</form>
 	</section>
 </div>

@@ -202,10 +202,13 @@ if (isset ( $item0 ) && isset ( $item1 )) {
     			<a id="relationship_web_link" href="#" style="display: none">[voir]</a>
 			</div>
 			
-			<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
-			<?php if ($relationship->getId()) : ?>
-				<button name="relationship_deletion" type="submit" value="1" class="btn btn-secondary">Supprimer</button>
-			<?php endif; ?>
+			<div>
+				<a href="/" class="btn btn-link">quitter</a>
+				<?php if ($relationship->getId()) : ?>
+					<button name="relationship_deletion" type="submit" value="1" class="btn btn-outline-secondary">supprimer</button>
+				<?php endif; ?>
+				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+			</div>
 		</form>
 	</section>
 </div>

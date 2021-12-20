@@ -354,27 +354,27 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			        echo '</div>';
 			    }
 			?>
-			
-			<button name="task" type="submit" value="membership_submission" class="btn btn-primary">Enregistrer</button>
-			
-			<?php
-    			if (isset($applicant)) {
-
-    			    switch (get_class($applicant)) {
-    			        case 'Society':
-    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-secondary">Quitter</a>';
-    			            break;
-    			        case 'Individual' :
-    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-secondary">Quitter</a>';
-    			            break;
-    			    }
-    			    
-    			}
-			?>
-
-    		<?php if ($membership->hasId()) : ?>
-    			<button name="task" type="submit" value="membership_deletion" class="btn btn-secondary">Supprimer</button>
-    		<?php endif; ?>
+			<div>
+				<?php
+	    			if (isset($applicant)) {
+	    			    switch (get_class($applicant)) {
+	    			        case 'Society':
+	    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-link">quitter</a>';
+	    			            break;
+	    			        case 'Individual' :
+	    			            echo '<a href="'.$applicant->getDisplayUrl().'" class="btn btn-link">quitter</a>';
+	    			            break;
+	    			    }
+	    			}
+				?>
+	
+	    		<?php if ($membership->hasId()) : ?>
+	    			<button name="task" type="submit" value="membership_deletion" class="btn btn-outline-secondary">supprimer</button>
+	    		<?php endif; ?>
+	    		
+				<button name="task" type="submit" value="membership_submission" class="btn btn-primary">enregistrer</button>
+			</div>
+			    		
     	</form>
 	</section>
 	

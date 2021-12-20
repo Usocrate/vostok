@@ -159,8 +159,13 @@ if (isset($_POST['task'])) {
     		</div>
     	</div>
    	
-    	<button name="task" type="submit" value="registration" class="btn btn-primary">Enregistrer</button>
-    	<button name="task" type="submit" value="deletion" class="btn btn-secondary">Supprimer</button>
+    	<div>
+    		<a href="/" class="btn btn-link">quitter</a>
+    		<?php if ($society->hasId()) : ?>
+	    		<button name="task" type="submit" value="deletion" class="btn btn-outline-secondary">supprimer</button>
+	    	<?php endif; ?>
+	    	<button name="task" type="submit" value="registration" class="btn btn-primary">enregistrer</button>
+    	</div>
     </form>
 </div>
 <script>

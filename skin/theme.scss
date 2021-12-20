@@ -83,6 +83,10 @@ I.colored {
 	color: #7d6f6c;
 }
 
+BUTTON, A.btn, LABEL {
+	text-transform: capitalize;
+}
+
 BUTTON SMALL, A.btn SMALL {
 	font-size: 1em !important;
 	color:inherit;
