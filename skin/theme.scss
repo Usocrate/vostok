@@ -61,6 +61,10 @@ $btn-font-size: 1.1rem;
 	font-family: "Sigmar one";
 }
 
+.nav-item {
+	font-family: $btn-font-family;
+}
+
 .nav-item A, .badge A {
 	color: inherit;
 }

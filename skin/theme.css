@@ -9935,6 +9935,10 @@ h3 {
   font-family: "Sigmar one";
 }
 
+.nav-item {
+  font-family: "Oswald";
+}
+
 .nav-item A, .badge A {
   color: inherit;
 }
