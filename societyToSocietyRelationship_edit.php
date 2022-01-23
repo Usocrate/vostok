@@ -245,7 +245,7 @@ if ($relationship->areItemsBothKnown()) {
 	    			}
 				?>
 				<?php if ($relationship->getId()) : ?>
-					<button name="relationship_deletion" type="submit" value="1" class="btn btn-outline-secondary">supprimer</button>
+					<button name="relationship_deletion" type="button" value="1" class="btn btn-outline-secondary">supprimer</button>
 				<?php endif; ?>
 				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">enregistrer</button>
 			</div>

@@ -369,7 +369,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				?>
 	
 	    		<?php if ($membership->hasId()) : ?>
-	    			<button name="task" type="submit" value="membership_deletion" class="btn btn-outline-secondary">supprimer</button>
+	    			<button name="task" type="button" value="membership_deletion" class="btn btn-outline-secondary">supprimer</button>
 	    		<?php endif; ?>
 	    		
 				<button name="task" type="submit" value="membership_submission" class="btn btn-primary">enregistrer</button>

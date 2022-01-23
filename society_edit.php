@@ -166,7 +166,7 @@ if (isset($_POST['task'])) {
     		
     		<?php if ($society->hasId()) : ?>
     		    <a href="society.php?society_id=<?php echo $society->getId() ?>" class="btn btn-link">quitter</a>
-	    		<button name="task" type="submit" value="deletion" class="btn btn-outline-secondary">supprimer</button>
+	    		<button name="task" type="button" value="deletion" class="btn btn-outline-secondary">supprimer</button>
 	    	<?php endif; ?>
 	    	
 	    	<button name="task" type="submit" value="registration" class="btn btn-primary">enregistrer</button>
