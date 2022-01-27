@@ -76,11 +76,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 					echo '</a>';
 				}
 				
-				if ($individual->hasDescription()) {
-					echo '<div class="card-body">';
-					echo Toolbox::toHtml($individual->getDescription());
-					echo '</div>';
-				}
 				if ($individual->getBirthDate()) {
 					echo '<div class="card-body">';
 					echo '<p><small>naissance : </small>'.$individual->getBirthDateFr().'</p>';
@@ -121,6 +116,14 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <li class="nav-item">
 				    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Relations <span class="badge badge-secondary"><?php echo count($relatedIndividuals) ?></span></a>
 			    	</li>
+			    	<?php
+			    		if ($individual->hasDescription()) {
+							echo '<li class="nav-item"><a class="nav-link';
+							if (strcmp($focus,'onDescription')==0) echo ' active';
+							echo '" id="descriptionTabSelector" href="#description-tab" data-toggle="tab">Notes</a></li>';
+							
+						}
+					?>
 			    	<?php
 				    	if ($individual->hasTwitterId()) {
 				    		echo '<li class="nav-item"><a class="nav-link';
@@ -224,6 +227,13 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 						</ul>	    	
 						<?php endif; ?>
 				    </div>
+				    
+					<?php if ($individual->hasDescription()) : ?>
+				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
+				    	<?php echo Toolbox::toHtml($individual->getDescription()); ?>
+				    </div>
+					<?php endif; ?>
+									    
 				    <?php  if ($individual->hasTwitterId()) :?>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onTweets')==0) echo 'active' ?>" id="tweets-tab">
 				    	<?php echo $individual->embedTwitterTimeline(); ?>
@@ -289,9 +299,12 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				  	case 'relationsTabSelector':
 				  		focus = 'onRelatedIndividuals';
 				  		break;
+				  	case 'descriptionTabSelector':
+				  		focus = 'onDescription';
+				  		break;				  		
 				  	case 'tweetsTabSelector':
 				  		focus = 'onTweets';
-				  		break;	
+				  		break;
 				}
 	
 				$.ajax({
