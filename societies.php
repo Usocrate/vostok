@@ -156,13 +156,6 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 						<button type="button" class="btn btn-outline-secondary" onclick="check('society_id[]')">tout cocher</button> /
 						<button type="button" class="btn btn-outline-secondary" onclick="uncheck('society_id[]')">tout décocher</button>
 						<label for="task_id">Pour la sélection :</label>
-			            <!--
-						<select id="task_id" name="task_id">
-							<option value="0">- choisir -</option>
-							<option value="1"<?php if (isset($params['task_id']) && $params['task_id']==1) echo 'selected="selected"' ?>>fusionner</option>
-							<option value="2"<?php if (isset($params['task_id']) && $params['task_id']==2) echo 'selected="selected"' ?>>supprimer</option>
-						</select>
-						-->
 						<button name="task_submission" type="submit" value="1" class="btn btn-secondary">fusionner</button> 
 					</div>
 		    	</form>
