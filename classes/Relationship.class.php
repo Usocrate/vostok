@@ -78,7 +78,12 @@ class Relationship
     {
         return $this->getAttribute('id');
     }
-
+    /**
+     * @since 01/2022
+     */
+    public function hasId() {
+    	return isset($this->id);
+    }
     /**
      * Fixe l'identifiant de la relation.
      *

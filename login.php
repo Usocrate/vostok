@@ -13,7 +13,7 @@ require 'config/boot.php';
 
 session_start();
 
-$fb = new UserFeedBack();
+$fb = new Feedback();
 
 // demande d'anonymat
 if (isset($_REQUEST['anonymat_submission'])) {
@@ -29,7 +29,8 @@ if (empty($_SESSION['user_id'])) {
 			header('Location:index.php');
 			exit;
 		} else {
-		    $fb->addWarningMessage("Pas d'utilisateur reconnu !");
+		    $fb->setMessage("Pas d'utilisateur reconnu !");
+		    $fb->setType('warning');
 		}
 	}
 } else {
@@ -58,7 +59,7 @@ $doc_title = $system->getAppliName();
 	
 	<div>
 		<p><strong><?php echo ToolBox::toHtml($system->getAppliName()); ?> </strong> est l'outil de prospection <a href="https://www.usocrate.fr" title="Lien vers maison-mère">Usocrate.fr</a>.</p>
-		<?php echo $fb->toHtml() ?>
+		<?php echo $fb->messageToHtml() ?>
 	</div>
 	
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">

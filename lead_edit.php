@@ -485,7 +485,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/society_names.json.php',
+	                url:'api/societies/names.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -504,7 +504,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/society_names.json.php',
+	                url:'api/societies/names.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -524,7 +524,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/membership_titles.json.php',
+	                url:'api/memberships/titles.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -554,7 +554,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/membership_departments.json.php',
+	                url:'api/memberships/departments.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term

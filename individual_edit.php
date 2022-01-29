@@ -32,11 +32,7 @@ if (! empty($_REQUEST['individual_id'])) {
     $individual->setLastName($_REQUEST['individual_lastname']);
 }
 
-if (isset($_POST['deletion_order'])) {
-    $individual->delete();
-    header('Location:individuals.php');
-    exit;
-} elseif (isset($_POST['toDB_order'])) {
+if (isset($_POST['toDB_order'])) {
 
     ToolBox::formatUserPost($_POST);
     
@@ -96,6 +92,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
         }
     ?>
   
+	<section>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
 		<?php
 			if (isset($_REQUEST['society_id'])) {
@@ -197,10 +194,36 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 		</div>
 		<div>
 			<a href="/" class="btn btn-link">quitter</a>
-			<!-- <button name="deletion_order" type="button" value="1" class="btn btn-outline-secondary">supprimer</button> -->
 			<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
 		</div>
 	</form>
+	<?php
+		if($individual->hasId()) {
+			echo '<p>Tu veux oublier cet individu ? C\'est <a id="delete_a" href="#">ici</a>.</p>';
+		}
+	?>
+	</section>
 </div>
+<?php if($individual->hasId()): ?>
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+		const delete_a = document.getElementById('delete_a');
+		delete_a.addEventListener('click', function (event) {
+		  event.preventDefault();
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("POST", "api/individuals/", true);
+		  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		  xhr.responseType = 'json';
+		  xhr.onreadystatechange = function () {
+		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+		    	alert(this.response.message);
+		    	window.location.replace(this.response.data.location);
+	    	}				  
+		  };
+		  xhr.send("id=<?php echo $individual->getId() ?>&task=deletion");
+		});
+	});
+</script>
+<?php endif; ?>
 </body>
 </html>

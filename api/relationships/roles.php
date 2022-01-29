@@ -1,15 +1,15 @@
 <?php
 function __autoload($class_name) {
-	$path = '../classes/';
+	$path = '../../classes/';
 	if (is_file ( $path . $class_name . '.class.php' )) {
 		include_once $path . $class_name . '.class.php';
 	} elseif ($path . $class_name . '.interface.php') {
 		include_once $path . $class_name . '.interface.php';
 	}
 }
-$system = new System( '../config/host.json' );
+$system = new System( '../../config/host.json' );
 
-require '../config/boot.php';
+require '../../config/boot.php';
 
 session_start();
 
@@ -22,5 +22,17 @@ $rolePlayerClass = isset($_REQUEST['rolePlayerClass']) ? $_REQUEST['rolePlayerCl
 
 //var_dump($_REQUEST);
 
-echo Relationship::knownRolesToJson($searchPattern, $rolePlayerClass);
+header("Content-type: text/plain");
+
+switch ($_SERVER["REQUEST_METHOD"]) {
+	case 'GET' :
+		echo Relationship::knownRolesToJson($searchPattern, $rolePlayerClass);
+		exit;
+		
+	case 'POST' :
+		exit;
+		
+	case 'DELETE' :
+		exit;
+}
 ?>

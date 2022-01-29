@@ -98,7 +98,7 @@ $(document).ready(function(){
    		source: function( request, response ) {
             $.ajax({
 				method:'GET',
-                url:'api/relationship_roles.json.php',
+                url:'api/relationships/roles.php',
                 dataType: 'json',
                 data:{
                     'searchPattern': request.term,

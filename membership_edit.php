@@ -86,8 +86,6 @@ if (isset($_POST['task'])) {
 			    if (isset($_REQUEST['serie']) && strcmp($_REQUEST['serie'],'none')!=0) {
 					
 					// enchaînement sur la déclaration d'une autre participation
-					
-			        $fb = new UserFeedBack();
 			        
 			        $lastSavedMembership = clone $membership;
 					
@@ -166,12 +164,6 @@ if (isset($_POST['task'])) {
 				}
 			}			
 			break;
-		case 'membership_deletion':
-			// demande de suppression de la participation
-			$individual = $membership->getIndividual();
-			$membership->delete();
-			header('location:individual.php?individual_id='.$individual->getId());
-			exit;
 	}
 }
 
@@ -246,18 +238,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			}
 
 			if (!$membership->isIndividualIdentified()) {
-				//echo '<fieldset>';
-				//echo '<legend>Qui ?</legend>';
 				echo '<div id="individual-form-row" class="form-row">';
-				/*
-				echo '<div class="form-group col-md-2">';
-				echo '<label for="individual_salutation_i">Civilité</label>';
-				echo '<select id="individual_salutation_i" name="individual_salutation" class="form-control">';
-				echo '<option value="">-- choisis --</option>';
-				echo Individual::getSalutationOptionsTags();
-				echo '</select>';
-				echo '</div>';
-				*/
 				echo '<div class="form-group col-md-4">';
 				echo '<label for="individual_firstName_i">Prénom</label>';
 				echo '<input id="individual_firstName_i" name="individual_firstName" type="text" maxlength="255" class="form-control" />';
@@ -267,24 +248,23 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 				echo '<input id="individual_lastName_i" name="individual_lastName" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
 				echo '</div>';
-				//echo '</fieldset>';
 			}
 			?>
 
 			<div class="form-row">
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-4 col-sm-12">
 					<label for="title_i">Fonction</label>
 					<input id="title_i" name="title" type="text" value="<?php echo $membership->getTitle(); ?>" size="35" maxlength="255" class="form-control" />
 				</div>
-				<div class="form-group col-md-4">
+				<div class="form-group col-md-4 col-sm-12">
 					<label for="department_i">Service</label>
 					<input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" class="form-control" /> 
 				</div>
-				<div class="form-group col-md-2">
+				<div class="form-group col-md-2 col-sm-6">
 					<label for="init_year_i">Année d'ouverture</label>
 					<input id="init_year_i" name="init_year" type="text" value="<?php echo $membership->getInitYear(); ?>" size="20" class="form-control" />
 				</div>
-				<div class="form-group col-md-2">
+				<div class="form-group col-md-2 col-sm-6">
 					<label for="end_year_i">Année de clôture</label>
 					<input id="end_year_i" name="end_year" type="text" value="<?php echo $membership->getEndYear(); ?>" size="20" class="form-control" />
 				</div>
@@ -305,7 +285,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			<?php endif; ?>
 
 			<div class="form-group">
-				<label for="comment_i">Commentaire</label>
+				<label for="comment_i">Notes</label>
 				<textarea id="comment_i" name="description" cols="51" rows="5" class="form-control"><?php echo $membership->getDescription(); ?></textarea>
 			</div>
 			
@@ -367,15 +347,15 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 	    			    }
 	    			}
 				?>
-	
-	    		<?php if ($membership->hasId()) : ?>
-	    			<!-- <button name="task" type="button" value="membership_deletion" class="btn btn-outline-secondary">supprimer</button> -->
-	    		<?php endif; ?>
-	    		
 				<button name="task" type="submit" value="membership_submission" class="btn btn-primary">enregistrer</button>
 			</div>
 			    		
     	</form>
+		<?php
+			if($membership->hasId()) {
+				echo '<p>Tu veux oublier cette participation ? C\'est <a id="delete_a" href="#">ici</a>.</p>';
+			}
+		?>
 	</section>
 	
 	<?php
@@ -383,132 +363,152 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 			echo '<nav><p>Voir tous les gens ayant comme fonction <a href="title.php?title='.urlencode($membership->getTitle()).'">'.ToolBox::toHtml($membership->getTitle()).'</a>.</p></nav>';
 		}
 	?>
-	
-	<script>
-		$(document).ready(function(){
-
-			function checkIndividualMemberships() {
-				removeFormerAlerts();
-
-				var exe_condition = $('#individual_firstName_i').val().length>0 && $('#individual_lastName_i').val().length>0;
-				if (exe_condition == false) return false;  
-				
-				$.ajax({
-				  method: "GET",
-				  url: "api/memberships.php",
-				  dataType: "json",
-				  data: {
-					  individual_firstName: $("#individual_firstName_i").val(),
-					  individual_lastName: $("#individual_lastName_i").val(),
-					  society_id: $("#society_id_i").val()}
-				}).done(function( r ) {
-					var titles=[];
-					for (const m of r) {
-						titles.push(m.title);
-					}
-					if (titles.length>0) {
-						var html = '';
-						html+= $('#individual_firstName_i').val()+" "+$('#individual_lastName_i').val()+" est déjà ";
-						for (i=0;i<titles.length;i++) {
-							html+= titles[i];
-							if (i < (titles.length-2)) {
-								html+=', ';
-							} else if(i < (titles.length-1)) {
-								html+=' et ';
-							}
-						}
-						html+='.<br>';
-						
-						displayAlert('individual-form-row', html);
-						//alert(JSON.stringify(r));
-					}
-				});
-			};
-
-			function displayAlert(id, value) {
-				var i = $('#'+id);
-				var aid = id+'_a';
-				if (value !== null && value !== undefined && value.length>0) {
-			        if ($('#'+aid)) {
-			        	$('#'+aid).slideUp('slow').remove();
-			        }
-			        var html = '<div id="'+aid+'" class="alert alert-info">'+value+'</div>';
-			        i.after(html);
-				} else {
-			        if ($('#'+aid)) {
-			        	$('#'+aid).slideUp('slow').remove();
-			        }
-				}
-			};
-		
-			function removeFormerAlerts() {
-				$('.alert').slideUp('slow').remove();
-			};
-			
-			$('#individual_firstName_i').focus();
-
-			$('#s_name_i').autocomplete({
-				minLength: 2,
-		   		source: function( request, response ) {
-		            $.ajax({
-						method:'GET',
-		                url:'api/society_names.json.php',
-		                dataType: 'json',
-		                data:{
-		                    'query': request.term
-		                 },
-		                 dataFilter: function(data,type){
-		                     return JSON.stringify(JSON.parse(data).names);
-		                 },
-		                 success : function(data, textStatus, jqXHR){
-							response(data);
-		                 }
-		         	})
-		   		}
-		   	});
-		    $('#title_i').autocomplete({
-				minLength: 3,
-		   		source: function( request, response ) {
-		            $.ajax({
-						method:'GET',
-		                url:'api/membership_titles.json.php',
-		                dataType: 'json',
-		                data:{
-		                    'query': request.term
-		                 },
-		                 dataFilter: function(data,type){
-		                     return JSON.stringify(JSON.parse(data).titles);
-		                 },
-		                 success : function(data, textStatus, jqXHR){
-							response(data);
-		                 }
-		         	})
-		   		}
-		   	});
-		    $('#department_i').autocomplete({
-				minLength: 3,
-		   		source: function( request, response ) {
-		            $.ajax({
-						method:'GET',
-		                url:'api/membership_departments.json.php',
-		                dataType: 'json',
-		                data:{
-		                    'query': request.term
-		                 },
-		                 dataFilter: function(data,type){
-		                     return JSON.stringify(JSON.parse(data).departments);
-		                 },
-		                 success : function(data, textStatus, jqXHR){
-							response(data);
-		                 }
-		         	})
-		   		}
-		   	});
-		   	
-		    $('#individual_lastName_i').change(checkIndividualMemberships);
-		    $('#individual_firstName_i').change(checkIndividualMemberships);		   	
-		});
-	</script>
 </div>
+<script>
+	$(document).ready(function(){
+
+		function checkIndividualMemberships() {
+			removeFormerAlerts();
+
+			var exe_condition = $('#individual_firstName_i').val().length>0 && $('#individual_lastName_i').val().length>0;
+			if (exe_condition == false) return false;  
+			
+			$.ajax({
+			  method: "GET",
+			  url: "api/memberships/",
+			  dataType: "json",
+			  data: {
+				  individual_firstName: $("#individual_firstName_i").val(),
+				  individual_lastName: $("#individual_lastName_i").val(),
+				  society_id: $("#society_id_i").val()}
+			}).done(function( r ) {
+				var titles=[];
+				for (const m of r) {
+					titles.push(m.title);
+				}
+				if (titles.length>0) {
+					var html = '';
+					html+= $('#individual_firstName_i').val()+" "+$('#individual_lastName_i').val()+" est déjà ";
+					for (i=0;i<titles.length;i++) {
+						html+= titles[i];
+						if (i < (titles.length-2)) {
+							html+=', ';
+						} else if(i < (titles.length-1)) {
+							html+=' et ';
+						}
+					}
+					html+='.<br>';
+					
+					displayAlert('individual-form-row', html);
+					//alert(JSON.stringify(r));
+				}
+			});
+		};
+
+		function displayAlert(id, value) {
+			var i = $('#'+id);
+			var aid = id+'_a';
+			if (value !== null && value !== undefined && value.length>0) {
+		        if ($('#'+aid)) {
+		        	$('#'+aid).slideUp('slow').remove();
+		        }
+		        var html = '<div id="'+aid+'" class="alert alert-info">'+value+'</div>';
+		        i.after(html);
+			} else {
+		        if ($('#'+aid)) {
+		        	$('#'+aid).slideUp('slow').remove();
+		        }
+			}
+		};
+	
+		function removeFormerAlerts() {
+			$('.alert').slideUp('slow').remove();
+		};
+		
+		$('#individual_firstName_i').focus();
+
+		$('#s_name_i').autocomplete({
+			minLength: 2,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'api/societies/names.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).names);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		}
+	   	});
+	    $('#title_i').autocomplete({
+			minLength: 3,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'api/memberships/titles.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).titles);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		}
+	   	});
+	    $('#department_i').autocomplete({
+			minLength: 3,
+	   		source: function( request, response ) {
+	            $.ajax({
+					method:'GET',
+	                url:'api/memberships/departments.php',
+	                dataType: 'json',
+	                data:{
+	                    'query': request.term
+	                 },
+	                 dataFilter: function(data,type){
+	                     return JSON.stringify(JSON.parse(data).departments);
+	                 },
+	                 success : function(data, textStatus, jqXHR){
+						response(data);
+	                 }
+	         	})
+	   		}
+	   	});
+	   	
+	    $('#individual_lastName_i').change(checkIndividualMemberships);
+	    $('#individual_firstName_i').change(checkIndividualMemberships);		   	
+	});
+</script>
+<?php if($membership->hasId()): ?>
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+		const delete_a = document.getElementById('delete_a');
+		delete_a.addEventListener('click', function (event) {
+		  event.preventDefault();
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("POST", "api/memberships/", true);
+		  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		  xhr.responseType = 'json';
+		  xhr.onreadystatechange = function () {
+		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+		    	alert(this.response.message);
+		    	window.location.replace(this.response.data.location);
+	    	}				  
+		  };
+		  xhr.send("id=<?php echo $membership->getId() ?>&task=deletion");
+		});
+	});
+</script>
+<?php endif; ?>
 </body>
 </html>

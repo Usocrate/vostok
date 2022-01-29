@@ -778,10 +778,18 @@ class Individual {
 					$m = new Membership ();
 					$m->setId ( $data ['id'] );
 					$m->setSociety ( $s );
-					$m->setTitle ( $data ['title'] );
-					$m->setDepartment ( $data ['department'] );
-					$m->setDescription ( $data ['description'] );
-					$m->setUrl ( $data ['url'] );
+					if (is_string($data ['title'])) {
+						$m->setTitle ( $data ['title'] );
+					}
+					if (is_string($data ['department'])) {
+						$m->setDepartment ( $data ['department'] );
+					}
+					if (is_string($data ['description'])) {
+						$m->setDescription ( $data ['description'] );
+					}
+					if (is_string($data ['url'])) {
+						$m->setUrl ( $data ['url'] );
+					}
 					$m->setInitYear ( $data ['init_year'] );
 					$m->setEndYear ( $data ['end_year'] );
 

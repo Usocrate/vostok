@@ -34,11 +34,6 @@ $h1_content = $society->hasId() ? $society->getHtmlLinkToSociety() : 'Une nouvel
 
 if (isset($_POST['task'])) {
 	switch ($_POST['task']) {
-		case 'deletion':
-			if (!$society->delete()) trigger_error('échec de la suppression de la société');
-			header('Location:societies.php');
-			exit;
-			break;
 		case 'registration':
 			ToolBox::formatUserPost($_POST);
 			$society->feed($_POST);
@@ -101,7 +96,7 @@ if (isset($_POST['task'])) {
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
     <h1 class="bd-title"><?php echo $h1_content ?></h1>
-    
+    <section>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     	<?php
     	if (isset($_REQUEST['society_id'])) {
@@ -153,7 +148,7 @@ if (isset($_POST['task'])) {
         		</div>
         		
         		<div class="form-group">
-        			<label>Description</label>
+        			<label>Notes</label>
             		<textarea name="society_description" cols="51" rows="5" class="form-control"><?php echo $society->getDescription(); ?></textarea>
             	</div>
     		</div>
@@ -166,12 +161,17 @@ if (isset($_POST['task'])) {
     		
     		<?php if ($society->hasId()) : ?>
     		    <a href="society.php?society_id=<?php echo $society->getId() ?>" class="btn btn-link">quitter</a>
-	    		<button name="task" type="button" value="deletion" class="btn btn-outline-secondary">supprimer</button>
 	    	<?php endif; ?>
 	    	
 	    	<button name="task" type="submit" value="registration" class="btn btn-primary">enregistrer</button>
     	</div>
     </form>
+	<?php
+		if($society->hasId()) {
+			echo '<p>Tu veux oublier cette société ? C\'est <a id="delete_a" href="#">ici</a>.</p>';
+		}
+	?>    
+    </section>
 </div>
 <script>
 	$(document).ready(function(){
@@ -180,7 +180,7 @@ if (isset($_POST['task'])) {
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/society_names.json.php',
+	                url:'api/societies/names.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -196,5 +196,26 @@ if (isset($_POST['task'])) {
 	   	});	    
 	})
 </script>
+<?php if($society->hasId()): ?>
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+		const delete_a = document.getElementById('delete_a');
+		delete_a.addEventListener('click', function (event) {
+		  event.preventDefault();
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("POST", "api/societies/", true);
+		  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		  xhr.responseType = 'json';
+		  xhr.onreadystatechange = function () {
+		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+		    	alert(this.response.message);
+		    	window.location.replace(this.response.data.location);
+	    	}				  
+		  };
+		  xhr.send("id=<?php echo $society->getId() ?>&task=deletion");
+		});
+	});
+</script>
+<?php endif; ?>
 </body>
 </html>

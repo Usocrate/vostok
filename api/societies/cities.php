@@ -1,15 +1,15 @@
 <?php
 function __autoload($class_name) {
-	$path = '../classes/';
+	$path = '../../classes/';
 	if (is_file ( $path . $class_name . '.class.php' )) {
 		include_once $path . $class_name . '.class.php';
 	} elseif ($path . $class_name . '.interface.php') {
 		include_once $path . $class_name . '.interface.php';
 	}
 }
-$system = new System( '../config/host.json' );
+$system = new System( '../../config/host.json' );
 
-require '../config/boot.php';
+require '../../config/boot.php';
 
 session_start();
 
@@ -17,11 +17,4 @@ if (empty($_SESSION['user_id'])) {
 	exit;
 }
 
-$society = new Society();
-if (isset($_REQUEST['society_id'])) {
-	$society->setId($_REQUEST['society_id']);
-}
-$society->initFromDB();
-header("Content-type: text/plain");
-echo $society->getJson();
-?>
+echo empty($_REQUEST['query']) ? Society::knownCitiesToJson() : Society::knownCitiesToJson($_REQUEST['query']);

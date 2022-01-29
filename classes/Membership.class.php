@@ -4,15 +4,15 @@
  * @author Florent Chanavat
  */
 class Membership {
-	public $id;
-	public $society;
-	public $individual;
-	public $title;
-	public $department;
-	public $phone;
-	public $email;
-	public $url;
-	public $description;
+	public int $id;
+	public Society $society;
+	public Individual $individual;
+	public string $title;
+	public string $department;
+	public string $phone;
+	public string $email;
+	public string $url;
+	public string $description;
 	public $init_year;
 	public $end_year;
 	
@@ -24,7 +24,7 @@ class Membership {
 	 * @since 01/2006 
 	 * @version 03/2006
 	 */
-	public function setAttribute($name, $value)	{
+	public function setAttribute(string $name, $value)	{
 		$value = trim($value);
 		$value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
 		return $this->{$name} = $value;
@@ -32,19 +32,19 @@ class Membership {
 	/**
 	 * @since 05/2018
 	 */
-	public function setTitle($input)	{
+	public function setTitle(string $input='') {
 		return $this->title = $input;
 	}
 	/**
 	 * @since 05/2018
 	 */
-	public function setDepartment($input)	{
+	public function setDepartment(string $input='')	{
 		return $this->department = $input;
 	}
 	/**
 	 * @since 05/2018
 	 */
-	public function setDescription($input)	{
+	public function setDescription(string $input='')	{
 		return $this->description = $input;
 	}	
 	/**
@@ -114,9 +114,9 @@ class Membership {
 	/**
 	 * Fixe l'identifiant de la participation.
 	 * @param int $input
-	 * @since 19/11/2005
+	 * @since 11/2005
 	 */
-	public function setId($input) {
+	public function setId(int $input) {
 		return $this->setAttribute('id', $input);
 	}
 	/**
@@ -156,16 +156,16 @@ class Membership {
 	/**
 	 * @since 10/2012
 	 */
-	private static function getKnownTitles($substring = NULL) {
+	private static function getKnownTitles(string $substring = '') {
 		global $system;
 		$sql = 'SELECT title AS value, COUNT(*) AS count FROM membership';
 		$sql.= ' WHERE title IS NOT NULL';
-		if (isset($substring)) {
+		if (!empty($substring)) {
 			$sql.= ' AND title LIKE :pattern';
 		}
 		$sql.= ' GROUP BY title ORDER BY COUNT(*) DESC';
 		$statement = $system->getPdo()->prepare($sql);
-		if (isset($substring)) {
+		if (!empty($substring)) {
 			$statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		}
 		$statement->execute();
@@ -174,7 +174,7 @@ class Membership {
 	/**
 	 * @since 10/2012
 	 */
-	public static function knownTitlesToJson($substring = NULL) {
+	public static function knownTitlesToJson(string $substring = '') {
 		$output = '{"titles":[';
 		$items = self::getKnownTitles($substring);
 		for ($i=0; $i<count($items); $i++) {
@@ -210,12 +210,12 @@ class Membership {
 	/**
 	 * Renvoie l'email utilisé dans le cadre de cette participation.
 	 * @return string
-	 * @since 21/01/2006
+	 * @since 01/2006
 	 */
 	public function getEmail() {
 		return $this->getAttribute('email');
 	}
-	public function setEmail($input) {
+	public function setEmail(string $input) {
 		return $this->setAttribute('email', strtolower($input));
 	}	
 	/**
@@ -240,26 +240,26 @@ class Membership {
 	    return !empty($this->department);
 	}
 	/**
-	 * @since 27/10/2012
+	 * @since 10/2012
 	 */
-	private static function getKnownDepartments($substring = NULL) {
+	private static function getKnownDepartments(string $substring = '') {
 		global $system;
 		$sql = 'SELECT department AS value, COUNT(*) AS count FROM membership WHERE department IS NOT NULL';
-		if (isset($substring)) {
+		if (!empty($substring)) {
 			$sql.= ' AND department LIKE :pattern';
 		}
 		$sql.= ' GROUP BY department ORDER BY COUNT(*) DESC';
 		$statement = $system->getPdo()->prepare($sql);
-		if (isset($substring)) {
+		if (!empty($substring)) {
 			$statement->bindValue(':pattern', '%'.$substring.'%', PDO::PARAM_STR);
 		}
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
 	/**
-	 * @since 27/10/2012
+	 * @since 10/2012
 	 */
-	public static function knownDepartmentsToJson($substring = NULL) {
+	public static function knownDepartmentsToJson(string $substring = '') {
 		$output = '{"departments":[';
 		$items = self::getKnownDepartments($substring);
 		for ($i=0; $i<count($items); $i++) {
@@ -303,7 +303,7 @@ class Membership {
 	 * Fixe la personne impliquée.
 	 * @param Individual $input
 	 */
-	public function setIndividual($input) {
+	public function setIndividual(Individual $input) {
 		if (is_a($input, 'Individual')) $this->individual = $input;
 	}
 	/**
@@ -331,7 +331,7 @@ class Membership {
 	 * @param Society $input
 	 * @version 04/2006	 
 	 */	
-	public function setSociety($input) {
+	public function setSociety(Society $input) {
 		if (is_a($input, 'Society')) $this->society = $input;
 	}
 	/**
@@ -363,7 +363,7 @@ class Membership {
 	/**
 	 * @since 08/2018
 	 */
-	public function setUrl($input) {
+	public function setUrl(string $input) {
 		$this->url = $input;
 	}	
 	/**
@@ -376,7 +376,7 @@ class Membership {
 	/**
 	 * @since 12/2018
 	 */
-	public function getHtmlLinkToIndividual($mode = 'normal') {
+	public function getHtmlLinkToIndividual(string $mode = 'normal') {
 		if ($this->isIndividualIdentified()) {
 			return $this->individual->getHtmlLinkToIndividual($mode);
 		}
@@ -459,7 +459,7 @@ class Membership {
 	 * Supprime la participation en base de données.
 	 * 
 	 * @return boolean
-	 * @version 13/01/2017
+	 * @version 01/2017
 	 */
 	public function delete() {
 		global $system;

@@ -34,26 +34,18 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 	// la participation à traiter est identifiée
 	$relationship->setId ( $_REQUEST ['relationship_id'] );
 	$relationship->feed ();
-	
-	if (isset ( $_POST ['relationship_deletion'] )) {
-		// demande de suppression de la participation
-		$item0 = $relationship->getItem(0);
-		$relationship->delete();
-		header('location:society.php?society_id='.$item0->getId());
-		exit;
-	} else {
-		// récupération des données en base
-		$item0 = $relationship->getItem ( 0 );
-		if (is_object ( $item0 )) {
-			$item0->feed ();
-			$relationship->setItem($item0,0);
-		}
 		
-		$item1 = $relationship->getItem ( 1 );
-		if (is_object ( $item1 )) {
-			$item1->feed ();
-			$relationship->setItem($item1,1);
-		}
+	// récupération des données en base
+	$item0 = $relationship->getItem ( 0 );
+	if (is_object ( $item0 )) {
+		$item0->feed ();
+		$relationship->setItem($item0,0);
+	}
+	
+	$item1 = $relationship->getItem ( 1 );
+	if (is_object ( $item1 )) {
+		$item1->feed ();
+		$relationship->setItem($item1,1);
 	}
 } else {
 	// la relation est nouvelle
@@ -244,13 +236,14 @@ if ($relationship->areItemsBothKnown()) {
 						echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-link">quitter</a>';
 	    			}
 				?>
-				<?php if ($relationship->getId()) : ?>
-					<button name="relationship_deletion" type="button" value="1" class="btn btn-outline-secondary">supprimer</button>
-				<?php endif; ?>
 				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">enregistrer</button>
 			</div>
-			
 		</form>
+		<?php
+		if ($relationship->getId()) {
+			echo '<p>Tu veux oublier cette relation ? C\'est <a id="delete_a" href="#">ici</a>.</p>';
+		}
+		?>		
 	</section>
 </div>
 <script>
@@ -260,7 +253,7 @@ if ($relationship->areItemsBothKnown()) {
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/society_names.json.php',
+	                url:'api/societies/names.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -279,7 +272,7 @@ if ($relationship->areItemsBothKnown()) {
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/society_names.json.php',
+					url:'api/societies/names.php',
 	                dataType: 'json',
 	                data:{
 	                    'query': request.term
@@ -298,7 +291,7 @@ if ($relationship->areItemsBothKnown()) {
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/relationship_roles.json.php',
+	                url:'api/relationships/roles.php',
 	                dataType: 'json',
 	                data:{
 	                    'searchPattern': request.term,
@@ -329,7 +322,7 @@ if ($relationship->areItemsBothKnown()) {
 	   		source: function( request, response ) {
 	            $.ajax({
 					method:'GET',
-	                url:'api/relationship_roles.json.php',
+	                url:'api/relationships/roles.php',
 	                dataType: 'json',
 	                data:{
 	                    'searchPattern': request.term,
@@ -357,5 +350,26 @@ if ($relationship->areItemsBothKnown()) {
 		};	    
 	})
 </script>
+<?php if($relationship->hasId()): ?>
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+		const delete_a = document.getElementById('delete_a');
+		delete_a.addEventListener('click', function (event) {
+		  event.preventDefault();
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("POST", "api/relationships/", true);
+		  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		  xhr.responseType = 'json';
+		  xhr.onreadystatechange = function () {
+		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+		    	alert(this.response.message);
+		    	window.location.replace(this.response.data.location);
+	    	}				  
+		  };
+		  xhr.send("id=<?php echo $relationship->getId() ?>&task=deletion");
+		});
+	});
+</script>
+<?php endif; ?>
 </body>
 </html>

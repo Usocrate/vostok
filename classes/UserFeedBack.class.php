@@ -5,13 +5,14 @@
  * @since 03/2008
  */
 class UserFeedBack {
-	private $messages;
+	private array $messages;
+	
 	public function __construct() {
 		$this->messages = array ();
-		$this->messages ['success'] = array ();
-		$this->messages ['info'] = array ();
-		$this->messages ['warning'] = array ();
-		$this->messages ['danger'] = array ();
+		$this->messages['success'] = array ();
+		$this->messages['info'] = array ();
+		$this->messages['warning'] = array ();
+		$this->messages['danger'] = array ();
 	}
 	
 	/**
@@ -49,6 +50,7 @@ class UserFeedBack {
 	public function DangerMessagesToHtml() {
 		return $this->messagesToHtml ( 'danger' );
 	}
+	
 	private function MessagesToHtml($type) {
 		switch ($type) {
 			case 'success' :
