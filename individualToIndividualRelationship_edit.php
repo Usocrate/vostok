@@ -285,7 +285,9 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 		  xhr.onreadystatechange = function () {
 		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
 		    	alert(this.response.message);
-		    	window.location.replace(this.response.data.location);
+		    	if (this.response.data.location !== undefined) {
+			    	window.location.replace(this.response.data.location);
+		    	}
 	    	}				  
 		  };
 		  xhr.send("id=<?php echo $relationship->getId() ?>&task=deletion");

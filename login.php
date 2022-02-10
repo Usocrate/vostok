@@ -72,7 +72,7 @@ $doc_title = $system->getAppliName();
 	
 	<footer><q>Reçu. Sens bien, excellent état d'esprit, prêt à y aller</q><br /> <cite>Youri Gagarine, 12 avril 1961</cite></footer>
 </div>
-<script type="text/javascript">
+<script>
 	document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById('user_name_i').focus();
 	});

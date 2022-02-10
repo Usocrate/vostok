@@ -217,7 +217,9 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 		  xhr.onreadystatechange = function () {
 		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
 		    	alert(this.response.message);
-		    	window.location.replace(this.response.data.location);
+		    	if (this.response.data.location !== undefined) {
+			    	window.location.replace(this.response.data.location);
+		    	}
 	    	}				  
 		  };
 		  xhr.send("id=<?php echo $individual->getId() ?>&task=deletion");
