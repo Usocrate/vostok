@@ -193,7 +193,14 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 			</div>
 		</div>
 		<div>
-			<a href="/" class="btn btn-link">quitter</a>
+    		<?php if (!$individual->hasId()) : ?>
+    			<a href="individuals.php" class="btn btn-link">quitter</a>
+    		<?php endif; ?>
+    		
+    		<?php if ($individual->hasId()) : ?>
+    		    <a href="individual.php?individual_id=<?php echo $individual->getId() ?>" class="btn btn-link">quitter</a>
+	    	<?php endif; ?>		
+
 			<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
 		</div>
 	</form>
