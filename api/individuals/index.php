@@ -30,12 +30,26 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 		switch($_POST['task']) {
 			case 'deletion':
 				if (isset($_POST['id'])) {
-					$individual = new Individual($_POST['id']);
+					$i = new Individual($_POST['id']);
 				
-					if ($individual->delete()) {
+					if ($i->delete()) {
 						$fb->setMessage('C\'est oublié.');
 						$fb->setType('success');
 						$fb->addDatum('location', $system->getAppliUrl());
+					} else {
+						$fb->setMessage('Mince, problème !');
+						$fb->setType('error');
+					}
+				}
+				break;
+			case 'updateDescription' :
+				if (isset($_POST['id'])) {
+					$i = new Individual($_POST['id']);
+					$i->setDescription($_POST['description']);
+					
+					if ($i->toDB()) {
+						$fb->setMessage('C\'est enregistré.');
+						$fb->setType('success');
 					} else {
 						$fb->setMessage('Mince, problème !');
 						$fb->setType('error');

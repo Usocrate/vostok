@@ -20,9 +20,11 @@ class Society {
 	protected $latitude;
 	protected $altitude;
 	protected $parent;
+	
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
+	
 	/**
 	 * Tente d'indentifier la société par son nom.
 	 *
@@ -37,18 +39,19 @@ class Society {
 		$this->id = $statement->fetch ( PDO::FETCH_COLUMN );
 		return $this->id !== false;
 	}
+	
 	/**
 	 * Obtient la valeur d'un attribut.
 	 */
 	public function getAttribute($name) {
-		if (isset ( $this->$name ))
-			return $this->$name;
+		if (isset ( $this->$name ))	return $this->$name;
 	}
+	
 	/**
 	 * Fixe la valeur d'un attribut.
 	 *
-	 * @since 28/01/2006
-	 * @version 04/03/2006
+	 * @since 01/2006
+	 * @version 03/2006
 	 */
 	public function setAttribute($name, $value) {
 		$value = trim ( $value );
@@ -58,7 +61,7 @@ class Society {
 	/**
 	 * Obtient la longitude
 	 *
-	 * @since 23/06/2007
+	 * @since 06/2007
 	 */
 	public function getLongitude() {
 		return $this->getAttribute ( 'longitude' );
@@ -66,7 +69,7 @@ class Society {
 	/**
 	 * Obtient la latitude
 	 *
-	 * @since 23/06/2007
+	 * @since 06/2007
 	 */
 	public function getLatitude() {
 		return $this->getAttribute ( 'latitude' );
@@ -86,7 +89,7 @@ class Society {
 	/**
 	 * Indique si l'identifiant de la société est connu.
 	 *
-	 * @since 28/12/2010
+	 * @since 12/2010
 	 * @return bool
 	 */
 	public function hasId() {
@@ -94,8 +97,9 @@ class Society {
 	}
 	/**
 	 * Fixe le nom de la société.
+	 * @version 02/2022
 	 */
-	public function setName($input) {
+	public function setName(string $input) {
 		if (! empty ( $input )) {
 			$this->name = $input;
 		}
@@ -286,7 +290,7 @@ class Society {
 	/**
 	 * Obtient la chaîne complète de l'adresse de la société
 	 *
-	 * @since 23/06/2007
+	 * @version 02/2022
 	 * @return string
 	 */
 	public function getAddress() {
@@ -300,10 +304,9 @@ class Society {
 		if ($this->getCity ()) {
 			$elements [] = $this->getCity ();
 		}
-		if (count ( $elements ) > 0) {
-			return implode ( ' ', $elements );
-		}
+		return implode ( ' ', $elements );
 	}
+
 	/**
 	 * Fixe la ville.
 	 */
@@ -313,7 +316,7 @@ class Society {
 	/**
 	 * Fixe les coordonnées géographiques de la société
 	 *
-	 * @since 23/06/2007
+	 * @since 06/2007
 	 */
 	public function setCoordinates($longitude, $latitude, $altitude) {
 		$this->setAttribute ( 'longitude', $longitude );

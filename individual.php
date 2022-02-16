@@ -114,7 +114,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    	<a class="nav-link <?php if (strcmp($focus,'onMemberships')==0) echo ' active' ?>" id="membershipsTabSelector" href="#memberships-tab" data-toggle="tab">Participations <span class="badge badge-secondary"><?php echo count($memberships) ?></span></a>
 			    	</li>
 				    <li class="nav-item">
-				    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" aria-controls="individuals-tab" role="tab" data-toggle="tab">Relations <span class="badge badge-secondary"><?php echo count($relatedIndividuals) ?></span></a>
+				    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" data-toggle="tab">Relations <span class="badge badge-secondary"><?php echo count($relatedIndividuals) ?></span></a>
 			    	</li>
 			    	<?php
 			    		if ($individual->hasDescription()) {
@@ -230,7 +230,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    
 					<?php if ($individual->hasDescription()) : ?>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
-				    	<?php echo Toolbox::toHtml($individual->getDescription()); ?>
+				    	<div id="individual_description_i" style="white-space: pre-wrap;"><?php echo ToolBox::toHtml($individual->getDescription()); ?></div>
 				    </div>
 					<?php endif; ?>
 									    
@@ -316,5 +316,27 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 			});
 		});
 	</script>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			const i = document.getElementById('individual_description_i');
+			if (i!==null) i.contentEditable = true;
+			i.addEventListener('blur', function (event) {
+				  event.preventDefault();
+				  var xhr = new XMLHttpRequest();
+				  xhr.open("POST", "api/individuals/", true);
+				  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				  xhr.responseType = 'json';
+				  xhr.onreadystatechange = function () {
+				    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+				    	alert(this.response.message);
+				    	if (this.response.data.location !== undefined) {
+					    	window.location.replace(this.response.data.location);
+				    	}
+			    	}				  
+				  };
+				  xhr.send("id=<?php echo $individual->getId() ?>&task=updateDescription&description="+i.innerHTML);			
+			});
+		});
+	</script>	
 </body>
 </html>

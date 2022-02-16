@@ -167,7 +167,7 @@ class System {
 
 	/**
 	 *
-	 * @since 01/10/2016
+	 * @since 10/2016
 	 * @return boolean
 	 */
 	public function configFileExists() {
@@ -175,7 +175,7 @@ class System {
 	}
 	/**
 	 *
-	 * @since 01/10/2016
+	 * @since 10/2016
 	 * @throws Exception
 	 * @return boolean
 	 */
@@ -224,7 +224,7 @@ class System {
 	}
 	/**
 	 *
-	 * @since 01/10/2016
+	 * @since 10/2016
 	 * @return number|boolean
 	 */
 	public function saveConfigFile() {
@@ -246,11 +246,10 @@ class System {
 			return false;
 		}
 	}
-
 	/**
 	 * Retourne un PHP Data Object permettant de se connecter à la date de données.
 	 *
-	 * @since 04/08/2014
+	 * @since 08/2014
 	 * @return PDO
 	 */
 	public function getPdo() {

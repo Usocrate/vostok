@@ -107,12 +107,12 @@ if (isset($_POST['task'])) {
     	<div class="row">
     		<div class="col-md-6">
             	<div class="form-group">
-        	    	<label>Nom</label>
-        	    	<input type="text" name="society_name" value="<?php echo ToolBox::toHtml($society->getName()) ?>" size="35" class="form-control" />
+        	    	<label for="society_name_i">Nom</label>
+        	    	<input id="society_name_i" type="text" name="society_name" value="<?php echo ToolBox::toHtml($society->getName()) ?>" size="35" class="form-control" />
         		</div>
         		
         		<div class="form-group">
-            		<label>Maison-mère</label>
+            		<label for="s_parent_name_i">Maison-mère</label>
                 	<?php
 	                	$parentSociety = $society->getParentSociety();
 	                	$value = $parentSociety ? $parentSociety->getName() : '';
@@ -122,33 +122,32 @@ if (isset($_POST['task'])) {
             	</div>
         		
         		<div class="form-group">
-        			<label for="society_url">URL</label>
-        			<input type="url" id="society_web_input" name="society_url" value="<?php echo ToolBox::toHtml($society->getUrl()); ?>" size="55" class="form-control" onchange="javascript:checkUrlInput('society_web_input', 'society_web_link');" /> 
-        			<a id="society_web_link" href="#" style="display: none">[voir]</a>
+        			<label for="society_url_i">URL</label>
+        			<input type="url" id="society_url_i" name="society_url" value="<?php echo ToolBox::toHtml($society->getUrl()); ?>" size="55" class="form-control" onchange="javascript:checkUrlInput('society_web_input', 'society_web_link');" /> 
         		</div>
         		
         		<div class="form-group">
-        			<label>Adresse</small></label>
-        			<input type="text" name="society_address" value="<?php echo ToolBox::toHtml($society->getAddress()); ?>" size="55" class="form-control" />
+        			<label for="society_address_i">Adresse</label>
+        			<input id="society_address_i" type="text" name="society_address" value="<?php echo ToolBox::toHtml($society->getAddress()); ?>" size="55" class="form-control" />
         		</div>
 
         		<div class="form-group">
-        			<label>Téléphone</label>
-        			<input type="tel"	name="society_phone" value="<?php echo ToolBox::toHtml($society->getPhone()); ?>" size="20" class="form-control" />
+        			<label for="society_phone_id">Téléphone</label>
+        			<input id="society_phone_id" type="tel" name="society_phone" value="<?php echo ToolBox::toHtml($society->getPhone()); ?>" size="20" class="form-control" />
         		</div>
     		</div>
     		
     		<div class="col-md-6">
         		<div class="form-group">
-        			<label>Activité</label>
-        			<select name="industries_ids[]" multiple="multiple" size="9"  class="form-control">
+        			<label for="industries_i">Activité</label>
+        			<select id="industries_i" name="industries_ids[]" multiple="multiple" size="9"  class="form-control">
         	    		<option value="">-- choisir --</option>
             			<?php echo $system->getIndustryOptionsTags($society->getIndustriesIds()) ?>
             		</select>
         		</div>
         		
         		<div class="form-group">
-        			<label>Notes</label>
+        			<label for="society_description_i">Notes</label>
             		<textarea name="society_description" cols="51" rows="5" class="form-control"><?php echo $society->getDescription(); ?></textarea>
             	</div>
     		</div>

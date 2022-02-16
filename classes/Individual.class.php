@@ -9,6 +9,7 @@ class Individual {
 	protected $linkedin_id;
 	public $firstName;
 	public $lastName;
+	protected $description;
 	protected $street;
 	protected $city;
 	protected $postalCode;
@@ -95,10 +96,33 @@ class Individual {
 				return $this->{$name} = $value;
 		}
 	}
+	/**
+	 * Fixe le prénom.
+	 */
+	public function setFirstName($name) {
+		if (! empty ( $name ))
+			$this->firstName = $name;
+	}
+	/**
+	 * Fixe le nom.
+	 */
+	public function setLastName($name) {
+		if (! empty ( $name ))
+			$this->lastName = $name;
+	}
+	/**
+	 * Fixe la description.
+	 *
+	 * @since 02/2022
+	 */
+	public function setDescription(string $input) {
+		$this->description = $input;
+	}
+	
 	public function getAttribute($name) {
 		return isset ( $this->{$name} ) ? $this->{$name} : NULL;
 	}
-
+	
 	/**
 	 * Obtient le lieu de résidence de l'individu.
 	 */
@@ -224,7 +248,7 @@ class Individual {
 	/**
 	 * Obtient la civilité.
 	 *
-	 * @since 24/09/2006
+	 * @since 09/2006
 	 */
 	public function getSalutation() {
 		return $this->getAttribute ( 'salutation' );
@@ -251,20 +275,6 @@ class Individual {
 			$html .= '</option>';
 		}
 		return $html;
-	}
-	/**
-	 * Fixe le prénom.
-	 */
-	public function setFirstName($name) {
-		if (! empty ( $name ))
-			$this->firstName = $name;
-	}
-	/**
-	 * Fixe le nom.
-	 */
-	public function setLastName($name) {
-		if (! empty ( $name ))
-			$this->lastName = $name;
 	}
 	/**
 	 *
@@ -295,7 +305,7 @@ class Individual {
 	 * Obtient le prénom de l'individu.
 	 *
 	 * @return string
-	 * @since 19/11/2005
+	 * @since 11/2005
 	 */
 	public function getFirstName() {
 		return $this->getAttribute ( 'firstName' );
@@ -304,7 +314,7 @@ class Individual {
 	 * Obtient le nom de famille de l'individu.
 	 *
 	 * @return string
-	 * @since 19/11/2005
+	 * @since 11/2005
 	 */
 	public function getLastName() {
 		return $this->getAttribute ( 'lastName' );
@@ -584,14 +594,14 @@ class Individual {
 	 */
 	private function deletePhotoFile() {
 		global $system;
-		
+
 		try {
-			$file_extensions = $system->getImageFileExtensions();
-			
-			$file_name_patterns = array();
+			$file_extensions = $system->getImageFileExtensions ();
+
+			$file_name_patterns = array ();
 			$file_name_patterns [] = $this->getId ();
 			$file_name_patterns [] = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
-			
+
 			foreach ( $file_extensions as $ext ) {
 				foreach ( $file_name_patterns as $file_name_pattern ) {
 					$file_path = $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name_pattern . '.' . $ext;
@@ -600,12 +610,13 @@ class Individual {
 					}
 				}
 			}
-		} catch (Exception $e) {
+		} catch ( Exception $e ) {
 			$system->reportException ( $e, __METHOD__ );
 			return false;
 		}
 	}
 	/**
+	 *
 	 * @since 08/2014
 	 * @version 07/2021
 	 */
@@ -614,8 +625,8 @@ class Individual {
 		try {
 			if ($uploadedFile ['size'] > 0) {
 				// nettoyage
-				$this->deletePhotoFile();
-				
+				$this->deletePhotoFile ();
+
 				// enregistrement
 				$a = explode ( '.', $uploadedFile ['name'] );
 				$ext = end ( $a );
@@ -711,8 +722,8 @@ class Individual {
 	/**
 	 * Obtient le nombre de participations enregistrées en base de données.
 	 *
-	 * @since 15/08/2006
-	 * @version 03/01/2017
+	 * @since 08/2006
+	 * @version 01/2017
 	 */
 	public function getMembershipsRowsNb() {
 		global $system;
@@ -778,16 +789,16 @@ class Individual {
 					$m = new Membership ();
 					$m->setId ( $data ['id'] );
 					$m->setSociety ( $s );
-					if (is_string($data ['title'])) {
+					if (is_string ( $data ['title'] )) {
 						$m->setTitle ( $data ['title'] );
 					}
-					if (is_string($data ['department'])) {
+					if (is_string ( $data ['department'] )) {
 						$m->setDepartment ( $data ['department'] );
 					}
-					if (is_string($data ['description'])) {
+					if (is_string ( $data ['description'] )) {
 						$m->setDescription ( $data ['description'] );
 					}
-					if (is_string($data ['url'])) {
+					if (is_string ( $data ['url'] )) {
 						$m->setUrl ( $data ['url'] );
 					}
 					$m->setInitYear ( $data ['init_year'] );
