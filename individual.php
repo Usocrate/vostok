@@ -90,6 +90,18 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				if ($individual->hasLinkedinId()) {
 					$links[] = $individual->getHtmlLinkToLinkedin();
 				}
+				if ($individual->getAddress()) {
+					$links[] = $individual->getAddress();
+				}
+				if ($individual->getPhoneNumber()) {
+					$links[] = $individual->getHtmlLinkToPhoneCall();
+				}
+				if ($individual->getMobilePhoneNumber()) {
+					$links[] = $individual->getHtmlLinkToMobilePhoneCall();
+				}
+				if ($individual->getEmailAddress()) {
+					$links[] = $individual->getEmailHtml();
+				}
 				if ($individual->getWeb()) {
 					$links[] = $individual->getHtmlLinkToWeb();
 				}
@@ -103,8 +115,8 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 					}
 					echo '</ul>';
 				}
-			?>			
-		</div>
+			?>
+			</div>
     	</div>
 	    <div class="col-lg">
 	    	<div>
@@ -116,14 +128,9 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <li class="nav-item">
 				    	<a class="nav-link <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo ' active' ?>" id="relationsTabSelector" href="#relations-tab" data-toggle="tab">Relations <span class="badge badge-secondary"><?php echo count($relatedIndividuals) ?></span></a>
 			    	</li>
-			    	<?php
-			    		if ($individual->hasDescription()) {
-							echo '<li class="nav-item"><a class="nav-link';
-							if (strcmp($focus,'onDescription')==0) echo ' active';
-							echo '" id="descriptionTabSelector" href="#description-tab" data-toggle="tab">Notes</a></li>';
-							
-						}
-					?>
+				    <li class="nav-item">
+				    	<a class="nav-link <?php if (strcmp($focus,'onDescription')==0) echo ' active' ?>" id="descriptionTabSelector" href="#description-tab" data-toggle="tab">Notes</span></a>
+			    	</li>			    	
 			    	<?php
 				    	if ($individual->hasTwitterId()) {
 				    		echo '<li class="nav-item"><a class="nav-link';
@@ -227,12 +234,9 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 						</ul>	    	
 						<?php endif; ?>
 				    </div>
-				    
-					<?php if ($individual->hasDescription()) : ?>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
-				    	<div id="individual_description_i" style="white-space: pre-wrap;"><?php echo ToolBox::toHtml($individual->getDescription()); ?></div>
+				    	<div id="individual_description_i" style="white-space: pre-wrap;"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...)'; ?></div>
 				    </div>
-					<?php endif; ?>
 									    
 				    <?php  if ($individual->hasTwitterId()) :?>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onTweets')==0) echo 'active' ?>" id="tweets-tab">
@@ -241,48 +245,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <?php endif; ?>
 		</div>
 			</div>
-	    </div>
-	    <div class="col-lg-3">
-	    	<div class="card" style="width:100%">
-	    		<div class="card-header text-center"><i class="fab fa-google"></i></div>
-	    		<ul class="list-group list-group-flush">
-	    			<?php
-	    				$links = array();
-						$links[] = '<a href="'.$individual->getGoogleQueryUrl().'" target="_blank">'.Toolbox::toHtml($individual->hasFirstName() ? $individual->getFirstName() : $individual->getWholeName()).' chez Google</a>';
-						$links[] = '<a href="'.$individual->getGoogleQueryUrl('vidéos').'" target="_blank">En vidéo</a>';
-						$links[] = '<a href="'.$individual->getGoogleQueryUrl('actualités').'" target="_blank">Actualités</a>';
-						foreach ($links as $l) {
-							echo '<li class="list-group-item"><small>'.$l.'</small></li>';
-						}
-	    			?>
-	    		</ul>
-			</div>
-	    	
-    		<?php
-				// coordonnées
-				$contact_data = array();
-				if ($individual->getAddress()) {
-					$contact_data[] = $individual->getAddress();
-				}
-				if ($individual->getPhoneNumber()) {
-					$contact_data[] = $individual->getHtmlLinkToPhoneCall();
-				}
-				if ($individual->getMobilePhoneNumber()) {
-					$contact_data[] = $individual->getHtmlLinkToMobilePhoneCall();
-				}
-				if ($individual->getEmailAddress()) {
-					$contact_data[] = $individual->getEmailHtml();
-				}
-				if (count($contact_data) >0) {
-					echo '<div class="card"><div class="card-header">Coordonnées</div>';
-					echo '<ul class="list-group list-group-flush">';
-					foreach ($contact_data as $d) {
-						echo '<li class="list-group-item">'.$d.'</li>';
-					}
-					echo '</ul></div>';
-				}
-			?>
-			
 	    </div>
   	</div>
 
@@ -319,8 +281,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	<script>
 		document.addEventListener("DOMContentLoaded", function() {
 			const i = document.getElementById('individual_description_i');
-			if (i!==null) i.contentEditable = true;
-			i.addEventListener('blur', function (event) {
+			if (i!==null) {
+				i.contentEditable = true;
+				//i.focus();
+				i.addEventListener('blur', function (event) {
 				  event.preventDefault();
 				  var xhr = new XMLHttpRequest();
 				  xhr.open("POST", "api/individuals/", true);
@@ -334,8 +298,9 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    	}
 			    	}				  
 				  };
-				  xhr.send("id=<?php echo $individual->getId() ?>&task=updateDescription&description="+i.innerHTML);			
-			});
+				  xhr.send("id=<?php echo $individual->getId() ?>&task=updateDescription&description="+encodeURIComponent(i.innerHTML));			
+				});
+			}
 		});
 	</script>	
 </body>

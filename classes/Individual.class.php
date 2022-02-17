@@ -400,10 +400,10 @@ class Individual {
 		return 'individual.php?individual_id=' . $this->getId ();
 	}
 	public function getHtmlLinkToPhoneCall() {
-		return '<a href="tel:' . $this->getPhoneNumber () . '">' . $this->getPhoneNumber () . '</a>';
+		return '<i class="fas fa-phone"></i> <a href="tel:' . $this->getPhoneNumber () . '">' . $this->getPhoneNumber () . '</a>';
 	}
 	public function getHtmlLinkToMobilePhoneCall() {
-		return '<a href="tel:' . $this->getMobilePhoneNumber () . '">' . $this->getMobilePhoneNumber () . '</a>';
+		return '<i class="fas fa-mobile-alt"></i> <a href="tel:' . $this->getMobilePhoneNumber () . '">' . $this->getMobilePhoneNumber () . '</a>';
 	}
 	/**
 	 *
@@ -521,7 +521,7 @@ class Individual {
 	 */
 	public function getEmailHtml() {
 		if ($this->getAttribute ( 'email' ))
-			return '<a href="mailto:' . $this->getAttribute ( 'email' ) . '">' . $this->getAttribute ( 'email' ) . '</a>';
+			return '<i class="fas fa-envelope"></i> <a href="mailto:' . $this->getAttribute ( 'email' ) . '">' . $this->getAttribute ( 'email' ) . '</a>';
 	}
 	/**
 	 * Obtient l'Url de la photographie de la personne.

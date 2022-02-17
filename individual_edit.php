@@ -155,7 +155,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 						<input id="individual_birth_date_i" type="date" name="individual_birth_date" value="<?php echo ToolBox::toHtml($individual->getBirthDate()) ?>" size="10" class="form-control" />
 					</div>
 					<div class="form-group">
-    					<label for="individual_description_i">Description</label>
+    					<label for="individual_description_i">Notes</label>
     					<textarea id="individual_description_i" cols="51" rows="5" name="individual_description" class="form-control"><?php echo $individual->getDescription(); ?></textarea>
 					</div>
 					
