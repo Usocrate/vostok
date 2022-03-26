@@ -1264,7 +1264,8 @@ class System {
 	 * Obtient la liste d'activités à partir de la liste de leur identifiant.
 	 *
 	 * @return array
-	 * @param ids array
+	 * @param
+	 *        	ids array
 	 * @since 08/2006
 	 * @version 12/2016
 	 */
@@ -1447,6 +1448,39 @@ class System {
 			return $statement->fetchAll ( PDO::FETCH_ASSOC );
 		} catch ( Exception $e ) {
 			error_log ( $e->getMessage () );
+		}
+	}
+	/**
+	 *
+	 * @param Society $s
+	 * @return boolean
+	 * @since 03/2022
+	 */
+	public function removeSocietyFromDB(Society $s) {
+		if (empty ( $s->getId () ))
+			return false;
+
+		try {
+			$this->getPdo ()->beginTransaction ();
+
+			$statement = $this->getPdo ()->prepare ( 'DELETE FROM relationship WHERE (item0_id=:item0_id AND item0_class=:item0_class) OR (item1_id=:item1_id AND item1_class=:item1_class)' );
+			$statement->bindValue ( ':item0_id', $s->getId (), PDO::PARAM_INT );
+			$statement->bindValue ( ':item0_class', 'Society', PDO::PARAM_STR );
+			$statement->bindValue ( ':item1_id', $s->getId (), PDO::PARAM_INT );
+			$statement->bindValue ( ':item1_class', 'Society', PDO::PARAM_STR );
+			$statement->execute ();
+
+			$statement = $this->getPdo ()->prepare ( 'DELETE FROM society WHERE society_id = :id' );
+			$statement->bindValue ( ':id', $s->getId (), PDO::PARAM_INT );
+			$statement->execute ();
+
+			return $this->getPdo ()->commit ();
+		} catch ( Exception $e ) {
+			$this->reportException ( __METHOD__, $e );
+			if ($this->getPdo ()->inTransaction ()) {
+				$this->getPdo ()->rollBack ();
+			}
+			return false;
 		}
 	}
 }

@@ -726,7 +726,7 @@ class Society {
 	/**
 	 * Supprime de la base de données les enregistrements des participations (les personnes associées sont supprimées si elles n'ont pas d'autres participations).
 	 *
-	 * @since 15/Bonne journé08/2006
+	 * @since 08/2006
 	 */
 	public function deleteMemberships() {
 		$errorless = true;
@@ -742,7 +742,7 @@ class Society {
 	 * Obtient la liste des membres sous forme de balises Html <option>.
 	 *
 	 * @return string
-	 * @since 25/06/2006
+	 * @since 06/2006
 	 */
 	public function getMembersOptionsTags($valueToSelect = NULL) {
 		$html = '';
@@ -919,29 +919,6 @@ class Society {
 		$statementB->bindValue ( ':class', get_class ( $this ), PDO::PARAM_STR );
 
 		return $statementA->execute () && $statementB->execute ();
-	}
-	/**
-	 * Supprime de la base de données les enregistrements des relations avec des personnes ou d'autres sociétés.
-	 *
-	 * @since 15/08/2006
-	 * @version 03/06/2017
-	 */
-	public function deleteRelationships() {
-		global $system;
-		if (empty ( $this->id )) {
-			return false;
-		}
-		$sql = 'DELETE FROM relationship';
-		$sql .= ' WHERE (item0_id=:item0_id AND item0_class=:item0_class)';
-		$sql .= ' OR (item1_id=:item1_id AND item1_class=:item1_class)';
-
-		$statement = $system->getPdo ()->prepare ( $sql );
-		$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
-		$statement->bindValue ( ':item0_class', get_class ( $this ), PDO::PARAM_STR );
-		$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
-		$statement->bindValue ( ':item1_class', get_class ( $this ), PDO::PARAM_STR );
-
-		return $statement->execute ();
 	}
 	/**
 	 * Obtient les pistes associées à la société.
@@ -1175,27 +1152,15 @@ class Society {
 		return $result;
 	}
 	/**
-	 * Efface l'enregistrement de la société en base de données.
-	 *
-	 * @return boolean
-	 * @version 15/08/2006
-	 */
-	protected function deleteRow() {
-		global $system;
-		if (empty ( $this->id ))
-			return false;
-		$statement = $system->getPdo ()->prepare ( 'DELETE FROM society WHERE society_id = :id' );
-		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
-		return $statement->execute ();
-	}
-	/**
 	 * Supprime la société de la base de données ainsi que toutes les données associées (pistes, participations, etc).
 	 *
 	 * @return boolean
-	 * @since 15/08/2006
+	 * @since 08/2006
+	 * @version 03/2022
 	 */
 	public function delete() {
-		return $this->deleteLeads () && $this->deleteMemberships () && $this->deleteRelationships () && $this->deleteIndustries () && $this->deleteRow ();
+		global $system;
+		return $system->removeSocietyFromDB($this);
 	}
 }
 ?>
