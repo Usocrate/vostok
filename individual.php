@@ -235,7 +235,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 						<?php endif; ?>
 				    </div>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
-				    	<div id="individual_description_i" style="white-space: pre-wrap;"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...)'; ?></div>
+				    	<div id="individual_description_i" style="white-space: pre-wrap;"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...'; ?></div>
 				    </div>
 									    
 				    <?php  if ($individual->hasTwitterId()) :?>
