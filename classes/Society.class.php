@@ -669,7 +669,7 @@ class Society {
 			// WHERE
 			$sql .= ' WHERE ms.society_id=:id';
 			// ORDER BY
-			$sql .= ' ORDER BY i.individual_lastName ASC';
+			$sql .= ' ORDER BY ms.weight DESC, i.individual_lastName ASC';
 
 			$statement = $system->getPdo ()->prepare ( $sql );
 

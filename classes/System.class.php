@@ -417,7 +417,7 @@ class System {
 	 */
 	public function getMemberships($criteria = NULL, $sort = 'Last updated first', $offset = 0, $count = NULL) {
 		try {
-			$sql = 'SELECT m.membership_id AS id, m.individual_id, m.society_id, m.title, m.department, m.description, m.init_year, m.end_year, m.timestamp';
+			$sql = 'SELECT m.membership_id AS id, m.individual_id, m.society_id, m.title, m.department, m.description, m.weight, m.init_year, m.end_year, m.timestamp';
 			$sql .= ', i.individual_firstName, i.individual_lastName';
 			$sql .= ', s.society_name, s.society_city';
 			$sql .= ' FROM membership AS m';
@@ -442,6 +442,10 @@ class System {
 				$where [] = 'm.title = :title';
 			}
 
+			if (isset ( $criteria ['minWeight'] )) {
+				$where [] = 'm.weight >= :minWeight';
+			}
+			
 			if (isset ( $criteria ['active'] ) && $criteria ['active'] === true) {
 				$where [] = 'm.end_year IS NULL';
 			}
@@ -476,6 +480,12 @@ class System {
 
 			// ORDER
 			switch ($sort) {
+				case 'Weightest first' :
+					$sql .= ' ORDER BY m.weight DESC, i.individual_lastName ASC';
+					break;
+				case 'Weightest last' :
+					$sql .= ' ORDER BY m.weight ASC, i.individual_lastName ASC';
+					break;
 				case 'Last updated first' :
 					$sql .= ' ORDER BY m.timestamp DESC';
 					break;
@@ -502,6 +512,9 @@ class System {
 			}
 			if (isset ( $criteria ['title'] )) {
 				$statement->bindValue ( ':title', $criteria ['title'], PDO::PARAM_STR );
+			}
+			if (isset ( $criteria ['minWeight'] )) {
+				$statement->bindValue ( ':minWeight', $criteria ['minWeight'], PDO::PARAM_INT);
 			}
 			if (isset ( $criteria ['society_name_like_pattern'] )) {
 				$statement->bindValue ( ':society_name_like_pattern', '%' . $criteria ['society_name_like_pattern'] . '%', PDO::PARAM_STR );
@@ -555,6 +568,7 @@ class System {
 				$m->setTitle ( $data ['title'] );
 				$m->setDepartment ( $data ['department'] );
 				$m->setDescription ( $data ['description'] );
+				$m->setWeight ( $data ['weight'] );
 				$m->setInitYear ( $data ['init_year'] );
 				$m->setEndYear ( $data ['end_year'] );
 				// $m->setTimestamp($data['timestamp']);
@@ -579,6 +593,47 @@ class System {
 	}
 	/**
 	 *
+	 * @since 04/2022
+	 */
+	public function getFirstWeighterMembershipInSociety(Membership $m) {
+		$criteria = array (
+				'minWeight' => $m->getWeight()+1, 'society_id' => $m->getSociety()->getId()
+		);
+		$result = $this->getMemberships ( $criteria, 'Weightest last', 0, 1 );
+		return count($result)>0 ? $result[0] : null;
+	}
+	/**
+	 * @since 04/2022
+	 * @param Membership $m
+	 */
+	public function setMembershipAsWeightestInSociety(Membership $m) {
+		$weightest = getWeightestMembershipInSociety($m->getSociety());
+		$m->setWeight($weightest->getWeight()+1);
+		return $m->toDB();
+	}
+	
+	/**
+	 * @since 04/2022
+	 * @param Society $s
+	 * @return array|Membership[]
+	 */
+	public function getWeightestMembershipInSociety(Society $s) {
+		$criteria = array ('society_id' => $s->getId());
+		return $this->getMemberships ( $criteria, 'Weighter first');
+	}
+
+	/**
+	 * @since 04/2022
+	 */
+	public function getMembershipMaxWeightInSociety(Society $s) {
+		$sql = 'SELECT weight FROM membership WHERE society_id=:society_id ORDER BY weight DESC LIMIT 0,1';
+		$statement = $this->getPdo ()->prepare ( $sql );
+		$statement->bindValue ( ':society_id', $s->getId(), PDO::PARAM_INT );
+		$statement->execute ();
+		return $statement->fetchColumn();
+	}
+	
+	/**
 	 * @since 12/2018
 	 */
 	public function getMembershipTitles($sort = 'Alphabetical') {

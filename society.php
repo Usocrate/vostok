@@ -260,7 +260,6 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						    echo '</p>';
     						    if ( current($memberships)->hasDescription() ) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDescription()).'</small></p>';
     						    //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
-    						    
     						    echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
     						    echo '</div>';
     						}

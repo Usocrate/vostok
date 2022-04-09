@@ -354,6 +354,7 @@ if ($membership->isSocietyIdentified() && $membership->isIndividualIdentified())
 		<?php
 			if($membership->hasId()) {
 				echo '<p>Tu veux oublier cette participation ? C\'est <a id="delete_a" href="#">ici</a>.</p>';
+				echo '<p>Pour positionner la participation par rapport aux autres, c\'est <a href="membership_weight_edit.php?membership_id='.$membership->getId().'">là</a>.</p>';
 			}
 		?>
 	</section>
