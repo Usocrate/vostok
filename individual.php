@@ -172,11 +172,11 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								if (count($more)>0) {
 									echo '<div><small>'.implode(' - ', $more).'</small></div>';
 								}					
-								
-								if ($ms->getDescription()) {
-									echo '<p>'.ToolBox::toHtml($ms->getDescription()).'</p>';
-								}
-								
+																
+								echo '<div class="membership-description-area" data-ms-id="'.$ms->getId().'">';
+								echo $ms->hasDescription() ? $ms->getDescription() : 'Il était une fois...';
+								echo '</div>';
+																
 								if ($ms->getUrl()) {
 									echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
 								}
@@ -235,7 +235,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 						<?php endif; ?>
 				    </div>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
-				    	<div id="individual_description_i" style="white-space: pre-wrap;"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...'; ?></div>
+				    	<div id="individual_description_i" class="individual-description-area"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...'; ?></div>
 				    </div>
 									    
 				    <?php  if ($individual->hasTwitterId()) :?>
@@ -292,7 +292,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				  xhr.responseType = 'json';
 				  xhr.onreadystatechange = function () {
 				    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-				    	alert(this.response.message);
+				    	//alert(this.response.message);
 				    	if (this.response.data.location !== undefined) {
 					    	window.location.replace(this.response.data.location);
 				    	}
@@ -301,7 +301,28 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				  xhr.send("id=<?php echo $individual->getId() ?>&task=updateDescription&description="+encodeURIComponent(i.innerHTML));			
 				});
 			}
+			
+			var items = document.getElementsByClassName('membership-description-area');
+			Array.prototype.filter.call(items, function(i){
+				i.contentEditable = true;
+				i.addEventListener('blur', function (event) {
+				  event.preventDefault();
+				  var xhr = new XMLHttpRequest();
+				  xhr.open("POST", "api/memberships/", true);
+				  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				  xhr.responseType = 'json';
+				  xhr.onreadystatechange = function () {
+				    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+				    	//alert(this.response.message);
+				    	if (this.response.data.location !== undefined) {
+					    	window.location.replace(this.response.data.location);
+				    	}
+			    	}				  
+				  };
+				  xhr.send("id="+i.dataset.msId+"&task=updateDescription&description="+encodeURIComponent(i.innerHTML));			
+				});
+			});
 		});
-	</script>	
+	</script>
 </body>
 </html>

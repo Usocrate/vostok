@@ -52,13 +52,13 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 		switch($_POST['task']) {
 			case 'deletion':
 				if (isset($_POST['id'])) {
-					$membership = new Membership($_POST['id']);
-					if ($membership->feed()) {
-						$membership->feedIndividual();
+					$m = new Membership($_POST['id']);
+					if ($m->feed()) {
+						$m->feedIndividual();
 					}
-					$individual = $membership->getIndividual();
+					$individual = $m->getIndividual();
 					
-					if ( $membership->delete() ) {
+					if ( $m->delete() ) {
 						$fb->setMessage('La participation est oubliée.');
 						$fb->setType('success');
 						if (is_a($individual, 'Individual')) {
@@ -68,6 +68,21 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 						}
 					} else {
 						$fb->setMessage('La participation n\'a pu être effacée');
+						$fb->setType('error');
+					}
+				}
+				break;
+				
+			case 'updateDescription' :
+				if (isset($_POST['id'])) {
+					$m = new Membership($_POST['id']);
+					$m->setDescription($_POST['description']);
+					
+					if ($m->toDB()) {
+						$fb->setMessage('C\'est enregistré.');
+						$fb->setType('success');
+					} else {
+						$fb->setMessage('Mince, problème !');
 						$fb->setType('error');
 					}
 				}

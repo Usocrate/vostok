@@ -107,7 +107,7 @@ $doc_title = 'Accueil';
 						echo ToolBox::toHtml( $item['industry']->getName() );
 						echo '</a></span>';
 					}
-					echo '<span class="seeMore" style="padding:0 1em"><a href="industries.php">Toutes les activités</a> <i class="fas fa-angle-right"></i></span>';
+					echo '<span style="padding:0 1em"><a href="industries.php">Toutes les activités</a></span>';
 					echo '</div>';
 
 					switch($people_focus) {

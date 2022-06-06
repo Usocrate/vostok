@@ -10077,23 +10077,9 @@ SMALL A I {
   font-weight: inherit;
 }
 
-.seeMore {
-  text-align: right;
+DIV.individual-description-area, DIV.membership-description-area {
+  white-space: pre-wrap;
   margin: 1em 0;
-}
-
-.seeMore A {
-  vertical-align: middle;
-}
-
-.seeMore A::hover {
-  text-decoration: none;
-}
-
-.seeMore I {
-  font-size: 1.2em;
-  vertical-align: middle;
-  color: #ccc;
 }
 
 .missing-thumbnail {
