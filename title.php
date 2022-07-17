@@ -42,7 +42,6 @@ $doc_title = $title;
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script src="<?php echo MASONRY_URI; ?>"></script>
 	<script src="<?php echo IMAGESLOADED_URI; ?>"></script>
 	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
