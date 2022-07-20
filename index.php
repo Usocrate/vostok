@@ -76,7 +76,7 @@ $doc_title = 'Accueil';
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
-	<script src="<?php echo IMAGESLOADED_URI ?>"></script>
+	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="indexDoc">
