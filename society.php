@@ -246,7 +246,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						        echo '<li class="list-group-item">';
     						        echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
     						        if ( $ms->getPeriod() ) echo ' <small>('.$ms->getPeriod().')</small>';
-    						        if ( $ms->hasDescription() ) echo '<p><small>'.ToolBox::toHtml($ms->getDescription()).'</small></p>';
+    						        if ( $ms->hasDescription() ) {
+    						        	echo $ms->getHtmlExpandableDescription();
+    						        }
     						        //if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
     						        echo '</li>';
     						    }
@@ -258,7 +260,10 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						    echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
     						    if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
     						    echo '</p>';
-    						    if ( current($memberships)->hasDescription() ) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDescription()).'</small></p>';
+    						    if ( current($memberships)->hasDescription() ) {
+    						    	echo current($memberships)->getHtmlExpandableDescription();
+    						    	//echo '<div class="description">'.ToolBox::toHtml(current($memberships)->getDescription()).'</div>';
+    						    }
     						    //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
     						    echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
     						    echo '</div>';
@@ -299,7 +304,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					            echo '<li class="list-group-item">';
     					            echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
     					            if ( $ms->getPeriod() ) echo ' <small>('.$ms->getPeriod().')</small>';
-    					            if ( $ms->hasDescription() ) echo '<p><small>'.ToolBox::toHtml($ms->getDescription()).'</small></p>';
+    					            if ( $ms->hasDescription() ) {
+    					            	echo $ms->getHtmlExpandableDescription();
+    					            }
     					            //if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
     					            echo '</li>';
     					        }
@@ -311,7 +318,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					        echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
     					        if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
     					        echo '</p>';
-    					        if ( current($memberships)->hasDescription() ) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDescription()).'</small></p>';
+    					        echo current($memberships)->getHtmlExpandableDescription();
     					        //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
     					        
     					        echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';

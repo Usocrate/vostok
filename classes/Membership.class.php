@@ -227,6 +227,24 @@ class Membership {
 		return $this->getAttribute ( 'description' );
 	}
 	/**
+	 * N'affiche que la première phrase de la description, le reste de la description est fournie mais sera masqué par défaut 
+	 * @since 08/2022
+	 */
+	public function getHtmlExpandableDescription() {
+		if (! empty ($this->description)) {
+			preg_match('/^(.*[\.|?|!]{1})/', $this->description, $result);
+			$html = '<div class="membership-description-area">';
+			if (count($result)>1 && count($result)<strlen($this->description)) {
+				$html.= '<span>'.ToolBox::toHtml($result[1]).'</span><span class="more">'.substr($this->description, strlen($result[1])).'</span>';
+				$html.= '<div>...</div>';
+			} else {
+				$html.= ToolBox::toHtml($this->description);
+			}
+			$html.= '</div>';
+			return $html;
+		}
+	}
+	/**
 	 *
 	 * @since 03/2019
 	 * @return boolean

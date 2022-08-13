@@ -206,6 +206,13 @@ DIV.individual-description-area, DIV.membership-description-area {
 	white-space: pre-wrap;
 	margin: 1em 0
 }
+DIV.card-body DIV.membership-description-area {
+	color: $gray-600
+}
+
+DIV.card-body DIV.membership-description-area SPAN.more {
+	display: none;
+}
 
 .missing-thumbnail {
 	background-color: #eee;

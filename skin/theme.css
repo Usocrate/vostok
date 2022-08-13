@@ -10082,6 +10082,14 @@ DIV.individual-description-area, DIV.membership-description-area {
   margin: 1em 0;
 }
 
+DIV.card-body DIV.membership-description-area {
+  color: #7d6f6c;
+}
+
+DIV.card-body DIV.membership-description-area SPAN.more {
+  display: none;
+}
+
 .missing-thumbnail {
   background-color: #eee;
 }
