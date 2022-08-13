@@ -444,13 +444,11 @@ class Society {
 	 *
 	 * @return string
 	 * @since 12/2016
-	 * @version 03/2019
 	 */
 	public function getHtmlLinkToSociety($focus = null) {
-		return '<a href="' . $this->getDisplayUrl () . '">' . $this->getNameForHtmlDisplay () . '</a>';
+		return '<a href="' . $this->getDisplayUrl ($focus) . '">' . $this->getNameForHtmlDisplay () . '</a>';
 	}
 	/**
-	 *
 	 * @since 03/2019
 	 * @return string
 	 */
