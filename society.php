@@ -1,15 +1,7 @@
 <?php
-function __autoload($class_name) {
-	$path = './classes/';
-	if (is_file ( $path . $class_name . '.class.php' )) {
-		include_once $path . $class_name . '.class.php';
-	} elseif ($path . $class_name . '.interface.php') {
-		include_once $path . $class_name . '.interface.php';
-	}
-}
-$system = new System( './config/host.json' );
-
 require_once 'config/boot.php';
+require_once 'classes/System.class.php';
+$system = new System( 'config/host.json' );
 
 session_start();
 
@@ -159,7 +151,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				foreach($inSameIndustrySocieties as $item) {
 					$links[] = '<a href="./society.php?society_id='.$item->getId().'">'.$item->getName().'</a>';
 				}
-				$html.= implode($links, ', ');
+				$html.= implode(', ',$links);
 				$html.= '</p>';
 				$html.= '</div>';
 			}
@@ -229,9 +221,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						$i = new Individual($id);
     						$i->feed();
     						echo '<div class="card">';
-    						if ($i->getPhotoUrl()) {
-    							echo '<a href="individual.php?individual_id='.$i->getId().'">';
-    							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+    						if ($i->hasPhoto()) {
+    							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
+    							echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
     							echo '</a>';
     						} else {
     							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
@@ -287,12 +279,12 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					    $i = new Individual($id);
     					    $i->feed();
     					    echo '<div class="card">';
-    					    if ($i->getPhotoUrl()) {
-    					        echo '<a href="individual.php?individual_id='.$i->getId().'">';
-    					        echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
-    					        echo '</a>';
+    					    if ($i->hasPhoto()) {
+    					    	echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
+    					    	echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+    					    	echo '</a>';
     					    } else {
-    					        //echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
+    					    	//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
     					    }
     					    
     					    $card_title_tag = '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';

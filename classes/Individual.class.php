@@ -118,11 +118,10 @@ class Individual {
 	public function setDescription(string $input) {
 		$this->description = $input;
 	}
-	
 	public function getAttribute($name) {
 		return isset ( $this->{$name} ) ? $this->{$name} : NULL;
 	}
-	
+
 	/**
 	 * Obtient le lieu de résidence de l'individu.
 	 */
@@ -526,14 +525,14 @@ class Individual {
 	/**
 	 * Obtient l'Url de la photographie de la personne.
 	 *
-	 * @version 01/2021
+	 * @version 08/2022
 	 * @return string
 	 */
 	public function getPhotoUrl() {
 		global $system;
 		try {
-			if (isset ( $this->photo_url )) {
-				return $this->photo_url;
+			if ($this->hasReworkedPhoto()) {
+				return $system->getTrombiReworkUrl(). $this->getId () .'.png';
 			} else {
 				$file_extensions = $system->getImageFileExtensions ();
 
@@ -541,7 +540,7 @@ class Individual {
 				foreach ( $file_extensions as $e ) {
 					$file_name = $this->getId () . '.' . $e;
 					if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
-						return $this->photo_url = $system->getTrombiUrl () . $file_name;
+						return $system->getTrombiUrl () . $file_name;
 					}
 				}
 
@@ -553,13 +552,24 @@ class Individual {
 				foreach ( $file_extensions as $e ) {
 					$file_name = $file_basename . '.' . $e;
 					if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
-						return $this->photo_url = $system->getTrombiUrl () . $file_name;
+						return $system->getTrombiUrl () . $file_name;
 					}
 				}
 			}
 		} catch ( Exception $e ) {
 			$system->reportException ( $e, __METHOD__ );
 		}
+	}
+	/**
+	 * @since 08/20022
+	 * @return string
+	 */
+	public function getReworkedPhotoUrl() {
+		global $system;
+		if (!$this->hasReworkedPhoto()) {
+			$this->reworkPhotoFile();
+		}
+		return $system->getTrombiReworkUrl(). $this->getId () .'.png';
 	}
 	/**
 	 * Obtient le chemin d'accès au fichier photo.
@@ -584,6 +594,18 @@ class Individual {
 			if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
 				return $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name;
 			}
+		}
+	}
+	/**
+	 *
+	 * @since 08/2022
+	 * @return string
+	 */
+	public function getReworkedPhotoFilePath() {
+		global $system;
+		$file_name = $this->getId () . '.png';
+		if (is_file ( $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+			return $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $file_name;
 		}
 	}
 	/**
@@ -618,9 +640,9 @@ class Individual {
 	/**
 	 *
 	 * @since 08/2014
-	 * @version 07/2021
+	 * @version 08/2022
 	 */
-	public function filePhoto(array $uploadedFile) {
+	public function storePhotoFile(array $uploadedFile) {
 		global $system;
 		try {
 			if ($uploadedFile ['size'] > 0) {
@@ -639,12 +661,45 @@ class Individual {
 		}
 	}
 	/**
+	 *
+	 * @since 08/2022
+	 * @return boolean
+	 */
+	public function reworkPhotoFile() {
+		global $system;
+		try {
+			if ($this->hasPhoto ()) {
+				$im = new Imagick ( $this->getPhotoFilePath () );
+				$im->scaleImage ( 453, 0 );
+				//$im->SetColorspace(Imagick::COLORSPACE_GRAY);
+				$im->normalizeimage();
+				$im->orderedPosterizeImage("h4x4a", imagick::CHANNEL_BLUE);
+				$im->orderedPosterizeImage("h4x4a", imagick::CHANNEL_GREEN);
+				$im->transformimagecolorspace(Imagick::COLORSPACE_GRAY);
+				$targetFilePath = $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $this->getId () . '.png';
+				$handle = fopen($targetFilePath, 'w+'); 
+				return $im->writeimagefile( $handle );
+			}
+		} catch ( Exception $e ) {
+			$system->reportException ( $e, __METHOD__ );
+			return false;
+		}
+	}
+	/**
 	 * Indique si une photo est associée à l'individu.
 	 *
 	 * @since 12/2006
+	 * @return boolean 
 	 */
-	private function hasPhoto() {
+	public function hasPhoto() {
 		return is_file ( $this->getPhotoFilePath () );
+	}
+	/**
+	 * @since 08/2022
+	 * @return boolean
+	 */
+	public function hasReworkedPhoto() {
+		return is_file ( $this->getReworkedPhotoFilePath () );
 	}
 	public function getPhotoHtml() {
 		if ($this->getPhotoUrl ())

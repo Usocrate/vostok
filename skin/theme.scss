@@ -32,24 +32,24 @@ $btn-font-size: 1.1rem;
 }
 
 .ui-widget-content {
-	background: #fff;
+	background: $white;
 }
 
 .ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em
 	{
 	background-color: #8ea4bc;
 	background-image: none;
-	color: #fff;
+	color: $white;
 	border: none;
 }
 
 .ui-widget-content .ui-state-focus small {
-	color: #fff;
+	color: $white;
 }
 
 .badge-info {
-	color: #fff;
-	background-color: #777;
+	color: $white;
+	background-color: $gray-600;
 }
 
 .tab-content {
@@ -73,8 +73,16 @@ $btn-font-size: 1.1rem;
 	margin-bottom: 20px;
 }
 
+.card-img-top-wrapper {
+	background-color: $gray-600;
+}
+
+.card-img-top {
+	mix-blend-mode: screen;
+}
+
 .container-fluid, .container {
-	background-color: #fff;
+	background-color: $white;
 	padding: 1rem 1rem 2rem 1rem;
 }
 
@@ -84,7 +92,7 @@ $btn-font-size: 1.1rem;
 }
 
 I.colored {
-	color: #7d6f6c;
+	color: $primary;
 }
 
 BUTTON, A.btn, LABEL {
@@ -133,7 +141,7 @@ IMG {
 DIV.card DIV.photo {
 	float: left;
 	margin: 0 1em;
-	border: 3px solid #C5C5C5;
+	border: 3px solid $gray-200;
 }
 
 DD {
@@ -147,7 +155,7 @@ A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 
 SMALL {
 	font-size: 1em;
-	color: #bbb;
+	color: $gray-600;
 }
 
 .bd-title {
@@ -177,7 +185,7 @@ SMALL A I {
 	display:block;
 	font-size:1.1rem;
 	font-weight:bold;
-	color: #bbb;
+	color: $gray-500;
 	padding: 1rem 0 1.2rem 0;
 }
 
@@ -215,7 +223,7 @@ DIV.card-body DIV.membership-description-area SPAN.more {
 }
 
 .missing-thumbnail {
-	background-color: #eee;
+	background-color: $gray-300;
 }
 
 #loginDoc div.container {
@@ -239,7 +247,7 @@ DIV.card-body DIV.membership-description-area SPAN.more {
 	padding-left: 90px;
 	border-width: 1px 0;
 	border-style: dotted;
-	border-color: #999
+	border-color: $gray-600
 }
 
 #indexDoc DIV.il {

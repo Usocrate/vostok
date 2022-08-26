@@ -1,15 +1,7 @@
 <?php
-function __autoload($class_name) {
-	$path = './classes/';
-	if (is_file ( $path . $class_name . '.class.php' )) {
-		include_once $path . $class_name . '.class.php';
-	} elseif ($path . $class_name . '.interface.php') {
-		include_once $path . $class_name . '.interface.php';
-	}
-}
-$system = new System ( './config/host.json' );
-
 require_once 'config/boot.php';
+require_once 'classes/System.class.php';
+$system = new System( 'config/host.json' );
 
 session_start ();
 

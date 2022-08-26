@@ -1,15 +1,7 @@
 <?php
-function __autoload($class_name) {
-	$path = './classes/';
-	if (is_file ( $path . $class_name . '.class.php' )) {
-		include_once $path . $class_name . '.class.php';
-	} elseif ($path . $class_name . '.interface.php') {
-		include_once $path . $class_name . '.interface.php';
-	}
-}
-$system = new System( './config/host.json' );
-
 require_once 'config/boot.php';
+require_once 'classes/System.class.php';
+$system = new System( 'config/host.json' );
 
 session_start();
 
@@ -51,7 +43,8 @@ if (isset($_POST['toDB_order'])) {
     
     // upload d'un fichier image
     if ( ! empty ($_FILES['individual_photo_file']) && $_FILES['individual_photo_file']['size']>0) {
-    	$individual->filePhoto($_FILES['individual_photo_file']);
+    	$individual->storePhotoFile($_FILES['individual_photo_file']);
+    	$individual->reworkPhotoFile();
     }
     
     header('Location:individual.php?individual_id=' . $individual->getId());

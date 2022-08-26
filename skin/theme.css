@@ -9923,7 +9923,7 @@ h3 {
 
 .badge-info {
   color: #fff;
-  background-color: #777;
+  background-color: #7d6f6c;
 }
 
 .tab-content {
@@ -9947,6 +9947,14 @@ h3 {
   margin-bottom: 20px;
 }
 
+.card-img-top-wrapper {
+  background-color: #7d6f6c;
+}
+
+.card-img-top {
+  mix-blend-mode: screen;
+}
+
 .container-fluid, .container-sm, .container-md, .container-lg, .container-xl, .container {
   background-color: #fff;
   padding: 1rem 1rem 2rem 1rem;
@@ -9958,7 +9966,7 @@ h3 {
 }
 
 I.colored {
-  color: #7d6f6c;
+  color: #da8055;
 }
 
 BUTTON, A.btn, LABEL {
@@ -10007,7 +10015,7 @@ IMG {
 DIV.card DIV.photo {
   float: left;
   margin: 0 1em;
-  border: 3px solid #C5C5C5;
+  border: 3px solid #efeae9;
 }
 
 DD {
@@ -10021,7 +10029,7 @@ A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 
 SMALL {
   font-size: 1em;
-  color: #bbb;
+  color: #7d6f6c;
 }
 
 .bd-title {
@@ -10052,7 +10060,7 @@ SMALL A I {
   display: block;
   font-size: 1.1rem;
   font-weight: bold;
-  color: #bbb;
+  color: #bdb0ad;
   padding: 1rem 0 1.2rem 0;
 }
 
@@ -10091,7 +10099,7 @@ DIV.card-body DIV.membership-description-area SPAN.more {
 }
 
 .missing-thumbnail {
-  background-color: #eee;
+  background-color: #e6e0de;
 }
 
 #loginDoc div.container {
@@ -10115,7 +10123,7 @@ DIV.card-body DIV.membership-description-area SPAN.more {
   padding-left: 90px;
   border-width: 1px 0;
   border-style: dotted;
-  border-color: #999;
+  border-color: #7d6f6c;
 }
 
 #indexDoc DIV.il {

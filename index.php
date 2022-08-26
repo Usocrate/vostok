@@ -1,15 +1,7 @@
 <?php
-function __autoload($class_name) {
-	$path = './classes/';
-	if (is_file ( $path . $class_name . '.class.php' )) {
-		include_once $path . $class_name . '.class.php';
-	} elseif ($path . $class_name . '.interface.php') {
-		include_once $path . $class_name . '.interface.php';
-	}
-}
-$system = new System( './config/host.json' );
-
 require_once 'config/boot.php';
+require_once 'classes/System.class.php';
+$system = new System( './config/host.json' );
 
 session_start ();
 
@@ -86,6 +78,7 @@ $doc_title = 'Accueil';
 		<div class="row justify-content-md-center">
 			<div class="col-md-12">
 				<?php
+					/**
 					$industries = $system->getLastUsedIndustries(30);
 					$weights = array_column($industries, 'weight');
 					$maxWeight = max($weights);
@@ -109,6 +102,7 @@ $doc_title = 'Accueil';
 					}
 					echo '<span style="padding:0 1em"><a href="industries.php">Toutes les activités</a></span>';
 					echo '</div>';
+					*/
 
 					switch($people_focus) {
 						case 'onLastPinned' : 
@@ -116,9 +110,9 @@ $doc_title = 'Accueil';
 					  		echo '<div class="masonryGutterSizer"></div>';
 					  		foreach ($individuals as $i) {
 								echo '<div class="card">';
-								if ($i->getPhotoUrl()) {
-									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">';
-									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+								if ($i->hasPhoto()) {
+									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
+									echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
 									echo '</a>';
 								}
 								echo '<div class="card-header">';
@@ -159,9 +153,9 @@ $doc_title = 'Accueil';
 								$i = $ms->getIndividual();
 								$s = $ms->getSociety();
 								echo '<div class="card">';
-								if ($i->getPhotoUrl()) {
-									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">';
-									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
+								if ($i->hasPhoto()) {
+									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
+									echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
 									echo '</a>';
 								}
 								echo '<div class="card-body">';

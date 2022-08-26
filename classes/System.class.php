@@ -25,6 +25,10 @@ class System {
 		if ($this->configFileExists ()) {
 			$this->parseConfigFile ();
 		}
+		spl_autoload_register ( array (
+				$this,
+				'loadClass'
+		) );
 	}
 	public function setDbHost($input) {
 		$this->db_host = $input;
@@ -107,6 +111,13 @@ class System {
 	public function getTrombiUrl() {
 		return $this->appli_url . 'data/trombinoscope/';
 	}
+	/**
+	 * @since 08/2022
+	 * @return string
+	 */
+	public function getTrombiReworkUrl() {
+		return $this->appli_url . 'data/trombinoscope/rework/';
+	}
 	public function setDirPath($input) {
 		$this->dir_path = $input;
 	}
@@ -155,6 +166,23 @@ class System {
 	public function getTrombiDirPath() {
 		try {
 			$path = $this->getDataDirPath () . DIRECTORY_SEPARATOR . 'trombinoscope';
+			if (! is_dir ( $path )) {
+				mkdir ( $path, 770 );
+			}
+			return $path;
+		} catch ( Exception $e ) {
+			$this->reportException ( __METHOD__, $e );
+			return false;
+		}
+	}
+	/**
+	 *
+	 * @since 08/2022
+	 * @return string|boolean
+	 */
+	public function getTrombiReworkDirPath() {
+		try {
+			$path = $this->getTrombiDirPath () . DIRECTORY_SEPARATOR . 'rework';
 			if (! is_dir ( $path )) {
 				mkdir ( $path, 770 );
 			}
@@ -445,7 +473,7 @@ class System {
 			if (isset ( $criteria ['minWeight'] )) {
 				$where [] = 'm.weight >= :minWeight';
 			}
-			
+
 			if (isset ( $criteria ['active'] ) && $criteria ['active'] === true) {
 				$where [] = 'm.end_year IS NULL';
 			}
@@ -514,7 +542,7 @@ class System {
 				$statement->bindValue ( ':title', $criteria ['title'], PDO::PARAM_STR );
 			}
 			if (isset ( $criteria ['minWeight'] )) {
-				$statement->bindValue ( ':minWeight', $criteria ['minWeight'], PDO::PARAM_INT);
+				$statement->bindValue ( ':minWeight', $criteria ['minWeight'], PDO::PARAM_INT );
 			}
 			if (isset ( $criteria ['society_name_like_pattern'] )) {
 				$statement->bindValue ( ':society_name_like_pattern', '%' . $criteria ['society_name_like_pattern'] . '%', PDO::PARAM_STR );
@@ -597,43 +625,50 @@ class System {
 	 */
 	public function getFirstWeighterMembershipInSociety(Membership $m) {
 		$criteria = array (
-				'minWeight' => $m->getWeight()+1, 'society_id' => $m->getSociety()->getId()
+				'minWeight' => $m->getWeight () + 1,
+				'society_id' => $m->getSociety ()->getId ()
 		);
 		$result = $this->getMemberships ( $criteria, 'Weightest last', 0, 1 );
-		return count($result)>0 ? $result[0] : null;
+		return count ( $result ) > 0 ? $result [0] : null;
 	}
 	/**
+	 *
 	 * @since 04/2022
 	 * @param Membership $m
 	 */
 	public function setMembershipAsWeightestInSociety(Membership $m) {
-		$weightest = getWeightestMembershipInSociety($m->getSociety());
-		$m->setWeight($weightest->getWeight()+1);
-		return $m->toDB();
+		$weightest = getWeightestMembershipInSociety ( $m->getSociety () );
+		$m->setWeight ( $weightest->getWeight () + 1 );
+		return $m->toDB ();
 	}
-	
+
 	/**
+	 *
 	 * @since 04/2022
 	 * @param Society $s
 	 * @return array|Membership[]
 	 */
 	public function getWeightestMembershipInSociety(Society $s) {
-		$criteria = array ('society_id' => $s->getId());
-		return $this->getMemberships ( $criteria, 'Weighter first');
+		$criteria = array (
+				'society_id' => $s->getId ()
+		);
+		return $this->getMemberships ( $criteria, 'Weighter first' );
 	}
 
 	/**
+	 *
 	 * @since 04/2022
 	 */
 	public function getMembershipMaxWeightInSociety(Society $s) {
 		$sql = 'SELECT weight FROM membership WHERE society_id=:society_id ORDER BY weight DESC LIMIT 0,1';
 		$statement = $this->getPdo ()->prepare ( $sql );
-		$statement->bindValue ( ':society_id', $s->getId(), PDO::PARAM_INT );
+		$statement->bindValue ( ':society_id', $s->getId (), PDO::PARAM_INT );
 		$statement->execute ();
-		return $statement->fetchColumn();
+		return $statement->fetchColumn ();
 	}
-	
+
 	/**
+	 *
 	 * @since 12/2018
 	 */
 	public function getMembershipTitles($sort = 'Alphabetical') {
@@ -1328,6 +1363,23 @@ class System {
 		return $this->getIndustries ( array (
 				'ids' => $ids
 		) );
+	}
+	/**
+	 *
+	 * @since 08/2022
+	 * @param string $class_name
+	 */
+	public function loadClass($class_name) {
+		if (is_file ( $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.class.php' )) {
+			include_once $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.class.php';
+			return true;
+		} elseif ($this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.interface.php') {
+			include_once $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.interface.php';
+			return true;
+		} else {
+			error_log ( $file_path . ' not found.' );
+			return false;
+		}
 	}
 	/**
 	 * Rassemble plusieurs activités en une seule.
