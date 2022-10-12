@@ -104,7 +104,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				if (count($links) > 0) {
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($links as $l) {
-						echo '<li class="list-group-item"><small>'.$l.'</small></li>';
+						echo '<li class="list-group-item">'.$l.'</li>';
 					}
 					echo '</ul>';
 				}
@@ -136,7 +136,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 		  		<!-- Tab panes -->
 				<div class="tab-content">
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onMemberships')==0) echo 'active' ?>" id="memberships-tab">
-						<!-- <h2>Participations <small><a href="membership_edit.php?individual_id=<?php echo $individual->getId() ?>."><i class="fas fa-plus"></i></a></small></h2>-->
 						<?php
 						if (isset($memberships)){
 							echo '<ul class="list-group list-group-flush">';

@@ -9969,8 +9969,21 @@ h3 {
   margin-top: 0;
 }
 
+SMALL {
+  font-size: inherit;
+  color: #7d6f6c;
+}
+
+I {
+  color: #7d6f6c;
+}
+
 I.colored {
   color: #da8055;
+}
+
+.btn I {
+  color: inherit;
 }
 
 BUTTON, A.btn, LABEL {
@@ -9991,6 +10004,19 @@ BUTTON SMALL, A.btn SMALL {
 BODY {
   background-color: #efeae9;
   background-image: url("./images/bg.svg");
+}
+
+H1 {
+  font-size: 2.2rem;
+}
+
+H2 {
+  color: #403734;
+  font-size: 1.8rem;
+}
+
+H3 {
+  color: #574c49;
 }
 
 SECTION {
@@ -10038,7 +10064,7 @@ A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 }
 
 H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
-  font-size: 0.6em;
+  font-size: 0.8em;
 }
 
 SMALL A I {
