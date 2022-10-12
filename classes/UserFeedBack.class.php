@@ -52,25 +52,28 @@ class UserFeedBack {
 	}
 	
 	private function MessagesToHtml($type) {
-		switch ($type) {
-			case 'success' :
-				$css_class = 'alert alert-success';
-				break;
-			case 'info' :
-				$css_class = 'alert alert-info';
-				break;
-			case 'warning' :
-				$css_class = 'alert alert-warning';
-				break;
-			case 'danger' :
-				$css_class = 'alert alert-danger';
-				break;
+		if (isset($this->messages[$type]) && count($this->messages[$type])>0) {
+			switch ($type) {
+				case 'success' :
+					$css_class = 'alert alert-success';
+					break;
+				case 'info' :
+					$css_class = 'alert alert-info';
+					break;
+				case 'warning' :
+					$css_class = 'alert alert-warning';
+					break;
+				case 'danger' :
+					$css_class = 'alert alert-danger';
+					break;
+			}
+			$html = '<div class="' . $css_class . '">';
+			foreach ( $this->messages [$type] as $m ) {
+				$html .= $m.'<br>';
+			}
+			$html .= '</div>';
+			return $html;
 		}
-		$html = '';
-		foreach ( $this->messages [$type] as $m ) {
-			$html .= '<div class="' . $css_class . '">'.$m.'</div>';
-		}
-		return $html;
 	}
 	public function AllMessagesToHtml() {
 		$html = $this->DangerMessagesToHtml ();

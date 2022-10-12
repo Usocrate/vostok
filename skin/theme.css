@@ -9930,9 +9930,13 @@ h3 {
   padding: 1em;
 }
 
-.navbar-brand {
+.navbar-brand, .brand {
   color: #da8055 !important;
   font-family: "Sigmar one";
+}
+.navbar-brand SMALL, .brand SMALL {
+  color: #efeae9;
+  font-family: "Open Sans";
 }
 
 .nav-item {
@@ -10025,11 +10029,6 @@ DD {
 
 A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
   color: inherit;
-}
-
-SMALL {
-  font-size: 1em;
-  color: #7d6f6c;
 }
 
 .bd-title {

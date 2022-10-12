@@ -56,6 +56,20 @@ if (isset ( $_POST ['task_id'] )) {
 			}
 			if ($system->saveConfigFile ()) {
 				$fb->addSuccessMessage ( 'Configuration enregistrée.' );
+				//
+				// écriture du fichier .htpasswd à disposition pour protéger certains répertoires
+				// on reprend les identifiants d'accès à la base de données
+				// NB : configuration Apache2 à faire en complément
+				//
+				try {
+					$htpasswdFilePath = '../config/.htpasswd';
+					file_put_contents($htpasswdFilePath, $system->getDbUser().':'.password_hash ( $system->getDbPassword(), PASSWORD_BCRYPT ).'\n');
+					if (file_exists($htpasswdFilePath)) {
+						$fb->addSuccessMessage('Un fichier est aussi à disposition pour protéger certains répertoires ('.realpath($htpasswdFilePath).').');
+					}
+				} catch ( Exception $e ) {
+					$system->reportException ( __METHOD__, $e );
+				}
 			} else {
 				$fb->addDangerMessage ( 'Echec de l\'enregistrement de la configuration.' );
 			}
@@ -92,7 +106,20 @@ header ( 'charset=utf-8' );
 		<div class="row">
 			<div class="col-md-6">
 				<fieldset>
+					<legend>Projet</legend>
+					<div class="form-group">
+						<label for="appli_url_i">Url</label><input id="appli_url_i" id="appli_url_i" type="url" name="appli_url" class="form-control" value="<?php echo ToolBox::toHtml($system->getAppliUrl()); ?>" />
+					</div>
+					<div class="form-group">
+						<label for="appli_name_i">Nom</label><input id="appli_name_i" type="text" name="appli_name" class="form-control" value="<?php echo ToolBox::toHtml($system->getAppliName()); ?>" />
+					</div>
+					<div class="form-group">
+						<label for="appli_description_i">Description</label><input id="appli_description_i" type="text" name="appli_description" class="form-control" value="<?php echo ToolBox::toHtml($system->getAppliDescription()); ?>" />
+					</div>
+				</fieldset>
+				<fieldset>
 					<legend>Base de données</legend>
+					<div class="alert alert-info">NB : Les mêmes identifiants seront demandés pour accéder aux zones sécurisées de l'application.</div>
 					<div class="form-group">
 						<label for="db_name_i">Nom</label><input id="db_name_i" type="text" name="db_name" class="form-control" value="<?php echo ToolBox::toHtml($system->getDbName()); ?>" />
 					</div>
@@ -120,18 +147,6 @@ header ( 'charset=utf-8' );
 						<label for="googlemaps_api_key_i">Clé</label><input id="googlemaps_api_key_i" type="text" name="googlemaps_api_key" class="form-control" value="<?php echo ToolBox::toHtml($system->getGoogleMapsApiKey()); ?>" />
 					</div>
 				</fieldset>				
-				<fieldset>
-					<legend>Projet</legend>
-					<div class="form-group">
-						<label for="appli_url_i">Url</label><input id="appli_url_i" id="appli_url_i" type="url" name="appli_url" class="form-control" value="<?php echo ToolBox::toHtml($system->getAppliUrl()); ?>" />
-					</div>
-					<div class="form-group">
-						<label for="appli_name_i">Nom</label><input id="appli_name_i" type="text" name="appli_name" class="form-control" value="<?php echo ToolBox::toHtml($system->getAppliName()); ?>" />
-					</div>
-					<div class="form-group">
-						<label for="appli_description_i">Description</label><input id="appli_description_i" type="text" name="appli_description" class="form-control" value="<?php echo ToolBox::toHtml($system->getAppliDescription()); ?>" />
-					</div>
-				</fieldset>
 			</div>
 			<a href="../index.php" class="btn btn-link">Quitter</a>
 			<button name="task_id" type="submit" value="save" class="btn btn-primary">Enregistrer</button>

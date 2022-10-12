@@ -56,9 +56,14 @@ $btn-font-size: 1.1rem;
 	padding: 1em;
 }
 
-.navbar-brand {
+.navbar-brand, .brand {
 	color: $primary !important;
 	font-family: "Sigmar one";
+	
+	SMALL {
+		color:$gray-200;
+		font-family: $font-family-sans-serif;
+	}
 }
 
 .nav-item {
@@ -151,11 +156,6 @@ DD {
 
 A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 	color: inherit;
-}
-
-SMALL {
-	font-size: 1em;
-	color: $gray-600;
 }
 
 .bd-title {

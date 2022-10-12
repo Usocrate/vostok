@@ -24,11 +24,11 @@ class System {
 		$this->config_file_path = $path;
 		if ($this->configFileExists ()) {
 			$this->parseConfigFile ();
+			spl_autoload_register ( array (
+					$this,
+					'loadClass'
+			) );
 		}
-		spl_autoload_register ( array (
-				$this,
-				'loadClass'
-		) );
 	}
 	public function setDbHost($input) {
 		$this->db_host = $input;
@@ -1377,7 +1377,7 @@ class System {
 			include_once $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.interface.php';
 			return true;
 		} else {
-			error_log ( $file_path . ' not found.' );
+			error_log ( $class_name . ' not found.' );
 			return false;
 		}
 	}
