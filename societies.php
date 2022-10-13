@@ -183,15 +183,9 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 						$s = $ms->getSociety();
 						echo '<div class="card">';
 						if ($i->getPhotoUrl()) {
-							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">';
+							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
 							echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 							echo '</a>';
-						} else {
-							/*
-							echo '<a href="individual_edit.php?individual_id='.$i->getId().'" class="implicit">';
-							echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
-							echo '</a>';
-							*/
 						}
 						echo '<div class="card-body">';
 							echo '<h3 class="card-title">';
