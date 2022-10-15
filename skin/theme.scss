@@ -10,12 +10,10 @@ $gray-800: #403734 !default;
 $gray-900: #292321 !default;
 $black:    #000 !default;
 
-$primary: #da8055;
-$secondary: #7d6f6c;
-
 $bg: $gray-200;
 
-$font-family-sans-serif : "Open Sans";
+$brand-font-family : "Sigmar One";
+$common-font-family : "Open Sans";
 $headings-font-family: "Oswald";
 $btn-font-family: "Oswald";
 $btn-font-size: 1.1rem;
@@ -24,6 +22,7 @@ $btn-font-size: 1.1rem;
 @import url('https://fonts.googleapis.com/css?family=Sigmar+One');
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 @import url('https://fonts.googleapis.com/css?family=Oswald');
+@import "customisable";
 @import "../vendor/twbs/bootstrap/scss/bootstrap";
 
 .ui-widget {
@@ -35,9 +34,8 @@ $btn-font-size: 1.1rem;
 	background: $white;
 }
 
-.ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em
-	{
-	background-color: #8ea4bc;
+.ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em {
+	background-color: $secondary;
 	background-image: none;
 	color: $white;
 	border: none;
@@ -58,11 +56,11 @@ $btn-font-size: 1.1rem;
 
 .navbar-brand, .brand {
 	color: $primary !important;
-	font-family: "Sigmar one";
+	font-family: $brand-font-family;
 	
 	SMALL {
 		color:$gray-200;
-		font-family: $font-family-sans-serif;
+		font-family: $common-font-family;
 	}
 }
 
@@ -96,6 +94,11 @@ $btn-font-size: 1.1rem;
 	margin-top: 0;
 }
 
+.masonryGutterSizer {
+	width: 20px;
+	height: 20px;
+}
+
 SMALL {
 	font-size: inherit;
 	color:$gray-600
@@ -121,11 +124,6 @@ BUTTON SMALL, A.btn SMALL {
 	font-size: 1em !important;
 	color:inherit;
 	opacity: .4;
-}
-
-.masonryGutterSizer {
-	width: 20px;
-	height: 20px;
 }
 
 BODY {
@@ -169,17 +167,6 @@ IMG {
 	margin: 0;
 }
 
-DIV.card DIV.photo {
-	float: left;
-	margin: 0 1em;
-	border: 3px solid $gray-200;
-}
-
-DD {
-	margin: .3em .6em;
-	padding: .3em;
-}
-
 A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 	color: inherit;
 }
@@ -195,17 +182,17 @@ H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
 }
 
 SMALL A I {
-	color: #bbb;
+	color:$gray-500;
 }
 
 /* autres styles génériques */
 .brand {
-	font-family: 'Sigmar one';
+	font-family: $brand-font-family;
 	color: $primary;
 }
 
 .brand SMALL {
-	font-family: 'Open Sans';
+	font-family: $common-font-family;
 }
 
 .il-legend {
@@ -220,62 +207,49 @@ SMALL A I {
 	color: inherit;
 }
 
-.tag {
-	display: inline-block;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: baseline;
-	border-radius: .25em;
-	padding: .2em .6em .3em;
-	font-weight: normal;
-	font-size: 100%;
-}
-
-.tag>A {
-	color: inherit;
-	font-size: inherit;
-	font-weight: inherit;
-}
-
 DIV.individual-description-area, DIV.membership-description-area {
 	white-space: pre-wrap;
 	margin: 1em 0
 }
 
-DIV.card-body DIV.membership-description-area {
-	color: $gray-600
-}
-
-DIV.card-body DIV.membership-description-area SPAN.more {
-	display: none;
+DIV.card-body {
+	DIV.membership-description-area {
+		color: $gray-600;
+		
+		SPAN.more {
+			display: none;
+		}
+	}
 }
 
 .missing-thumbnail {
 	background-color: $gray-300;
 }
 
-#loginDoc div.container {
-	max-width: 496px;
-	background-color: $white;
-}
-
-#loginDoc FORM {
-	background-image: url("./images/vostok.gif");
-	background-position: top center;
-	background-repeat: no-repeat;
-	margin: auto;
-	padding: 180px 0 0 0;
-}
-
-#loginDoc FOOTER {
-	margin: 20px auto 10px auto;
-	background-image: url("./images/gagarinecasque.gif");
-	background-position: bottom left;
-	background-repeat: no-repeat;
-	padding-left: 90px;
-	border-width: 1px 0;
-	border-style: dotted;
-	border-color: $gray-600
+#loginDoc {
+	div.container {
+		max-width: 496px;
+		background-color: $white;
+	}
+	
+	FORM {
+		background-image: url("./images/vostok.gif");
+		background-position: top center;
+		background-repeat: no-repeat;
+		margin: auto;
+		padding: 180px 0 0 0;
+	}
+	
+	FOOTER {
+		margin: 20px auto 10px auto;
+		background-image: url("./images/gagarinecasque.gif");
+		background-position: bottom left;
+		background-repeat: no-repeat;
+		padding-left: 90px;
+		border-width: 1px 0;
+		border-style: dotted;
+		border-color: $gray-600
+	}
 }
 
 #indexDoc DIV.il {
@@ -300,45 +274,50 @@ DIV.card-body DIV.membership-description-area SPAN.more {
 	}
 }
 
-@media ( min-width : 1349px) {
-	#indexDoc .card {
-		width: 314px;
-	}
-	#societyDoc .card {
-		width: 300px;
-	}
-	#individualDoc .card {
-		width: 310px;
-	}
-}
-
-@media ( min-width : 1518px) {
-	#indexDoc .card {
-		width: 281px;
-	}
-	#societyDoc .card {
-		width: 348px;
-	}
-}
-
 @media ( min-width : 1600px) {
-	#indexDoc .card {
-		width: 290px;
-	}
 	.container, .container-fluid {
-		max-width: 95%;
-		padding-left: 2.5%;
-		padding-right: 2.5%;
+		max-width: 1580px;
+		padding: 30px;
+		
+		.masonryGutterSizer {
+			width: 20px;
+			height: 20px;
+		}
 	}
+	
+	#indexDoc {
+		.card {
+			width: 288px;
+		}
+	}
+	#societyDoc {
+		.card {
+			width: 357px;
+		}
+	}	
 }
 
 @media ( min-width : 1920px) {
-	#indexDoc .card {
-		width: 320px;
+	.container, .container-fluid {
+		max-width: 1900px;
+		padding: 30px;
+		
+		.masonryGutterSizer {
+			width: 20px;
+			height: 20px;
+		}		
 	}
+
+	#indexDoc {
+		.card {
+			width: 290px;
+		}
+	}
+	
 	#societyDoc .card {
 		width: 350px;
 	}
+	
 	#individualDoc .card {
 		width: 450px;
 	}

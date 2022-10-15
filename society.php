@@ -139,7 +139,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
         if (count($industries)>0) {
             $html.= '<div>';
             foreach ($industries as $i) {
-                $html.= '<span class="badge badge-secondary tag">'.$i->getHtmlLink().'</span> ';
+                $html.= '<span class="badge badge-info">'.$i->getHtmlLink().'</span> ';
             }
             $html.= '</div>';
 

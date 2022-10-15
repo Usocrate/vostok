@@ -73,121 +73,91 @@ $doc_title = 'Accueil';
 </head>
 <body id="indexDoc">
     <?php include 'navbar.inc.php'; ?>
-    <div class="container-fluid">
+    <div class="container">
 		<h1 class="sr-only"><?php echo ToolBox::toHtml($doc_title); ?></h1>
-		<div class="row justify-content-md-center">
-			<div class="col-md-12">
-				<?php
-					/**
-					$industries = $system->getLastUsedIndustries(30);
-					$weights = array_column($industries, 'weight');
-					$maxWeight = max($weights);
-					$minWeight = min($weights);
-					$minEm = 1;
-					$maxEm = 1.5;
-
-					echo '<div class="tagCloud">';
-					foreach($industries as $item) {
-						if ($maxWeight == $minWeight) {
-							$em = ($maxEm + $minEm) / 2;
-						} else {
-							$weight = $item['weight'];
-							$r = ($weight - $minWeight) / ($maxWeight - $minWeight);
-							$em = round($minEm + ($r * ($maxEm - $minEm)),1);
+		<?php
+			switch($people_focus) {
+				case 'onLastPinned' : 
+			  		echo '<div class="il">';
+			  		echo '<div class="masonryGutterSizer"></div>';
+			  		foreach ($individuals as $i) {
+						echo '<div class="card">';
+						if ($i->hasPhoto()) {
+							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
+							echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+							echo '</a>';
 						}
-						echo '<span class="badge badge-secondary tag" style="font-size:'.$em.'em; display:inline-block; margin:2px; padding:'.round($em/4,1).'em '.round($em/3,1).'em">';
-						echo '<a href="societies.php?society_newsearch=1&industry_id='.$item['industry']->getId().'">';
-						echo ToolBox::toHtml( $item['industry']->getName() );
-						echo '</a></span>';
-					}
-					echo '<span style="padding:0 1em"><a href="industries.php">Toutes les activités</a></span>';
+						echo '<div class="card-header">';
+							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">'.ToolBox::toHtml($i->getWholeName()).'</a>';
+						echo '</div>';
+						echo '<ul class="list-group list-group-flush">';
+						foreach ($i->getMemberships() as $ms) {
+							$s = $ms->getSociety();
+							echo '<li class="list-group-item">';
+								//echo '<div class="card-text">';
+								echo '<div>'.$s->getHtmlLinkToSociety('onIndividuals').'</div>';
+								$href = 'membership_edit.php?membership_id='.$ms->getId();
+								if ($ms->getTitle()) {
+									echo '<a href="'.$href.'" class="implicit">';
+									echo ToolBox::toHtml($ms->getTitle());
+									echo '</a>';
+									if ( $ms->getPeriod() ) {
+										echo ' <small style="white-space: nowrap">('.$ms->getPeriod().')</small>';
+									}
+								} else {
+									echo '<a href="'.$href.'" class="implicit">';
+									echo '<i class="fas fa-edit"></i> éditer';
+									echo '</a>';
+								}
+								//echo '</div>';
+							echo '</li>';
+						}
+						echo '</ul>';
+						echo '</div>';
+			  		}
 					echo '</div>';
-					*/
+					echo '<div><a href="index.php?people_focus=onLastUpdated">Voir les dernières participations mise à jour</a></div>';
+					break;
+				case 'onLastUpdated' : 
+			  		echo '<div class="il">';
+			  		echo '<div class="masonryGutterSizer"></div>';
+			  		foreach ($memberships as $ms) {
+						$i = $ms->getIndividual();
+						$s = $ms->getSociety();
+						echo '<div class="card">';
+						if ($i->hasPhoto()) {
+							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
+							echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+							echo '</a>';
+						}
+						echo '<div class="card-body">';
+							echo '<h3 class="card-title">';
+							echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
+							echo '<br><small>'.$s->getHtmlLinkToSociety().'</small>';
+							echo '</h3>';
+							echo '<div class="card-text">';
+								$position_elt = array();
+								if ($ms->getDepartment()) {
+									$position_elt[] = ToolBox::toHtml($ms->getDepartment());
+								}
+								if ($ms->getTitle()) {
+									$position_elt[] = ToolBox::toHtml($ms->getTitle());
+								};
+								if (count($position_elt)>0) {
+									echo '<p>'.implode(' / ', $position_elt).'</p>';
+								}
 
-					switch($people_focus) {
-						case 'onLastPinned' : 
-					  		echo '<div class="il">';
-					  		echo '<div class="masonryGutterSizer"></div>';
-					  		foreach ($individuals as $i) {
-								echo '<div class="card">';
-								if ($i->hasPhoto()) {
-									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-									echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
-									echo '</a>';
-								}
-								echo '<div class="card-header">';
-									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">'.ToolBox::toHtml($i->getWholeName()).'</a>';
-								echo '</div>';
-								echo '<ul class="list-group list-group-flush">';
-								foreach ($i->getMemberships() as $ms) {
-									$s = $ms->getSociety();
-									echo '<li class="list-group-item">';
-										//echo '<div class="card-text">';
-										echo '<div>'.$s->getHtmlLinkToSociety('onIndividuals').'</div>';
-										$href = 'membership_edit.php?membership_id='.$ms->getId();
-										if ($ms->getTitle()) {
-											echo '<a href="'.$href.'" class="implicit">';
-											echo ToolBox::toHtml($ms->getTitle());
-											echo '</a>';
-											if ( $ms->getPeriod() ) {
-												echo ' <small style="white-space: nowrap">('.$ms->getPeriod().')</small>';
-											}
-										} else {
-											echo '<a href="'.$href.'" class="implicit">';
-											echo '<i class="fas fa-edit"></i> éditer';
-											echo '</a>';
-										}
-										//echo '</div>';
-									echo '</li>';
-								}
-								echo '</ul>';
-								echo '</div>';
-					  		}
+								if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
 							echo '</div>';
-							echo '<div><a href="index.php?people_focus=onLastUpdated">Voir les dernières participations mise à jour</a></div>';
-							break;
-						case 'onLastUpdated' : 
-					  		echo '<div class="il">';
-					  		echo '<div class="masonryGutterSizer"></div>';
-					  		foreach ($memberships as $ms) {
-								$i = $ms->getIndividual();
-								$s = $ms->getSociety();
-								echo '<div class="card">';
-								if ($i->hasPhoto()) {
-									echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-									echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
-									echo '</a>';
-								}
-								echo '<div class="card-body">';
-									echo '<h3 class="card-title">';
-									echo '<a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a>';
-									echo '<br><small>'.$s->getHtmlLinkToSociety().'</small>';
-									echo '</h3>';
-									echo '<div class="card-text">';
-										$position_elt = array();
-										if ($ms->getDepartment()) {
-											$position_elt[] = ToolBox::toHtml($ms->getDepartment());
-										}
-										if ($ms->getTitle()) {
-											$position_elt[] = ToolBox::toHtml($ms->getTitle());
-										};
-										if (count($position_elt)>0) {
-											echo '<p>'.implode(' / ', $position_elt).'</p>';
-										}
-		
-										if ( $ms->getPeriod() ) $smallTag_elt[] = '<p><small>'.$ms->getPeriod().'</small></p>';
-									echo '</div>';
-									echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
-								echo '</div>';
-								echo '</div>';
-						  	}
-							echo '</div>';
-							echo '<div><a href="index.php?people_focus=onLastPinned">Voir les derniers gens épinglés</a></div>';
-							break;			
-					}
-				?>
-			</div>
-		</div>
+							echo '<div><a href="membership_edit.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
+						echo '</div>';
+						echo '</div>';
+				  	}
+					echo '</div>';
+					echo '<div><a href="index.php?people_focus=onLastPinned">Voir les derniers gens épinglés</a></div>';
+					break;			
+			}
+		?>
 	</div>
 	<script>
 		$(document).ready(function(){
