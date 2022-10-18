@@ -74,6 +74,7 @@ $btn-font-size: 1.1rem;
 
 .card {
 	margin-bottom: 20px;
+	width:100%;
 }
 
 .card-img-top-wrapper {
@@ -86,7 +87,7 @@ $btn-font-size: 1.1rem;
 
 .container-fluid, .container {
 	background-color: $white;
-	padding: 1rem 1rem 2rem 1rem;
+	padding: 20px 30px;
 }
 
 .container-fluid>H1, .container>H1 {
@@ -252,37 +253,69 @@ DIV.card-body {
 	}
 }
 
-#indexDoc DIV.il {
-	margin: 1em 0;
-}
-
 @media ( min-width : 768px) {
-	.card {
-		width: 340px;
+	.container, .container-fluid {
+		max-width: 768px;
+	}
+	
+	#indexDoc {
+		.card {
+			width: 344px;
+		}
 	}
 }
 
 @media ( min-width : 992px) {
-	#indexDoc .card {
-		width: 370px;
+	.container, .container-fluid {
+		max-width: 988px;
+	}
+	
+	#indexDoc {
+		.card {
+			width: 296px;
+		}
 	}
 }
 
 @media ( min-width : 1200px) {
-	#indexDoc .card {
-		width: 300px;
+	.container, .container-fluid {
+		max-width: 1200px;
 	}
+	
+	#indexDoc {
+		.card {
+			width: 270px;
+		}
+	}
+	
+	#societyDoc {
+		.card {
+			width: 356px;
+		}
+	}	
+}
+
+@media ( min-width : 1359px) {
+	.container, .container-fluid {
+		max-width: 1348px;
+	}
+	
+	#indexDoc {
+		.card {
+			width: 307px;
+		}
+	}
+	
+	#societyDoc {
+		.card {
+			width: 298px;
+		}
+	}	
 }
 
 @media ( min-width : 1600px) {
 	.container, .container-fluid {
 		max-width: 1580px;
-		padding: 30px;
-		
-		.masonryGutterSizer {
-			width: 20px;
-			height: 20px;
-		}
 	}
 	
 	#indexDoc {
@@ -290,22 +323,17 @@ DIV.card-body {
 			width: 288px;
 		}
 	}
+	
 	#societyDoc {
 		.card {
 			width: 357px;
 		}
-	}	
+	}
 }
 
 @media ( min-width : 1920px) {
 	.container, .container-fluid {
 		max-width: 1900px;
-		padding: 30px;
-		
-		.masonryGutterSizer {
-			width: 20px;
-			height: 20px;
-		}		
 	}
 
 	#indexDoc {
@@ -314,11 +342,15 @@ DIV.card-body {
 		}
 	}
 	
-	#societyDoc .card {
-		width: 350px;
+	#societyDoc {
+		.card {
+			width: 345px;
+		}
 	}
 	
-	#individualDoc .card {
-		width: 450px;
+	#individualDoc {
+		.card {
+			width: 450px;
+		}
 	}
 }
