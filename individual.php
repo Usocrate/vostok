@@ -124,13 +124,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <li class="nav-item">
 				    	<a class="nav-link <?php if (strcmp($focus,'onDescription')==0) echo ' active' ?>" id="descriptionTabSelector" href="#description-tab" data-toggle="tab">Notes</span></a>
 			    	</li>			    	
-			    	<?php
-				    	if ($individual->hasTwitterId()) {
-				    		echo '<li class="nav-item"><a class="nav-link';
-				    		if (strcmp($focus,'onTweets')==0) echo ' active';
-				    		echo '" id="tweetsTabSelector" href="#tweets-tab" data-toggle="tab">Tweets</a></li>';
-				    	}
-			    	?>
 				  </ul>
 		  		
 		  		<!-- Tab panes -->
@@ -229,12 +222,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
 				    	<div id="individual_description_i" class="individual-description-area"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...'; ?></div>
 				    </div>
-									    
-				    <?php  if ($individual->hasTwitterId()) :?>
-				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onTweets')==0) echo 'active' ?>" id="tweets-tab">
-					    <a class="twitter-timeline" href="https://twitter.com/<?php echo $individual->getTwitterId() ?>?ref_src=twsrc%5Etfw" data-width="520">Tweets de <?php echo $individual->getTwitterId() ?></a>
-				    </div>
-				    <?php endif; ?>
 		</div>
 			</div>
 	    </div>
@@ -316,6 +303,5 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 			});
 		});
 	</script>
-	<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>	
 </body>
 </html>
