@@ -232,7 +232,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 									    
 				    <?php  if ($individual->hasTwitterId()) :?>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onTweets')==0) echo 'active' ?>" id="tweets-tab">
-				    	<?php echo $individual->embedTwitterTimeline(); ?>
+					    <a class="twitter-timeline" href="https://twitter.com/<?php echo $individual->getTwitterId() ?>?ref_src=twsrc%5Etfw" data-width="520">Tweets de <?php echo $individual->getTwitterId() ?></a>
 				    </div>
 				    <?php endif; ?>
 		</div>
@@ -316,5 +316,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 			});
 		});
 	</script>
+	<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>	
 </body>
 </html>

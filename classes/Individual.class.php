@@ -442,13 +442,6 @@ class Individual {
 		return $out;
 	}
 	/**
-	 *
-	 * @since 08/2018
-	 */
-	public function embedTwitterTimeline() {
-		return '<a class="twitter-timeline" href="https://twitter.com/' . $this->getTwitterId () . '?ref_src=twsrc%5Etfw">Tweets by ' . $this->getTwitterId () . '</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>';
-	}
-	/**
 	 * Obtient le commentaire.
 	 *
 	 * @version 08/2018
