@@ -112,6 +112,7 @@ class System {
 		return $this->appli_url . 'data/trombinoscope/';
 	}
 	/**
+	 *
 	 * @since 08/2022
 	 * @return string
 	 */
@@ -1060,46 +1061,23 @@ class System {
 	/**
 	 *
 	 * @since 02/2019
+	 * @version 12/2022
 	 */
-	public function getEntities($criteria = NULL, $sort = 'Alphabetical', $offset = 0, $nb = NULL) {
-		if (isset ( $criteria ) && count ( $criteria ) > 0) {
-
-			$society_criteria = array ();
-			$individual_criteria = array ();
-
-			if (isset ( $criteria ['name substring'] )) {
-				$society_criteria [] = 'society_name LIKE :society_name_substring';
-				$individual_criteria [] = '(individual_lastName LIKE :individual_lastName_firstLetters OR individual_firstName LIKE :individual_firstName_firstLetters)';
-			}
-		}
-
-		$sql = '(SELECT society_id AS id, society_name AS name, \'society\' AS type FROM society WHERE ' . implode ( ' AND ', $society_criteria ) . ')';
+	public function getEntities($name_substring, $offset=0, $nb = 100) {
 		$individualWholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
-		$sql .= ' UNION (SELECT individual_id AS id, ' . $individualWholeNameSqlSelectPattern . ' AS name, \'individual\' AS type FROM individual WHERE ' . implode ( ' AND ', $individual_criteria ) . ')';
 
-		switch ($sort) {
-			default :
-				$sql .= ' ORDER BY name ASC';
-		}
+		$sql = '(SELECT society_id AS id, society_name AS name, \'society\' AS type FROM society WHERE society_name LIKE :society_name)';
+		$sql .= ' UNION ';
+		$sql .= '(SELECT individual_id AS id, ' . $individualWholeNameSqlSelectPattern . ' AS name, \'individual\' AS type FROM individual WHERE ' . $individualWholeNameSqlSelectPattern . ' LIKE :individual_wholeName)';
+		$sql .= ' ORDER BY name ASC';
+		$sql .= ' LIMIT :offset, :nb';
 
-		if (isset ( $nb )) {
-			$sql .= ' LIMIT :offset, :nb';
-		}
-		// echo $sql;
 		$statement = $this->getPdo ()->prepare ( $sql );
 
-		if (isset ( $criteria ) && count ( $criteria ) > 0) {
-			if (isset ( $criteria ['name substring'] )) {
-				$statement->bindValue ( ':society_name_substring', '%' . $criteria ['name substring'] . '%', PDO::PARAM_STR );
-				$statement->bindValue ( ':individual_lastName_firstLetters', $criteria ['name substring'] . '%', PDO::PARAM_STR );
-				$statement->bindValue ( ':individual_firstName_firstLetters', $criteria ['name substring'] . '%', PDO::PARAM_STR );
-			}
-		}
-
-		if (isset ( $nb )) {
-			$statement->bindValue ( ':offset', $offset, PDO::PARAM_INT );
-			$statement->bindValue ( ':nb', $nb, PDO::PARAM_INT );
-		}
+		$statement->bindValue ( ':society_name', '%' . $name_substring . '%', PDO::PARAM_STR );
+		$statement->bindValue ( ':individual_wholeName', '%' . $name_substring . '%', PDO::PARAM_STR );
+		$statement->bindValue ( ':offset', $offset, PDO::PARAM_INT );
+		$statement->bindValue ( ':nb', $nb, PDO::PARAM_INT );
 
 		$statement->execute ();
 		return $statement->fetchAll ( PDO::FETCH_ASSOC );

@@ -9,7 +9,9 @@ if (empty($_SESSION['user_id'])) {
 	exit;
 }
 
-$data = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntities(array("name substring"=>$_REQUEST['query']));
+$count_max = isset($_REQUEST['count_max']) ? $_REQUEST['count_max'] : null;
+
+$data = $system->getEntities($_REQUEST['name_substring'], 0, $count_max);
 
 //echo '{"entities":' . json_encode ( $data ) . '}';
 

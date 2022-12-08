@@ -10,11 +10,13 @@ if (empty ( $_SESSION ['user_id'] )) {
 	exit ();
 } else {
 	$user = new User ( $_SESSION ['user_id'] );
-	$user->feed ();
+	$user->feed();
 }
 
 $doc_title = 'Résultat de la recherche';
-$entities = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEntities(array("name substring"=>$_REQUEST['query']));
+$name_substring = isset($_REQUEST['name_substring']) ? $_REQUEST['name_substring'] : '';
+$count_max = 70;
+$entities = $system->getEntities($name_substring, 0, $count_max);
 
 ?>
 <!doctype html>
@@ -39,14 +41,14 @@ $entities = empty($_REQUEST['query']) ? $system->getEntities() : $system->getEnt
 	<?php
 		if (count($entities)==0) {
 			echo '<h1 class="bd-title">Aucun résultat</h1>';
-			echo '<p>Introduire une <a href="society_edit.php?society_name='.urlencode(ucfirst($_REQUEST['query'])).'">nouvelle société</a> ou un <a href="individual_edit.php?individual_lastname='.urlencode(ucfirst($_REQUEST['query'])).'">nouvel individu</a>.</p>';
+			echo '<p>Introduire une <a href="society_edit.php?society_name='.urlencode(ucfirst($_REQUEST['name_substring'])).'">nouvelle société</a> ou un <a href="individual_edit.php?individual_lastname='.urlencode(ucfirst($_REQUEST['name_substring'])).'">nouvel individu</a>.</p>';
 		} else {
-			echo '<h1 class="bd-title">'.ToolBox::toHtml($doc_title).'</h1>';
+			echo '<h1 class="bd-title">'.ToolBox::toHtml($doc_title).' <small>'.$count_max.' max</small></h1>';
 			echo '<ul class="list-group">';
 			foreach ($entities as $e) {
 				echo '<li class="list-group-item">';
 				
-				$name = empty($_REQUEST['query']) ? ToolBox::toHtml($e['name']) : str_ireplace(ToolBox::toHtml($_REQUEST['query']), '<small>'.ToolBox::toHtml($_REQUEST['query']).'</small>', ToolBox::toHtml($e['name']));
+				$name = empty($_REQUEST['name_substring']) ? ToolBox::toHtml($e['name']) : str_ireplace(ToolBox::toHtml($_REQUEST['name_substring']), '<small>'.ToolBox::toHtml($_REQUEST['name_substring']).'</small>', ToolBox::toHtml($e['name']));
 				
 				switch($e['type']) {
 					case 'individual':

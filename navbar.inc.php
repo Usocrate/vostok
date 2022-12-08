@@ -35,7 +35,7 @@
 		</li>    	
     </ul>
 	<form class="form-inline flex-lg-fill mx-lg-2" method="post" action="entities.php">
-		<input id="entity_search_i" name="query" type="search" class="form-control flex-lg-fill mx-lg-1  my-1" placeholder="nom, prénom, société" />
+		<input id="entity_search_i" name="name_substring" type="search" class="form-control flex-lg-fill mx-lg-1  my-1" placeholder="nom, prénom, société" />
 		<button type="submit" name="entity_newsearch" value="filtrer" class="btn btn-outline-primary mx-lg-1 my-1">Ok</button>
 	</form>    
   </div>
@@ -52,7 +52,8 @@
 	                url:'api/entities_names.json.php',
 	                dataType: 'json',
 	                data:{
-	                    'query': request.term
+	                    'name_substring': request.term,
+	                    'count_max': 21
 	                 },
 	                 success : function(data, textStatus, jqXHR){
 	                 	//console.log(JSON.stringify(data));
