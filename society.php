@@ -181,34 +181,50 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	  <!-- Tab panes -->
 	  <div class="tab-content">
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onRelatedSocieties')==0) echo ' active' ?>" id="societies-tab">
-			<ul class="list-group list-group-flush">
+			
 				<?php
+				$groups = array();
 				foreach ($relatedSocieties as $item) {
-					// $item[0] : Société
-					// $item[1] : Identifiant de la relation;
-					// $item[2] : Rôle
-					// $item[3] : Description
-					echo '<li class="list-group-item">';
-					echo '<h2>';
-					echo '<a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a>';
-					echo ' <small>(';
-					echo '<a href="relationshipSocietyRole.php?role='.$item[2].'">';
-					echo empty($item[2]) ? '?' : ToolBox::toHtml($item[2]);
-					echo '</a>';
-					echo ')';
-					echo ' <a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
-					echo '</small>';
-					echo '</h2>';
-					if (!empty($item[3])) {
-						echo '<p>';
-						echo ToolBox::toHtml($item[3]);
-						echo '</p>';
+					if (!isset($groups[$item[2]])) {
+						$groups[$item[2]] = array();
 					}
-					echo '</li>';
+					$groups[$item[2]][] = $item;
 				}
-				echo '<li class="list-group-item"><a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
+				foreach ($groups as $name=>$societies) {
+					echo '<section>';
+					echo '<h2><a href="relationshipSocietyRole.php?role='.ToolBox::toHtml($name).'">'.ToolBox::toHtml($name).'</a>';
+					if (count($societies) > 1) {
+						echo ' <small>'.count($societies).'</small>';
+					}
+					echo '</h2>';
+					echo '<ul class="list-group list-group-flush">';
+					foreach ($societies as $item) {
+						// $item[0] : Société
+						// $item[1] : Identifiant de la relation;
+						// $item[2] : Rôle
+						// $item[3] : Description
+						echo '<li class="container p-2 list-group-item">';
+						echo '<div class="row">';
+						
+						echo '<div class="col-lg-5 align-self-start">';
+						echo '<h3><a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a> <small><a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a></small></h3>';
+						echo '</div>';
+						
+						echo '<div class="col-lg-7 align-self-center">';
+						if (!empty($item[3])) {
+							echo '<div>'.ToolBox::toHtml($item[3]).'</div>';
+						}
+						echo '</div>';
+						
+						echo '</div>';
+						echo '</li>';
+					}
+					echo '</ul>';
+					echo '</section>';
+				}
+				echo '<div><a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></div>';
 				?>
-			</ul>
+			
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individuals-tab">
 			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <i class="fas fa-plus"></i></a></small></h2>
