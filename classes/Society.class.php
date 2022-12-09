@@ -841,7 +841,10 @@ class Society {
 					$s,
 					$row ['relationship_id'],
 					$row ['relatedsociety_role'],
-					$row ['description']
+					$row ['description'],
+					$row ['init_year'],
+					$row ['end_year']
+					
 			);
 		}
 		return $output;
