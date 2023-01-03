@@ -102,7 +102,8 @@ class System {
 				'jpg',
 				'jfif',
 				'png',
-				'gif'
+				'gif',
+				'webp'
 		);
 	}
 	public function getCvUrl() {
