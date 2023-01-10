@@ -160,17 +160,18 @@ $doc_title = 'Accueil';
 		?>
 	</div>
 	<script>
-		$(document).ready(function(){
-			$('.il').masonry({
-				itemSelector: '.card',
-				columnWidth: '.card',
-				gutter: '.masonryGutterSizer'
-		    }).imagesLoaded().progress(
-				function() {
-					$('.il').masonry('layout');	
-				}
-			);
-		})
+	document.addEventListener("DOMContentLoaded", function() {
+		const ils = document.querySelectorAll('.il');
+		imagesLoaded(ils, function(){
+			for (let il of ils) {
+				new Masonry( il, {
+					itemSelector: '.card',
+					columnWidth:  '.card',
+					gutter: '.masonryGutterSizer'
+				});
+			}
+		});
+	});
 	</script>
 </body>
 </html>

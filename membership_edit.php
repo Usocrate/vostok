@@ -174,30 +174,22 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 <!doctype html>
 <html lang="fr">
 <head>
-<title><?php echo strip_tags($h1_content); ?></title>
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, height=device-height, initial-scale=1.0">
-<link type="text/css" rel="stylesheet"
-	href="<?php echo FONTAWESOME_CSS_URI ?>"
-	integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>"
-	crossorigin="anonymous" />
-<link type="text/css" rel="stylesheet"
-	href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
-<script src="js/controls.js"></script>
-<link type="text/css" rel="stylesheet"
-	href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
-    <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
+	<title><?php echo strip_tags($h1_content); ?></title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+	<link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>"	integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>"	crossorigin="anonymous" />
+	<link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
+	<script src="js/controls.js"></script>
+	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
+	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
-<script src="<?php echo JQUERY_UI_URI; ?>"></script>
-<script src="<?php echo BOOTSTRAP_JS_URI ?>"
-	integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>"
-	crossorigin="anonymous"></script>
+	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-		<h1 class="bd-title"><?php echo $h1_content ?></h1>
+	<h1 class="bd-title"><?php echo $h1_content ?></h1>
 	<?php echo $fb->toHtml() ?>
 	<section>
 			<form id="membership_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
@@ -263,54 +255,35 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 					</datalist>
 				</div>
 				<div class="form-group col-md-4 col-sm-12">
-					<label for="department_i">Service</label> <input id="department_i"
-						name="department" type="text"
-						value="<?php echo $membership->getDepartment(); ?>" size="35"
-						maxlength="255" class="form-control" />
+					<label for="department_i">Service</label> <input id="department_i" name="department" type="text" value="<?php echo $membership->getDepartment(); ?>" size="35" maxlength="255" class="form-control" />
 				</div>
 				<div class="form-group col-md-2 col-sm-6">
-					<label for="init_year_i">Année d'ouverture</label> <input
-						id="init_year_i" name="init_year" type="text"
-						value="<?php echo $membership->getInitYear(); ?>" size="20"
-						class="form-control" />
+					<label for="init_year_i">Année d'ouverture</label> <input id="init_year_i" name="init_year" type="text"	value="<?php echo $membership->getInitYear(); ?>" size="20"	class="form-control" />
 				</div>
 				<div class="form-group col-md-2 col-sm-6">
-					<label for="end_year_i">Année de clôture</label> <input
-						id="end_year_i" name="end_year" type="text"
-						value="<?php echo $membership->getEndYear(); ?>" size="20"
-						class="form-control" />
+					<label for="end_year_i">Année de clôture</label> <input	id="end_year_i" name="end_year" type="text"	value="<?php echo $membership->getEndYear(); ?>" size="20" class="form-control" />
 				</div>
 			</div>
 			
 			<?php if ( empty($_REQUEST['serie']) || strcmp($_REQUEST['serie'], 'similarMembershipInSociety')!=0 || ($lastSavedMembership->hasPhone() || $lastSavedMembership->hasEmail()) ) : ?>
     		<div class="form-row">
 					<div class="form-group col-md-4">
-						<label for="phone_i">Téléphone</label> <input id="phone_i"
-							name="phone" type="tel"
-							value="<?php echo $membership->getPhone(); ?>" size="15"
-							maxlength="255" class="form-control" />
+						<label for="phone_i">Téléphone</label> <input id="phone_i" name="phone" type="tel" value="<?php echo $membership->getPhone(); ?>" size="15"	maxlength="255" class="form-control" />
 					</div>
 
 					<div class="form-group col-md-8">
-						<label for="email_i">Mél</label> <input id="email_i" name="email"
-							type="email" value="<?php echo $membership->getEmail(); ?>"
-							size="35" maxlength="255" class="form-control" />
+						<label for="email_i">Mél</label> <input id="email_i" name="email" type="email" value="<?php echo $membership->getEmail(); ?>" size="35" maxlength="255" class="form-control" />
 					</div>
 				</div>
 			<?php endif; ?>
 
 			<div class="form-group">
 					<label for="comment_i">Notes</label>
-					<textarea id="comment_i" name="description" cols="51" rows="5"
-						class="form-control"><?php echo $membership->getDescription(); ?></textarea>
+					<textarea id="comment_i" name="description" cols="51" rows="5" class="form-control"><?php echo $membership->getDescription(); ?></textarea>
 				</div>
 
 				<div class="form-group">
-					<label for="membership_url_i">Sur le web</label> <input
-						id="membership_url_i" name="url" type="url"
-						value="<?php echo $membership->getUrl(); ?>" size="35"
-						maxlength="255" class="form-control"
-						onchange="javascript:checkUrlInput('membership_url_i', 'membership_url_link');" />
+					<label for="membership_url_i">Sur le web</label> <input	id="membership_url_i" name="url" type="url"	value="<?php echo $membership->getUrl(); ?>" size="35"	maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_i', 'membership_url_link');" />
 					<a id="membership_url_link" href="#" style="display: none">[voir]</a>
 				</div>
 
@@ -406,7 +379,7 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 	});
 </script>
 
-<script type="text/javascript">
+<script>
 	document.addEventListener("DOMContentLoaded", function() {
 
 		const ifni = document.getElementById('individual_firstName_i');
