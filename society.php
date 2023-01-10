@@ -390,9 +390,6 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 </div>
 <script>
 	$(document).ready(function() {
-		
-		// https://www.sitepoint.com/bootstrap-tabs-play-nice-with-masonry/
-		
 	    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			var focus;
 			var scope = 'society';
@@ -420,15 +417,20 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				  }
 			});
 		});
-
-		$('.il').masonry({
-	      itemSelector: '.card',
-	      columnWidth: '.card',
-	      gutter: '.masonryGutterSizer'
-	    }).imagesLoaded().progress(function() {
-				$('.il').masonry('layout');
+	});
+</script>
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		const ils = document.querySelectorAll('.il');
+		imagesLoaded(ils, function(){
+			for (let il of ils) {
+				new Masonry( il, {
+					itemSelector: '.card',
+					columnWidth:  '.card',
+					gutter: '.masonryGutterSizer'
+				});
 			}
-		);
+		});
 	});
 </script>
 </body>

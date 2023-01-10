@@ -65,9 +65,5 @@ $doc_title = $title;
         ?>
 	</section>
 </div>
-<script>
-	$(document).ready(function() {
-	});
-</script>
 </body>
 </html>
