@@ -343,7 +343,7 @@ if ($relationship->areItemsBothKnown()) {
 	})
 </script>
 <?php if($relationship->hasId()): ?>
-<script type="text/javascript">
+<script>
 	document.addEventListener("DOMContentLoaded", function() {
 		const delete_a = document.getElementById('delete_a');
 		delete_a.addEventListener('click', function (event) {

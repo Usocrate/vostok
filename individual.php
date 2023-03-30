@@ -50,6 +50,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+	<script src="js/individual-photo.js"></script>
 </head>
 <body id="individualDoc">
 <?php include 'navbar.inc.php'; ?>
@@ -61,7 +62,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
     		<?php
     			if ($individual->hasPhoto()) {
     				echo '<a href="individual_edit.php?individual_id='.$individual->getId().'" class="implicit card-img-top-wrapper">';
-    				echo '<img src="' . $individual->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+    				echo '<img is="i-photo" data-individual-id="'.$individual->getId().'" src="' . $individual->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
 	    			echo '</a>';
 	    		} else {
 					echo '<a href="individual_edit.php?individual_id='.$individual->getId().'" class="implicit card-img-top-wrapper">';
@@ -258,8 +259,15 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 		});
 	</script>
 	<script>
+		const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
+		const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
+		const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
+	
 		document.addEventListener("DOMContentLoaded", function() {
 			const i = document.getElementById('individual_description_i');
+
+			customElements.define("i-photo", IndividualPhoto, { extends: "img" });
+			
 			if (i!==null) {
 				i.contentEditable = true;
 				//i.focus();
@@ -271,7 +279,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				  xhr.responseType = 'json';
 				  xhr.onreadystatechange = function () {
 				    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-				    	//alert(this.response.message);
 				    	if (this.response.data.location !== undefined) {
 					    	window.location.replace(this.response.data.location);
 				    	}

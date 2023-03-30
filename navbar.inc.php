@@ -40,8 +40,8 @@
 	</form>    
   </div>
 </nav>
-
 <script>
+	/*
 	$(document).ready(function(){
 
 	    $('#entity_search_i').autocomplete({
@@ -86,4 +86,5 @@
 	   		return $("<li>").append("<div>"+icon+" "+nameWithSmallTerm+"</div>").appendTo(ul);
 	    };
 	})
+	*/
 </script>

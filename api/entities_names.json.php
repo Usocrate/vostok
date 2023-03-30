@@ -13,8 +13,6 @@ $count_max = isset($_REQUEST['count_max']) ? $_REQUEST['count_max'] : null;
 
 $data = $system->getEntities($_REQUEST['name_substring'], 0, $count_max);
 
-//echo '{"entities":' . json_encode ( $data ) . '}';
-
 echo json_encode ( $data, JSON_UNESCAPED_UNICODE);
 
 ?>

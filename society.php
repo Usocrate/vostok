@@ -22,7 +22,7 @@ $society->initFromDB();
 // participations
 $memberships = $society->getMemberships();
 if ($memberships) {
-	// regroupement des participations par individu
+	// regroupement des participations par individu	
 	$members = array();
 	foreach ($memberships as $ms) {
 		$i = $ms->getIndividual();
@@ -93,6 +93,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
+	<script src="js/individual-photo.js"></script>	
 	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="societyDoc">
@@ -245,7 +246,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						echo '<div class="card">';
     						if ($i->hasPhoto()) {
     							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-    							echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+    							echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
     							echo '</a>';
     						} else {
     							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
@@ -270,7 +271,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						} else {
     						    echo '<div class="card-body">';
     						    echo $card_title_tag;
-    						    echo '<p>';
+    						    echo '<p>';	
     						    echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
     						    if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
     						    echo '</p>';
@@ -303,7 +304,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					    echo '<div class="card">';
     					    if ($i->hasPhoto()) {
     					    	echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-    					    	echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+    					    	echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
     					    	echo '</a>';
     					    } else {
     					    	//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
@@ -420,8 +421,16 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	});
 </script>
 <script>
+	const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
+	const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
+	const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
+	
+
 	document.addEventListener("DOMContentLoaded", function() {
 		const ils = document.querySelectorAll('.il');
+		
+		customElements.define("i-photo", IndividualPhoto, { extends: "img" });
+
 		imagesLoaded(ils, function(){
 			for (let il of ils) {
 				new Masonry( il, {

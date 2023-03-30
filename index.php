@@ -69,6 +69,8 @@ $doc_title = 'Accueil';
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
+	<script src="js/individual-photo.js"></script>	
+	<script src="https://cdn.jsdelivr.net/npm/datalist-ajax/dist/datalist-ajax.min.js"></script>
 	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="indexDoc">
@@ -84,7 +86,7 @@ $doc_title = 'Accueil';
 						echo '<div class="card">';
 						if ($i->hasPhoto()) {
 							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-							echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+							echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
 							echo '</a>';
 						}
 						echo '<div class="card-header">';
@@ -127,7 +129,7 @@ $doc_title = 'Accueil';
 						echo '<div class="card">';
 						if ($i->hasPhoto()) {
 							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-							echo '<img src="' . $i->getReworkedPhotoUrl () . '"  class="card-img-top" />';
+							echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
 							echo '</a>';
 						}
 						echo '<div class="card-body">';
@@ -160,18 +162,25 @@ $doc_title = 'Accueil';
 		?>
 	</div>
 	<script>
-	document.addEventListener("DOMContentLoaded", function() {
-		const ils = document.querySelectorAll('.il');
-		imagesLoaded(ils, function(){
-			for (let il of ils) {
-				new Masonry( il, {
-					itemSelector: '.card',
-					columnWidth:  '.card',
-					gutter: '.masonryGutterSizer'
-				});
-			}
+		const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
+		const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
+		const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
+		
+	
+		document.addEventListener("DOMContentLoaded", function() {
+			customElements.define("i-photo", IndividualPhoto, { extends: "img" });
+	
+			const ils = document.querySelectorAll('.il');
+			imagesLoaded(ils, function(){
+				for (let il of ils) {
+					new Masonry( il, {
+						itemSelector: '.card',
+						columnWidth:  '.card',
+						gutter: '.masonryGutterSizer'
+					});
+				}
+			});
 		});
-	});
 	</script>
 </body>
 </html>

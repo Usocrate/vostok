@@ -518,37 +518,45 @@ class Individual {
 	/**
 	 * Obtient l'Url de la photographie de la personne.
 	 *
-	 * @version 08/2022
+	 * @version 03/2023
 	 * @return string
 	 */
-	public function getPhotoUrl() {
+	public function getPhotoUrl($mode='reworked') {
 		global $system;
 		try {
-			if ($this->hasReworkedPhoto()) {
-				return $system->getTrombiReworkUrl(). $this->getId () .'.png';
-			} else {
-				$file_extensions = $system->getImageFileExtensions ();
-
-				// recherche d'un fichier construit à partir de l'id de l'individu.
-				foreach ( $file_extensions as $e ) {
-					$file_name = $this->getId () . '.' . $e;
-					if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
-						return $system->getTrombiUrl () . $file_name;
+			switch ($mode) {
+				case 'reworked':
+					if ($this->hasReworkedPhoto()) {
+						return $system->getTrombiReworkUrl(). $this->getId () .'.png';
+					} else {
+						return $this->getPhotoUrl('original');
 					}
-				}
-
-				// recherche d'un fichier construit à partir du nom de l'individu.
-				if (! isset ( $this->lastName ) && ! isset ( $this->firstName )) {
-					throw new Exception ( 'Il nous manque le nom de la personne pour trouver sa photo' );
-				}
-				$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
-				foreach ( $file_extensions as $e ) {
-					$file_name = $file_basename . '.' . $e;
-					if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
-						return $system->getTrombiUrl () . $file_name;
+					break;
+				case 'original':
+					$file_extensions = $system->getImageFileExtensions ();
+					
+					// recherche d'un fichier construit à partir de l'id de l'individu.
+					foreach ( $file_extensions as $e ) {
+						$file_name = $this->getId () . '.' . $e;
+						if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+							return $system->getTrombiUrl () . $file_name;
+						}
 					}
-				}
+					
+					// recherche d'un fichier construit à partir du nom de l'individu.
+					if (! isset ( $this->lastName ) && ! isset ( $this->firstName )) {
+						throw new Exception ( 'Il nous manque le nom de la personne pour trouver sa photo' );
+					}
+					$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
+					foreach ( $file_extensions as $e ) {
+						$file_name = $file_basename . '.' . $e;
+						if (is_file ( $system->getTrombiDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
+							return $system->getTrombiUrl () . $file_name;
+						}
+					}
+					break;
 			}
+
 		} catch ( Exception $e ) {
 			$system->reportException ( $e, __METHOD__ );
 		}
