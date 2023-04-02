@@ -602,9 +602,9 @@ class Individual {
 	 * @since 08/2022
 	 * @return string
 	 */
-	public function getReworkedPhotoFilePath() {
+	public function getReworkedPhotoFilePath($version='default') {
 		global $system;
-		$file_name = $this->getId () . '.png';
+		$file_name = strcmp($version,'hover')==0 ? $this->getId () . '_hover.png' : $this->getId () . '.png';
 		if (is_file ( $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
 			return $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $file_name;
 		}
@@ -671,14 +671,21 @@ class Individual {
 		try {
 			if ($this->hasPhoto ()) {
 				$im = new Imagick ( $this->getPhotoFilePath () );
+				$im->setImageFormat('png');
 				$im->scaleImage ( 453, 0 );
-				//$im->SetColorspace(Imagick::COLORSPACE_GRAY);
 				$im->normalizeimage();
+
+				$targetFilePath = $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $this->getId () . '_hover.png';
+				$handle = fopen($targetFilePath, 'w+');
+				$step1 = $im->writeimagefile( $handle );
+				
 				$im->orderedPosterizeImage("h4x4a", imagick::CHANNEL_BLUE);
 				$im->orderedPosterizeImage("h4x4a", imagick::CHANNEL_GREEN);
 				$im->transformimagecolorspace(Imagick::COLORSPACE_GRAY);
 				$targetFilePath = $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $this->getId () . '.png';
-				$handle = fopen($targetFilePath, 'w+'); 
+				$handle = fopen($targetFilePath, 'w+');
+				$step2 = $im->writeimagefile( $handle );
+				
 				return $im->writeimagefile( $handle );
 			}
 		} catch ( Exception $e ) {
@@ -700,7 +707,7 @@ class Individual {
 	 * @return boolean
 	 */
 	public function hasReworkedPhoto() {
-		return is_file ( $this->getReworkedPhotoFilePath () );
+		return is_file ( $this->getReworkedPhotoFilePath()) && is_file ($this->getReworkedPhotoFilePath('hover'));
 	}
 	public function getPhotoHtml() {
 		if ($this->getPhotoUrl ())

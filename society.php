@@ -246,7 +246,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						echo '<div class="card">';
     						if ($i->hasPhoto()) {
     							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-    							echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
+    							echo '<img is="individual-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
     							echo '</a>';
     						} else {
     							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
@@ -304,7 +304,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					    echo '<div class="card">';
     					    if ($i->hasPhoto()) {
     					    	echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-    					    	echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
+    					    	echo '<img is="individual-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
     					    	echo '</a>';
     					    } else {
     					    	//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
@@ -390,15 +390,13 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	</div>
 </div>
 <script>
-	const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
 	const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
-	const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
 	var masonries = [];
 
 	document.addEventListener("DOMContentLoaded", function() {
 		const ils = document.querySelectorAll('.il');
 		
-		customElements.define("i-photo", IndividualPhoto, { extends: "img" });
+		customElements.define("individual-photo", IndividualPhoto, { extends: "img" });
 
 		imagesLoaded(ils, function(){
 			for (let il of ils) {

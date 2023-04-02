@@ -62,7 +62,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
     		<?php
     			if ($individual->hasPhoto()) {
     				echo '<a href="individual_edit.php?individual_id='.$individual->getId().'" class="implicit card-img-top-wrapper">';
-    				echo '<img is="i-photo" data-individual-id="'.$individual->getId().'" src="' . $individual->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
+    				echo '<img is="individual-photo" data-individual-id="'.$individual->getId().'" src="' . $individual->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
 	    			echo '</a>';
 	    		} else {
 					echo '<a href="individual_edit.php?individual_id='.$individual->getId().'" class="implicit card-img-top-wrapper">';
@@ -266,7 +266,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 		document.addEventListener("DOMContentLoaded", function() {
 			const i = document.getElementById('individual_description_i');
 
-			customElements.define("i-photo", IndividualPhoto, { extends: "img" });
+			customElements.define("individual-photo", IndividualPhoto, { extends: "img" });
 			
 			if (i!==null) {
 				i.contentEditable = true;

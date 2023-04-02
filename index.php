@@ -86,7 +86,7 @@ $doc_title = 'Accueil';
 						echo '<div class="card">';
 						if ($i->hasPhoto()) {
 							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-							echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
+							echo '<img is="individual-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
 							echo '</a>';
 						}
 						echo '<div class="card-header">';
@@ -129,7 +129,7 @@ $doc_title = 'Accueil';
 						echo '<div class="card">';
 						if ($i->hasPhoto()) {
 							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
-							echo '<img is="i-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
+							echo '<img is="individual-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
 							echo '</a>';
 						}
 						echo '<div class="card-body">';
@@ -168,7 +168,7 @@ $doc_title = 'Accueil';
 		
 	
 		document.addEventListener("DOMContentLoaded", function() {
-			customElements.define("i-photo", IndividualPhoto, { extends: "img" });
+			customElements.define("individual-photo", IndividualPhoto, { extends: "img" });
 	
 			const ils = document.querySelectorAll('.il');
 			imagesLoaded(ils, function(){

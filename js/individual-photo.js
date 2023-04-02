@@ -2,40 +2,33 @@ class IndividualPhoto extends HTMLImageElement {
 	constructor() {
 		super();
 		this.reworkedSrc = this.src;
-		this.originalSrc = null;
-		this.addEventListener('mouseover', this._setOriginalSrc.bind(this));
+		this.reworkedHOverSrc = null;
+		this.addEventListener('mouseover', this._setHOverSrc.bind(this));
 		this.addEventListener('mouseout', this._resetReworkedSrc.bind(this));
 	}
-	
-	_setOriginalSrc(event) {
-		if (this.originalSrc!==null) {
-			this.src = this.originalSrc; 
+	_setHOverSrc(event) {
+		if (this.reworkedHOverSrc!==null) {
+			this.src = this.reworkedHOverSrc; 
 		} else {
-			var foundImgSrc=null;
-			for (let e of imageFileExtensions) {
-				if (foundImgSrc!==null) {
-					this.originalSrc = foundImgSrc;
-					this.src = this.originalSrc;
-					break;
-				}
-								
-				let urlToTest = trombiUrl+this.dataset.individualId+'.'+e;
-				//console.log('test '+urlToTest);
+			let foundImgSrc=null;
+			let urlToTest = trombiReworkUrl+this.dataset.individualId+'_hover.png';
+			let xhr = new XMLHttpRequest();
 
-				let xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+					foundImgSrc=urlToTest;
+				}				  
+			};
 
-				xhr.onreadystatechange = function () {
-					if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-						console.log('something found at '+urlToTest+'!');
-						foundImgSrc=urlToTest;
-					}				  
-				};
-
-				xhr.open("GET", urlToTest, false);
-				xhr.send();
+			xhr.open("GET", urlToTest, false);
+			xhr.send();
+			
+			if (foundImgSrc!==null) {
+				this.reworkedHOverSrc = foundImgSrc;
+				this.src = this.reworkedHOverSrc;
 			}
 		}
-	}
+	}	
 	
 	_resetReworkedSrc(event) {
 		this.src=this.reworkedSrc;
