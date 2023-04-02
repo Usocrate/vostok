@@ -390,7 +390,27 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	</div>
 </div>
 <script>
-	$(document).ready(function() {
+	const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
+	const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
+	const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
+	var masonries = [];
+
+	document.addEventListener("DOMContentLoaded", function() {
+		const ils = document.querySelectorAll('.il');
+		
+		customElements.define("i-photo", IndividualPhoto, { extends: "img" });
+
+		imagesLoaded(ils, function(){
+			for (let il of ils) {
+				let m = new Masonry( il, {
+					itemSelector: '.card',
+					columnWidth:  '.card',
+					gutter: '.masonryGutterSizer'
+				});
+				masonries.push(m);
+			}
+		});
+
 	    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 			var focus;
 			var scope = 'society';
@@ -401,7 +421,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 			  		break;
 			  	case 'individualsTabSelector':
 			  		focus = 'onIndividuals';
-			  		$('.il').masonry('layout');
+			  		for (let m of masonries) {
+				  		m.layout();
+			  		}
 			  		break;
 			  	case 'leadsTabSelector':
 			  		focus = 'onLeads';
@@ -418,28 +440,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				  }
 			});
 		});
-	});
-</script>
-<script>
-	const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
-	const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
-	const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
-	
-
-	document.addEventListener("DOMContentLoaded", function() {
-		const ils = document.querySelectorAll('.il');
 		
-		customElements.define("i-photo", IndividualPhoto, { extends: "img" });
-
-		imagesLoaded(ils, function(){
-			for (let il of ils) {
-				new Masonry( il, {
-					itemSelector: '.card',
-					columnWidth:  '.card',
-					gutter: '.masonryGutterSizer'
-				});
-			}
-		});
 	});
 </script>
 </body>
