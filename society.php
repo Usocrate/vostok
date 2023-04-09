@@ -193,11 +193,17 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				}
 				foreach ($groups as $name=>$societies) {
 					echo '<section>';
+
+					echo '<div class="d-lg-flex flex-lg-row justify-content-between align-items-center mb-3 mt-3">';
 					echo '<h2><a href="relationshipSocietyRole.php?role='.ToolBox::toHtml($name).'">'.ToolBox::toHtml($name).'</a>';
 					if (count($societies) > 1) {
 						echo ' <small>'.count($societies).'</small>';
 					}
 					echo '</h2>';
+					echo '<div>';
+					echo '<a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'&item1_role='.ToolBox::toHtml($name).'" class="btn btn-sm btn btn-outline-secondary" ><i class="fas fa-plus"></i></a>';
+					echo '</div>';
+					echo '</div>';
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($societies as $item) {
 						// $item[0] : Société
