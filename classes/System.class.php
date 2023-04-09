@@ -1011,6 +1011,23 @@ class System {
 		return $statement->fetchAll ( PDO::FETCH_ASSOC );
 	}
 	/**
+	 * @since 04/2023
+	 */
+	public function suggestCorrespondingRoleForRelatedSocietyRole($role) {
+		$sql = 'SELECT role, COUNT(*) as nb FROM ';
+		$sql .= '(SELECT item0_role AS role FROM relationship WHERE item0_class=\'society\' AND item1_class=\'society\' AND item1_role=:item1_role';
+		$sql .= ' UNION ALL ';
+		$sql .= 'SELECT item1_role AS role FROM relationship WHERE item0_class=\'society\' AND item1_class=\'society\' AND item0_role=:item0_role) AS r';
+		$sql .= ' GROUP BY role';
+		$sql .= ' ORDER BY nb DESC';
+		$statement = $this->getPdo ()->prepare ( $sql );
+		$statement->bindValue ( ':item1_role', $role, PDO::PARAM_STR );
+		$statement->bindValue ( ':item0_role', $role, PDO::PARAM_STR );
+		$statement->execute();
+		$row = $statement->fetch( PDO::FETCH_ASSOC );
+		return isset($row['role']) ? $row['role'] : false;
+	}
+	/**
 	 *
 	 * @since 07/2019
 	 */

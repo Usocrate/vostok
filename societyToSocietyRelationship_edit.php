@@ -54,6 +54,8 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 	}
 	if (isset ( $_REQUEST ['item1_role'] )) {
 		$relationship->setItemRole($_REQUEST ['item1_role'],1);
+		$correspondingRole = $system->suggestCorrespondingRoleForRelatedSocietyRole($_REQUEST ['item1_role']);
+		$relationship->setItemRole($correspondingRole,0);
 	}
 }
 
