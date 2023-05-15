@@ -787,8 +787,8 @@ class Society {
 	/**
 	 * Obtient la société-mère si elle existe
 	 *
-	 * @since 23/09/2006
-	 * @version 20/12/2016
+	 * @since 09/2006
+	 * @version 12/2016
 	 */
 	public function getParentSociety() {
 		$data = $this->getRelatedSocieties ();
@@ -808,9 +808,9 @@ class Society {
 	 *
 	 * @return array
 	 * @since 08/2006
-	 * @version 12/2016
+	 * @version 04/2023
 	 */
-	public function getRelatedSocieties() {
+	public function getRelatedSocieties($role=null) {
 		global $system;
 
 		if (empty ( $this->id )) {
@@ -822,15 +822,25 @@ class Society {
 		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
 		$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
+		if (isset($role)) {
+			$sql .= ' AND item1_role=:item1_role';
+		}
 		$sql .= ' UNION';
 		$sql .= ' SELECT s.*, r.relationship_id, r.item0_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
 		$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
+		if (isset($role)) {
+			$sql .= ' AND item0_role=:item0_role';
+		}
 		$sql .= ' ORDER BY society_name ASC';
 
 		$statement = $system->getPdo ()->prepare ( $sql );
 		$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
 		$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
+		if (isset($role)) {
+			$statement->bindValue ( ':item0_role', $role, PDO::PARAM_STR );
+			$statement->bindValue ( ':item1_role', $role, PDO::PARAM_STR );
+		}
 		$statement->execute ();
 		$data = $statement->fetchAll ( PDO::FETCH_ASSOC );
 

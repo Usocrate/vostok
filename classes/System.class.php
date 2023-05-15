@@ -1088,6 +1088,53 @@ class System {
 		return $output;
 	}
 	/**
+	 * 
+	 * @since 05/2023
+	 */
+	public function updateSocietyRole(Society $society, Society $relatedSociety, $newRole)
+	{
+		try {
+			$this->getPdo()->beginTransaction();
+			
+			/*
+			 * requête 1
+			 */
+			$where = array('item0_id=:society_id', 'item0_class=\'society\'','item1_id=:relatedSociety_id', 'item1_class=\'society\'');
+			
+			$sql = 'UPDATE relationship SET item0_role=:newRole WHERE ' . implode(' AND ', $where);
+			$statement = $this->getPDO()->prepare($sql);
+			
+			$statement->bindValue(':society_id', $society->getId(), PDO::PARAM_INT);
+			$statement->bindValue(':relatedSociety_id', $relatedSociety->getId(), PDO::PARAM_INT);
+			$statement->bindValue(':newRole', $newRole, PDO::PARAM_STR);
+
+			$statement->execute();
+			
+			/*
+			 * requête 2
+			 */
+			$where = array('item0_id=:relatedSociety_id', 'item0_class=\'society\'','item1_id=:society_id', 'item1_class=\'society\'');
+			
+			$sql = 'UPDATE relationship SET item1_role=:newRole WHERE ' . implode(' AND ', $where);
+			$statement = $this->getPDO()->prepare($sql);
+			
+			$statement->bindValue(':society_id', $society->getId(), PDO::PARAM_INT);
+			$statement->bindValue(':relatedSociety_id', $relatedSociety->getId(), PDO::PARAM_INT);
+			$statement->bindValue(':newRole', $newRole, PDO::PARAM_STR);
+			
+			$statement->execute();
+			
+			return $this->getPdo()->commit();
+			
+		} catch (Exception $e) {
+			$this->reportException(__METHOD__, $e);
+			if ($this->getPdo()->inTransaction()) {
+				$this->getPdo()->rollBack();
+			}
+			return false;
+		}
+	}
+	/**
 	 *
 	 * @since 02/2019
 	 * @version 12/2022

@@ -63,7 +63,6 @@ if (isset($_POST['task'])) {
 			}
 			header('Location:society.php?society_id='.$society->getId());
 			exit;
-			break;
 		default :
 			trigger_error('Demande d\'éxécution d\'une tâche inconnue.');
 	}

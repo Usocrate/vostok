@@ -82,7 +82,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 <!doctype html>
 <html lang="fr">
 <head>
-    <title>Un des comptes (sa fiche détaillées)</title>
+    <title>Une société</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
@@ -91,6 +91,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
+	<script src="<?php echo POPPER_JS_URI; ?>"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="js/individual-photo.js"></script>	
@@ -200,9 +201,12 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 						echo ' <small>'.count($societies).'</small>';
 					}
 					echo '</h2>';
-					echo '<div>';
-					echo '<a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'&item1_role='.ToolBox::toHtml($name).'" class="btn btn-sm btn btn-outline-secondary" ><i class="fas fa-plus"></i></a>';
+					
+					echo '<div class="btn-group btn-group-sm">';
+					echo '<a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'&item1_role='.ToolBox::toHtml($name).'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-plus"></i></a>';
+					echo '<a href="society_relatedSocieties_role_edit.php?society_id='.$society->getId().'&role='.ToolBox::toHtml($name).'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></a>';
 					echo '</div>';
+					
 					echo '</div>';
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($societies as $item) {
