@@ -258,41 +258,24 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit card-img-top-wrapper">';
     							echo '<img is="individual-photo" data-individual-id="'.$i->getId().'" src="' . $i->getReworkedPhotoUrl () . '" class="card-img-top"></img>';
     							echo '</a>';
-    						} else {
-    							//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
     						}
-    						
-    						$card_title_tag = '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
-    						
-    						if (count($memberships)>1) {
-    						    echo '<div class="card-body">'.$card_title_tag.'</div>';
-    						    echo '<ul class="list-group list-group-flush">';
-    						    foreach ($memberships as $ms) {
-    						        echo '<li class="list-group-item">';
-    						        echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
-    						        if ( $ms->getPeriod() ) echo ' <small>('.$ms->getPeriod().')</small>';
-    						        if ( $ms->hasDescription() ) {
-    						        	echo $ms->getHtmlExpandableDescription();
-    						        }
-    						        //if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
-    						        echo '</li>';
-    						    }
-    						    echo '</ul>';
-    						} else {
-    						    echo '<div class="card-body">';
-    						    echo $card_title_tag;
-    						    echo '<p>';	
-    						    echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
-    						    if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
-    						    echo '</p>';
-    						    if ( current($memberships)->hasDescription() ) {
-    						    	echo current($memberships)->getHtmlExpandableDescription();
-    						    	//echo '<div class="description">'.ToolBox::toHtml(current($memberships)->getDescription()).'</div>';
-    						    }
-    						    //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
-    						    echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
-    						    echo '</div>';
+
+    						echo '<div class="card-body">';
+    						echo '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
+    						foreach ($memberships as $ms) {
+    							echo '<h4 class="card-subtitle mb-2 text-muted"><a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
+    							echo '<p class="card-text">';
+    							$smallElt = array();
+    							if ( $ms->getPeriod() ) $smallElt[] = $ms->getPeriod();
+    							if ($ms->getDepartment()) $smallElt[] = $ms->getDepartment();
+    							echo '<small class="text-muted">'.ToolBox::toHtml(implode(' - ', $smallElt)).'</small>';
+    							echo '</p>';
+    							if ( $ms->hasDescription() ) {
+    								echo $ms->getHtmlExpandableDescription();
+    							}
+    							//echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="card-link">édition</a>';
     						}
+    						echo '</div>';
     						echo '</div>';
     				  	}
     					echo '</div>';
@@ -320,35 +303,22 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					    	//echo '<img src="'.$system->getSkinUrl().'/images/missingThumbnail.svg" class="card-img-top missing-thumbnail" />';
     					    }
     					    
-    					    $card_title_tag = '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
-    					    
-    					    if (count($memberships)>1) {
-    					        echo '<div class="card-body">'.$card_title_tag.'</div>';
-    					        echo '<ul class="list-group list-group-flush">';
-    					        foreach ($memberships as $ms) {
-    					            echo '<li class="list-group-item">';
-    					            echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a>';
-    					            if ( $ms->getPeriod() ) echo ' <small>('.$ms->getPeriod().')</small>';
-    					            if ( $ms->hasDescription() ) {
-    					            	echo $ms->getHtmlExpandableDescription();
-    					            }
-    					            //if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
-    					            echo '</li>';
-    					        }
-    					        echo '</ul>';
-    					    } else {
-    					        echo '<div class="card-body">';
-    					        echo $card_title_tag;
-    					        echo '<p>';
-    					        echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="implicit">'.ToolBox::toHtml(current($memberships)->getTitle()).'</a>';
-    					        if ( current($memberships)->getPeriod() ) echo ' <small>('.current($memberships)->getPeriod().')</small>';
-    					        echo '</p>';
-    					        echo current($memberships)->getHtmlExpandableDescription();
-    					        //if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
-    					        
-    					        echo '<div><a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="btn btn-sm btn-outline-secondary">édition</a></div>';
-    					        echo '</div>';
+    					    echo '<div class="card-body">';
+    					    echo '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
+    					    foreach ($memberships as $ms) {
+    					    	echo '<h4 class="card-subtitle mb-2 text-muted"><a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
+    					    	echo '<p class="card-text">';
+    					    	$smallElt = array();
+    					    	if ( $ms->getPeriod() ) $smallElt[] = $ms->getPeriod();
+    					    	if ($ms->getDepartment()) $smallElt[] = $ms->getDepartment();
+    					    	echo '<small class="text-muted">'.ToolBox::toHtml(implode(' - ', $smallElt)).'</small>';
+    					    	echo '</p>';
+    					    	if ( $ms->hasDescription() ) {
+    					    		echo $ms->getHtmlExpandableDescription();
+    					    	}
+    					    	//echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="card-link">édition</a>';
     					    }
+    					    echo '</div>';
     					    
     					    echo '</div>';
     					}
