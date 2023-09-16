@@ -197,7 +197,6 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
-    <script src="js/controls.js"></script>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="<?php echo POPPER_JS_URI ?>" integrity="<?php echo POPPER_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>

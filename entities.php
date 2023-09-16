@@ -29,7 +29,6 @@ $entities = $system->getEntities($name_substring, 0, $count_max);
     <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
-    <script type="application/javascript" src="js/controls.js"></script>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
