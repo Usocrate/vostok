@@ -61,7 +61,6 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 	<link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
 	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
 	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>    
-	<script src="js/controls.js"></script>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
@@ -89,13 +88,11 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 						// $item[1] : Identifiant de la relation;
 						// $item[2] : Rôle
 						// $item[3] : Description
-						$radio_count = 0;
 						echo '<div class="form-check">';
-						echo '<input class="form-check-input" type="radio" name="targetSociety_id" id="radio' . $radio_count . '" value="' . $item [0]->getId () . '">';
-						echo '<label class="form-check-label" for="radio' . $radio_count . '">' . $item [0]->getHtmlLinkToSociety () . '</label>';
+						echo '<input class="form-check-input" type="radio" name="targetSociety_id" id="rs-radio' . $item [0]->getId () . '" value="' . $item [0]->getId () . '">';
+						echo '<label class="form-check-label" for="rs-radio' . $item [0]->getId () . '">' . $item [0]->getHtmlLinkToSociety () . '</label>';
 						echo '<div>' . ToolBox::toHtml ( $item [2] ) . '</div>';
 						echo '</div>';
-						$radio_count ++;
 					}
 					?>
 				</div>
@@ -141,7 +138,7 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 								$i->feed ();
 								echo '<div class="card">';
 								if ($i->getPhotoUrl ()) {
-									echo '<a href="individual.php?individual_id=' . $i->getId () . '">';
+									echo '<a href="individual.php?individual_id=' . $i->getId () . '" class="implicit card-img-top-wrapper">';
 									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 									echo '</a>';
 								}
@@ -177,8 +174,12 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 									echo '<div><a href="membership_edit.php?membership_id=' . current ( $memberships )->getId () . '" class="btn btn-sm btn-outline-secondary">édition</a></div>';
 									echo '</div>';
 								}
-								echo '<div class="card-footer"><div class="form-check form-check-inline"><input name="individualToTransfer[]" class="form-check-input" type="checkbox" id="" value="' . $i->getId () . '">
-  <label class="form-check-label" for="">A transférer</label></div></div>';
+								echo '<div class="card-footer">';
+									echo '<div class="form-check form-check-inline">';
+									echo '<input name="individualToTransfer[]" class="form-check-input" type="checkbox" id="i-box'.$i->getId ().'" value="' . $i->getId () . '">';
+									echo '<label class="form-check-label" for="i-box'.$i->getId ().'">A transférer</label>';
+									echo '</div>';
+								echo '</div>';
 								echo '</div>';
 							}
 							echo '</div>';

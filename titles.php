@@ -62,7 +62,6 @@ $doc_title = 'Les rôles';
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
     <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
-    <script language="JavaScript" type="application/javascript" src="js/controls.js"></script>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
     <script src="<?php echo JQUERY_URI; ?>"></script>

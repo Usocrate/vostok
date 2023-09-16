@@ -80,7 +80,6 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
-    <script type="application/javascript" src="js/controls.js"></script>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
