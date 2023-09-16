@@ -78,9 +78,9 @@ $h1_content = 'Une activité';
     	</div>
 
 		<div>   	
-	    	<a href="societies_industries.php" class="btn btn-link">quitter</a>
+	    	<a href="societies_industries.php" class="btn btn-link">Quitter</a>
 	    	<!-- <button name="task" type="button" value="deletion" class="btn  btn-outline-secondary">supprimer</button> -->
-	    	<button name="task" type="submit" value="registration" class="btn btn-primary">enregistrer</button>
+	    	<button name="task" type="submit" value="registration" class="btn btn-primary">Enregistrer</button>
     	</div>
     </form>
 </div>

@@ -107,7 +107,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 	    		<label for="s_city_i" class="mr-2">Ville</label>
 	    		<input id="s_city_i" name="society_city" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
 			</div>
-	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-secondary m-2">filtrer</button>
+	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-secondary m-2">Filtrer</button>
 	   		<?php if( count($_SESSION['society_search']['criteria']) > 0) echo ' <a href="societies.php?society_newsearch=1">Toutes les sociétés</a>'  ?>
 		</form>
    	</section>
@@ -144,10 +144,10 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 						?>
 		    		</div>
 		    		<div class="mt-4 mb-4">
-						<button type="button" class="btn btn-outline-secondary" onclick="check('society_id[]')">tout cocher</button> /
-						<button type="button" class="btn btn-outline-secondary" onclick="uncheck('society_id[]')">tout décocher</button>
+						<button type="button" class="btn btn-outline-secondary" onclick="check('society_id[]')">Tout cocher</button> /
+						<button type="button" class="btn btn-outline-secondary" onclick="uncheck('society_id[]')">Tout décocher</button>
 						<label for="task_id">Pour la sélection :</label>
-						<button name="task_submission" type="submit" value="1" class="btn btn-secondary">fusionner</button> 
+						<button name="task_submission" type="submit" value="1" class="btn btn-secondary">Fusionner</button> 
 					</div>
 		    	</form>
 		    	<div class="mt-4 mb-4">

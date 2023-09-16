@@ -92,11 +92,11 @@ $doc_title = 'Un évènement chez ' . $society->getName();
 		</div>
 		<?php
 			if ($event->hasUserPosition () && strcmp ( $event->getUserPosition (), 'active' ) == 0) {
-				echo '<div class="radio"><label><input name="user_position" type="radio" value="active" checked="checked" />actif</label></div>';
-				echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" />passif</label></div>';
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="active" checked="checked" />Actif</label></div>';
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" />Passif</label></div>';
 			} else {
-				echo '<div class="radio"><label><input name="user_position" type="radio" value="active" />active</label></div>';
-				echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" checked="checked" />passive</label></div>';
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="active" />Actif</label></div>';
+				echo '<div class="radio"><label><input name="user_position" type="radio" value="passive" checked="checked" />Passif</label></div>';
 			}
 		?>
 		<div class="form-group">
@@ -110,7 +110,7 @@ $doc_title = 'Un évènement chez ' . $society->getName();
 			<textarea name="comment" cols="55" rows="10" class="form-control"><?php echo $event->getComment() ?></textarea>
 		</div>
 		
-		<button type="submit" class="btn btn-primary">enregistrer</button>
+		<button type="submit" class="btn btn-primary">Enregistrer</button>
 	</form>
 </div>
 </body>

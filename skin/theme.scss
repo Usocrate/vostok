@@ -117,10 +117,6 @@ I.colored {
 	color:inherit;
 }
 
-BUTTON, A.btn, LABEL {
-	text-transform: capitalize;
-}
-
 BUTTON SMALL, A.btn SMALL {
 	font-size: 1em !important;
 	color:inherit;
@@ -293,14 +289,19 @@ DIV.card-body {
 		.card {
 			width: 356px;
 		}
-	}	
+	}
+	#societyIndividualTransferDoc {
+		.card {
+			width: 257px;
+		}
+	}
 }
 
 @media ( min-width : 1359px) {
 	.container, .container-fluid {
 		max-width: 1348px;
 	}
-	
+
 	#indexDoc {
 		.card {
 			width: 307px;
@@ -311,7 +312,13 @@ DIV.card-body {
 		.card {
 			width: 298px;
 		}
-	}	
+	}
+
+	#societyIndividualTransferDoc {
+		.card {
+			width: 294px;
+		}
+	}
 }
 
 @media ( min-width : 1600px) {
@@ -328,6 +335,11 @@ DIV.card-body {
 	#societyDoc {
 		.card {
 			width: 357px;
+		}
+	}
+	#societyIndividualTransferDoc {
+		.card {
+			width: 228px;
 		}
 	}
 }

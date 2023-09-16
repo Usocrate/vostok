@@ -229,10 +229,10 @@ if ($relationship->areItemsBothKnown()) {
 			<div>
 				<?php
 	    			if ($relationship->isItemKnown(0)) {
-						echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-link">quitter</a>';
+						echo '<a href="'.$relationship->getItem(0)->getDisplayUrl().'" class="btn btn-link">Quitter</a>';
 	    			}
 				?>
-				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 			</div>
 		</form>
 		<?php

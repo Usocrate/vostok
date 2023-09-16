@@ -105,21 +105,21 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 	<section>
     	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group m-2">
-        		<label for="lead_type_i" class="mr-2">type</label>
+        		<label for="lead_type_i" class="mr-2">Type</label>
         		<select id="lead_type_i" name="lead_type" class="form-control">
         			<option value="-1">-- tous --</option>
         			<?php echo isset($_SESSION['lead_search']['type']) ? Lead::getKnownTypesAsOptionsTags($_SESSION['lead_search']['type']) : Lead::getKnownTypesAsOptionsTags() ?>
         		</select>
     		</div>
     		<div class="form-group m-2">
-        		<label for="lead_source_i" class="mr-2">origine</label>
+        		<label for="lead_source_i" class="mr-2">Origine</label>
         		<select id="lead_source_i" name="lead_source" class="form-control">
         			<option value="-1">-- toutes --</option>
         			<?php echo isset($_SESSION['lead_search']['source']) ? Lead::getKnownSourcesAsOptionsTags($_SESSION['lead_search']['source']) : Lead::getKnownSourcesAsOptionsTags() ?>
         		</select>
         	</div>
         	<div class="form-group m-2">
-        		<label for="lead_status_i" class="mr-2">état</label>
+        		<label for="lead_status_i" class="mr-2">État</label>
         		<select id="lead_status_i" name="lead_status" class="form-control">
         			<option value="-1">-- tous --</option>
         			<?php

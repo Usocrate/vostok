@@ -132,7 +132,7 @@ $h1_content = '<small>Quelle place pour </small>' . $membership->getHtmlLinkToIn
 				<?php endif; ?>
 			</div>
 			<div>
-				<button name="task" type="submit" value="membership_upgrade" class="btn btn-primary">enregistrer</button>
+				<button name="task" type="submit" value="membership_upgrade" class="btn btn-primary">Enregistrer</button>
 			</div>
 		</form>
 	</section>
@@ -154,7 +154,7 @@ $h1_content = '<small>Quelle place pour </small>' . $membership->getHtmlLinkToIn
 						<label for="reset_i" class="form-check-label">Retour en bas de l'échelle</label>
 					</div>
 				</div>
-				<div><button name="task" type="submit" value="membership_downgrade" class="btn btn-primary">enregistrer</button></div>
+				<div><button name="task" type="submit" value="membership_downgrade" class="btn btn-primary">Enregistrer</button></div>
 			</form>
 	</section>
 	</div>

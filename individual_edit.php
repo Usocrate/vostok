@@ -99,7 +99,6 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 				<label for="individual_firstname_i">Prénom</label>
 				<input id="individual_firstname_i" type="text" name="individual_firstName" value="<?php echo ToolBox::toHtml($individual->getFirstName()) ?>" size="25" class="form-control" /> 
 			</div>
-		
 			<div class="form-group col-md-3">
 				<label for="individual_lastname_i">Nom</label>
 				<input id="individual_lastname_i" type="text" name="individual_lastName" value="<?php echo ToolBox::toHtml($individual->getLastName()) ?>" size="25"  class="form-control" />
@@ -107,13 +106,11 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 			<div class="form-group col-md-6">
 				<label for="individual_photo_file_i">Photo</label>
 				<input id="individual_photo_file_i" type="file" name="individual_photo_file" size="55" class="form-control-file"></input>
-	
 				<small id="passwordHelpBlock" class="form-text text-muted">
 				<?php if ($individual->getGoogleQueryUrl('images')) : ?>
 					<a href="<?php echo $individual->getGoogleQueryUrl('images') ?>" target="_blank">Une photo chez Google ?</a>
 				<?php endif; ?>
 				</small>
-	
 			</div>
 		</div>
 
@@ -186,14 +183,14 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 		</div>
 		<div>
     		<?php if (!$individual->hasId()) : ?>
-    			<a href="individuals.php" class="btn btn-link">quitter</a>
+    			<a href="individuals.php" class="btn btn-link">Quitter</a>
     		<?php endif; ?>
     		
     		<?php if ($individual->hasId()) : ?>
-    		    <a href="individual.php?individual_id=<?php echo $individual->getId() ?>" class="btn btn-link">quitter</a>
+    		    <a href="individual.php?individual_id=<?php echo $individual->getId() ?>" class="btn btn-link">Quitter</a>
 	    	<?php endif; ?>		
 
-			<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+			<button name="toDB_order" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 		</div>
 	</form>
 	<?php

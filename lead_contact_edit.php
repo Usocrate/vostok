@@ -127,7 +127,7 @@ $doc_title = 'Une piste';
     				<legend>Qui est à l'origine de la piste ?</legend>
     				
     				<div class="form-group">
-        				<label for="individual_salutation">civilité</label>
+        				<label for="individual_salutation">Civilité</label>
         				<select name="individual_salutation" class="form-control">
         					<option value="">-- choisis --</option>
         					<?php echo Individual::getSalutationOptionsTags(); ?>
@@ -135,41 +135,41 @@ $doc_title = 'Une piste';
     				</div>
     				
     				<div class="form-group">
-        				<label for="individual_firstName">prénom <small>(individual)</small></label>
+        				<label for="individual_firstName">Prénom <small>(individual)</small></label>
         				<input name="individual_firstName" type="text" size="15" class="form-control" />
     				</div>
     				
     				<div class="form-group">
-        				<label for="individual_lastName">nom</label>
+        				<label for="individual_lastName">Nom</label>
         				<input name="individual_lastName" type="text" size="15" class="form-control" />
     				</div>
     				
     				<div class="form-group">
-        				<label for="individual_mobile">mobile</label>
+        				<label for="individual_mobile">Mobile</label>
         				<input name="individual_mobile" type="tel" size="12" class="form-control" />
         				<input name="individual_submission" type="hidden" value="1" />
     				</div>
     				
     				<fieldset id="membership_fieldset">
-    					<legend>fait partie de la société ?</legend>
+    					<legend>Fait partie de la société ?</legend>
     					<div class="checkbox">
-    						<label><input type="checkbox" name="membership_submission" value="1" /> oui</label>
+    						<label><input type="checkbox" name="membership_submission" value="1" /> Oui</label>
     					</div>
 						<div class="checkbox">
-							<label><input name="membership_department" type="text" size="12" /> service</label>
+							<label><input name="membership_department" type="text" size="12" /> Service</label>
 						</div>
 						<div class="form-group">
-							<label for="membership_title">fonction</label>
+							<label for="membership_title">Fonction</label>
 							<input name="membership_title" type="text" size="12" class="form-control" />
 						</div>
 						
 						<div class="form-group">
-							<label for="membership_phone">téléphone</label>
+							<label for="membership_phone">Téléphone</label>
 							<input name="membership_phone" type="tel" size="12" class="form-control" />
 						</div>
 						
 						<div class="form-group">
-						<label for="membership_email">email</label>
+						<label for="membership_email">Mél</label>
     					<input name="membership_email" type="email" size="12" class="form-control" />
     					</div>
 						
@@ -194,9 +194,9 @@ $doc_title = 'Une piste';
     		}
     		?>
     		<div>
-	    		<a href="/" class="btn btn-link">quitter</a>
+	    		<a href="/" class="btn btn-link">Quitter</a>
 	    		<!-- <button name="deletion_order" type="button" value="1" class="btn btn-outline-secondary">supprimer</button> -->
-	    		<button name="toDB_order" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+	    		<button name="toDB_order" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
     		</div>
 	</form>
 </div>	

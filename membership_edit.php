@@ -329,15 +329,15 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 				if (isset ( $applicant )) {
 					switch (get_class ( $applicant )) {
 						case 'Society' :
-							echo '<a href="' . $applicant->getDisplayUrl () . '" class="btn btn-link">quitter</a>';
+							echo '<a href="' . $applicant->getDisplayUrl () . '" class="btn btn-link">Quitter</a>';
 							break;
 						case 'Individual' :
-							echo '<a href="' . $applicant->getDisplayUrl () . '" class="btn btn-link">quitter</a>';
+							echo '<a href="' . $applicant->getDisplayUrl () . '" class="btn btn-link">Quitter</a>';
 							break;
 					}
 				}
 				?>
-				<button name="task" type="submit" value="membership_submission"	class="btn btn-primary">enregistrer</button>
+				<button name="task" type="submit" value="membership_submission"	class="btn btn-primary">Enregistrer</button>
 			</div>
 		</form>
 		<?php

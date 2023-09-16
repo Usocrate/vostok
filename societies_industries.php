@@ -146,7 +146,7 @@ $doc_title = 'Les activités exercées';
 					<tfoot>
 						<tr>
 							<td colspan="3">
-								<button type="submit" name="task" value="industries_merge" class="btn btn-primary">fusionner</button>
+								<button type="submit" name="task" value="industries_merge" class="btn btn-primary">Fusionner</button>
 							</td>
 						</tr>
 					</tfoot>
@@ -155,8 +155,8 @@ $doc_title = 'Les activités exercées';
 			</div>
 			<div class="col-md-6">
 				<section>
-    				<label>nouvelle activité</label> <input name="newindustry_name" type="text" size="15" />
-    				<button name="task" type="submit" value="newindustry" class="btn btn-secondary">déclarer</button>
+    				<label>Nouvelle activité</label> <input name="newindustry_name" type="text" size="15" />
+    				<button name="task" type="submit" value="newindustry" class="btn btn-secondary">Déclarer</button>
 				</section>
 			</div>
 		</div>

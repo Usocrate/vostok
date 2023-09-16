@@ -77,7 +77,7 @@ if (isset($_POST)) {
 		<div class="form-group">
 			<label for="newRole_i">Nouveau nom</label> <input id="newRole_i" name="newRole" type="text" maxlength="255" class="form-control" />
 		</div>
-		<button name="task_id" type="submit" value="replaceRole" class="btn btn-primary">enregistrer</button>
+		<button name="task_id" type="submit" value="replaceRole" class="btn btn-primary">Enregistrer</button>
 	</form>
 </div>
 <script>

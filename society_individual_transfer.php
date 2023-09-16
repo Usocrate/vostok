@@ -67,7 +67,7 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="<?php echo BOOTSTRAP_JS_URI ?>"	integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
-<body>
+<body id="societyIndividualTransferDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
 		<h1 class="bd-title"><?php echo $h1_content ?></h1>
@@ -142,38 +142,12 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 									echo '<img src="' . $i->getPhotoUrl () . '"  class="card-img-top" />';
 									echo '</a>';
 								}
-
-								$card_title_tag = '<h3 class="card-title"><a href="individual.php?individual_id=' . $i->getId () . '">' . ToolBox::toHtml ( $i->getWholeName () ) . '</a></h3>';
-
-								if (count ( $memberships ) > 1) {
-									echo '<div class="card-body">' . $card_title_tag . '</div>';
-									echo '<ul class="list-group list-group-flush">';
-									foreach ( $memberships as $ms ) {
-										echo '<li class="list-group-item">';
-										echo '<a href="membership_edit.php?membership_id=' . $ms->getId () . '" class="implicit">' . ToolBox::toHtml ( $ms->getTitle () ) . '</a>';
-										if ($ms->getPeriod ())
-											echo ' <small>(' . $ms->getPeriod () . ')</small>';
-										if ($ms->hasDescription ())
-											echo '<p><small>' . ToolBox::toHtml ( $ms->getDescription () ) . '</small></p>';
-										// if ($ms->getDepartment()) echo '<p><small>'.ToolBox::toHtml($ms->getDepartment()).'</small></p>';
-										echo '</li>';
-									}
-									echo '</ul>';
-								} else {
-									echo '<div class="card-body">';
-									echo $card_title_tag;
-									echo '<p>';
-									echo '<a href="membership_edit.php?membership_id=' . current ( $memberships )->getId () . '" class="implicit">' . ToolBox::toHtml ( current ( $memberships )->getTitle () ) . '</a>';
-									if (current ( $memberships )->getPeriod ())
-										echo ' <small>(' . current ( $memberships )->getPeriod () . ')</small>';
-									echo '</p>';
-									if (current ( $memberships )->hasDescription ())
-										echo '<p><small>' . ToolBox::toHtml ( current ( $memberships )->getDescription () ) . '</small></p>';
-									// if (current($memberships)->getDepartment()) echo '<p><small>'.ToolBox::toHtml(current($memberships)->getDepartment()).'</small></p>';
-
-									echo '<div><a href="membership_edit.php?membership_id=' . current ( $memberships )->getId () . '" class="btn btn-sm btn-outline-secondary">édition</a></div>';
-									echo '</div>';
-								}
+				
+								echo '<div class="card-body">';
+								echo '<h3 class="card-title">' . ToolBox::toHtml ( $i->getWholeName () ) . '</h3>';
+								echo '<p>' . ToolBox::toHtml ( current ( $memberships )->getTitle () ) . '</p>';
+								echo '</div>';
+								
 								echo '<div class="card-footer">';
 									echo '<div class="form-check form-check-inline">';
 									echo '<input name="individualToTransfer[]" class="form-check-input" type="checkbox" id="i-box'.$i->getId ().'" value="' . $i->getId () . '">';
@@ -207,7 +181,7 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 						<input name="targetTitle" type="text" class="form-control"
 							id="title_i" value="membre">
 					</div>
-					<button name="cmd" type="submit" value="transfer" class="btn btn-primary">lancer le transfert</button>
+					<button name="cmd" type="submit" value="transfer" class="btn btn-primary">Lancer le transfert</button>
 				</div>
 			</div>
 		</form>

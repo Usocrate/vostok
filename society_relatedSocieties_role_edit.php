@@ -138,8 +138,8 @@ foreach ($relatedSocieties as $item) {
 			</section>
 		</div>
    	</div>
-    <a href="society.php?society_id=<?php echo $society->getId() ?>" class="btn btn-link">quitter</a>
-   	<button name="task" type="submit" value="registration" class="btn btn-primary">enregistrer</button>
+    <a href="society.php?society_id=<?php echo $society->getId() ?>" class="btn btn-link">Quitter</a>
+   	<button name="task" type="submit" value="registration" class="btn btn-primary">Enregistrer</button>
 	</form>
 </div>
 </body>

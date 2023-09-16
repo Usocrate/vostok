@@ -105,7 +105,7 @@ $doc_title = 'Les relations entre sociétés';
 		<tfoot style="display:none">
 			<tr>
 				<td colspan="2">
-					<button type="submit" name="task" value="titles_merge" class="btn btn-primary">fusionner</button>
+					<button type="submit" name="task" value="titles_merge" class="btn btn-primary">Fusionner</button>
 				</td>
 			</tr>
 		</tfoot>

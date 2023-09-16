@@ -186,8 +186,8 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			</div>
 			
 			<div>
-				<a href="/" class="btn btn-link">quitter</a>
-				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">enregistrer</button>
+				<a href="/" class="btn btn-link">Quitter</a>
+				<button name="relationship_submission" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
 			</div>
 		</form>
 		<?php

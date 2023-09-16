@@ -145,14 +145,14 @@ if (isset($_POST['task'])) {
    	
     	<div>
     		<?php if (!$society->hasId()) : ?>
-    			<a href="societies.php" class="btn btn-link">quitter</a>
+    			<a href="societies.php" class="btn btn-link">Quitter</a>
     		<?php endif; ?>
     		
     		<?php if ($society->hasId()) : ?>
-    		    <a href="society.php?society_id=<?php echo $society->getId() ?>" class="btn btn-link">quitter</a>
+    		    <a href="society.php?society_id=<?php echo $society->getId() ?>" class="btn btn-link">Quitter</a>
 	    	<?php endif; ?>
 	    	
-	    	<button name="task" type="submit" value="registration" class="btn btn-primary">enregistrer</button>
+	    	<button name="task" type="submit" value="registration" class="btn btn-primary">Enregistrer</button>
     	</div>
     </form>
 	<?php
