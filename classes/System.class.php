@@ -587,7 +587,10 @@ class System {
 				// society
 				$s = new Society ();
 				$s->setId ( $data ['society_id'] );
-				$s->setName ( $data ['society_name'] );
+				if (is_string ( $data ['society_name'] )) {
+					$s->setName ( $data ['society_name'] );
+				}
+
 				$s->setCity ( $data ['society_city'] );
 
 				// membership
@@ -595,10 +598,22 @@ class System {
 				$m->setId ( $data ['id'] );
 				$m->setSociety ( $s );
 				$m->setIndividual ( $i );
-				$m->setTitle ( $data ['title'] );
-				$m->setDepartment ( $data ['department'] );
-				$m->setDescription ( $data ['description'] );
-				$m->setWeight ( $data ['weight'] );
+
+				if (is_string ( $data ['title'] )) {
+					$m->setTitle ( $data ['title'] );
+				}
+
+				if (is_string ( $data ['department'] )) {
+					$m->setDepartment ( $data ['department'] );
+				}
+
+				if (is_string ( $data ['description'] )) {
+					$m->setDescription ( $data ['description'] );
+				}
+
+				if (is_int ( $data ['weight'] )) {
+					$m->setWeight ( $data ['weight'] );
+				}
 				$m->setInitYear ( $data ['init_year'] );
 				$m->setEndYear ( $data ['end_year'] );
 				// $m->setTimestamp($data['timestamp']);
@@ -1011,17 +1026,18 @@ class System {
 		return $statement->fetchAll ( PDO::FETCH_ASSOC );
 	}
 	/**
+	 *
 	 * @since 04/2023
 	 */
-	public function suggestCorrespondingRoleForRelatedSocietyRole($role, Society $society=null) {
+	public function suggestCorrespondingRoleForRelatedSocietyRole($role, Society $society = null) {
 		$sql = 'SELECT role, COUNT(*) as nb FROM ';
 		$sql .= '(SELECT item0_role AS role FROM relationship WHERE item0_class=\'society\' AND item1_class=\'society\' AND item1_role=:item1_role';
-		if (isset($society)) {
+		if (isset ( $society )) {
 			$sql .= ' AND item0_id=:item0_id';
 		}
 		$sql .= ' UNION ALL ';
 		$sql .= 'SELECT item1_role AS role FROM relationship WHERE item0_class=\'society\' AND item1_class=\'society\' AND item0_role=:item0_role';
-		if (isset($society)) {
+		if (isset ( $society )) {
 			$sql .= ' AND item1_id=:item1_id';
 		}
 		$sql .= ') AS r';
@@ -1030,13 +1046,13 @@ class System {
 		$statement = $this->getPdo ()->prepare ( $sql );
 		$statement->bindValue ( ':item1_role', $role, PDO::PARAM_STR );
 		$statement->bindValue ( ':item0_role', $role, PDO::PARAM_STR );
-		if (isset($society)) {
-			$statement->bindValue ( ':item0_id', $society->getId(), PDO::PARAM_INT );
-			$statement->bindValue ( ':item1_id', $society->getId(), PDO::PARAM_INT );
+		if (isset ( $society )) {
+			$statement->bindValue ( ':item0_id', $society->getId (), PDO::PARAM_INT );
+			$statement->bindValue ( ':item1_id', $society->getId (), PDO::PARAM_INT );
 		}
-		$statement->execute();
-		$row = $statement->fetch( PDO::FETCH_ASSOC );
-		return isset($row['role']) ? $row['role'] : false;
+		$statement->execute ();
+		$row = $statement->fetch ( PDO::FETCH_ASSOC );
+		return isset ( $row ['role'] ) ? $row ['role'] : false;
 	}
 	/**
 	 *
@@ -1088,48 +1104,56 @@ class System {
 		return $output;
 	}
 	/**
-	 * 
+	 *
 	 * @since 05/2023
 	 */
-	public function updateSocietyRole(Society $society, Society $relatedSociety, $newRole)
-	{
+	public function updateSocietyRole(Society $society, Society $relatedSociety, $newRole) {
 		try {
-			$this->getPdo()->beginTransaction();
-			
+			$this->getPdo ()->beginTransaction ();
+
 			/*
 			 * requête 1
 			 */
-			$where = array('item0_id=:society_id', 'item0_class=\'society\'','item1_id=:relatedSociety_id', 'item1_class=\'society\'');
-			
-			$sql = 'UPDATE relationship SET item0_role=:newRole WHERE ' . implode(' AND ', $where);
-			$statement = $this->getPDO()->prepare($sql);
-			
-			$statement->bindValue(':society_id', $society->getId(), PDO::PARAM_INT);
-			$statement->bindValue(':relatedSociety_id', $relatedSociety->getId(), PDO::PARAM_INT);
-			$statement->bindValue(':newRole', $newRole, PDO::PARAM_STR);
+			$where = array (
+					'item0_id=:society_id',
+					'item0_class=\'society\'',
+					'item1_id=:relatedSociety_id',
+					'item1_class=\'society\''
+			);
 
-			$statement->execute();
-			
+			$sql = 'UPDATE relationship SET item0_role=:newRole WHERE ' . implode ( ' AND ', $where );
+			$statement = $this->getPDO ()->prepare ( $sql );
+
+			$statement->bindValue ( ':society_id', $society->getId (), PDO::PARAM_INT );
+			$statement->bindValue ( ':relatedSociety_id', $relatedSociety->getId (), PDO::PARAM_INT );
+			$statement->bindValue ( ':newRole', $newRole, PDO::PARAM_STR );
+
+			$statement->execute ();
+
 			/*
 			 * requête 2
 			 */
-			$where = array('item0_id=:relatedSociety_id', 'item0_class=\'society\'','item1_id=:society_id', 'item1_class=\'society\'');
-			
-			$sql = 'UPDATE relationship SET item1_role=:newRole WHERE ' . implode(' AND ', $where);
-			$statement = $this->getPDO()->prepare($sql);
-			
-			$statement->bindValue(':society_id', $society->getId(), PDO::PARAM_INT);
-			$statement->bindValue(':relatedSociety_id', $relatedSociety->getId(), PDO::PARAM_INT);
-			$statement->bindValue(':newRole', $newRole, PDO::PARAM_STR);
-			
-			$statement->execute();
-			
-			return $this->getPdo()->commit();
-			
-		} catch (Exception $e) {
-			$this->reportException(__METHOD__, $e);
-			if ($this->getPdo()->inTransaction()) {
-				$this->getPdo()->rollBack();
+			$where = array (
+					'item0_id=:relatedSociety_id',
+					'item0_class=\'society\'',
+					'item1_id=:society_id',
+					'item1_class=\'society\''
+			);
+
+			$sql = 'UPDATE relationship SET item1_role=:newRole WHERE ' . implode ( ' AND ', $where );
+			$statement = $this->getPDO ()->prepare ( $sql );
+
+			$statement->bindValue ( ':society_id', $society->getId (), PDO::PARAM_INT );
+			$statement->bindValue ( ':relatedSociety_id', $relatedSociety->getId (), PDO::PARAM_INT );
+			$statement->bindValue ( ':newRole', $newRole, PDO::PARAM_STR );
+
+			$statement->execute ();
+
+			return $this->getPdo ()->commit ();
+		} catch ( Exception $e ) {
+			$this->reportException ( __METHOD__, $e );
+			if ($this->getPdo ()->inTransaction ()) {
+				$this->getPdo ()->rollBack ();
 			}
 			return false;
 		}
@@ -1139,7 +1163,7 @@ class System {
 	 * @since 02/2019
 	 * @version 12/2022
 	 */
-	public function getEntities($name_substring, $offset=0, $nb = 100) {
+	public function getEntities($name_substring, $offset = 0, $nb = 100) {
 		$individualWholeNameSqlSelectPattern = 'IF((individual_lastname IS NOT NULL AND individual_firstname IS NOT NULL), CONCAT(individual_firstname, " ", individual_lastName), IF(individual_lastname IS NOT NULL, individual_lastname, individual_firstname))';
 
 		$sql = '(SELECT society_id AS id, society_name AS name, \'society\' AS type FROM society WHERE society_name LIKE :society_name)';
