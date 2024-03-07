@@ -34,6 +34,20 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 					}
 				}
 				break;
+			case 'updateDescription' :
+				if (isset($_POST['id'])) {
+					$relationship = new Relationship($_POST['id']);
+					$relationship->setDescription($_POST['description']);
+					
+					if ($relationship->toDB()) {
+						$fb->setMessage('C\'est enregistré.');
+						$fb->setType('success');
+					} else {
+						$fb->setMessage('Mince, problème !');
+						$fb->setType('error');
+					}
+				}
+				break;
 		}
 		echo $fb->toJson();
 		exit;

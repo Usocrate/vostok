@@ -420,7 +420,7 @@ class Relationship
      * Enregistre en base de données les valeurs des attributs de la relation.
      *
      * @since 03/2006
-     * @version 06/2017
+     * @version 03/2024
      */
     public function toDB()
     {
@@ -429,18 +429,23 @@ class Relationship
         try {
             $new = empty($this->id);
 
-            if (empty($this->items) && empty($this->items_roles)) {
+            if ($new && empty($this->items) && empty($this->items_roles)) {
                 throw new Exception(__METHOD__ . ' : Les 2 termes de la relation doivent être connus.');
             }
 
             $settings = array();
-
-            $settings[] = 'item0_id=:item0_id';
-            $settings[] = 'item0_class=:item0_class';
-            $settings[] = 'item0_role=:item0_role';
-            $settings[] = 'item1_id=:item1_id';
-            $settings[] = 'item1_class=:item1_class';
-            $settings[] = 'item1_role=:item1_role';
+            
+            if (isset($this->items[0])) {
+	            $settings[] = 'item0_id=:item0_id';
+	            $settings[] = 'item0_class=:item0_class';
+	            $settings[] = 'item0_role=:item0_role';
+            }
+            
+            if (isset($this->items[1])) {
+	            $settings[] = 'item1_id=:item1_id';
+	            $settings[] = 'item1_class=:item1_class';
+	            $settings[] = 'item1_role=:item1_role';
+            }
 
             if (isset($this->description)) {
                 $settings[] = 'description=:description';
@@ -462,12 +467,19 @@ class Relationship
                 $sql .= ' WHERE relationship_id=:id';
             }
             $statement = $system->getPdo()->prepare($sql);
-            $statement->bindValue(':item0_id', $this->items[0]->getId(), PDO::PARAM_INT);
-            $statement->bindValue(':item0_class', get_class($this->items[0]), PDO::PARAM_STR);
-            $statement->bindValue(':item0_role', $this->items_roles[0], PDO::PARAM_STR);
-            $statement->bindValue(':item1_id', $this->items[1]->getId(), PDO::PARAM_INT);
-            $statement->bindValue(':item1_class', get_class($this->items[1]), PDO::PARAM_STR);
-            $statement->bindValue(':item1_role', $this->items_roles[1], PDO::PARAM_STR);
+
+            if (isset($this->items[0])) {
+	            $statement->bindValue(':item0_id', $this->items[0]->getId(), PDO::PARAM_INT);
+	            $statement->bindValue(':item0_class', get_class($this->items[0]), PDO::PARAM_STR);
+	            $statement->bindValue(':item0_role', $this->items_roles[0], PDO::PARAM_STR);
+            }
+            
+            if (isset($this->items[1])) {
+	            $statement->bindValue(':item1_id', $this->items[1]->getId(), PDO::PARAM_INT);
+	            $statement->bindValue(':item1_class', get_class($this->items[1]), PDO::PARAM_STR);
+	            $statement->bindValue(':item1_role', $this->items_roles[1], PDO::PARAM_STR);
+            }
+            
             if (isset($this->description)) {
                 $statement->bindValue(':description', $this->description, PDO::PARAM_STR);
             }

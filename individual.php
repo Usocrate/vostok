@@ -187,7 +187,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 							<?php
 							foreach ($relatedIndividuals as $item) {
 								// $item[0] : Individu
-								// $item[1] : Identifiant de la relation;
+								// $item[1] : Identifiant de la relation
 								// $item[2] : Rôle
 								// $item[3] : Description
 								// $item[4] : Period object
@@ -207,12 +207,11 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 									
 								}
 								echo '<div><small>'.implode(' - ',$baseline).'</small></div>';
-
-								if (!empty($item[3])) {
-									echo '<p>';
-									echo ToolBox::toHtml($item[3]);
-									echo '</p>';
-								}
+								
+								echo '<div class="relationship-description-area" data-rs-id="'.$item[1].'">';
+								echo empty($item[3]) ? 'Il était une fois...' : $item[3];
+								echo '</div>';
+								
 								echo '</li>';
 							}
 							echo '<li class="list-group-item"><a href="individualToIndividualRelationship_edit.php?item0_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
@@ -288,8 +287,8 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				});
 			}
 			
-			var items = document.getElementsByClassName('membership-description-area');
-			Array.prototype.filter.call(items, function(i){
+			var msItems = document.getElementsByClassName('membership-description-area');
+			Array.prototype.filter.call(msItems, function(i){
 				i.contentEditable = true;
 				i.addEventListener('blur', function (event) {
 				  event.preventDefault();
@@ -299,7 +298,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				  xhr.responseType = 'json';
 				  xhr.onreadystatechange = function () {
 				    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-				    	//alert(this.response.message);
 				    	if (this.response.data.location !== undefined) {
 					    	window.location.replace(this.response.data.location);
 				    	}
@@ -308,6 +306,26 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				  xhr.send("id="+i.dataset.msId+"&task=updateDescription&description="+encodeURIComponent(i.innerHTML));			
 				});
 			});
+			
+			var rsItems = document.getElementsByClassName('relationship-description-area');
+			Array.prototype.filter.call(rsItems, function(i){
+				i.contentEditable = true;
+				i.addEventListener('blur', function (event) {
+				  event.preventDefault();
+				  var xhr = new XMLHttpRequest();
+				  xhr.open("POST", "api/relationships/", true);
+				  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+				  xhr.responseType = 'json';
+				  xhr.onreadystatechange = function () {
+				    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+				    	if (this.response.data.location !== undefined) {
+					    	window.location.replace(this.response.data.location);
+				    	}
+			    	}				  
+				  };
+				  xhr.send("id="+i.dataset.rsId+"&task=updateDescription&description="+encodeURIComponent(i.innerHTML));			
+				});
+			});			
 		});
 	</script>
 </body>

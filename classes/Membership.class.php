@@ -64,7 +64,7 @@ class Membership {
 	 * @since 04/2022
 	 */
 	public function getWeight() {
-		return $this->weight;
+		return isset($this->weight) ? $this->weight : null;
 	}
 	/**
 	 *
@@ -85,7 +85,7 @@ class Membership {
 	 * @return boolean
 	 */
 	public function getInitYear() {
-		return $this->init_year;
+		return isset ($this->init_year) ? $this->init_year : null;
 	}
 	/**
 	 *
@@ -114,7 +114,7 @@ class Membership {
 	 * @return boolean
 	 */
 	public function getEndYear() {
-		return $this->end_year;
+		return isset($this->end_year) ? $this->end_year : null;
 	}
 	/**
 	 *
