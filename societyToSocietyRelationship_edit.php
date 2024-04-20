@@ -5,8 +5,6 @@ $system = new System( 'config/host.json' );
 
 session_start ();
 
-//print_r($_POST);
-
 if (empty ( $_SESSION ['user_id'] )) {
 	header ( 'Location:login.php' );
 	exit ();
@@ -130,6 +128,13 @@ if ($relationship->areItemsBothKnown()) {
 		<form id="relationship_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 			<input name="item0_class" type="hidden" value="Society" />
 			<input name="item1_class" type="hidden" value="Society" />
+			<datalist id="role_list">
+				<?php
+				foreach (Relationship::getKnownRoles() as $r) {
+					echo '<option>'.ToolBox::toHtml($r['role']).'</option>';
+				}
+				?>
+			</datalist>
 			<?php
 			if ($relationship->getId ())
 				echo '<input name="relationship_id" type="hidden" value="' . $relationship->getId () . '" />';
@@ -143,7 +148,7 @@ if ($relationship->areItemsBothKnown()) {
 				echo '</div>';
 				echo '<div class="form-group col-md-6">';
     			echo '<label for="s1_role_i">Son rôle</label>';
-    			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+    			echo '<input id="s1_role_i" name="item0_role" type="text" list="role_list" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 				echo '</div>';
 			} else {
@@ -151,7 +156,7 @@ if ($relationship->areItemsBothKnown()) {
 				echo '<div class="form-group">';
 				echo '<input name="item0_id" type="hidden" value="' . $relationship->getItem(0)->getId () . '"/>';
     			echo '<label for="s1_role_i">Rôle '. $relationship->getItem(0)->getHtmlLinkToSociety() . '</label>';
-    			echo '<input id="s1_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+    			echo '<input id="s1_role_i" name="item0_role" type="text" list="role_list" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
 			if (!$relationship->isItemKnown(1)) {
@@ -163,7 +168,7 @@ if ($relationship->areItemsBothKnown()) {
 				echo '</div>';
 				echo '<div class="form-group col-md-6">';
     			echo '<label for="s2_role_i">Son rôle</label>';
-    			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+    			echo '<input id="s2_role_i" name="item1_role" type="text" list="role_list" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 				echo '</div>';
 			} else {
@@ -171,7 +176,7 @@ if ($relationship->areItemsBothKnown()) {
 				echo '<div class="form-group">';
 				echo '<input name="item1_id" type="hidden" value="' . $relationship->getItem(1)->getId () . '"/>';
     			echo '<label for="s2_role_i">Rôle '. $relationship->getItem(1)->getHtmlLinkToSociety() . '</label>';
-    			echo '<input id="s2_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+    			echo '<input id="s2_role_i" name="item1_role" type="text" list="role_list" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
 			?>
@@ -282,68 +287,6 @@ if ($relationship->areItemsBothKnown()) {
 	         	})
 	   		}
 	   	});	    
-	    $('#s1_role_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/relationships/roles.php',
-	                dataType: 'json',
-	                data:{
-	                    'searchPattern': request.term,
-	                    'rolePlayerClass': 'society'
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).roles);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#s1_role_i').val( ui.item.role);
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-	        	$('#s1_role_i').val( ui.item.role);
-	        	return false;
-	        }
-	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
-		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
-		   	return $( "<li>" ).append(content).appendTo( ul );
-		};
-	    $('#s2_role_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/relationships/roles.php',
-	                dataType: 'json',
-	                data:{
-	                    'searchPattern': request.term,
-	                    'rolePlayerClass': 'society'
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).roles);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		},
-            focus: function( event, ui ) {
-    			$('#s2_role_i').val( ui.item.role);
-            	return false;
-            },
-            select: function( event, ui ) {
-            	$('#s2_role_i').val( ui.item.role);
-            	return false;
-            }
-	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
-		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
-		   	return $( "<li>" ).append(content).appendTo( ul );
-		};	    
 	})
 </script>
 <?php if($relationship->hasId()): ?>
