@@ -95,7 +95,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	<script src="js/masonry.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="js/individual-photo.js"></script>	
-	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 <body id="societyDoc">
 <?php include 'navbar.inc.php'; ?>

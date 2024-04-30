@@ -118,7 +118,7 @@ if ($relationship->areItemsBothKnown()) {
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -131,7 +131,7 @@ if ($relationship->areItemsBothKnown()) {
 			<datalist id="role_list">
 				<?php
 				foreach (Relationship::getKnownRoles() as $r) {
-					echo '<option>'.ToolBox::toHtml($r['role']).'</option>';
+					echo '<option value="'.ToolBox::toHtml($r['role']).'"/>';
 				}
 				?>
 			</datalist>

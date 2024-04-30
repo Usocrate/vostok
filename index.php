@@ -70,8 +70,7 @@ $doc_title = 'Accueil';
 	<script src="js/masonry.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="js/individual-photo.js"></script>	
-	<script src="https://cdn.jsdelivr.net/npm/datalist-ajax/dist/datalist-ajax.min.js"></script>
-	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 <body id="indexDoc">
     <?php include 'navbar.inc.php'; ?>

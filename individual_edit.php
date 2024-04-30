@@ -65,7 +65,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
-	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
+	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>

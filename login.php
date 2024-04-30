@@ -39,7 +39,6 @@ $doc_title = $system->getAppliName();
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
-	<script src="<?php echo BOOTSTRAP_JS_URI ?>" integrity="<?php echo BOOTSTRAP_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 </head>
 <body id="loginDoc" >
 <div class="container">	
