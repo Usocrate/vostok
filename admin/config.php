@@ -56,20 +56,6 @@ if (isset ( $_POST ['task_id'] )) {
 			}
 			if ($system->saveConfigFile ()) {
 				$fb->addSuccessMessage ( 'Configuration enregistrée.' );
-				//
-				// écriture du fichier .htpasswd à disposition pour protéger certains répertoires
-				// on reprend les identifiants d'accès à la base de données
-				// NB : configuration Apache2 à faire en complément
-				//
-				try {
-					$htpasswdFilePath = '../config/.htpasswd';
-					file_put_contents($htpasswdFilePath, $system->getDbUser().':'.password_hash ( $system->getDbPassword(), PASSWORD_BCRYPT ).'\n');
-					if (file_exists($htpasswdFilePath)) {
-						$fb->addSuccessMessage('Un fichier est aussi à disposition pour protéger certains répertoires ('.realpath($htpasswdFilePath).').');
-					}
-				} catch ( Exception $e ) {
-					$system->reportException ( __METHOD__, $e );
-				}
 			} else {
 				$fb->addDangerMessage ( 'Echec de l\'enregistrement de la configuration.' );
 			}
