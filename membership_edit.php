@@ -184,6 +184,7 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/society-name-autocomplete.js"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -210,7 +211,7 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 				if (! $membership->isSocietyIdentified ()) {
 					echo '<div class="form-group">';
 					echo '<label for="s_name_i">Nom de la Société</label>';
-					echo '<input id="s_name_i" name="society_name" type="text" class="form-control" maxlength="255" size="35"';
+					echo '<input id="s_name_i" name="society_name" is="society-name-autocomplete" type="text" class="form-control" maxlength="255" size="35"';
 					echo '/>';
 					echo '</div>';
 				} else {
@@ -354,29 +355,6 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 	}
 	?>
 </div>
-<script>
-	$(document).ready(function(){
-		$('#s_name_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/societies/names.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).names);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});
-	});
-</script>
 
 <script>
 	document.addEventListener("DOMContentLoaded", function() {

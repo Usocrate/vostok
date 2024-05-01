@@ -119,6 +119,7 @@ if ($relationship->areItemsBothKnown()) {
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/society-name-autocomplete.js"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -126,6 +127,7 @@ if ($relationship->areItemsBothKnown()) {
 	<h1 class="bd-title"><?php echo $h1_content ?></h1>
 	<section>
 		<form id="relationship_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
+			
 			<input name="item0_class" type="hidden" value="Society" />
 			<input name="item1_class" type="hidden" value="Society" />
 			<datalist id="role_list">
@@ -144,7 +146,7 @@ if ($relationship->areItemsBothKnown()) {
 				echo '<div class="form-row">';
 				echo '<div class="form-group col-md-6">';
 			    echo '<label for="s1_name_i">Nom de la première société</label>';
-				echo '<input id="s1_name_i" name="item0_name" type="text" maxlength="255" class="form-control" />';
+				echo '<input is="society-name-autocomplete" id="s1_name_i" name="item0_name" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
 				echo '<div class="form-group col-md-6">';
     			echo '<label for="s1_role_i">Son rôle</label>';
@@ -164,7 +166,7 @@ if ($relationship->areItemsBothKnown()) {
 				echo '<div class="form-row">';
 				echo '<div class="form-group col-md-6">';
 				echo '<label for="s2_name_i">Nom de la deuxième société</label>';
-				echo '<input id="s2_name_i" name="item1_name" type="text" maxlength="255" class="form-control" />';
+				echo '<input is="society-name-autocomplete" id="s2_name_i" name="item1_name" type="text" maxlength="255" class="form-control" />';
 				echo '</div>';
 				echo '<div class="form-group col-md-6">';
     			echo '<label for="s2_role_i">Son rôle</label>';
@@ -193,8 +195,8 @@ if ($relationship->areItemsBothKnown()) {
 			</div>
 			
 			<div class="form-group">
-    			<label>Commentaire</label>
-    			<textarea name="description" cols="51" rows="5" class="form-control"><?php echo $relationship->getAttribute('description'); ?></textarea>
+    			<label for="description_area">Commentaire</label>
+    			<textarea id="description_area" name="description" cols="51" rows="5" class="form-control"><?php echo $relationship->getAttribute('description'); ?></textarea>
 			</div>
 			
 			<div class="form-group">
@@ -247,51 +249,11 @@ if ($relationship->areItemsBothKnown()) {
 		?>		
 	</section>
 </div>
-<script>
-	$(document).ready(function(){
-	    $('#s1_name_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/societies/names.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).names);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});
-	    $('#s2_name_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-					url:'api/societies/names.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).names);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});	    
-	})
-</script>
-<?php if($relationship->hasId()): ?>
+
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
+
+		<?php if($relationship->hasId()): ?>		
 		const delete_a = document.getElementById('delete_a');
 		delete_a.addEventListener('click', function (event) {
 		  event.preventDefault();
@@ -309,8 +271,9 @@ if ($relationship->areItemsBothKnown()) {
 		  };
 		  xhr.send("id=<?php echo $relationship->getId() ?>&task=deletion");
 		});
+		<?php endif; ?>
 	});
 </script>
-<?php endif; ?>
+
 </body>
 </html>

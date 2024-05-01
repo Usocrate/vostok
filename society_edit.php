@@ -81,6 +81,7 @@ if (isset($_POST['task'])) {
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/society-name-autocomplete.js"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -107,7 +108,7 @@ if (isset($_POST['task'])) {
 	                	$parentSociety = $society->getParentSociety();
 	                	$value = $parentSociety ? $parentSociety->getName() : '';
                 	?>
-                	<input type="text" id ="s_parent_name_i" name="society_parent_name" value="<?php echo ToolBox::toHtml($value); ?>" size="35" class="form-control" />
+                	<input id ="s_parent_name_i" name="society_parent_name" is="society-name-autocomplete" type="text" value="<?php echo ToolBox::toHtml($value); ?>" size="35" class="form-control" />
                 	<input type="hidden" name="society_lastparent_name" value="<?php echo ToolBox::toHtml($value); ?>" />
             	</div>
         		
@@ -162,29 +163,6 @@ if (isset($_POST['task'])) {
 	?>    
     </section>
 </div>
-<script>
-	$(document).ready(function(){
-	    $('#s_parent_name_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/societies/names.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).names);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});	    
-	})
-</script>
 <?php if($society->hasId()): ?>
 <script type="text/javascript">
 	document.addEventListener("DOMContentLoaded", function() {

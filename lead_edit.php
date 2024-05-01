@@ -201,6 +201,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="<?php echo POPPER_JS_URI ?>" integrity="<?php echo POPPER_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/society-name-autocomplete.js"></script>
 </head>
 <body id="leadEditDoc" >
 <?php include 'navbar.inc.php'; ?>
@@ -266,7 +267,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 						<section>
         					<div class="form-group">
             					<label for="s_name_i">nom</label>
-            					<input id="s_name_i" name="society_name" type="text" size="35" class="form-control" />
+            					<input id="s_name_i" name="society_name" is="society-name-autocomplete" type="text" size="35" class="form-control" />
         					</div>
         					    					
         					<div class="form-group">
@@ -276,7 +277,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
         					
         					<div class="form-group">
             					<label for="s_parent_name_i">Société mère</label>
-            					<input id="s_parent_name_i" type="text" name="society_parent_name" size="35" class="form-control" />
+            					<input id="s_parent_name_i" is="society-name-autocomplete" type="text" name="society_parent_name" size="35" class="form-control" />
         					</div>
     					</section>
 					</div>
@@ -470,46 +471,6 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	         	})
 	   		}
 	   	});
-	    <?php if (!(isset($society) && $society->hasId())): ?>
-	    $('#s_name_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/societies/names.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).names);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});
-	    $('#s_parent_name_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/societies/names.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).names);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});	    
-	    <?php endif; ?>
 	    $('#ms_title_i').autocomplete({
 			minLength: 3,
 	   		source: function( request, response ) {
