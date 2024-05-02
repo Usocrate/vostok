@@ -226,9 +226,17 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 			</div>
 	    </div>
   	</div>
-
 	<script>
-		$(document).ready(function() {
+		const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
+		const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
+		const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
+	
+		document.addEventListener("DOMContentLoaded", function() {
+			const apiUrl = '<?php echo $system->getApiUrl() ?>';		
+			customElements.define("individual-photo", IndividualPhoto, { extends: "img" });
+						
+			const i = document.getElementById('individual_description_i');
+
 		    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 				var focus;
 				var scope = 'individual';
@@ -255,17 +263,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 					  }
 				});
 			});
-		});
-	</script>
-	<script>
-		const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
-		const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
-		const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
-	
-		document.addEventListener("DOMContentLoaded", function() {
-			const i = document.getElementById('individual_description_i');
-
-			customElements.define("individual-photo", IndividualPhoto, { extends: "img" });
 			
 			if (i!==null) {
 				i.contentEditable = true;

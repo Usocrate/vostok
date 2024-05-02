@@ -165,7 +165,11 @@ if (isset($_POST['task'])) {
 </div>
 <?php if($society->hasId()): ?>
 <script type="text/javascript">
+	const apiUrl = '<?php echo $system->getApiUrl() ?>';
+	
 	document.addEventListener("DOMContentLoaded", function() {
+		customElements.define("society-name-autocomplete", SocietyNameAutocomplete, { extends: "input" });
+		
 		const delete_a = document.getElementById('delete_a');
 		delete_a.addEventListener('click', function (event) {
 		  event.preventDefault();

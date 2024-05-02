@@ -409,7 +409,6 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
           </div>
         </div>
 		<div>
-		
 			<?php if ($lead->hasId()): ?>
 			<!-- <button name="deletion_order" type="button" value="1" class="btn btn-outline-secondary">Supprimer</button> -->
 			<?php endif; ?>
@@ -432,7 +431,11 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 </div>
 
 <script>
-	$(document).ready(function(){
+	const apiUrl = '<?php echo $system->getApiUrl() ?>';
+	
+	document.addEventListener("DOMContentLoaded", function() {
+		customElements.define("society-name-autocomplete", SocietyNameAutocomplete, { extends: "input" });
+		
 	    $('#lead_type_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
@@ -519,8 +522,8 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	                 }
 	         	})
 	   		}
-	   	});
-	})
+	   	});		 
+	});
 </script>
 </body>
 </html>

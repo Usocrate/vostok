@@ -357,8 +357,11 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 </div>
 
 <script>
+	const apiUrl = '<?php echo $system->getApiUrl() ?>';
+	
 	document.addEventListener("DOMContentLoaded", function() {
-
+		customElements.define("society-name-autocomplete", SocietyNameAutocomplete, { extends: "input" });
+					
 		const ifni = document.getElementById('individual_firstName_i');
 		const ilni = document.getElementById('individual_lastName_i');
 

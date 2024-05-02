@@ -106,6 +106,9 @@ class System {
 				'webp'
 		);
 	}
+	public function getApiUrl() {
+		return $this->appli_url . 'api/';
+	}
 	public function getCvUrl() {
 		return $this->appli_url . 'cv/';
 	}

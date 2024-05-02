@@ -167,8 +167,8 @@ $doc_title = 'Accueil';
 		
 	
 		document.addEventListener("DOMContentLoaded", function() {
-			customElements.define("individual-photo", IndividualPhoto, { extends: "img" });
-	
+			customElements.define("individual-photo", IndividualPhoto, { extends: "img" }); 
+		
 			const ils = document.querySelectorAll('.il');
 			imagesLoaded(ils, function(){
 				for (let il of ils) {

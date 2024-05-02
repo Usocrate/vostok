@@ -81,7 +81,7 @@ if (isset($_POST)) {
 	</form>
 </div>
 <script>
-$(document).ready(function(){
+document.addEventListener("DOMContentLoaded", function() {
 	$('#newRole_i').autocomplete({
 		minLength: 2,
    		source: function( request, response ) {

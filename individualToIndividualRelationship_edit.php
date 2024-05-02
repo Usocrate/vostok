@@ -197,8 +197,29 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 		?>
 	</section>
 </div>
-<script>
-	$(document).ready(function(){
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function() {
+		<?php if($relationship->hasId()): ?>
+		const delete_a = document.getElementById('delete_a');
+
+		delete_a.addEventListener('click', function (event) {
+		  event.preventDefault();
+		  var xhr = new XMLHttpRequest();
+		  xhr.open("POST", "api/relationships/", true);
+		  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		  xhr.responseType = 'json';
+		  xhr.onreadystatechange = function () {
+		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+		    	alert(this.response.message);
+		    	if (this.response.data.location !== undefined) {
+			    	window.location.replace(this.response.data.location);
+		    	}
+	    	}				  
+		  };
+		  xhr.send("id=<?php echo $relationship->getId() ?>&task=deletion");
+		});
+		<?php endif; ?>
+		
 	    $('#item0_role_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
@@ -230,6 +251,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
 		   	return $( "<li>" ).append(content).appendTo( ul );
 		};
+		
 	    $('#item1_role_i').autocomplete({
 			minLength: 2,
 	   		source: function( request, response ) {
@@ -260,31 +282,9 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
 		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
 		   	return $( "<li>" ).append(content).appendTo( ul );
-		};	    
-	})
-</script>
-<?php if($relationship->hasId()): ?>
-<script type="text/javascript">
-	document.addEventListener("DOMContentLoaded", function() {
-		const delete_a = document.getElementById('delete_a');
-		delete_a.addEventListener('click', function (event) {
-		  event.preventDefault();
-		  var xhr = new XMLHttpRequest();
-		  xhr.open("POST", "api/relationships/", true);
-		  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		  xhr.responseType = 'json';
-		  xhr.onreadystatechange = function () {
-		    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-		    	alert(this.response.message);
-		    	if (this.response.data.location !== undefined) {
-			    	window.location.replace(this.response.data.location);
-		    	}
-	    	}				  
-		  };
-		  xhr.send("id=<?php echo $relationship->getId() ?>&task=deletion");
-		});
+		};		
+		
 	});
 </script>
-<?php endif; ?>
 </body>
 </html>

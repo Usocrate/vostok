@@ -251,7 +251,10 @@ if ($relationship->areItemsBothKnown()) {
 </div>
 
 <script>
+	const apiUrl = '<?php echo $system->getApiUrl() ?>';
+	
 	document.addEventListener("DOMContentLoaded", function() {
+		customElements.define("society-name-autocomplete", SocietyNameAutocomplete, { extends: "input" });	
 
 		<?php if($relationship->hasId()): ?>		
 		const delete_a = document.getElementById('delete_a');

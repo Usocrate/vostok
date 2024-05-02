@@ -370,13 +370,16 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	</div>
 </div>
 <script>
+	const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
 	const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';
+	const imageFileExtensions = JSON.parse('<?php echo json_encode($system->getImageFileExtensions()) ?>');
+		
 	var masonries = [];
 
 	document.addEventListener("DOMContentLoaded", function() {
-		const ils = document.querySelectorAll('.il');
-		
 		customElements.define("individual-photo", IndividualPhoto, { extends: "img" });
+		
+		const ils = document.querySelectorAll('.il');
 
 		imagesLoaded(ils, function(){
 			for (let il of ils) {
