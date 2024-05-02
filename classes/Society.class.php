@@ -134,6 +134,7 @@ class Society {
 		if (isset ( $substring )) {
 			$sql .= ' AND society_name LIKE :pattern';
 		}
+		$sql .= ' ORDER BY society_name ASC';
 		$statement = $system->getPdo ()->prepare ( $sql );
 		if (isset ( $substring )) {
 			$statement->bindValue ( ':pattern', '%' . $substring . '%', PDO::PARAM_STR );
@@ -271,17 +272,17 @@ class Society {
 	}
 	private static function getKnownCities($substring = NULL) {
 		global $system;
-		$sql = 'SELECT society_city AS value, COUNT(*) AS count FROM society WHERE society_city IS NOT NULL';
+		$sql = 'SELECT DISTINCT society_city FROM `society` WHERE society_city IS NOT NULL';
 		if (isset ( $substring )) {
 			$sql .= ' AND society_city LIKE :pattern';
 		}
-		$sql .= ' GROUP BY society_city ASC';
+		$sql .= ' ORDER BY society_city ASC';
 		$statement = $system->getPdo ()->prepare ( $sql );
 		if (isset ( $substring )) {
 			$statement->bindValue ( ':pattern', $substring . '%', PDO::PARAM_STR );
 		}
 		$statement->execute ();
-		return $statement->fetchAll ( PDO::FETCH_ASSOC );
+		return $statement->fetchAll ( PDO::FETCH_COLUMN );
 	}
 	public static function knownCitiesToJson($substring = NULL) {
 		$output = '{"cities":' . json_encode ( self::getKnownCities ( $substring ) ) . '}';

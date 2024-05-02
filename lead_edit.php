@@ -194,14 +194,16 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
-    <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
-	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="<?php echo POPPER_JS_URI ?>" integrity="<?php echo POPPER_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="js/society-name-autocomplete.js"></script>
+	<script src="js/membership-title-autocomplete.js"></script>
+	<script src="js/membership-department-autocomplete.js"></script>
+	<script src="js/lead-source-autocomplete.js"></script>
+	<script src="js/lead-type-autocomplete.js"></script>
 </head>
 <body id="leadEditDoc" >
 <?php include 'navbar.inc.php'; ?>
@@ -242,11 +244,11 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
         					</div>
          					<div class="form-group">
             					<label for="lead_type_i">Type</label>
-            					<input id="lead_type_i" name="lead_type" type="text" value="<?php echo ToolBox::toHtml($lead->getType()) ?>" class="form-control" />
+            					<input id="lead_type_i" name="lead_type" is="lead-type-autocomplete" type="text" value="<?php echo ToolBox::toHtml($lead->getType()) ?>" class="form-control" />
             				</div>
             				<div class="form-group">
             					<label for="lead_source_i">Origine</label>
-            					<input id="lead_source_i" name="lead_source" type="text" value="<?php echo ToolBox::toHtml($lead->getSource()) ?>" size="55" class="form-control" />
+            					<input id="lead_source_i" name="lead_source" is="lead-source-autocomplete" type="text" value="<?php echo ToolBox::toHtml($lead->getSource()) ?>" size="55" class="form-control" />
             				</div>
             				<div class="form-group">
             					<label for="l_source_description_ta">Précisions sur l'origine</label>
@@ -370,12 +372,12 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
     						
 							<div class="form-group">
     							<label for="ms_department_i">service</label> 
-    							<input id="ms_department_i" name="membership_department" type="text" size="35" class="form-control" />
+    							<input id="ms_department_i" name="membership_department" is="membership-department-autocomplete" type="text" size="35" class="form-control" />
 							</div>
 							
 							<div class="form-group"> 
     							<label for="ms_title_i">fonction</label> 
-    							<input id="ms_title_i" name="membership_title" type="text" size="35" class="form-control" />
+    							<input id="ms_title_i" name="membership_title" is="membership-title-autocomplete" type="text" size="35" class="form-control" />
 							</div>
 							
 							<div class="form-group"> 
@@ -435,94 +437,10 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 	
 	document.addEventListener("DOMContentLoaded", function() {
 		customElements.define("society-name-autocomplete", SocietyNameAutocomplete, { extends: "input" });
-		
-	    $('#lead_type_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/lead_types.json.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).types);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});
-	    $('#lead_source_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/lead_sources.json.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).sources);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});
-	    $('#ms_title_i').autocomplete({
-			minLength: 3,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/memberships/titles.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).titles);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		},
-	        focus: function( event, ui ) {
-				$('#ms_title_i').val( ui.item.value );
-	        	return false;
-	        },
-	        select: function( event, ui ) {
-				$('#ms_title_i').val( ui.item.value );
-	        	return false;
-	        },
-	        _renderItem: function( ul, item ) {
-			    return $( "<li>" ).append(item.value + ' <small>(' + item.count +')</small>').appendTo( ul );
-		    }
-	   	});
-	    $('#ms_department_i').autocomplete({
-			minLength: 3,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/memberships/departments.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).departments);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});		 
+		customElements.define("membership-title-autocomplete", MembershipTitleAutocomplete, { extends: "input" });
+		customElements.define("membership-department-autocomplete", MembershipDepartmentAutocomplete, { extends: "input" });
+		customElements.define("lead-source-autocomplete", LeadSourceAutocomplete, { extends: "input" });
+		customElements.define("lead-type-autocomplete", LeadTypeAutocomplete, { extends: "input" });
 	});
 </script>
 </body>

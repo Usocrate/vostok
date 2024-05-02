@@ -1,7 +1,7 @@
 <?php
-require_once '../config/boot.php';
-require_once '../classes/System.class.php';
-$system = new System( '../config/host.json' );
+require_once '../../config/boot.php';
+require_once '../../classes/System.class.php';
+$system = new System( '../../config/host.json' );
 
 session_start();
 

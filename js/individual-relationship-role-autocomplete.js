@@ -36,7 +36,7 @@ class IndividualRelationshipRoleAutocomplete extends HTMLInputElement {
         return [];
       }
     } catch (error) {
-      console.error('Suggestion en échec :', error);
+      console.error(error);
       return [];
     }
   }

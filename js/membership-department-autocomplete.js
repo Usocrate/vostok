@@ -1,4 +1,4 @@
-class SocietyRelationshipRoleAutocomplete extends HTMLInputElement {
+class MembershipDepartmentAutocomplete extends HTMLInputElement {
   constructor() {
     super();
     this.datalist = null;
@@ -26,12 +26,12 @@ class SocietyRelationshipRoleAutocomplete extends HTMLInputElement {
           throw new Error('où chercher ?');
         }
       
-        const response = await fetch(apiUrl+`relationships/roles.php?searchPattern=${encodeURIComponent(query)}&rolePlayerClass=society`);
+        const response = await fetch(apiUrl+`memberships/departments.php?query=${encodeURIComponent(query)}`);
         if (!response.ok) {
           throw new Error('demande sans réponse');
         }
         const data = await response.json();
-        return data.roles || [];
+        return data.departments || [];
       } else {
         return [];
       }
@@ -45,7 +45,7 @@ class SocietyRelationshipRoleAutocomplete extends HTMLInputElement {
     this.datalist.innerHTML = '';
     suggestions.forEach(suggestion => {
       const option = document.createElement('option');
-      option.value = suggestion.role;
+      option.value = suggestion.value;
       this.datalist.appendChild(option);
     });
   }

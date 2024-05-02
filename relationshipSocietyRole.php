@@ -61,11 +61,9 @@ $doc_title = $role;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
-    <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
-	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="<?php echo POPPER_JS_URI ?>" integrity="<?php echo POPPER_JS_URI_INTEGRITY ?>" crossorigin="anonymous"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
@@ -116,8 +114,8 @@ $doc_title = $role;
             	<thead>
         			<tr>
         				<th style="display:none"></th>
-        				<th>Nom de la société</th>
-        				<th>Les sociétés auprès desquelles le rôle est assumé</th>
+        				<th>Société</th>
+        				<th>Rôle assumé auprès de</th>
         			</tr>
         		</thead>
             	<tbody>

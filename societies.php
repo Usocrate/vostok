@@ -77,14 +77,13 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link type="text/css" rel="stylesheet" href="<?php echo FONTAWESOME_CSS_URI ?>" integrity="<?php echo FONTAWESOME_CSS_URI_INTEGRITY ?>" crossorigin="anonymous" />    
-    <link type="text/css" rel="stylesheet" href="<?php echo JQUERY_UI_CSS_THEME_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
-	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="js/masonry.pkgd.min.js"></script>
 	<script src="js/imagesloaded.pkgd.min.js"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/society-city-autocomplete.js"></script>	
 </head>
 <body id="societiesListDoc">
 <?php include 'navbar.inc.php'; ?>
@@ -105,7 +104,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 			</div>
 			<div class="form-group m-2">
 	    		<label for="s_city_i" class="mr-2">Ville</label>
-	    		<input id="s_city_i" name="society_city" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
+	    		<input id="s_city_i" name="society_city" is="society-city-autocomplete" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
 			</div>
 	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-secondary m-2">Filtrer</button>
 	   		<?php if( count($_SESSION['society_search']['criteria']) > 0) echo ' <a href="societies.php?society_newsearch=1">Toutes les sociétés</a>'  ?>
@@ -218,7 +217,11 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     </div>
 </div>
 <script>
+	const apiUrl = '<?php echo $system->getApiUrl() ?>';
+	
 	document.addEventListener("DOMContentLoaded", function() {
+		customElements.define("society-city-autocomplete", SocietyCityAutocomplete, { extends: "input" });
+		
 		const ils = document.querySelectorAll('.il');
 		
 		imagesLoaded(ils, function(){
@@ -230,26 +233,6 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 				});
 			}
 		});
-		
-		$('#s_city_i').autocomplete({
-			minLength: 1,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/societies/cities.php',
-	                dataType: 'json',
-	                data:{
-	                    'query': request.term
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).cities);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		}
-	   	});		
 	});
 </script>
 </body>
