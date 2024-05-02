@@ -94,6 +94,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/individual-relationship-role-autocomplete.js"></script>
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
@@ -123,7 +124,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 				echo '</div>';
 				echo '<div class="form-group col-md-6">';
     			echo '<label for="item1_role_i">Son rôle dans la relation</label>';
-    			echo '<input id="item1_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+    			echo '<input id="item1_role_i" name="item1_role" is="individual-relationship-role-autocomplete" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 				echo '</div>';				
 			} else {
@@ -131,7 +132,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 				echo '<div class="form-group">';
 				echo '<input name="item1_id" type="hidden" value="' . $item1->getId () . '"/>';
     			echo '<label for="item1_role_i">Rôle de '. $item1->getHtmlLinkToIndividual() . '</label>';
-    			echo '<input id="item1_role_i" name="item1_role" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
+    			echo '<input id="item1_role_i" name="item1_role" is="individual-relationship-role-autocomplete" type="text" value="'.$relationship->getItemRole(1).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
 			?>
@@ -150,7 +151,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 				echo '</div>';
 				echo '<div class="form-group col-md-6">';
     			echo '<label for="item0_role_i">Son rôle dans la relation</label>';
-    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+    			echo '<input id="item0_role_i" name="item0_role" is="individual-relationship-role-autocomplete" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 				echo '</div>';
 			} else {
@@ -158,7 +159,7 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 				echo '<div class="form-group">';
 				echo '<input name="item0_id" type="hidden" value="' . $item0->getId () . '"/>';
     			echo '<label for="item0_role_i">Rôle de '. $item0->getHtmlLinkToIndividual() . '</label>';
-    			echo '<input id="item0_role_i" name="item0_role" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
+    			echo '<input id="item0_role_i" name="item0_role" is="individual-relationship-role-autocomplete" type="text" value="'.$relationship->getItemRole(0).'" size="20" class="form-control" />';
 				echo '</div>';
 			}
 			?>
@@ -198,7 +199,11 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 	</section>
 </div>
 <script type="text/javascript">
+	const apiUrl = '<?php echo $system->getApiUrl() ?>';
+	
 	document.addEventListener("DOMContentLoaded", function() {
+		customElements.define("individual-relationship-role-autocomplete", IndividualRelationshipRoleAutocomplete, { extends: "input" });
+		
 		<?php if($relationship->hasId()): ?>
 		const delete_a = document.getElementById('delete_a');
 
@@ -219,71 +224,6 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 		  xhr.send("id=<?php echo $relationship->getId() ?>&task=deletion");
 		});
 		<?php endif; ?>
-		
-	    $('#item0_role_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/relationships/roles.php',
-	                dataType: 'json',
-	                data:{
-	                    'searchPattern': request.term,
-	                    'roleType': 'individualRole'
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).roles);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		},
-            focus: function( event, ui ) {
-    			$('#item0_role_i').val( ui.item.role);
-            	return false;
-            },
-            select: function( event, ui ) {
-            	$('#item0_role_i').val( ui.item.role);
-            	return false;
-            }
-	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
-		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
-		   	return $( "<li>" ).append(content).appendTo( ul );
-		};
-		
-	    $('#item1_role_i').autocomplete({
-			minLength: 2,
-	   		source: function( request, response ) {
-	            $.ajax({
-					method:'GET',
-	                url:'api/relationships/roles.php',
-	                dataType: 'json',
-	                data:{
-	                    'searchPattern': request.term,
-	                    'roleType': 'individualRole'
-	                 },
-	                 dataFilter: function(data,type){
-	                     return JSON.stringify(JSON.parse(data).roles);
-	                 },
-	                 success : function(data, textStatus, jqXHR){
-						response(data);
-	                 }
-	         	})
-	   		},
-            focus: function( event, ui ) {
-    			$('#item1_role_i').val( ui.item.role);
-            	return false;
-            },
-            select: function( event, ui ) {
-            	$('#item1_role_i').val( ui.item.role);
-            	return false;
-            }
-	   	}).autocomplete("instance")._renderItem = function( ul, item ) {
-		   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
-		   	return $( "<li>" ).append(content).appendTo( ul );
-		};		
-		
 	});
 </script>
 </body>

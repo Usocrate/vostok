@@ -51,6 +51,7 @@ if (isset($_POST)) {
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="<?php echo JQUERY_UI_URI; ?>"></script>
 	<script src="vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/society-relationship-role-autocomplete.js"></script>
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
@@ -75,44 +76,16 @@ if (isset($_POST)) {
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<input name="role" type="hidden" value="<?php echo $role ?>">
 		<div class="form-group">
-			<label for="newRole_i">Nouveau nom</label> <input id="newRole_i" name="newRole" type="text" maxlength="255" class="form-control" />
+			<label for="newRole_i">Nouveau nom</label> <input id="newRole_i" name="newRole" is="society-relationship-role-autocomplete" type="text" maxlength="255" class="form-control" />
 		</div>
 		<button name="task_id" type="submit" value="replaceRole" class="btn btn-primary">Enregistrer</button>
 	</form>
 </div>
 <script>
+const apiUrl = '<?php echo $system->getApiUrl() ?>';
+
 document.addEventListener("DOMContentLoaded", function() {
-	$('#newRole_i').autocomplete({
-		minLength: 2,
-   		source: function( request, response ) {
-            $.ajax({
-				method:'GET',
-                url:'api/relationships/roles.php',
-                dataType: 'json',
-                data:{
-                    'searchPattern': request.term,
-                    'rolePlayerClass': 'society'
-                 },
-                 dataFilter: function(data,type){
-                     return JSON.stringify(JSON.parse(data).roles);
-                 },
-                 success : function(data, textStatus, jqXHR){
-					response(data);
-                 }
-         	})
-   		},
-        focus: function( event, ui ) {
-			$('#newRole_i').val( ui.item.role);
-        	return false;
-        },
-        select: function( event, ui ) {
-        	$('#newRole_i').val( ui.item.role);
-        	return false;
-        }
-   	}).autocomplete("instance")._renderItem = function( ul, item ) {
-	   	var content = '<div>'+item.role+' <small>('+item.nb+')</small></div>';
-	   	return $( "<li>" ).append(content).appendTo( ul );
-	};		
+	customElements.define("society-relationship-role-autocomplete", SocietyRelationshipRoleAutocomplete, { extends: "input" });
 })
 </script>
 </body>
