@@ -643,7 +643,7 @@ class System {
 	 *
 	 * @since 04/2022
 	 */
-	public function getFirstWeighterMembershipInSociety(Membership $m) {
+	public function getFirstHeavierMembershipInSociety(Membership $m) {
 		$criteria = array (
 				'minWeight' => $m->getWeight () + 1,
 				'society_id' => $m->getSociety ()->getId ()
@@ -672,7 +672,7 @@ class System {
 		$criteria = array (
 				'society_id' => $s->getId ()
 		);
-		return $this->getMemberships ( $criteria, 'Weighter first' );
+		return $this->getMemberships ( $criteria, 'Heavier first' );
 	}
 
 	/**

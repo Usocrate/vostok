@@ -22,7 +22,7 @@ $society->initFromDB();
 // participations
 $memberships = $society->getMemberships();
 if ($memberships) {
-	// regroupement des participations par individu	
+	// regroupement des participations par individu
 	$members = array();
 	foreach ($memberships as $ms) {
 		$i = $ms->getIndividual();
@@ -271,6 +271,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     							if ( $ms->hasDescription() ) {
     								echo $ms->getHtmlExpandableDescription();
     							}
+    							if ($ms->getWeight()) echo '<div>'.str_repeat('<span style="font-size:1.2em;mix-blend-mode:luminosity">🏅</span>', $ms->getWeight()).'</div>';
     							//echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="card-link">édition</a>';
     						}
     						echo '</div>';

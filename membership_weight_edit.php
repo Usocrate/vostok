@@ -26,7 +26,7 @@ if (! empty ( $_REQUEST ['membership_id'] )) {
 	}
 	// print_r($membership);
 
-	$weighterMembership = $system->getFirstWeighterMembershipInSociety ( $membership );
+	$heavierMembership = $system->getFirstHeavierMembershipInSociety ( $membership );
 	
 } else {
 	header ( 'location:index.php' );
@@ -45,24 +45,25 @@ if (isset ( $_POST ['task'] )) {
 					$membership->setWeight ( $maxWeight + 1 );
 					if ($membership->toDB ()) {
 						$fb->addSuccessMessage ( 'Le repositionnement est fait.' );
-						$weighterMembership = null;
+						$heavierMembership = $membership;
 					}
 					break;
 				case 'join' :
-					if (isset($weighterMembership)) {
-						$membership->setWeight ($weighterMembership->getWeight());
+					if (isset($heavierMembership)) {
+						$targetWeight = $heavierMembership->getWeight();
+						$membership->setWeight($targetWeight);
 						if ($membership->toDB ()) {
-							$fb->addSuccessMessage ( 'Le repositionnement est fait à la hauteur de '. $weighterMembership->getHtmlLinkToIndividual().'.');
+							$fb->addSuccessMessage ( 'Le repositionnement est fait à la hauteur de '. $heavierMembership->getHtmlLinkToIndividual().'.');
 						}
-						$weighterMembership = $system->getFirstWeighterMembershipInSociety ( $membership );
+						$heavierMembership = $system->getFirstHeavierMembershipInSociety ( $membership );
 					}
 					break;
 				case 'goBeyond' :
-					$membership->setWeight ( $weighterMembership->getWeight () + 1 );
+					$membership->setWeight ( $heavierMembership->getWeight () + 1 );
 					if ($membership->toDB ()) {
-						$fb->addSuccessMessage ( $membership->getHtmlLinkToIndividual().' est promu(e) devant '. $weighterMembership->getHtmlLinkToIndividual().'.');
+						$fb->addSuccessMessage ( $membership->getHtmlLinkToIndividual().' est promu(e) devant '. $heavierMembership->getHtmlLinkToIndividual().'.');
 					}
-					$weighterMembership = $system->getFirstWeighterMembershipInSociety ( $membership );
+					$heavierMembership = $system->getFirstHeavierMembershipInSociety ( $membership );
 					break;
 			}
 			break;
@@ -74,7 +75,7 @@ if (isset ( $_POST ['task'] )) {
 						$membership->setWeight ( $membership->getWeight () - 1 );
 						if ($membership->toDB ()) {
 							$fb->addSuccessMessage ( 'Le repositionnement est fait.' );
-							$weighterMembership = $system->getFirstWeighterMembershipInSociety ( $membership );
+							$heavierMembership = $system->getFirstHeavierMembershipInSociety ( $membership );
 						}
 					}
 					break;
@@ -82,7 +83,7 @@ if (isset ( $_POST ['task'] )) {
 					$membership->setWeight ( 0 );
 					if ($membership->toDB ()) {
 						$fb->addSuccessMessage ( 'Le repositionnement est fait.' );
-						$weighterMembership = $system->getFirstWeighterMembershipInSociety ( $membership );
+						$heavierMembership = $system->getFirstHeavierMembershipInSociety ( $membership );
 					}
 					break;
 			}
@@ -119,14 +120,14 @@ $h1_content = '<small>Quelle place pour </small>' . $membership->getHtmlLinkToIn
 					<input id="head_i" name="location" type="radio"	class="form-check-input" value="gohead">
 					<label for="head_i" class="form-check-label">En-tête de liste</label>
 				</div>
-				<?php if(isset($weighterMembership)): ?>
+				<?php if(isset($heavierMembership)): ?>
 				<div class="form-check">
 					<input id="join_i" name="location" type="radio"	class="form-check-input" value="join">
-					<label for="join_i" class="form-check-label">Au même rang que <?php echo $weighterMembership->getHtmlLinkToIndividual() ?></label>
+					<label for="join_i" class="form-check-label">Au même rang que <?php echo $heavierMembership->getHtmlLinkToIndividual() ?></label>
 				</div>
 				<div class="form-check">
 					<input id="goBeyond_i" name="location" type="radio"	class="form-check-input" value="goBeyond">
-					<label for="goBeyond_i" class="form-check-label">Devant <?php echo $weighterMembership->getHtmlLinkToIndividual() ?></label>
+					<label for="goBeyond_i" class="form-check-label">Devant <?php echo $heavierMembership->getHtmlLinkToIndividual() ?></label>
 				</div>
 				<?php endif; ?>
 			</div>
@@ -150,7 +151,7 @@ $h1_content = '<small>Quelle place pour </small>' . $membership->getHtmlLinkToIn
 					</div>
 					<div class="form-check">
 						<input id="reset_i" name="location" type="radio" class="form-check-input" value="reset">
-						<label for="reset_i" class="form-check-label">Retour en bas de l'échelle</label>
+						<label for="reset_i" class="form-check-label">Retour en bas de l&apos;échelle</label>
 					</div>
 				</div>
 				<div><button name="task" type="submit" value="membership_downgrade" class="btn btn-primary">Enregistrer</button></div>
