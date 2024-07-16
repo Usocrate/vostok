@@ -78,7 +78,8 @@ $btn-font-size: 1.1rem;
 }
 
 .card-img-top-wrapper {
-	background-color: $gray-600;
+	background : linear-gradient(135deg, $white 5%, $gray-600 10%, $primary 80%);
+	filter:saturate(0.6);
 }
 
 .card-img-top {

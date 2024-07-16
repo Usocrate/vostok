@@ -9953,7 +9953,8 @@ h3 {
 }
 
 .card-img-top-wrapper {
-  background-color: #7d6f6c;
+  background: linear-gradient(135deg, #fff 5%, #7d6f6c 10%, #da8055 80%);
+  filter: saturate(0.6);
 }
 
 .card-img-top {
