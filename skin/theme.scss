@@ -1,5 +1,5 @@
 $white:    #fff !default;
-$gray-100: #faf8f8 !default;
+$gray-100: #f8f8f8 !default;
 $gray-200: #efeae9 !default;
 $gray-300: #e6e0de !default;
 $gray-400: #dad1ce !default;
@@ -127,6 +127,7 @@ BUTTON SMALL, A.btn SMALL {
 BODY {
 	background-color: $bg;
 	background-image: url('./images/bg.svg');
+	font-family:$common-font-family;
 }
 
 H1 {
@@ -164,6 +165,12 @@ TABLE {
 IMG {
 	border-width: 0;
 	margin: 0;
+}
+
+FORM FIELDSET LEGEND {
+	font-family:$headings-font-family;
+	color: $tertiary;
+	font-size:1.2em;		
 }
 
 A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
@@ -227,27 +234,36 @@ DIV.card-body {
 
 #loginDoc {
 	div.container {
-		max-width: 496px;
+		max-width: 560px;
 		background-color: $white;
 	}
 	
 	FORM {
-		background-image: url("./images/vostok.gif");
+		background-image: url("./images/vostok.jpg");
+		background-color: $gray-100;
+		background-blend-mode:darken;
 		background-position: top center;
 		background-repeat: no-repeat;
+		background-size: contain;
 		margin: auto;
-		padding: 180px 0 0 0;
+		padding: 400px 20px 20px 20px;
 	}
 	
-	FOOTER {
+	FIGURE {
 		margin: 20px auto 10px auto;
 		background-image: url("./images/gagarinecasque.gif");
 		background-position: bottom left;
 		background-repeat: no-repeat;
-		padding-left: 90px;
+		padding: 10px 10px 10px 90px;
 		border-width: 1px 0;
 		border-style: dotted;
-		border-color: $gray-600
+		border-color: $gray-600;
+		
+		Q {
+			font-family:$headings-font-family;
+			color: $gray-600;
+			font-size:1.2em;
+		}
 	}
 }
 

@@ -60,8 +60,11 @@ $doc_title = $system->getAppliName();
 		</div>
 		<button name="login_submission" type="submit" value="1" class="btn btn-primary">Lancer</button>
 	</form>
-	
-	<footer><q>Reçu. Sens bien, excellent état d'esprit, prêt à y aller</q><br /> <cite>Youri Gagarine, 12 avril 1961</cite></footer>
+
+	<figure>
+	  <q>Reçu. Sens bien, excellent état d'esprit, prêt à y aller.</q>
+	  <figcaption><cite><a href="https://fr.wikipedia.org/wiki/Vostok_1">Youri Gagarine, 12 avril 1961</a></cite></figcaption>
+	</figure>	
 </div>
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
