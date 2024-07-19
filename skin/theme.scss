@@ -246,23 +246,22 @@ DIV.card-body {
 		background-repeat: no-repeat;
 		background-size: contain;
 		margin: auto;
-		padding: 400px 20px 20px 20px;
+		padding: 260px 20px 20px 20px;
 	}
 	
 	FIGURE {
-		margin: 20px auto 10px auto;
 		background-image: url("./images/gagarinecasque.gif");
-		background-position: bottom left;
+		background-position: top center;
 		background-repeat: no-repeat;
-		padding: 10px 10px 10px 90px;
 		border-width: 1px 0;
 		border-style: dotted;
-		border-color: $gray-600;
+		border-color: $gray-600;	
+		padding: 70px 10px 10px 10px;
 		
 		Q {
 			font-family:$headings-font-family;
-			color: $gray-600;
-			font-size:1.2em;
+			color: $gray-600;			
+			font-size: 1em;
 		}
 	}
 }
@@ -275,6 +274,20 @@ DIV.card-body {
 	#indexDoc {
 		.card {
 			width: 344px;
+		}
+	}
+	#loginDoc {
+		FORM {
+			padding-top: 400px;
+		}
+	
+		FIGURE {
+			background-position: bottom left;
+			padding: 10px 10px 10px 90px;
+			
+			Q {
+				font-size:1.2em;
+			}
 		}
 	}
 }
