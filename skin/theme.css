@@ -10116,22 +10116,21 @@ DIV.card-body DIV.membership-description-area SPAN.more {
   background-repeat: no-repeat;
   background-size: contain;
   margin: auto;
-  padding: 400px 20px 20px 20px;
+  padding: 260px 20px 20px 20px;
 }
 #loginDoc FIGURE {
-  margin: 20px auto 10px auto;
   background-image: url("./images/gagarinecasque.gif");
-  background-position: bottom left;
+  background-position: top center;
   background-repeat: no-repeat;
-  padding: 10px 10px 10px 90px;
   border-width: 1px 0;
   border-style: dotted;
   border-color: #7d6f6c;
+  padding: 70px 10px 10px 10px;
 }
 #loginDoc FIGURE Q {
   font-family: "Oswald";
   color: #7d6f6c;
-  font-size: 1.2em;
+  font-size: 1em;
 }
 
 @media (min-width: 768px) {
@@ -10141,6 +10140,17 @@ DIV.card-body DIV.membership-description-area SPAN.more {
 
   #indexDoc .card {
     width: 344px;
+  }
+
+  #loginDoc FORM {
+    padding-top: 400px;
+  }
+  #loginDoc FIGURE {
+    background-position: bottom left;
+    padding: 10px 10px 10px 90px;
+  }
+  #loginDoc FIGURE Q {
+    font-size: 1.2em;
   }
 }
 @media (min-width: 992px) {
