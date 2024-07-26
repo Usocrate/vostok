@@ -163,24 +163,24 @@ if (isset ( $item0 ) && isset ( $item1 )) {
 			?>
 			<div class="form-row">
 			<div class="form-group col-md-3">
-    			<label>Année de démarrage</label>
-    			<input name="init_year" type="text" value="<?php echo $relationship->getAttribute('init_year'); ?>" size="4" class="form-control" />
+    			<label for="init_year_i">Année de démarrage</label>
+    			<input id="init_year_i" name="init_year" type="number" value="<?php echo $relationship->getAttribute('init_year'); ?>" size="4" class="form-control" />
 			</div>
 			
 			<div class="form-group col-md-3">
-    			<label>Année de clôture</label>
-    			<input name="end_year" type="text" value="<?php echo $relationship->getAttribute('end_year'); ?>" size="4" class="form-control" />
+    			<label for="end_year_i">Année de clôture</label>
+    			<input id="end_year_i" name="end_year" type="number" value="<?php echo $relationship->getAttribute('end_year'); ?>" size="4" class="form-control" />
 			</div>
 			</div>
 			
 			<div class="form-group">
-    			<label>Commentaire</label>
-    			<textarea name="description" cols="51" rows="5" class="form-control"><?php echo $relationship->getAttribute('description'); ?></textarea>
+    			<label for="description_i">Commentaire</label>
+    			<textarea id="description_i" name="description" cols="51" rows="5" class="form-control"><?php echo $relationship->getAttribute('description'); ?></textarea>
 			</div>
 			
 			<div class="form-group">
-    			<label for="relationship_url_input">url</label>
-    			<input id="relationship_url_input" name="url" type="url" size="35" class="form-control" onchange="javascript:checkUrlInput('relationship_url_input', 'relationship_web_link');" value="<?php echo $relationship->getUrl(); ?>" />
+    			<label for="relationship_url_i">url</label>
+    			<input id="relationship_url_i" name="url" type="url" size="35" class="form-control" onchange="javascript:checkUrlInput('relationship_url_i', 'relationship_web_link');" value="<?php echo $relationship->getUrl(); ?>" />
     			<a id="relationship_web_link" href="#" style="display: none">[voir]</a>
 			</div>
 			

@@ -130,7 +130,7 @@ $doc_title = 'Les gens';
 			<input id="individual_wholeName_i" name="individual_wholeName" type="text" value="<?php if (isset($_SESSION['individual_search']['wholeName'])) echo $_SESSION['individual_search']['wholeName'] ?>" placeholder="prénom, nom" class="form-control" />
 		</div>
 		<div class="checkbox m-2">
-            <label><input id="i_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> class="mr-2" /> Sans société</label>
+            <label for="individual_toCheck_i"><input id="individual_toCheck_i" name="individual_toCheck" type="checkbox" value="1" <?php if (isset($_SESSION['individual_search']['toCheck'])) echo 'checked="checked" ' ?> class="mr-2" /> Sans société</label>
  		</div>
 		<button type="submit" name="individual_newsearch" value="filtrer" class="btn btn-secondary m-2">Filtrer</button>
 		<?php if( count($criteria) > 0) echo ' <a href="individuals.php?individual_newsearch=1">Tous les gens</a>'  ?>

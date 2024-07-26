@@ -66,10 +66,8 @@ if (isset ( $_POST ['task'] )) {
     		</div>
     		<small> à remplacer par </small> 
     		<div class="form-group">
-        		<label>La catégorie référence</label>
-        		<select name="lead_type_ref" class="form-control">
-        			<?php echo Lead::getKnownTypesAsOptionsTags()?>
-        		</select>
+        		<label for="lead_type_ref_i">La catégorie référence</label>
+        		<select id="lead_type_ref_i" name="lead_type_ref" class="form-control"><?php echo Lead::getKnownTypesAsOptionsTags()?></select>
     		</div>
     		<input name="task" type="hidden" value="lead_types_merge" />
     		<button type="submit" class="btn btn-primary">Ok</button>

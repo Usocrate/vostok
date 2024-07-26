@@ -80,12 +80,12 @@ $doc_title = 'Un évènement chez ' . $society->getName();
 		<?php endif; ?>
 
 		<div class="form-group">
-			<label>Quand ?</label>
-			<input name="datetime" type="text" value="<?php echo $event->hasDatetime()? $event->getDatetime() : date('Y-m-d h:i:s', time()) ?>" size="25" maxlength="19" class="form-control" />
+			<label for="datetime_i">Quand ?</label>
+			<input id="datetime_i" name="datetime" type="text" value="<?php echo $event->hasDatetime()? $event->getDatetime() : date('Y-m-d h:i:s', time()) ?>" size="25" maxlength="19" class="form-control" />
 		</div>
 		<div class="form-group">
-			<label>Quelle est la nature de l&rsquo;évènement ?</label><br />
-			<select name="type" class="form-control">
+			<label for="type_i">Quelle est la nature de l&rsquo;évènement ?</label><br />
+			<select id="type_i" name="type" class="form-control">
 				<?php echo $event->hasType() ? Event::getTypeOptionsTags($event->getType()) : Event::getTypeOptionsTags(); ?>
 			</select>
 		</div>
@@ -99,14 +99,14 @@ $doc_title = 'Un évènement chez ' . $society->getName();
 			}
 		?>
 		<div class="form-group">
-			<label>Quel est le média ?</label>
-			<select name="media" class="form-control">
+			<label for="media_i">Quel est le média ?</label>
+			<select id="media_i" name="media" class="form-control">
 				<?php echo $event->hasMedia() ? Event::getMediaOptionsTags($event->getMedia()) : Event::getMediaOptionsTags(); ?>
 			</select>
 		</div>
 		<div class="form-group">
-			<label>Commentaire</label>
-			<textarea name="comment" cols="55" rows="10" class="form-control"><?php echo $event->getComment() ?></textarea>
+			<label for="comment_i">Commentaire</label>
+			<textarea id="comment_i" name="comment" cols="55" rows="10" class="form-control"><?php echo $event->getComment() ?></textarea>
 		</div>
 		
 		<button type="submit" class="btn btn-primary">Enregistrer</button>

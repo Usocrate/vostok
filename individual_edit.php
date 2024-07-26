@@ -157,23 +157,23 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 				<fieldset>
 					<legend>Coordonnées (perso)</legend>
 					<div class="form-group">
-    					<label>Tél. mobile</label>
-    					<input type="tel" name="individual_mobile" value="<?php echo ToolBox::toHtml($individual->getMobilePhoneNumber()) ?>" size="15" class="form-control"/>
+    					<label for="individual_mobile_i">Tél. mobile</label>
+    					<input id="individual_mobile_i" type="tel" name="individual_mobile" value="<?php echo ToolBox::toHtml($individual->getMobilePhoneNumber()) ?>" size="15" class="form-control"/>
 					</div>
 					
 					<div class="form-group">
-						<label>Téléphone</label>
-						<input type="tel" name="individual_phone" value="<?php echo ToolBox::toHtml($individual->getPhoneNumber()) ?>" size="15" class="form-control" />
+						<label for="individual_phone_i">Téléphone</label>
+						<input id="individual_phone_i" type="tel" name="individual_phone" value="<?php echo ToolBox::toHtml($individual->getPhoneNumber()) ?>" size="15" class="form-control" />
     				</div>
     				
     				<div class="form-group">
-    					<label>Email</label>
-    					<input type="email" name="individual_email" value="<?php echo ToolBox::toHtml($individual->getEmailAddress()) ?>" size="55" class="form-control" />
+    					<label for="individual_email_i">Email</label>
+    					<input id="individual_email_i" type="email" name="individual_email" value="<?php echo ToolBox::toHtml($individual->getEmailAddress()) ?>" size="55" class="form-control" />
 					</div>
 					
 					<div class="form-group">
-						<label>Adresse</label>
-						<input type="text" name="individual_address" value="<?php echo ToolBox::toHtml($individual->getAddress()) ?>" size="55" class="form-control" />
+						<label for="individual_address_i">Adresse</label>
+						<input id="individual_address_i" type="text" name="individual_address" value="<?php echo ToolBox::toHtml($individual->getAddress()) ?>" size="55" class="form-control" />
 					</div>
 				
 				</fieldset>

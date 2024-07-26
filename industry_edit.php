@@ -69,8 +69,8 @@ $h1_content = 'Une activité';
     	<div class="row">
     		<div class="col-md-12">
             	<div class="form-group">
-        	    	<label>Désignation de l'activité</label>
-        	    	<input type="text" name="name" value="<?php echo ToolBox::toHtml($industry->getName()) ?>" size="35" class="form-control" />
+        	    	<label for="industry_name_i">Désignation de l'activité</label>
+        	    	<input id="industry_name_i" type="text" name="name" value="<?php echo ToolBox::toHtml($industry->getName()) ?>" size="35" class="form-control" />
         		</div>
     		</div>
     	</div>

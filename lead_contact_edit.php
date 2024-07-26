@@ -151,29 +151,29 @@ $doc_title = 'Une piste';
     				<fieldset id="membership_fieldset">
     					<legend>Fait partie de la société ?</legend>
     					<div class="checkbox">
-    						<label><input type="checkbox" name="membership_submission" value="1" /> Oui</label>
+    						<label for="membership_submission_i"><input id="membership_submission_i" type="checkbox" name="membership_submission" value="1" /> Oui</label>
     					</div>
 						<div class="checkbox">
-							<label><input name="membership_department" type="text" size="12" /> Service</label>
+							<label for="membership_department_i"><input id="membership_department_i" name="membership_department" type="text" size="12" /> Service</label>
 						</div>
 						<div class="form-group">
-							<label for="membership_title">Fonction</label>
-							<input name="membership_title" type="text" size="12" class="form-control" />
-						</div>
-						
-						<div class="form-group">
-							<label for="membership_phone">Téléphone</label>
-							<input name="membership_phone" type="tel" size="12" class="form-control" />
+							<label for="membership_title_i">Fonction</label>
+							<input id="membership_title_i" name="membership_title" type="text" size="12" class="form-control" />
 						</div>
 						
 						<div class="form-group">
-						<label for="membership_email">Mél</label>
-    					<input name="membership_email" type="email" size="12" class="form-control" />
+							<label for="membership_phone_i">Téléphone</label>
+							<input id="membership_phone_i"  name="membership_phone" type="tel" size="12" class="form-control" />
+						</div>
+						
+						<div class="form-group">
+						<label for="membership_email_i">Mél</label>
+    					<input id="membership_email_i" name="membership_email" type="email" size="12" class="form-control" />
     					</div>
 						
 						<div class="form-group">
-							<label for="membership_url">Page perso</label>
-							<input id="membership_url_input" name="membership_url" type="text" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_input', 'membership_url_link');" /> 
+							<label for="membership_url_i">Page perso</label>
+							<input id="membership_url_i" name="membership_url" type="text" size="35" maxlength="255" class="form-control" onchange="javascript:checkUrlInput('membership_url_i', 'membership_url_link');" /> 
     						<a id="membership_url_link" href="#" style="display: none">[voir]</a>
 						</div>
     				</fieldset>
@@ -183,8 +183,8 @@ $doc_title = 'Une piste';
     		<?php
     		if (isset($individual) && $individual->getId()) {
     			echo '<div class="form-group">';
-    		    echo '<label>Qui est à l\'origine de la piste<label>';
-    			echo '<select name="individual_id" type="hidden" value="'.$individual->getId().'" class="form-control">';
+    		    echo '<label for="individual_id_i">Qui est à l\'origine de la piste</label>';
+    			echo '<select id="individual_id_i" name="individual_id" type="hidden" value="'.$individual->getId().'" class="form-control">';
     			echo '<option>-- choisir --</option>';
     			echo $society->getMembersOptionsTags($individual->getId());
     			echo '</select>';

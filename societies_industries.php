@@ -153,7 +153,7 @@ $doc_title = 'Les activités exercées';
 			</div>
 			<div class="col-md-6">
 				<section>
-    				<label>Nouvelle activité</label> <input name="newindustry_name" type="text" size="15" />
+    				<label id="newindustry_name_i">Nouvelle activité</label> <input id="newindustry_name_i" name="newindustry_name" type="text" size="15" />
     				<button name="task" type="submit" value="newindustry" class="btn btn-secondary">Déclarer</button>
 				</section>
 			</div>
