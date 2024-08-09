@@ -117,7 +117,6 @@ class ToolBox {
 				self::formatUserPost ( $item );
 			}
 		} else {
-			$data = urldecode($data);
 			$data = html_entity_decode ( $data, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 			$data = str_replace(array("<br />", "<br>", "</p>", "</div>", "</li>"), "\n", $data);
 			$data = strip_tags ( $data );
