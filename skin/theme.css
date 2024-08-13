@@ -10104,9 +10104,8 @@ DIV.card-body DIV.membership-description-area SPAN.more {
   background-color: #e6e0de;
 }
 
-#loginDoc div.container {
+#loginDoc container {
   max-width: 560px;
-  background-color: #fff;
 }
 #loginDoc FORM {
   background-image: url("./images/vostok.jpg");
@@ -10133,9 +10132,15 @@ DIV.card-body DIV.membership-description-area SPAN.more {
   font-size: 1em;
 }
 
+body.menu .container, body.menu .container-fluid, body.menu .container-sm, body.menu .container-md, body.menu .container-lg, body.menu .container-xl {
+  margin: auto;
+  max-width: 768px;
+}
+
 @media (min-width: 768px) {
   .container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
     max-width: 768px;
+    background-color: #fff;
   }
 
   #indexDoc .card {

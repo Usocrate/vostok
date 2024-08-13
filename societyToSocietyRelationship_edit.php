@@ -37,24 +37,6 @@ if (! empty ( $_REQUEST ['relationship_id'] )) {
 		$item1->feed ();
 		$relationship->setItem($item1,1);
 	}
-} else {
-	// la relation est nouvelle
-	// on récupère les identifiants, éventuellement fournis, des sociétés impliquées  
-	if (isset ( $_REQUEST ['item0_id'] )) {
-		$item0 = new Society ( $_REQUEST ['item0_id'] );
-		$item0->feed();
-		$relationship->setItem ($item0, 0);
-	}
-	if (isset ( $_REQUEST ['item1_id'] )) {
-		$item1 = new Society ( $_REQUEST ['item1_id'] );
-		$item1->feed();
-		$relationship->setItem($item1, 1);
-	}
-	if (isset ( $_REQUEST ['item1_role'] )) {
-		$relationship->setItemRole($_REQUEST ['item1_role'],1);
-		$correspondingRole = isset($item0) ? $system->suggestCorrespondingRoleForRelatedSocietyRole($_REQUEST ['item1_role'],$item0) : $system->suggestCorrespondingRoleForRelatedSocietyRole($_REQUEST ['item1_role']);
-		$relationship->setItemRole($correspondingRole,0);
-	}
 }
 
 if (isset ( $_POST ['relationship_submission'] )) {

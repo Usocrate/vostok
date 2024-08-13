@@ -233,9 +233,8 @@ DIV.card-body {
 }
 
 #loginDoc {
-	div.container {
+	container {
 		max-width: 560px;
-		background-color: $white;
 	}
 	
 	FORM {
@@ -266,9 +265,17 @@ DIV.card-body {
 	}
 }
 
+body.menu {
+	.container, .container-fluid {
+		margin:auto;
+		max-width: 768px;
+	}
+}
+
 @media ( min-width : 768px) {
 	.container, .container-fluid {
 		max-width: 768px;
+		background-color: $white;		
 	}
 	
 	#indexDoc {

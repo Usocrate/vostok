@@ -216,7 +216,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 						echo '<div class="row">';
 						
 						echo '<div class="col-lg-5 align-self-start">';
-						echo '<h3><a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a> <small><a href="societyToSocietyRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a></small></h3>';
+						echo '<h3><a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a> <small><a href="societyToSocietyRelationship_menu.php?relationship_id='.$item[1].'&societyToFocus_id='.$item[0]->getId().'"><i class="fas fa-ellipsis-h"></i></a></small></h3>';
 						if (!empty($item[5])) {
 							echo '<div><small>Jusqu\'en '.$item[5].'</small></div>';
 						}
