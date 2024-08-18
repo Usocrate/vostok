@@ -1,8 +1,4 @@
 <?php
-/**
- * @package usocrate.vostok
- * @author Florent Chanavat
- */
 class System {
 	private $db_host;
 	private $db_name;
@@ -442,6 +438,99 @@ class System {
 			$this->reportException ( $e );
 		}
 	}
+	/**
+	 * 
+	 * @param Individual|Society $firstTerm
+	 * @param Individual|Society $secondTerm
+	 * @since 08/2024
+	 */
+	public function getRelationship($firstTerm=null, $secondTerm=null) {
+		$criteria =array();
+		if (isset($firstTerm)) {
+			$criteria['firstTerm'] = $firstTerm; 
+		}
+		if (isset($secondTerm)) {
+			$criteria['secondTerm'] = $secondTerm;
+		}
+		$data = $this->getRelationshipsData($criteria);
+
+		if (is_array($data)) {
+			$r = new Relationship();
+			$r->feed($data[0]);
+			return $r;
+		}
+	}
+	/**
+	 *
+	 * @param array $criteria
+	 * @return array
+	 * @since 08/2024
+	 */
+	public function getRelationshipsData($criteria = null) {
+		try {
+			$sql = 'SELECT * FROM relationship AS r';
+			
+			// WHERE
+			$where = array ();
+			
+			if (isset ( $criteria ['firstTerm'] )) {
+				if (isset ( $criteria ['firstTermRole'] )) {
+					$where [] = '((r.item0_class = :firstTerm_class_1 AND r.item0_id = :firstTerm_id_1 AND r.item0_role = :firstTerm_role_1) OR (r.item1_class = :firstTerm_class_2 AND r.item1_id = :firstTerm_id_2 AND r.item0_role = :firstTerm_role_2))';
+				} else {
+					$where [] = '((r.item0_class = :firstTerm_class_1 AND r.item0_id = :firstTerm_id_1) OR (r.item1_class = :firstTerm_class_2 AND r.item1_id = :firstTerm_id_2))';
+				}
+			}
+			
+			if (isset ( $criteria ['secondTerm'] )) {
+				if (isset ( $criteria ['secondTermRole'] )) {
+					$where [] = '((r.item0_class = :secondTerm_class_1 AND r.item0_id = :secondTerm_id_1 AND r.item0_role = :secondTerm_role_1) OR (r.item1_class = :secondTerm_class_2 AND r.item1_id = :secondTerm_id_2 AND r.item0_role = :secondTerm_role_2))';
+				} else {
+					$where [] = '((r.item0_class = :secondTerm_class_1 AND r.item0_id = :secondTerm_id_1) OR (r.item1_class = :secondTerm_class_2 AND r.item1_id = :secondTerm_id_2))';
+				}
+			}
+			
+			if (count ( $where ) > 0) {
+				$sql .= ' WHERE ' . implode ( ' AND ', $where );
+			}
+			
+			$statement = $this->getPdo ()->prepare ( $sql );
+			
+			// BINDING
+			if (isset ( $criteria ['firstTerm'] )) {
+				
+				$statement->bindValue ( ':firstTerm_class_1', get_class ( $criteria ['firstTerm'] ), PDO::PARAM_STR );
+				$statement->bindValue ( ':firstTerm_id_1', $criteria ['firstTerm']->getId (), PDO::PARAM_INT );
+				
+				$statement->bindValue ( ':firstTerm_class_2', get_class ( $criteria ['firstTerm'] ), PDO::PARAM_STR );
+				$statement->bindValue ( ':firstTerm_id_2', $criteria ['firstTerm']->getId (), PDO::PARAM_INT );
+				
+				if (isset ( $criteria ['firstTermRole'] )) {
+					$statement->bindValue ( ':firstTerm_role_1', $criteria ['firstTermRole'], PDO::PARAM_STR );
+					$statement->bindValue ( ':firstTerm_role_2', $criteria ['firstTermRole'], PDO::PARAM_STR );
+				}
+			}
+			if (isset ( $criteria ['secondTerm'] )) {
+				
+				$statement->bindValue ( ':secondTerm_class_1', get_class ( $criteria ['secondTerm'] ), PDO::PARAM_STR );
+				$statement->bindValue ( ':secondTerm_id_1', $criteria ['secondTerm']->getId (), PDO::PARAM_INT );
+				
+				$statement->bindValue ( ':secondTerm_class_2', get_class ( $criteria ['secondTerm'] ), PDO::PARAM_STR );
+				$statement->bindValue ( ':secondTerm_id_2', $criteria ['secondTerm']->getId (), PDO::PARAM_INT );
+				
+				if (isset ( $criteria ['secondTermRole'] )) {
+					$statement->bindValue ( ':secondTerm_role_1', $criteria ['secondTermRole'], PDO::PARAM_STR );
+					$statement->bindValue ( ':secondTerm_role_2', $criteria ['secondTermRole'], PDO::PARAM_STR );
+				}
+			}
+			
+			$statement->execute ();
+			return $statement->fetchAll ( PDO::FETCH_ASSOC );
+		} catch (PDOException $e) {
+			$statement->debugDumpParams();
+			$this->reportException ( $e, __METHOD__ );
+		}
+	}
+
 	/**
 	 * Obtient les participations des individus aux sociétés
 	 *
@@ -903,9 +992,10 @@ class System {
 	/**
 	 * Renvoie les enregistrements des sociétés (avec critères éventuels).
 	 *
-	 * @version 03/2020
+	 * @version 08/2024
 	 */
 	private function getSocietiesData($criteria = NULL, $sort = 'Last created first', $offset = 0, $nb = NULL) {
+		// print_r($criteria);
 		$sql = 'SELECT s.*, DATE_FORMAT(s.society_creation_date, "%d/%m/%Y") AS society_creation_date_fr, UNIX_TIMESTAMP(s.society_creation_date) AS society_creation_timestamp';
 		$sql .= ' FROM society AS s LEFT OUTER JOIN society_industry AS si ON(si.society_id=s.society_id)';
 		if (isset ( $criteria ) && count ( $criteria ) > 0) {
@@ -918,6 +1008,9 @@ class System {
 			}
 			if (isset ( $criteria ['industry_id'] )) {
 				$sql_criteria [] = 'si.industry_id = :industry_id';
+			}
+			if (isset ( $criteria ['ids'] )) {
+				$sql_criteria [] = 's.society_id IN (' . implode ( ',', $criteria ['ids'] ) . ')';
 			}
 			$sql .= ' WHERE ' . implode ( ' AND ', $sql_criteria );
 		}
@@ -956,6 +1049,7 @@ class System {
 		}
 
 		$statement->execute ();
+		// $statement->debugDumpParams();
 		return $statement->fetchAll ( PDO::FETCH_ASSOC );
 	}
 	/**
@@ -1054,9 +1148,9 @@ class System {
 			$statement->bindValue ( ':item1_id', $society->getId (), PDO::PARAM_INT );
 		}
 		$statement->execute ();
-		$row = $statement->fetch ( PDO::FETCH_ASSOC );
-		return isset ( $row ['role'] ) ? $row ['role'] : false;
+		return $statement->fetchAll ( PDO::FETCH_ASSOC );
 	}
+
 	/**
 	 *
 	 * @since 07/2019
@@ -1358,7 +1452,7 @@ class System {
 		$sql = 'SELECT * FROM industry WHERE id=?';
 		$statement = $this->getPdo ()->prepare ( $sql );
 		$statement->execute ( array (
-				$id
+				$id500
 		) );
 		$data = $statement->fetch ( PDO::FETCH_ASSOC );
 		if ($data) {
@@ -1435,8 +1529,6 @@ class System {
 	 * Obtient la liste d'activités à partir de la liste de leur identifiant.
 	 *
 	 * @return array
-	 * @param
-	 *        	ids array
 	 * @since 08/2006
 	 * @version 12/2016
 	 */
@@ -1451,11 +1543,8 @@ class System {
 	 * @param string $class_name
 	 */
 	public function loadClass($class_name) {
-		if (is_file ( $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.class.php' )) {
-			include_once $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.class.php';
-			return true;
-		} elseif ($this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.interface.php') {
-			include_once $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.interface.php';
+		if (is_file ( $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.php' )) {
+			include_once $this->getClassDirPath () . DIRECTORY_SEPARATOR . $class_name . '.php';
 			return true;
 		} else {
 			error_log ( $class_name . ' not found.' );

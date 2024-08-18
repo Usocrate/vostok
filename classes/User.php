@@ -1,8 +1,4 @@
 <?php
-/**
- * @package usocrate.vostok
- * @author Florent Chanavat
- */
 class User {
 	public $id;
 	public $name;
@@ -21,17 +17,19 @@ class User {
 		} elseif ($this->id) {
 			// on ne transmet pas les données de l'initialisation mais on connaît l'identifiant de l'utilisateur
 			$sql = 'SELECT * FROM user WHERE user_id=:id';
-			$statement = $system->getPdo()->prepare($sql);
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			$statement->execute();
-			$row = $statement->fetch(PDO::FETCH_ASSOC);
-			if (! $row)	return false;
+			$statement = $system->getPdo ()->prepare ( $sql );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			$statement->execute ();
+			$row = $statement->fetch ( PDO::FETCH_ASSOC );
+			if (! $row)
+				return false;
 			return $this->feed ( $row );
 		}
 		return false;
 	}
 	/**
-	 * @version 23/11/2016 
+	 *
+	 * @version 23/11/2016
 	 */
 	public function toDB() {
 		global $system;
@@ -44,30 +42,30 @@ class User {
 			$settings [] = 'password = :password';
 		}
 		$sql = ($this->id) ? 'UPDATE' : 'INSERT INTO';
-		$sql .= ' user SET '. implode ( ', ', $settings );
-		
+		$sql .= ' user SET ' . implode ( ', ', $settings );
+
 		if ($this->id) {
 			$sql .= ' WHERE user_id = :id';
 		}
-		
-		$statement = $system->getPdo()->prepare($sql);
-		
+
+		$statement = $system->getPdo ()->prepare ( $sql );
+
 		if ($this->name) {
-			$statement->bindValue(':name', $this->name, PDO::PARAM_STR);
+			$statement->bindValue ( ':name', $this->name, PDO::PARAM_STR );
 		}
 		if ($this->password) {
-			$statement->bindValue(':password', $this->password, PDO::PARAM_STR);
+			$statement->bindValue ( ':password', $this->password, PDO::PARAM_STR );
 		}
 		if ($this->id) {
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
 		}
-		
-		$result =  $statement->execute();
+
+		$result = $statement->execute ();
 
 		if (! $this->id) {
-			$this->id = $system->getPdo()->lastInsertId();
+			$this->id = $system->getPdo ()->lastInsertId ();
 		}
-		
+
 		return $result;
 	}
 	/**
@@ -78,10 +76,10 @@ class User {
 	public function getName() {
 		global $system;
 		if (! isset ( $this->name )) {
-			$statement = $system->getPdo()->prepare('SELECT username FROM user WHERE user_id = :id');
-			$statement->bindValue(':id', $this->id, PDO::PARAM_INT);
-			$statement->execute();
-			$this->name = $statement->fetchColumn();
+			$statement = $system->getPdo ()->prepare ( 'SELECT username FROM user WHERE user_id = :id' );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			$statement->execute ();
+			$this->name = $statement->fetchColumn ();
 		}
 		return $this->name;
 	}
@@ -91,8 +89,8 @@ class User {
 		$statement->bindValue ( ':name', $name, PDO::PARAM_STR );
 		$statement->bindValue ( ':password', $password, PDO::PARAM_STR );
 		$statement->setFetchMode ( PDO::FETCH_ASSOC );
-		$statement->execute();
-		$this->feed ($statement->fetch());
+		$statement->execute ();
+		$this->feed ( $statement->fetch () );
 		return $this->id;
 	}
 	/**

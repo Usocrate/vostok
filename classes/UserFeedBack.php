@@ -1,20 +1,17 @@
 <?php
 /**
  * permet de gérer des messages à fournir aux utilisateur
- *
- * @since 03/2008
  */
 class UserFeedBack {
 	private array $messages;
-	
 	public function __construct() {
 		$this->messages = array ();
-		$this->messages['success'] = array ();
-		$this->messages['info'] = array ();
-		$this->messages['warning'] = array ();
-		$this->messages['danger'] = array ();
+		$this->messages ['success'] = array ();
+		$this->messages ['info'] = array ();
+		$this->messages ['warning'] = array ();
+		$this->messages ['danger'] = array ();
 	}
-	
+
 	/**
 	 * ajoute un message au feedback à fournir à l'utilisateur
 	 *
@@ -50,9 +47,8 @@ class UserFeedBack {
 	public function DangerMessagesToHtml() {
 		return $this->messagesToHtml ( 'danger' );
 	}
-	
 	private function MessagesToHtml($type) {
-		if (isset($this->messages[$type]) && count($this->messages[$type])>0) {
+		if (isset ( $this->messages [$type] ) && count ( $this->messages [$type] ) > 0) {
 			switch ($type) {
 				case 'success' :
 					$css_class = 'alert alert-success';
@@ -69,7 +65,7 @@ class UserFeedBack {
 			}
 			$html = '<div class="' . $css_class . '">';
 			foreach ( $this->messages [$type] as $m ) {
-				$html .= $m.'<br>';
+				$html .= $m . '<br>';
 			}
 			$html .= '</div>';
 			return $html;
@@ -83,10 +79,11 @@ class UserFeedBack {
 		return $html;
 	}
 	/**
+	 *
 	 * @since 12/2018
 	 */
 	public function toHtml() {
-		return $this->AllMessagesToHtml();
+		return $this->AllMessagesToHtml ();
 	}
 }
 ?>

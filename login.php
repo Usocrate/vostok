@@ -1,6 +1,6 @@
 <?php
 require_once 'config/boot.php';
-require_once 'classes/System.class.php';
+require_once 'classes/System.php';
 $system = new System( './config/host.json' );
 
 session_start();
@@ -9,7 +9,7 @@ $fb = new UserFeedBack();
 
 // demande d'anonymat
 if (isset($_REQUEST['anonymat_submission'])) {
-	unset($_SESSION['user_id']);
+	unset($_SESSION);
 }
 // authentification de l'utilisateur
 if (empty($_SESSION['user_id'])) {

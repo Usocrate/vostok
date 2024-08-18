@@ -10104,7 +10104,7 @@ DIV.card-body DIV.membership-description-area SPAN.more {
   background-color: #e6e0de;
 }
 
-#loginDoc container {
+#loginDoc .container {
   max-width: 560px;
 }
 #loginDoc FORM {

@@ -1,8 +1,4 @@
 <?php
-/**
- * @package usocrate.vostok
- * @author Florent Chanavat
- */
 class Individual {
 	public $id;
 	protected $twitter_id;
@@ -521,20 +517,20 @@ class Individual {
 	 * @version 03/2023
 	 * @return string
 	 */
-	public function getPhotoUrl($mode='reworked') {
+	public function getPhotoUrl($mode = 'reworked') {
 		global $system;
 		try {
 			switch ($mode) {
-				case 'reworked':
-					if ($this->hasReworkedPhoto()) {
-						return $system->getTrombiReworkUrl(). $this->getId () .'.png';
+				case 'reworked' :
+					if ($this->hasReworkedPhoto ()) {
+						return $system->getTrombiReworkUrl () . $this->getId () . '.png';
 					} else {
-						return $this->getPhotoUrl('original');
+						return $this->getPhotoUrl ( 'original' );
 					}
 					break;
-				case 'original':
+				case 'original' :
 					$file_extensions = $system->getImageFileExtensions ();
-					
+
 					// recherche d'un fichier construit à partir de l'id de l'individu.
 					foreach ( $file_extensions as $e ) {
 						$file_name = $this->getId () . '.' . $e;
@@ -542,7 +538,7 @@ class Individual {
 							return $system->getTrombiUrl () . $file_name;
 						}
 					}
-					
+
 					// recherche d'un fichier construit à partir du nom de l'individu.
 					if (! isset ( $this->lastName ) && ! isset ( $this->firstName )) {
 						throw new Exception ( 'Il nous manque le nom de la personne pour trouver sa photo' );
@@ -556,21 +552,21 @@ class Individual {
 					}
 					break;
 			}
-
 		} catch ( Exception $e ) {
 			$system->reportException ( $e, __METHOD__ );
 		}
 	}
 	/**
+	 *
 	 * @since 08/20022
 	 * @return string
 	 */
 	public function getReworkedPhotoUrl() {
 		global $system;
-		if (!$this->hasReworkedPhoto()) {
-			$this->reworkPhotoFile();
+		if (! $this->hasReworkedPhoto ()) {
+			$this->reworkPhotoFile ();
 		}
-		return $system->getTrombiReworkUrl(). $this->getId () .'.png';
+		return $system->getTrombiReworkUrl () . $this->getId () . '.png';
 	}
 	/**
 	 * Obtient le chemin d'accès au fichier photo.
@@ -602,9 +598,9 @@ class Individual {
 	 * @since 08/2022
 	 * @return string
 	 */
-	public function getReworkedPhotoFilePath($version='default') {
+	public function getReworkedPhotoFilePath($version = 'default') {
 		global $system;
-		$file_name = strcmp($version,'hover')==0 ? $this->getId () . '_hover.png' : $this->getId () . '.png';
+		$file_name = strcmp ( $version, 'hover' ) == 0 ? $this->getId () . '_hover.png' : $this->getId () . '.png';
 		if (is_file ( $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
 			return $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $file_name;
 		}
@@ -671,22 +667,22 @@ class Individual {
 		try {
 			if ($this->hasPhoto ()) {
 				$im = new Imagick ( $this->getPhotoFilePath () );
-				$im->setImageFormat('png');
+				$im->setImageFormat ( 'png' );
 				$im->scaleImage ( 453, 0 );
-				$im->normalizeimage();
+				$im->normalizeimage ();
 
 				$targetFilePath = $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $this->getId () . '_hover.png';
-				$handle = fopen($targetFilePath, 'w+');
-				$step1 = $im->writeimagefile( $handle );
-				
-				$im->orderedPosterizeImage("h4x4a", imagick::CHANNEL_BLUE);
-				$im->orderedPosterizeImage("h4x4a", imagick::CHANNEL_GREEN);
-				$im->transformimagecolorspace(Imagick::COLORSPACE_GRAY);
+				$handle = fopen ( $targetFilePath, 'w+' );
+				$step1 = $im->writeimagefile ( $handle );
+
+				$im->orderedPosterizeImage ( "h4x4a", imagick::CHANNEL_BLUE );
+				$im->orderedPosterizeImage ( "h4x4a", imagick::CHANNEL_GREEN );
+				$im->transformimagecolorspace ( Imagick::COLORSPACE_GRAY );
 				$targetFilePath = $system->getTrombiReworkDirPath () . DIRECTORY_SEPARATOR . $this->getId () . '.png';
-				$handle = fopen($targetFilePath, 'w+');
-				$step2 = $im->writeimagefile( $handle );
-				
-				return $im->writeimagefile( $handle );
+				$handle = fopen ( $targetFilePath, 'w+' );
+				$step2 = $im->writeimagefile ( $handle );
+
+				return $im->writeimagefile ( $handle );
 			}
 		} catch ( Exception $e ) {
 			$system->reportException ( $e, __METHOD__ );
@@ -697,17 +693,18 @@ class Individual {
 	 * Indique si une photo est associée à l'individu.
 	 *
 	 * @since 12/2006
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function hasPhoto() {
 		return is_file ( $this->getPhotoFilePath () );
 	}
 	/**
+	 *
 	 * @since 08/2022
 	 * @return boolean
 	 */
 	public function hasReworkedPhoto() {
-		return is_file ( $this->getReworkedPhotoFilePath()) && is_file ($this->getReworkedPhotoFilePath('hover'));
+		return is_file ( $this->getReworkedPhotoFilePath () ) && is_file ( $this->getReworkedPhotoFilePath ( 'hover' ) );
 	}
 	public function getPhotoHtml() {
 		if ($this->getPhotoUrl ())

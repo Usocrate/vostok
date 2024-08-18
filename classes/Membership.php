@@ -1,8 +1,4 @@
 <?php
-/**
- * @package usocrate.vostok
- * @author Florent Chanavat
- */
 class Membership {
 	public int $id;
 	public Society $society;
@@ -64,7 +60,7 @@ class Membership {
 	 * @since 04/2022
 	 */
 	public function getWeight() {
-		return isset($this->weight) ? $this->weight : null;
+		return isset ( $this->weight ) ? $this->weight : null;
 	}
 	/**
 	 *
@@ -85,7 +81,7 @@ class Membership {
 	 * @return boolean
 	 */
 	public function getInitYear() {
-		return isset ($this->init_year) ? $this->init_year : null;
+		return isset ( $this->init_year ) ? $this->init_year : null;
 	}
 	/**
 	 *
@@ -114,7 +110,7 @@ class Membership {
 	 * @return boolean
 	 */
 	public function getEndYear() {
-		return isset($this->end_year) ? $this->end_year : null;
+		return isset ( $this->end_year ) ? $this->end_year : null;
 	}
 	/**
 	 *
@@ -227,20 +223,21 @@ class Membership {
 		return $this->getAttribute ( 'description' );
 	}
 	/**
-	 * N'affiche que la première phrase de la description, le reste de la description est fournie mais sera masqué par défaut 
+	 * N'affiche que la première phrase de la description, le reste de la description est fournie mais sera masqué par défaut
+	 *
 	 * @since 08/2022
 	 */
 	public function getHtmlExpandableDescription() {
-		if (! empty ($this->description)) {
-			preg_match('/^(.*[\.|?|!]{1})/', $this->description, $result);
+		if (! empty ( $this->description )) {
+			preg_match ( '/^(.*[\.|?|!]{1})/', $this->description, $result );
 			$html = '<div class="card-text membership-description-area">';
-			if (count($result)>1 && count($result)<strlen($this->description)) {
-				$html.= '<span>'.ToolBox::toHtml($result[1]).'</span><span class="more">'.substr($this->description, strlen($result[1])).'</span>';
-				$html.= '<div>...</div>';
+			if (count ( $result ) > 1 && count ( $result ) < strlen ( $this->description )) {
+				$html .= '<span>' . ToolBox::toHtml ( $result [1] ) . '</span><span class="more">' . substr ( $this->description, strlen ( $result [1] ) ) . '</span>';
+				$html .= '<div>...</div>';
 			} else {
-				$html.= ToolBox::toHtml($this->description);
+				$html .= ToolBox::toHtml ( $this->description );
 			}
-			$html.= '</div>';
+			$html .= '</div>';
 			return $html;
 		}
 	}

@@ -1,8 +1,4 @@
 <?php
-/**
- * @package usocrate.vostok
- * @author Florent Chanavat
- */
 class Society {
 	public $id;
 	protected $industries;
@@ -20,11 +16,10 @@ class Society {
 	protected $latitude;
 	protected $altitude;
 	protected $parent;
-	
 	public function __construct($id = NULL) {
 		$this->id = $id;
 	}
-	
+
 	/**
 	 * Tente d'indentifier la société par son nom.
 	 *
@@ -39,14 +34,15 @@ class Society {
 		$this->id = $statement->fetch ( PDO::FETCH_COLUMN );
 		return $this->id !== false;
 	}
-	
+
 	/**
 	 * Obtient la valeur d'un attribut.
 	 */
 	public function getAttribute($name) {
-		if (isset ( $this->$name ))	return $this->$name;
+		if (isset ( $this->$name ))
+			return $this->$name;
 	}
-	
+
 	/**
 	 * Fixe la valeur d'un attribut.
 	 *
@@ -97,6 +93,7 @@ class Society {
 	}
 	/**
 	 * Fixe le nom de la société.
+	 *
 	 * @version 02/2022
 	 */
 	public function setName(string $input) {
@@ -447,9 +444,10 @@ class Society {
 	 * @since 12/2016
 	 */
 	public function getHtmlLinkToSociety($focus = null) {
-		return '<a href="' . $this->getDisplayUrl ($focus) . '">' . $this->getNameForHtmlDisplay () . '</a>';
+		return '<a href="' . $this->getDisplayUrl ( $focus ) . '">' . $this->getNameForHtmlDisplay () . '</a>';
 	}
 	/**
+	 *
 	 * @since 03/2019
 	 * @return string
 	 */
@@ -758,34 +756,6 @@ class Society {
 		return $html;
 	}
 	/**
-	 * Obtient les éléments en relation avec la société.
-	 *
-	 * @return array
-	 * @since 03/2006
-	 * @version 12/2016
-	 */
-	public function getRelationships() {
-		global $system;
-		if (! isset ( $this->relationships )) {
-			$this->relationships = array ();
-			$sql = 'SELECT * FROM relationship AS rs ';
-			$sql .= ' WHERE (rs.item0_id=:item0_id AND rs.item0_class=:item0_class) OR (rs.item1_id=:item1_id AND rs.item1_class=:item1_class)';
-			$statement = $system->getPdo ()->prepare ( $sql );
-			$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
-			$statement->bindValue ( ':item0_class', get_class ( $this ), PDO::PARAM_STR );
-			$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
-			$statement->bindValue ( ':item1_class', get_class ( $this ), PDO::PARAM_STR );
-			$statement->execute ();
-			$rowset = $statement->fetchAll ( PDO::FETCH_ASSOC );
-			foreach ( $rowset as $row ) {
-				$rs = new Relationship ();
-				$rs->feed ( $row );
-				$this->relationships [] = $rs;
-			}
-		}
-		return $this->relationships;
-	}
-	/**
 	 * Obtient la société-mère si elle existe
 	 *
 	 * @since 09/2006
@@ -811,7 +781,7 @@ class Society {
 	 * @since 08/2006
 	 * @version 04/2023
 	 */
-	public function getRelatedSocieties($role=null) {
+	public function getRelatedSocieties($role = null) {
 		global $system;
 
 		if (empty ( $this->id )) {
@@ -823,14 +793,14 @@ class Society {
 		$sql = 'SELECT s.*, r.relationship_id, r.item1_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
 		$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
-		if (isset($role)) {
+		if (isset ( $role )) {
 			$sql .= ' AND item1_role=:item1_role';
 		}
 		$sql .= ' UNION';
 		$sql .= ' SELECT s.*, r.relationship_id, r.item0_role AS relatedsociety_role, r.description, r.init_year, r.end_year';
 		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
 		$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
-		if (isset($role)) {
+		if (isset ( $role )) {
 			$sql .= ' AND item0_role=:item0_role';
 		}
 		$sql .= ' ORDER BY society_name ASC';
@@ -838,7 +808,7 @@ class Society {
 		$statement = $system->getPdo ()->prepare ( $sql );
 		$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
 		$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
-		if (isset($role)) {
+		if (isset ( $role )) {
 			$statement->bindValue ( ':item0_role', $role, PDO::PARAM_STR );
 			$statement->bindValue ( ':item1_role', $role, PDO::PARAM_STR );
 		}
@@ -855,10 +825,44 @@ class Society {
 					$row ['description'],
 					$row ['init_year'],
 					$row ['end_year']
-					
 			);
 		}
 		return $output;
+	}
+	/**
+	 *
+	 * @since 08/2024
+	 * @return NULL|array
+	 */
+	public function getRelatedSocietiesRoles() {
+		global $system;
+
+		if (empty ( $this->id )) {
+			return NULL;
+		}
+
+		$output = array ();
+
+		$sql = 'SELECT r.item1_role AS role';
+		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item1_id=s.society_id)';
+		$sql .= ' WHERE item0_class="society" AND item0_id=:item0_id AND item1_class="society"';
+		if (isset ( $role )) {
+			$sql .= ' AND item1_role=:item1_role';
+		}
+		$sql .= ' UNION';
+		$sql .= ' SELECT r.item0_role AS role';
+		$sql .= ' FROM relationship AS r INNER JOIN society AS s ON(r.item0_id=s.society_id)';
+		$sql .= ' WHERE item1_class="society" AND item1_id=:item1_id AND item0_class="society"';
+		if (isset ( $role )) {
+			$sql .= ' AND item0_role=:item0_role';
+		}
+		$sql .= ' ORDER BY role ASC';
+
+		$statement = $system->getPdo ()->prepare ( $sql );
+		$statement->bindValue ( ':item0_id', $this->id, PDO::PARAM_INT );
+		$statement->bindValue ( ':item1_id', $this->id, PDO::PARAM_INT );
+		$statement->execute ();
+		return $statement->fetchAll ( PDO::FETCH_COLUMN );
 	}
 	/**
 	 * Obtient les sociétés à l'activité proche
@@ -1172,7 +1176,7 @@ class Society {
 	 */
 	public function delete() {
 		global $system;
-		return $system->removeSocietyFromDB($this);
+		return $system->removeSocietyFromDB ( $this );
 	}
 }
 ?>

@@ -8,7 +8,7 @@ class ToolBox {
 	 */
 	public static function toHtml($input, bool $nl2br = true) {
 		if (is_string ( $input )) {
-			return $nl2br ? nl2br (htmlentities ( $input, ENT_QUOTES | ENT_HTML5, 'UTF-8' )) : htmlentities ( $input, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			return $nl2br ? nl2br ( htmlentities ( $input, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) : htmlentities ( $input, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 		}
 		return '';
 	}
@@ -109,6 +109,7 @@ class ToolBox {
 		return $input;
 	}
 	/**
+	 *
 	 * @version 02/2022
 	 */
 	public static function formatUserPost(&$data) {
@@ -118,7 +119,13 @@ class ToolBox {
 			}
 		} else {
 			$data = html_entity_decode ( $data, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-			$data = str_replace(array("<br />", "<br>", "</p>", "</div>", "</li>"), "\n", $data);
+			$data = str_replace ( array (
+					"<br />",
+					"<br>",
+					"</p>",
+					"</div>",
+					"</li>"
+			), "\n", $data );
 			$data = strip_tags ( $data );
 			$data = trim ( $data );
 		}
