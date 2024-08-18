@@ -46,7 +46,6 @@ $formerRelatedSociety = $relationship->getRelatedItem($society);
 
 if (isset ( $_POST )) {
 	ToolBox::formatUserPost ( $_POST );
-	//var_dump($_POST);
 }
 
 if (isset ( $_POST ['cmd'] )) {
@@ -54,18 +53,25 @@ if (isset ( $_POST ['cmd'] )) {
 		case 'Abandonner' :
 			unset ( $_SESSION ['pendingProcess'] );
 			header ( 'location:' . $formerRelatedSociety->getDisplayUrl() );
-			exit;
+			exit ();
 	}
 }
 
+$fb = new UserFeedBack ();
+
 if (isset ( $_POST ['task_id'] )) {
+
 	switch ($_POST ['task_id']) {
 		case 'target society role selection' :
 			if (isset ( $_POST ['cmd'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
-						$_SESSION ['pendingProcess'] ['targetSociety_role'] = $_POST ['targetSociety_role'];
-						$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'target society selection';
+						if (isset($_POST ['targetSociety_role'])) {
+							$_SESSION ['pendingProcess'] ['targetSociety_role'] = $_POST ['targetSociety_role'];
+							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'target society selection';
+						} else {
+							$fb->addWarningMessage ( 'Il faut choisir une des options.' );
+						}
 						break;
 				}
 			}
@@ -75,9 +81,13 @@ if (isset ( $_POST ['task_id'] )) {
 			if (isset ( $_POST ['cmd'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
-						$_SESSION ['pendingProcess'] ['targetSociety'] = new Society($_POST ['targetSociety_id']);
-						$_SESSION ['pendingProcess'] ['targetSociety'] -> feed();
-						$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'new role definition';
+						if (isset($_POST ['targetSociety_id'])) {
+							$_SESSION ['pendingProcess'] ['targetSociety'] = new Society($_POST ['targetSociety_id']);
+							$_SESSION ['pendingProcess'] ['targetSociety'] -> feed();
+							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'new role definition';
+						} else {
+							$fb->addWarningMessage ( 'Il faut choisir une des options.' );
+						}
 						break;
 				}
 			}
@@ -146,6 +156,14 @@ if (isset ( $_POST ['task_id'] )) {
 
 $formerRelatedSociety = $relationship->getRelatedItem($society);
 $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
+
+/*
+echo '<h2>Post</h2>';
+var_dump($_POST);
+
+echo '<h2>Session</h2>';
+var_dump($_SESSION);
+*/
 ?>
 
 <!doctype html>
@@ -164,15 +182,26 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 		switch ($_SESSION ['pendingProcess'] ['taskToFullfill']) {
 			
 			case 'target society role selection' :
+
+				$role = $relationship->getRole($society);
 				$options = $formerRelatedSociety->getRelatedSocietiesRoles();
-							
+				
 				echo '<header><h1>Transférer vers une société tenant quel rôle ? <small>étape 1</small></h1></header>';
 				
+				echo $fb->toHtml();
+				
 				echo '<form action="' . $_SERVER ['PHP_SELF'] . '" method="post">';
+
 				echo '<input type="hidden" name="task_id" value="target society role selection" />';
 				
 				echo '<ul class="list-group list-group-flush">';
+				
 				for($i= 0; $i<count($options); $i++) {
+					
+					if (strcasecmp($options[$i], $role)==0) {
+						continue;
+					}
+					
 					echo '<li class="p-2 list-group-item">';
 					echo '<div class="form-check">';
 					echo '<input id="targetSociety_role_i'.$i.'" name="targetSociety_role" class="form-check-input" type="radio" value="'.$options[$i].'" />';
@@ -182,23 +211,21 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 				}
 				echo '</ul>';
 				
-				
 				echo '<div class="btn-group">';
-
-				//echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
-				
-				echo '<a href="'.$formerRelatedSociety->getDisplayUrl().'" class="btn btn-link">Quitter</a>';
 				echo '<input type="submit" name="cmd" value="Poursuivre" class="btn btn-default btn-primary" />';
 				echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
 				echo '</div>';
+				
 				echo '</form>';
 
 				break;
 				
 			case 'target society selection' :
-				$options = $formerRelatedSociety->getRelatedSocieties($_POST ['targetSociety_role']);
+				$options = $formerRelatedSociety->getRelatedSocieties($_SESSION ['pendingProcess'] ['targetSociety_role']);
 			
 				echo '<header><h1>Quelle est la société ? <small>étape 2</small></h1></header>';
+				
+				echo $fb->toHtml();
 				
 				echo '<form action="' . $_SERVER ['PHP_SELF'] . '" method="post">';
 				echo '<input type="hidden" name="task_id" value="target society selection" />';
@@ -238,7 +265,7 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 				}
 				echo '</datalist>';
 				
-				echo '<div class="form-group col-md-6">';
+				echo '<div class="form-group">';
 				echo '<label for="society_role_i">Son rôle</label>';
 				echo '<input id="society_role_i" name="society_role" type="text" list="role_list" value="'.$relationship->getRole($society).'" size="20" class="form-control" />';
 				echo '</div>';
@@ -263,10 +290,10 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 				echo '<datalist id="role_list">';
 				foreach (Relationship::getKnownRoles() as $r) {
 					echo '<option value="'.ToolBox::toHtml($r['role']).'"/>';
-				}
+				};
 				echo '</datalist>';
 				
-				echo '<div class="form-group col-md-6">';
+				echo '<div class="form-group">';
 				echo '<label for="society_role_i">Son rôle</label>';
 				echo '<input id="society_role_i" name="society_role" type="text" list="role_list" value="'.$_SESSION ['pendingProcess'] ['targetSociety_role'].'" size="20" class="form-control" />';
 				echo '</div>';
@@ -315,6 +342,8 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 				
 				$followingOnes = $system->getSocieties(array("ids"=>$_SESSION['pendingProcess']['followingSocietiesCollectionIds']));
 		
+				
+				echo '<div class="table-responsive">';
 				echo '<table class="table">';
 				echo '<thead><tr><th></th><th scope="col">avant</th><th scope="col">après</th></tr></thead>';
 				echo '<tbody>';
@@ -325,7 +354,7 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 				if (!empty($relationship->getPeriod())) {
 					echo '<div><small>'.$relationship->getPeriod().'</small></div>';
 				}
-				echo Toolbox::toHtml($relationship->getRole($society)).' pour '.Toolbox::toHtml($formerRelatedSociety->getName());
+				echo Toolbox::toHtml($relationship->getRole($society)).' <em>'.Toolbox::toHtml($formerRelatedSociety->getName()).'</em>';
 				if (!empty($relationship->getDescription())) {
 					echo '<p>'.Toolbox::toHtml($relationship->getDescription()).'</p>';
 				}
@@ -334,7 +363,7 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 				if (!empty($relationship->getPeriod())) {
 					echo '<div><small>'.$relationship->getPeriod().'</small></div>';
 				}
-				echo Toolbox::toHtml($_SESSION ['pendingProcess'] ['society_role']).' pour '.Toolbox::toHtml($targetSociety->getName());
+				echo Toolbox::toHtml($_SESSION ['pendingProcess'] ['society_role']).' <em>'.Toolbox::toHtml($targetSociety->getName()).'</em>';
 				if (!empty($relationship->getDescription())) {
 					echo '<p>'.Toolbox::toHtml($relationship->getDescription()).'</p>';
 				}
@@ -351,7 +380,7 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 					if (!empty($r->getPeriod())) {
 						echo '<div><small>'.$r->getPeriod().'</small></div>';
 					}
-					echo Toolbox::toHtml($r->getRole($s)).' pour '.Toolbox::toHtml($formerRelatedSociety->getName());
+					echo Toolbox::toHtml($r->getRole($s)).' <em>'.Toolbox::toHtml($formerRelatedSociety->getName()).'</em>';
 					if (!empty($r->getDescription())) {
 						echo '<p>'.Toolbox::toHtml($r->getDescription()).'</p>';
 					}
@@ -360,7 +389,7 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 					if (!empty($r->getPeriod())) {
 						echo '<div><small>'.$r->getPeriod().'</small></div>';
 					}
-					echo Toolbox::toHtml($_SESSION ['pendingProcess'] ['society_role']).' pour '.Toolbox::toHtml($targetSociety->getName());
+					echo Toolbox::toHtml($_SESSION ['pendingProcess'] ['society_role']).' <em>'.Toolbox::toHtml($targetSociety->getName()).'</em>';
 					if (!empty($r->getDescription())) {
 						echo '<p>'.Toolbox::toHtml($r->getDescription()).'</p>';
 					}
@@ -370,6 +399,7 @@ $targetSociety = $_SESSION['pendingProcess']['targetSociety'];
 				
 				echo '</tbody>';
 				echo '</table>';
+				echo '</div>';
 				
 				echo '<form action="' . $_SERVER ['PHP_SELF'] . '" method="post">';
 				echo '<input type="hidden" name="task_id" value="confirmation" />';

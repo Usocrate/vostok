@@ -36,23 +36,24 @@ $refItem = $relationship->getRelatedItem($itemToFocus);
 	<h1 class="bd-title"><?php echo $itemToFocus->getHtmlLinkToSociety() ?></h1>
 	<p class="text-muted"><?php echo '... et ' . $refItem->getHtmlLinkToSociety() ?></p>
 	<section>
-	<h2>Options</h2>
-	<ul class="list-group">
-		<li class="list-group-item">
-		  	<h3><a href="societyToSocietyRelationship_edit.php?relationship_id=<?php echo $relationship->getId() ?>">Formulaire d&apos;édition générique</a></h3>
-			<p class="mb-1">Pour modifier depuis un même écran toutes les caractéristiques de la relation</p>
-		</li>
-		<li class="list-group-item">
-			<h3><a href="societyToSocietyRelationship_transfer.php?society_id=<?php echo $itemToFocus->getId(); ?>&relationship_id=<?php echo $relationship->getId(); ?>">Déplacer <?php echo $itemToFocus->getName() ?></a></h3>
-			<span class="badge badge-warning">En cours de développement</span>
-			<p class="mb-1">S&apos;il est plus juste de lier <?php echo $itemToFocus->getName() ?> à une autre société liée à <?php echo $refItem->getName() ?></p>
-		</li>
-		<li class="list-group-item disabled">
-			<h3>Changer de rôle</h3>
-			<span class="badge badge-warning">A développer</span>
-			<p class="mb-1">Si un rôle est plus approprié pour <?php echo $itemToFocus->getName() ?> en lien avec <?php echo $refItem->getName() ?></p>
-		</li>		
-	</ul>
+		<h2>Options</h2>
+		<ul class="list-group">
+			<li class="list-group-item">
+			  	<h3><a href="societyToSocietyRelationship_edit.php?relationship_id=<?php echo $relationship->getId() ?>">Formulaire d&apos;édition standard</a></h3>
+				<p class="mb-1">Pour modifier depuis un même écran toutes les caractéristiques de la relation</p>
+			</li>
+			<?php if (count($refItem->getRelatedSocietiesRoles()) > 1 ): ?>
+			<li class="list-group-item">
+				<h3><a href="societyToSocietyRelationship_transfer.php?society_id=<?php echo $itemToFocus->getId(); ?>&relationship_id=<?php echo $relationship->getId(); ?>">Déplacer <?php echo $itemToFocus->getName() ?></a></h3>
+				<p class="mb-1">S&apos;il est plus juste de lier <?php echo $itemToFocus->getName() ?> à une autre société liée à <?php echo $refItem->getName() ?></p>
+			</li>
+			<?php endif; ?>
+			<li class="list-group-item disabled">
+				<h3>Changer de rôle</h3>
+				<span class="badge badge-warning">A développer</span>
+				<p class="mb-1">Si un rôle est plus approprié pour <?php echo $itemToFocus->getName() ?> en lien avec <?php echo $refItem->getName() ?></p>
+			</li>		
+		</ul>
 	</section>
 	<div><?php echo '<a href="'.$refItem->getDisplayUrl().'" class="btn btn-link">Quitter</a>'; ?></div>
 </div>
