@@ -1,7 +1,7 @@
 <?php
 
 require_once '../config/boot.php';
-require_once '../classes/System.class.php';
+require_once '../classes/System.php';
 $system = new System( '../config/host.json' );
 
 if ($system->configFileExists ()) {
