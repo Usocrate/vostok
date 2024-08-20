@@ -15,48 +15,45 @@ if (empty ( $_SESSION ['user_id'] )) {
 
 $relationship = new Relationship();
 
+if (! empty ( $_GET ['relationship_id'] )) {
+	// la participation à traiter est identifiée
+	$relationship->setId ( $_GET ['relationship_id'] );
+	$relationship->feed ();
+	$relationship->feedItems ();
+} else {
+	if (! empty ( $_GET ['item0_id'] )) {
+		$s0 = new Society($_GET ['item0_id']);
+		$s0->feed();
+		$relationship->setItem($s0,0);
+	}
+	if (! empty ( $_GET ['item1_role'] )) {
+		$relationship->setItemRole($_GET ['item1_role'],1);
+	}
+}
+
 // Formatage des données saisies par l'utilisateur
 if (isset ( $_POST )) {
 	ToolBox::formatUserPost ( $_POST );
 }
 
-if (! empty ( $_REQUEST ['relationship_id'] )) {
-	// la participation à traiter est identifiée
-	$relationship->setId ( $_REQUEST ['relationship_id'] );
-	$relationship->feed ();
-		
-	// récupération des données en base
-	$item0 = $relationship->getItem ( 0 );
-	if (is_object ( $item0 )) {
-		$item0->feed ();
-		$relationship->setItem($item0,0);
-	}
-	
-	$item1 = $relationship->getItem ( 1 );
-	if (is_object ( $item1 )) {
-		$item1->feed ();
-		$relationship->setItem($item1,1);
-	}
-}
-
 if (isset ( $_POST ['relationship_submission'] )) {
 	// enregistrement des données de la participation
 	$relationship->feed ( $_POST );
-	if (empty($item0) && !empty($_POST['item0_name'])) {
-		$item0 = new Society ();
-		$item0->setName ( $_POST ['item0_name'] );
-		if (! $item0->identifyFromName()) {
-			$item0->toDB ();
+	if (!$relationship->isItemKnown(0) && !empty($_POST['item0_name'])) {
+		$s0 = new Society ();
+		$s0->setName ( $_POST ['item0_name'] );
+		if (! $s0->identifyFromName()) {
+			$s0->toDB ();
 		}
-		$relationship->setItem($item0,0);
+		$relationship->setItem($s0,0);
 	}
-	if (empty($item1) && !empty($_POST['item1_name'])) {
-		$item1 = new Society();
-		$item1->setName($_POST['item1_name']);
-		if(!$item1->identifyFromName()) {
-			$item1->toDB();
+	if (!$relationship->isItemKnown(1) && !empty($_POST['item1_name'])) {
+		$s1 = new Society();
+		$s1->setName($_POST['item1_name']);
+		if(!$s1->identifyFromName()) {
+			$s1->toDB();
 		}
-		$relationship->setItem($item1,1);
+		$relationship->setItem($s1,1);
 	}
 	if ($relationship->toDB ()) {
 		if (isset($_POST['serie']) && strcmp($_POST['serie'],'none')!=0) {
@@ -83,7 +80,7 @@ if (isset ( $_POST ['relationship_submission'] )) {
 	}
 }
 if ($relationship->areItemsBothKnown()) {
-	$h1_content = 'Une relation entre ' . $item0->getHtmlLinkToSociety() . ' et ' . $item1->getHtmlLinkToSociety();
+	$h1_content = 'Une relation entre ' . $relationship->getItem(0)->getHtmlLinkToSociety() . ' et ' . $relationship->getItem(1)->getHtmlLinkToSociety();
 } else {
 	$h1_content = $relationship->isItemKnown(0) ? 'Une relation de ' . $relationship->getItem(0)->getHtmlLinkToSociety() : 'Une relation';
 }
@@ -192,7 +189,6 @@ if ($relationship->areItemsBothKnown()) {
                 $serie_options['similarRelationship'] = 'Enchaîner avec une relation similaire';
                 $serie_options['anotherRelationship'] = 'Enchaîner avec une autre relation';
 		        
-
 			    $toCheck = empty($_POST['serie']) ? 'none' : $_POST['serie'];
 			    
 			    if (count($serie_options)>1) {

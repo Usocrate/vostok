@@ -646,5 +646,17 @@ class Relationship {
 		}
 		return false;
 	}
+	/**
+	 * 
+	 * @param int $index
+	 * @return boolean
+	 * @since 08/2024
+	 */
+	public function feedItem($index) {
+		return $this->isItemKnown($index) ? $this->items [$index]->feed() : false;
+	}
+	public function feedItems() {
+		return $this->feedItem(0) && $this->feedItem(1); 
+	}
 }
 ?>
