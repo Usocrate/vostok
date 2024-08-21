@@ -137,12 +137,14 @@ if (isset ( $_POST ['task_id'] )) {
 						$relationship->setRelatedItem($society, $_SESSION ['pendingProcess'] ['targetSociety'],  $_SESSION ['pendingProcess'] ['targetSociety_role']);
 						
 						if ($relationship->toDB()) {
-							$followingOnes = $system->getSocieties(array("ids"=>$_SESSION['pendingProcess']['followingSocietiesCollectionIds']));
-							foreach ($followingOnes as $s) {
-								$r = $system->getRelationship($s,$formerRelatedSociety);
-								$r->setRole($s, $_SESSION ['pendingProcess'] ['society_role']);
-								$r->setRelatedItem($s, $_SESSION ['pendingProcess'] ['targetSociety'],  $_SESSION ['pendingProcess'] ['targetSociety_role']);
-								$r->toDB();
+							if (isset($_SESSION['pendingProcess']['followingSocietiesCollectionIds'])){
+								$followingOnes = $system->getSocieties(array("ids"=>$_SESSION['pendingProcess']['followingSocietiesCollectionIds']));
+								foreach ($followingOnes as $s) {
+									$r = $system->getRelationship($s,$formerRelatedSociety);
+									$r->setRole($s, $_SESSION ['pendingProcess'] ['society_role']);
+									$r->setRelatedItem($s, $_SESSION ['pendingProcess'] ['targetSociety'],  $_SESSION ['pendingProcess'] ['targetSociety_role']);
+									$r->toDB();
+								}
 							}
 							unset ( $_SESSION ['pendingProcess'] );
 							header ( 'location:' . $formerRelatedSociety->getDisplayUrl() );
