@@ -109,7 +109,14 @@ if (isset ( $_POST ['task_id'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
 						$_SESSION ['pendingProcess'] ['targetSociety_role'] = $_POST ['society_role'];
-						$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'following societies selection';
+						
+						$items = $formerRelatedSociety->getRelatedSocieties($relationship->getRole($society));
+						if (count($items)>1) {
+							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'following societies selection';
+						} else {
+							// on passe l'étape de transfert des sociétés tenant le même rôle s'il n'y en a pas
+							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'confirmation';
+						}
 						break;
 				}
 			}
