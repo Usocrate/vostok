@@ -342,7 +342,9 @@ var_dump($_SESSION);
 				
 				echo '<header><h1>Récapitulatif <small>étape 6</small></h1></header>';
 				
-				$followingOnes = $system->getSocieties(array("ids"=>$_SESSION['pendingProcess']['followingSocietiesCollectionIds']));
+				if (isset($_SESSION['pendingProcess']['followingSocietiesCollectionIds'])) {
+					$followingOnes = $system->getSocieties(array("ids"=>$_SESSION['pendingProcess']['followingSocietiesCollectionIds']));
+				}
 		
 				
 				echo '<div class="table-responsive">';
