@@ -27,6 +27,7 @@ if (! empty ( $_REQUEST ['membership_id'] )) {
 	// print_r($membership);
 
 	$heavierMembership = $system->getFirstHeavierMembershipInSociety ( $membership );
+	//print_r($heavierMembership);
 	
 } else {
 	header ( 'location:index.php' );

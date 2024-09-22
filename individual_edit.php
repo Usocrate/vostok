@@ -134,7 +134,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 			</div>			
 		</div>
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<fieldset>
 					<legend>Infos complémentaires</legend>
 					<div class="form-group">	
@@ -153,9 +153,9 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 					</div>
 				</fieldset>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-4">
 				<fieldset>
-					<legend>Coordonnées (perso)</legend>
+					<legend>Contact</legend>
 					<div class="form-group">
     					<label for="individual_mobile_i">Tél. mobile</label>
     					<input id="individual_mobile_i" type="tel" name="individual_mobile" value="<?php echo ToolBox::toHtml($individual->getMobilePhoneNumber()) ?>" size="15" class="form-control"/>
@@ -168,10 +168,31 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
     					<label for="individual_email_i">Email</label>
     					<input id="individual_email_i" type="email" name="individual_email" value="<?php echo ToolBox::toHtml($individual->getEmailAddress()) ?>" size="55" class="form-control" />
 					</div>
-					<div class="form-group">
-						<label for="individual_address_i">Adresse</label>
-						<input id="individual_address_i" type="text" name="individual_address" value="<?php echo ToolBox::toHtml($individual->getAddress()) ?>" size="55" class="form-control" />
+				</fieldset>
+			</div>
+			<div class="col-md-4">
+				<fieldset>
+					<legend>Localisation</legend>
+					<div class="form-group">	
+						<label for="individual_street_i">Rue</label>
+						<input id="individual_street_i" type="text" name="individual_street" value="<?php echo ToolBox::toHtml($individual->getStreet()) ?>" size="25" class="form-control" />
 					</div>
+					<div class="form-group">	
+						<label for="individual_city_i">Ville</label>
+						<input id="individual_city_i" type="text" name="individual_city" value="<?php echo ToolBox::toHtml($individual->getCity()) ?>" size="25" class="form-control" />
+					</div>
+					<div class="form-group">	
+						<label for="individual_postalCode_i">Code postal</label>
+						<input id="individual_postalCode_i" type="text" name="individual_postalCode" value="<?php echo $individual->getPostalCode() ?>" size="15" class="form-control" />
+					</div>	
+					<div class="form-group">	
+						<label for="individual_state_i">Région</label>
+						<input id="individual_state_i" type="text" name="individual_state" value="<?php echo ToolBox::toHtml($individual->getState()) ?>" size="25" class="form-control" />
+					</div>
+					<div class="form-group">	
+						<label for="individual_country_i">Pays</label>
+						<input id="individual_country_i" type="text" name="individual_country" value="<?php echo ToolBox::toHtml($individual->getCountry()) ?>" size="25" class="form-control" />
+					</div>					
 				</fieldset>
 			</div>
 		</div>

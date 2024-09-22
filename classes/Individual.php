@@ -125,6 +125,12 @@ class Individual {
 		return $this->getAttribute ( 'street' );
 	}
 	/**
+	 * Obtient la région de résidence de l'individu.
+	 */
+	public function getState() {
+		return $this->getAttribute ( 'state' );
+	}
+	/**
 	 * Obtient la ville de résidence de l'individu.
 	 */
 	public function getCity() {
@@ -748,6 +754,10 @@ class Individual {
 		$var = $this->getWholeName ();
 		return empty ( $var ) ? null : Toolbox::getGoogleQueryUrl ( '"' . $var . '"', $type );
 	}
+	/**
+	 * 
+	 * @param string $input
+	 */
 	public function getAddressFromGoogle($input = NULL) {
 		global $system;
 		if (empty ( $input ))
