@@ -261,7 +261,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						echo '<div class="card-body">';
     						echo '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
     						foreach ($memberships as $ms) {
-    							echo '<h4 class="card-subtitle mb-2 text-muted"><a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
+    							echo '<h4 class="card-subtitle"><a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
     							echo '<p class="card-text">';
     							$smallElt = array();
     							if ( $ms->getPeriod() ) $smallElt[] = $ms->getPeriod();
@@ -305,7 +305,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					    echo '<div class="card-body">';
     					    echo '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
     					    foreach ($memberships as $ms) {
-    					    	echo '<h4 class="card-subtitle mb-2 text-muted"><a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
+    					    	echo '<h4 class="card-subtitle"><a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
     					    	echo '<p class="card-text">';
     					    	$smallElt = array();
     					    	if ( $ms->getPeriod() ) $smallElt[] = $ms->getPeriod();

@@ -89,6 +89,7 @@ $doc_title = 'Accueil';
 						echo '<div class="card-header">';
 							echo '<a href="individual.php?individual_id='.$i->getId().'" class="implicit">'.ToolBox::toHtml($i->getWholeName()).'</a>';
 						echo '</div>';
+						//*
 						echo '<ul class="list-group list-group-flush">';
 						foreach ($i->getMemberships() as $ms) {
 							$s = $ms->getSociety();
@@ -112,6 +113,7 @@ $doc_title = 'Accueil';
 							echo '</li>';
 						}
 						echo '</ul>';
+						//*/
 						echo '</div>';
 			  		}
 					echo '</div>';

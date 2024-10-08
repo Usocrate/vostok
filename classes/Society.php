@@ -683,36 +683,38 @@ class Society {
 		return $this->memberships;
 	}
 	/**
+	 *
 	 * @since 09/2024
 	 */
-	public function getMembers() {
+	public function getMembers($context = '') {
 		global $system;
-		
-		$members = array();
-		
-		$sql = 'SELECT i.individual_id, i.individual_firstName, i.individual_lastName, SUM(ms.weight) FROM membership AS ms INNER JOIN individual AS i ON ms.individual_id = i.individual_id';
-		// WHERE
-		$sql .= ' WHERE ms.society_id=:id';
-		// GROUP BY
-		$sql .= ' GROUP BY i.individual_id, i.individual_firstName, i.individual_lastName';
-		// ORDER BY
-		$sql .= ' ORDER BY SUM(ms.weight) DESC, i.individual_firstName ASC, i.individual_lastName ASC';
-		
-		$statement = $system->getPdo ()->prepare ( $sql );
-		
-		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
-		
-		$statement->execute ();
-		
-		foreach ( $statement->fetchAll ( PDO::FETCH_ASSOC ) as $row ) {
-			
-			//print_r($row);
-			
-			$i = new Individual($row['individual_id']);
-			$i->setFirstName($row['individual_firstName']);
-			$i->setLastName($row['individual_lastName']);
-			
-			$members[] = $i;
+
+		$members = array ();
+
+		switch ($context) {
+
+			default :
+
+				$sql = 'SELECT i.individual_id, i.individual_firstName, i.individual_lastName, SUM(ms.weight) FROM membership AS ms INNER JOIN individual AS i ON ms.individual_id = i.individual_id';
+				// WHERE
+				$sql .= ' WHERE ms.society_id=:id';
+				// GROUP BY
+				$sql .= ' GROUP BY i.individual_id, i.individual_firstName, i.individual_lastName';
+				// ORDER BY
+				$sql .= ' ORDER BY SUM(ms.weight) DESC, i.individual_firstName ASC, i.individual_lastName ASC';
+
+				$statement = $system->getPdo ()->prepare ( $sql );
+
+				$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+
+				$statement->execute ();
+
+				foreach ( $statement->fetchAll ( PDO::FETCH_ASSOC ) as $row ) {
+					$i = new Individual ( $row ['individual_id'] );
+					$i->setFirstName ( $row ['individual_firstName'] );
+					$i->setLastName ( $row ['individual_lastName'] );
+					$members [] = $i;
+				}
 		}
 		return $members;
 	}
@@ -778,7 +780,7 @@ class Society {
 	 */
 	public function getMembersOptionsTags($valueToSelect = NULL) {
 		$html = '';
-		foreach ( $this->getMembers() as $i ) {
+		foreach ( $this->getMembers () as $i ) {
 			$html .= '<option value="' . $i->getId () . '"';
 			if (isset ( $valueToSelect ) && strcmp ( $valueToSelect, $i->getId () ) == 0) {
 				$html .= ' selected="selected"';

@@ -1,16 +1,15 @@
-$white:    #fff !default;
-$gray-100: #f8f8f8 !default;
-$gray-200: #efeae9 !default;
-$gray-300: #e6e0de !default;
-$gray-400: #dad1ce !default;
-$gray-500: #bdb0ad !default;
-$gray-600: #7d6f6c !default;
-$gray-700: #574c49 !default;
-$gray-800: #403734 !default;
-$gray-900: #292321 !default;
-$black:    #000 !default;
+@use "sass:color";
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css?family=Sigmar+One');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+@import "swatch";
 
-$bg: $gray-300;
+$card-cap-bg : $secondary;
+$card-border-color : $gray-300;
+
+$link-color:$primary;
+//$link-hover-color:$gray-600;
 
 $brand-font-family : "Sigmar One";
 $common-font-family : "Open Sans";
@@ -18,120 +17,27 @@ $headings-font-family: "Oswald";
 $btn-font-family: "Oswald";
 $btn-font-size: 1.1rem;
 
-@charset "utf-8";
-@import url('https://fonts.googleapis.com/css?family=Sigmar+One');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-@import url('https://fonts.googleapis.com/css?family=Oswald');
-@import "customisable";
 @import "../vendor/twbs/bootstrap/scss/bootstrap";
 
-.ui-widget {
-	font-family: inherit;
-	font-size: 1em;
-}
+BODY {
 
-.ui-widget-content {
-	background: $white;
-}
-
-.ui-widget-content .ui-state-focus, .ui-widget-content .ui-state-focus em {
-	background-color: $secondary;
-	background-image: none;
-	color: $white;
-	border: none;
-}
-
-.ui-widget-content .ui-state-focus small {
-	color: $white;
-}
-
-.badge-info {
-	color: $white;
-	background-color: $gray-600;
-}
-
-.tab-content {
-	padding: 1em;
-}
-
-.navbar-brand, .brand {
-	color: $primary !important;
-	font-family: $brand-font-family;
+	background-color: $gray-300;
+	font-family:$common-font-family;
 	
-	SMALL {
-		color:$gray-200;
-		font-family: $common-font-family;
+	>.container-fluid, >.container {
+		background-color: $white;
+		box-shadow: 0 0 60px $gray-400;
+		padding: 20px 30px;
+		
+		H1 {
+			padding-top: 0;
+			margin-top: 0;
+		}
 	}
 }
 
-.nav-item {
-	font-family: $btn-font-family;
-}
-
-.nav-item A, .badge A {
-	color: inherit;
-}
-
-.card {
-	margin-bottom: 20px;
-	width:100%;
-}
-
-.card-img-top-wrapper {
-	filter:saturate(0.6);
-	background : linear-gradient(135deg, $white 5%, $gray-600 10%, $primary 80%);	
-}
-
-.card-img-top {
-	mix-blend-mode: screen;
-}
-
-.container-fluid, .container {
-	background-color: $white;
-	padding: 20px 30px;
-}
-
-.container-fluid>H1, .container>H1 {
-	padding-top: 0;
-	margin-top: 0;
-}
-
-.masonryGutterSizer {
-	width: 20px;
-	height: 20px;
-}
-
-SMALL {
-	font-size: inherit;
-	color:$gray-600
-}
-
-I {
-	color: $secondary;
-}
-
-I.colored {
-	color: $primary;
-}
-
-.btn I {
-	color:inherit;
-}
-
-BUTTON SMALL, A.btn SMALL {
-	font-size: 1em !important;
-	color:inherit;
-	opacity: .4;
-}
-
-BODY {
-	background-color: $bg;
-	background-image: url('./images/bg.svg');
-	font-family:$common-font-family;
-}
-
 H1 {
-	font-size:2.2rem;
+	font-size:2rem;
 }
 
 H2 {
@@ -142,6 +48,11 @@ H2 {
 H3 {
 	color:$gray-700;
 	font-size:1.4rem;	
+}
+
+H4 {
+	color:$gray-600;
+	font-size:1.2rem;	
 }
 
 SECTION {
@@ -169,18 +80,76 @@ IMG {
 
 FORM FIELDSET LEGEND {
 	font-family:$headings-font-family;
-	color: $tertiary;
+	color:$tertiary;
 	font-size:1.2em;		
 }
 
 A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 	color: inherit;
+	
+	:hover{
+		color: $primary;
+	}
+}
+
+.badge-info {
+	color: $white;
+	background-color: $tertiary;
+}
+
+.tab-content {
+	padding: 1em;
+}
+
+.navbar-brand, .brand {
+	color: $primary !important;
+	font-family: $brand-font-family;
+	
+	SMALL {
+		color:$gray-200;
+		font-family: $common-font-family;
+	}
+}
+
+.nav-item {
+	font-family: $btn-font-family;
+}
+
+.nav-item A, .badge A {
+	color: inherit;
+}
+
+.masonryGutterSizer {
+	width: 20px;
+	height: 20px;
+}
+
+SMALL {
+	font-size: inherit;
+	color:$gray-600
+}
+
+I {
+	color:$secondary;
+}
+
+I.colored {
+	color: $primary;
+}
+
+.btn I {
+	color:inherit;
+}
+
+BUTTON SMALL, A.btn SMALL {
+	font-size: 1em !important;
+	color:inherit;
+	opacity: .4;
 }
 
 .bd-title {
 	padding: 1rem 0;
 	margin: 0;
-	font-weight: 300;
 }
 
 H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
@@ -218,7 +187,36 @@ DIV.individual-description-area, DIV.membership-description-area {
 	margin: 1em 0
 }
 
-DIV.card-body {
+.card {
+	margin-bottom: 20px;
+	width:100%;
+}
+
+.card-img-top-wrapper {
+	filter:saturate(0.6);
+	background : linear-gradient(135deg, $white 5%, $gray-600 10%, $primary 80%);	
+}
+
+.card-img-top {
+	mix-blend-mode: screen;
+}
+
+.card-header {
+	font-family:$headings-font-family;
+	color:$white;
+}
+
+.card-body {
+	DIV.membership-description-area {
+		color: $gray-600;
+		
+		SPAN.more {
+			display: none;
+		}
+	}
+}
+
+.card-body {
 	DIV.membership-description-area {
 		color: $gray-600;
 		

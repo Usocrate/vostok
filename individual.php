@@ -134,29 +134,31 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 							foreach ($memberships as $ms) {
 								$s = $ms->getSociety();
 								echo '<li class="list-group-item">';
-								echo '<h2>';
-								echo $s->getHtmlLinkToSociety();
-								echo ' <small>';
-								echo '<a href="membership_edit.php?membership_id='.$ms->getId().'"><i class="fas fa-edit"></i></a>';
-								echo ' <a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'" target="_blank"><i class="fab fa-google"></i></a>';
-								echo '</small>';
-								echo '</h2>';
 								
+								echo '<div class="d-lg-flex flex-lg-row justify-content-between align-items-center mb-3 mt-3">';
+								echo '<div>';
+								echo '<h2>'.$s->getHtmlLinkToSociety().'</h2>';
 								$more = array();
 								if ($ms->getDepartment()) {
-								    $more[] = $ms->getDepartment();
+									$more[] = $ms->getDepartment();
 								}
 								if ($ms->getTitle()) {
-								    $more[] = '<a href="title.php?title='.urlencode($ms->getTitle()).'" class="implicit">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>';
+									$more[] = '<a href="title.php?title='.urlencode($ms->getTitle()).'" class="implicit">'.ToolBox::toHtml(ucfirst($ms->getTitle())).'</a>';
 								}
 								if ($ms->getPeriod()) {
 									$more[] = $ms->getPeriod();
-															
+									
 								}
 								if (count($more)>0) {
-									echo '<div><small>'.implode(' - ', $more).'</small></div>';
-								}					
-																
+									echo '<h4>'.implode(' - ', $more).'</small></h4>';
+								}
+								echo '</div>';
+								echo '<div class="btn-group btn-group-sm">';
+								echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>';
+								echo '<a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="fab fa-google"></i></a>';
+								echo '</div>';
+								echo '</div>';
+															
 								echo '<div class="membership-description-area" data-ms-id="'.$ms->getId().'">';
 								echo $ms->hasDescription() ? $ms->getDescription() : 'Il était une fois...';
 								echo '</div>';
@@ -190,22 +192,29 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								// $item[3] : Description
 								// $item[4] : Period object
 								echo '<li class="list-group-item">';
+								
+								echo '<div class="d-lg-flex flex-lg-row justify-content-between align-items-center mb-3 mt-3">';
+								echo '<div>';
 								echo '<h2>';
 								echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
-								echo ' <small>';
-								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="fas fa-edit"></i></a>';
-								echo ' <a href="'.ToolBox::getGoogleQueryUrl('"'.$item[0]->getWholeName().'" "'.$individual->getWholeName().'"').'" target="_blank"><i class="fab fa-google"></i></a>';
-								echo '</small>';
 								echo '</h2>';
 
-								$baseline = array();
-								$baseline[] = empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
+								$more = array();
+								$more[] = empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
 								if ($item[4]->isDefined()) {
-									$baseline[] = $item[4]->toString();
+									$more[] = $item[4]->toString();
 									
 								}
-								echo '<div><small>'.implode(' - ',$baseline).'</small></div>';
-								
+								if (count($more)>0) {
+									echo '<h4>'.implode(' - ', $more).'</small></h4>';
+								}
+								echo '</div>';
+								echo '<div class="btn-group btn-group-sm">';
+								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>';
+								echo '<a href="'.ToolBox::getGoogleQueryUrl('"'.$item[0]->getWholeName().'" "'.$individual->getWholeName().'"').'" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="fab fa-google"></i></a>';
+								echo '</div>';
+								echo '</div>';
+					
 								echo '<div class="relationship-description-area" data-rs-id="'.$item[1].'">';
 								echo empty($item[3]) ? 'Il était une fois...' : $item[3];
 								echo '</div>';
