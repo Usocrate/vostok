@@ -236,9 +236,9 @@ DIV.individual-description-area, DIV.membership-description-area {
 	}
 	
 	FORM {
-		background-image: url("./images/vostok.jpg");
+		background-image: url("./images/login.png");
 		background-color: $gray-100;
-		background-blend-mode:darken;
+		background-blend-mode:color-burn;
 		background-position: top center;
 		background-repeat: no-repeat;
 		background-size: contain;

@@ -105,9 +105,6 @@ class System {
 	public function getApiUrl() {
 		return $this->appli_url . 'api/';
 	}
-	public function getCvUrl() {
-		return $this->appli_url . 'cv/';
-	}
 	public function getTrombiUrl() {
 		return $this->appli_url . 'data/trombinoscope/';
 	}
@@ -146,15 +143,11 @@ class System {
 	}
 	/**
 	 *
-	 * @version 01/2021
+	 * @since 10/2024
 	 */
-	public function getCvDirPath() {
+	public function getSkinDirPath() {
 		try {
-			$path = $this->getDataDirPath () . DIRECTORY_SEPARATOR . 'cv';
-			if (! is_dir ( $path )) {
-				mkdir ( $path, 770 );
-			}
-			return $path;
+			return $this->dir_path . DIRECTORY_SEPARATOR . 'skin';
 		} catch ( Exception $e ) {
 			$this->reportException ( __METHOD__, $e );
 			return false;
@@ -325,6 +318,29 @@ class System {
 	public function writeHtmlHeadTagsForFavicon() {
 		foreach ( $this->getHtmlHeadTagsForFavicon () as $tag ) {
 			echo $tag;
+		}
+	}
+	/**
+	 *
+	 * @since 10/2024
+	 */
+	public function saveSkinLoginScreenImg($file) {
+		try {
+			$im = new Imagick ( $file['tmp_name'] );
+			$im->setImageFormat('png');
+			$im->scaleImage ( 500, 0 );
+			$im->normalizeimage ();
+			$im->orderedPosterizeImage ( "h4x4a", imagick::CHANNEL_BLUE );
+			$im->orderedPosterizeImage ( "h4x4a", imagick::CHANNEL_GREEN );
+			$im->transformimagecolorspace ( Imagick::COLORSPACE_GRAY );
+			
+			$targetPath = $this->getSkinDirPath().DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'login.png';
+			$handle = fopen ( $targetPath, 'w+' );
+			
+			return $im->writeimagefile ( $handle );
+		} catch ( Exception $e ) {
+			$this->reportException ( __METHOD__, $e );
+			return false;
 		}
 	}
 	/**

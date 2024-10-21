@@ -97,9 +97,6 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				if ($individual->getWeb()) {
 					$links[] = $individual->getHtmlLinkToWeb();
 				}
-				if ($individual->getCvUrl()) {
-					$links[] = '<a href="'.$individual->getCvUrl().'">cv</a>';
-				}
 				if (count($links) > 0) {
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($links as $l) {

@@ -10105,7 +10105,7 @@ DIV.individual-description-area, DIV.membership-description-area {
   max-width: 560px;
 }
 #loginDoc FORM {
-  background-image: url("./images/vostok.jpg");
+  background-image: url("./images/login.png");
   background-color: #f2f3f2;
   background-blend-mode: darken;
   background-position: top center;

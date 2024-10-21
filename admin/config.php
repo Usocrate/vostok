@@ -25,6 +25,7 @@ if ($system->configFileExists ()) {
 if (isset ( $_POST ['task_id'] )) {
 	$fb = new UserFeedBack ();
 	ToolBox::formatUserPost ( $_POST );
+
 	switch ($_POST ['task_id']) {
 		case 'save' :
 			if (isset ( $_POST ['db_host'] )) {
@@ -47,6 +48,9 @@ if (isset ( $_POST ['task_id'] )) {
 			}
 			if (isset ( $_POST ['appli_description'] )) {
 				$system->setAppliDescription ( $_POST ['appli_description'] );
+			}
+			if ( ! empty ($_FILES['img_file']) && $_FILES['img_file']['size']>0) {
+				$system->saveSkinLoginScreenImg($_FILES['img_file']);
 			}
 			if (isset ( $_POST ['googlemaps_api_key'] )) {
 				$system->setGoogleMapsApiKey( $_POST ['googlemaps_api_key'] );
@@ -88,7 +92,7 @@ header ( 'charset=utf-8' );
 		echo '</div>';
 	}
 	?>
-	<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+	<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
 		<div class="row">
 			<div class="col-md-6">
 				<fieldset>
@@ -127,6 +131,13 @@ header ( 'charset=utf-8' );
 						<label for="dir_path_i">Répertoire où l'application est installée</label><input id="dir_path_i" type="text" name="dir_path" class="form-control" value="<?php echo ToolBox::toHtml($system->getDirPath()); ?>" />
 					</div>
 				</fieldset>
+				<fieldset>
+					<legend>Apparence</legend>
+					<div class="form-group">
+						<label for="img_file_i">Image <small>(écran d'authentification)</small></label>
+						<input id="img_file_i" type="file" name="img_file" class="form-control-file" />
+					</div>
+				</fieldset>				
 				<fieldset>
 					<legend>Google Maps</legend>
 					<div class="form-group">

@@ -717,33 +717,6 @@ class Individual {
 			return '<img src="' . $this->getPhotoUrl () . '" />';
 	}
 	/**
-	 * Obtient l'Url du CV la personne.
-	 *
-	 * @return String
-	 */
-	public function getCvUrl() {
-		global $system;
-		if (isset ( $this->cv_url )) {
-			return $this->cv_url;
-		} else {
-			$file_extensions = array (
-					'odt',
-					'pdf',
-					'rtf',
-					'txt',
-					'doc'
-			);
-			$file_basename = ToolBox::formatForFileName ( $this->lastName . '_' . $this->firstName );
-			foreach ( $file_extensions as $e ) {
-				$file_name = $file_basename . '.' . $e;
-				if (is_file ( $system->getCvDirPath () . DIRECTORY_SEPARATOR . $file_name )) {
-					return $this->cv_url = $system->getCvUrl () . '/' . $file_name;
-				}
-			}
-		}
-		return NULL;
-	}
-	/**
 	 * Obtient l'URL permettant de googliser la personne.
 	 *
 	 * @return string
