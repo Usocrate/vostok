@@ -13,8 +13,13 @@ class Individual {
 	protected $country;
 	protected $lastPin_date;
 	protected $memberships;
-	public function __construct($id = NULL) {
-		$this->id = $id;
+	
+	public function __construct($data = NULL) {
+		if (is_array($data)) {
+			$this->feed($data);
+		} else {
+			$this->id = $data;
+		}
 	}
 	/**
 	 *
@@ -1326,35 +1331,27 @@ class Individual {
 
 	/**
 	 *
-	 * @version 03/2019
+	 * @version 11/2024
 	 */
-	public function feed($array = NULL) {
-		if (is_array ( $array )) {
-			// les données de l'initialisation sont transmises
+	public function feed($array = NULL, $prefix = NULL) {
+		
+		if (is_null ( $array )) {
+			$row = $this->getDataFromBase ();
+			return $this->feed ( $row, 'individual_' );
+		} else {
 			foreach ( $array as $key => $value ) {
-
-				// echo $key.' : '.$value.'<br>';
-
-				// NB : stricte correspondance entre les noms d'attribut de la classe une fois préfixe retiré
-				$items = explode ( '_', $key );
-				switch ($items [0]) {
-					case 'individual' :
-						// pour les champs préfixés 'individual_', on supprime le préfixe
-						array_shift ( $items );
-						$this->setAttribute ( implode ( '_', $items ), $value );
-						break;
-					default :
-					// $this->setAttribute($key, $value);
+				if (isset ( $prefix )) {
+					// on ne traite que les clés avec le préfixe spécifié
+					if (strcmp ( iconv_substr ( $key, 0, iconv_strlen ( $prefix ) ), $prefix ) != 0)
+						continue;
+						// on retire le préfixe
+						$key = iconv_substr ( $key, iconv_strlen ( $prefix ) );
 				}
+				// echo $key.': '.$value.'<br />';
+				$this->setAttribute ( $key, $value );
 			}
 			return true;
-		} elseif (! empty ( $this->id )) {
-			// on ne transmet pas les données de l'initialisation
-			// mais on connaît l'identifiant de la personne
-			$row = $this->getDataFromBase ();
-			return $this->feed ( $row );
 		}
-		return false;
 	}
 }
 ?>

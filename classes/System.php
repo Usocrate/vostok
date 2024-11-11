@@ -554,6 +554,7 @@ class System {
 	 * @since 05/2018
 	 */
 	public function getMemberships($criteria = NULL, $sort = 'Last updated first', $offset = 0, $count = NULL) {
+		
 		try {
 			$sql = 'SELECT m.membership_id AS id, m.individual_id, m.society_id, m.title, m.department, m.description, m.weight, m.init_year, m.end_year, m.timestamp';
 			$sql .= ', i.individual_firstName, i.individual_lastName';
@@ -680,9 +681,6 @@ class System {
 			$statement->setFetchMode ( PDO::FETCH_ASSOC );
 
 			$statement->execute ();
-
-			// $statement->debugDumpParams();
-			// echo '<hr>';
 
 			$memberships = array ();
 			foreach ( $statement->fetchAll () as $data ) {
@@ -1112,7 +1110,7 @@ class System {
 
 		foreach ( $this->getSocietiesData ( $criteria, $sort, $offset, $nb ) as $data ) {
 			$s = new Society ();
-			$s->feed ( $data );
+			$s->feed ( $data, 'society_' );
 			$output [] = $s;
 		}
 

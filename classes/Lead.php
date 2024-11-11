@@ -517,11 +517,11 @@ class Lead {
 		if (is_array ( $data )) {
 			// compte
 			$this->society = new Society ();
-			$this->society->feed ( $data );
+			$this->society->feed ( $data, 'society_' );
 
 			// individual
 			$this->individual = new Individual ();
-			$this->individual->feed ( $data );
+			$this->individual->feed ( $data, 'individual_' );
 
 			// les données de l'initialisation sont transmises
 			foreach ( $data as $key => $value ) {

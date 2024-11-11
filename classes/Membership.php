@@ -328,34 +328,80 @@ class Membership {
 		return $output;
 	}
 	/**
+	 *
+	 * @since 11/2024
+	 */
+	public function getIndividualIdentityFromDB() {
+		global $system;
+
+		try {
+			if (isset ( $this->id )) {
+				$sql = 'SELECT m.individual_id AS id, i.individual_firstName AS firstName, i.individual_lastName AS lastName';
+				$sql .= ' FROM membership AS m INNER JOIN individual AS i ON i.individual_id = m.individual_id';
+				$sql .= ' WHERE m.membership_id = :id';
+
+				$statement = $system->getPdo ()->prepare ( $sql );
+				$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+				$statement->execute ();
+				$data = $statement->fetch ( PDO::FETCH_ASSOC );
+
+				return new Individual ( $data );
+			}
+			return null;
+		} catch ( Exception $e ) {
+			$system->reportException ( $e, __METHOD__ );
+		}
+	}
+	/**
+	 *
+	 * @since 11/2024
+	 */
+	public function getSocietyIdentityFromDB() {
+		global $system;
+
+		try {
+			if (isset ( $this->id )) {
+				$sql = 'SELECT m.society_id AS id, s.society_name';
+				$sql .= ' FROM membership AS m INNER JOIN society AS s ON s.society_id = m.society_id';
+				$sql .= ' WHERE m.membership_id = :id';
+
+				$statement = $system->getPdo ()->prepare ( $sql );
+				$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+				$statement->execute ();
+				$data = $statement->fetch ( PDO::FETCH_ASSOC );
+
+				return new Society ( $data );
+			}
+			return null;
+		} catch ( Exception $e ) {
+			$system->reportException ( $e, __METHOD__ );
+		}
+	}
+	/**
 	 * Renvoie la personne impliquée.
 	 *
-	 * @version 03/2017
+	 * @version 11/2024
 	 * @return Individual|NULL
 	 */
 	public function getIndividual() {
-		if (isset ( $this->individual )) {
-			return $this->individual;
-		} elseif ($this->getAttribute ( 'individual_id' )) {
-			$this->individual = new Individual ( $this->getAttribute ( 'individual_id' ) );
-			return $this->individual;
+		if (! isset ( $this->individual )) {
+			$i = $this->getIndividualIdentityFromDB ();
+			$this->setIndividual ( $i );
 		}
-		return NULL;
+		return isset ( $this->individual ) ? $this->individual : NULL;
 	}
 	/**
+	 * Renvoie la société concernée.
 	 *
-	 * @since 03/2020
+	 * @version 11/2024
+	 * @return Society|NULL
 	 */
-	public function feedIndividual() {
-		if (isset ( $this->individual )) {
-			return $this->individual->feed ();
+	public function getSociety() {
+		if (! isset ( $this->society )) {
+			$s = $this->getSocietyIdentityFromDB ();
+			$this->setSociety ( $s );
 		}
-	}
-	/**
-	 * Renvoie l'id de la personne impliquée.
-	 */
-	public function getIndividualId() {
-		return isset ( $this->individual ) ? $this->individual->getId () : NULL;
+		return isset ( $this->society ) ? $this->society : NULL;
 	}
 	/**
 	 * Fixe la personne impliquée.
@@ -363,52 +409,55 @@ class Membership {
 	 * @param Individual $input
 	 */
 	public function setIndividual(Individual $input) {
-		if (is_a ( $input, 'Individual' ))
+		if (is_a ( $input, 'Individual' )) {
 			$this->individual = $input;
-	}
-	/**
-	 * Renvoie la société concernée.
-	 */
-	public function getSociety() {
-		if (isset ( $this->society )) {
-			return $this->society;
-		} elseif ($this->getAttribute ( 'society_id' )) {
-			$this->society = new Society ( $this->getAttribute ( 'society_id' ) );
-			return $this->society;
+			return true;
 		}
-		return NULL;
-	}
-	/**
-	 *
-	 * @since 03/2020
-	 */
-	public function feedSociety() {
-		if (isset ( $this->society )) {
-			return $this->society->feed ();
-		}
+		return false;
 	}
 	/**
 	 * Fixe la société concernée.
 	 *
 	 * @param Society $input
-	 * @version 04/2006
+	 * @version 11/2024
 	 */
 	public function setSociety(Society $input) {
-		if (is_a ( $input, 'Society' ))
+		if (is_a ( $input, 'Society' )) {
 			$this->society = $input;
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Renvoie l'id de la personne impliquée.
+	 */
+	public function getIndividualId() {
+		if (! isset ( $this->individual )) {
+			$this->individual = $this->getIndividualIdentityFromDB ();
+		}
+		return isset ( $this->individual ) ? $this->individual->getId () : NULL;
 	}
 	/**
 	 *
 	 * @since 12/2018
+	 * @version 11/2024
 	 */
 	public function isSocietyIdentified() {
+		if (! isset ( $this->society )) {
+			$this->society = $this->getSocietyIdentityFromDB ();
+		}
 		return isset ( $this->society ) && ! empty ( $this->society->getId () );
 	}
 	/**
 	 *
 	 * @since 12/2018
+	 * @version 11/2024
 	 */
 	public function isIndividualIdentified() {
+		if (! isset ( $this->individual )) {
+			$this->individual = $this->getIndividualIdentityFromDB ();
+		}
+
 		return isset ( $this->individual ) && ! empty ( $this->individual->getId () );
 	}
 	/**
@@ -445,19 +494,37 @@ class Membership {
 	/**
 	 *
 	 * @since 12/2018
+	 * @version 11/2024*
 	 */
 	public function getHtmlLinkToIndividual(string $mode = 'normal') {
 		if ($this->isIndividualIdentified ()) {
 			return $this->individual->getHtmlLinkToIndividual ( $mode );
+		} else {
+			if ($this->hasId ()) {
+				$i = $this->getIndividualIdentityFromDB ();
+				if ($this->setIndividual ( $i )) {
+					return $this->individual->getHtmlLinkToIndividual ( $mode );
+				}
+			}
+			return null;
 		}
 	}
 	/**
 	 *
 	 * @since 12/2018
+	 * @version 11/2024
 	 */
 	public function getHtmlLinkToSociety() {
 		if ($this->isSocietyIdentified ()) {
 			return $this->society->getHtmlLinkToSociety ();
+		} else {
+			if ($this->hasId ()) {
+				$s = $this->getSocietyIdentityFromDB ();
+				if ($this->setSociety ( $s )) {
+					return $this->society->getHtmlLinkToSociety ();
+				}
+			}
+			return null;
 		}
 	}
 	/**

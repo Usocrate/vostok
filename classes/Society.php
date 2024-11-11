@@ -16,8 +16,13 @@ class Society {
 	protected $latitude;
 	protected $altitude;
 	protected $parent;
-	public function __construct($id = NULL) {
-		$this->id = $id;
+	
+	public function __construct($data = NULL) {
+		if (is_array ( $data )) {
+			$this->feed ( $data );
+		} else {
+			$this->id = $data;
+		}
 	}
 
 	/**
@@ -853,7 +858,7 @@ class Society {
 
 		foreach ( $data as $row ) {
 			$s = new Society ();
-			$s->feed ( $row );
+			$s->feed ( $row, 'society_' );
 			$output [] = array (
 					$s,
 					$row ['relationship_id'],
@@ -1045,22 +1050,20 @@ class Society {
 	 *
 	 * @version 04/2006
 	 */
-	public function feed($array = NULL, $prefix = 'society_') {
+	public function feed($array = NULL, $prefix = NULL) {
 		if (is_null ( $array )) {
 			return $this->initFromDB ();
 		} else {
-			foreach ( $array as $clé => $valeur ) {
-				if (is_null ( $valeur ))
-					continue;
+			foreach ( $array as $key => $value ) {
 				if (isset ( $prefix )) {
 					// on ne traite que les clés avec le préfixe spécifié
-					if (strcmp ( iconv_substr ( $clé, 0, iconv_strlen ( $prefix ) ), $prefix ) != 0)
+					if (strcmp ( iconv_substr ( $key, 0, iconv_strlen ( $prefix ) ), $prefix ) != 0)
 						continue;
 					// on retire le préfixe
-					$clé = iconv_substr ( $clé, iconv_strlen ( $prefix ) );
+						$key = iconv_substr ( $key, iconv_strlen ( $prefix ) );
 				}
-				// echo $clé.': '.$valeur.'<br />';
-				$this->setAttribute ( $clé, $valeur );
+				// echo $key.': '.$value.'<br />';
+				$this->setAttribute ( $key, $value );
 			}
 			return true;
 		}
@@ -1068,7 +1071,7 @@ class Society {
 	/**
 	 * Fixe les attributs de la société à partir de son enregistrement en base de données.
 	 *
-	 * @version 23/11/2016
+	 * @version 11/2024
 	 */
 	public function initFromDB() {
 		global $system;
@@ -1076,7 +1079,7 @@ class Society {
 			$statement = $system->getPdo ()->prepare ( 'SELECT * FROM society WHERE society_id=:id' );
 			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
 			$statement->execute ();
-			return $this->feed ( $statement->fetch ( PDO::FETCH_ASSOC ) );
+			return $this->feed ( $statement->fetch ( PDO::FETCH_ASSOC ) , '_society');
 		}
 		return false;
 	}

@@ -20,14 +20,8 @@ $fb = new UserFeedBack ();
 if (! empty ( $_REQUEST ['membership_id'] )) {
 
 	$membership->setId ( $_REQUEST ['membership_id'] );
-	if ($membership->feed ()) {
-		$membership->feedIndividual ();
-		$membership->feedSociety ();
-	}
-	// print_r($membership);
 
 	$heavierMembership = $system->getFirstHeavierMembershipInSociety ( $membership );
-	//print_r($heavierMembership);
 	
 } else {
 	header ( 'location:index.php' );
@@ -93,6 +87,8 @@ if (isset ( $_POST ['task'] )) {
 }
 
 $h1_content = '<small>Quelle place pour </small>' . $membership->getHtmlLinkToIndividual () . ' <small>chez ' . $membership->getHtmlLinkToSociety () . ' ?</small>';
+
+//print_r($membership);
 
 ?>
 <!doctype html>

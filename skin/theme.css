@@ -9942,12 +9942,6 @@ P {
   margin: 1em 0;
 }
 
-HR {
-  clear: both;
-  visibility: hidden;
-  margin: 0;
-}
-
 TABLE {
   width: auto;
 }
@@ -10107,7 +10101,7 @@ DIV.individual-description-area, DIV.membership-description-area {
 #loginDoc FORM {
   background-image: url("./images/login.png");
   background-color: #f2f3f2;
-  background-blend-mode: darken;
+  background-blend-mode: color-burn;
   background-position: top center;
   background-repeat: no-repeat;
   background-size: contain;

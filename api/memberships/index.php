@@ -45,9 +45,7 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 			case 'deletion':
 				if (isset($_POST['id'])) {
 					$m = new Membership($_POST['id']);
-					if ($m->feed()) {
-						$m->feedIndividual();
-					}
+					$m->feed();
 					$individual = $m->getIndividual();
 					
 					if ( $m->delete() ) {

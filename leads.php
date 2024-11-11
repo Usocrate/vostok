@@ -77,8 +77,8 @@ $leads = array ();
 foreach ($page_rowset as $row) {
 	$l = new Lead();
 	$l->feed($row);
-	$l->getIndividual()->feed($row);
-	$l->getSociety()->feed($row);
+	$l->getIndividual()->feed($row, 'individual_');
+	$l->getSociety()->feed($row, 'society_');
 	$leads[] = $l;
 }
 

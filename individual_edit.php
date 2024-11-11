@@ -29,7 +29,7 @@ if (isset($_POST['toDB_order'])) {
     ToolBox::formatUserPost($_POST);
     
     // enregistrement des données de l'individu
-    $individual->feed($_POST);
+    $individual->feed($_POST, 'individual_');
     
     if ( ! empty ( $_POST['individual_address'] ) ) {
     	$individual->getAddressFromGoogle($_POST['individual_address']);

@@ -65,7 +65,7 @@ if (!empty($_REQUEST['individual_id'])) {
 	// On demande l'association de la piste avec un nouvel individu
 	//
 	$individual = new Individual();
-	$individual->feed($_POST);
+	$individual->feed($_POST, 'individual_');
 	// on exige au moins un nom ou un prénom pour créer l'individu
 	if ($individual->getLastName() || $individual->getLastName() || $individual->getId()){
 		if (!$individual->getId()) $individual->identifyFromName();

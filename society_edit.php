@@ -28,7 +28,7 @@ if (isset($_POST['task'])) {
 	switch ($_POST['task']) {
 		case 'registration':
 			ToolBox::formatUserPost($_POST);
-			$society->feed($_POST);
+			$society->feed($_POST, 'society_');
 			if (! empty ( $_POST['society_address'] ) ) {
     			$society->getAddressFromGoogle($_POST['society_address']);
     		}

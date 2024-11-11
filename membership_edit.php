@@ -22,10 +22,7 @@ if (! empty ( $_REQUEST ['membership_id'] )) {
 	// la participation à traiter est identifiée
 	//
 	$membership->setId ( $_REQUEST ['membership_id'] );
-	if ($membership->feed ()) {
-		$membership->feedIndividual ();
-		$membership->feedSociety ();
-	} else {
+	if (! $membership->feed ()) {
 		header ( 'location:index.php' );
 		exit ();
 	}

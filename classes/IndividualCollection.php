@@ -7,7 +7,7 @@ class IndividualCollection extends Collection {
 			$data = $input->fetchAll ();
 			foreach ( $data as $datum ) {
 				$i = new Individual ();
-				$i->feed ( $datum );
+				$i->feed ( $datum, 'individual_');
 				$this->addElement ( $i );
 			}
 		}
@@ -19,7 +19,7 @@ class IndividualCollection extends Collection {
 				} elseif (is_array ( $datum )) {
 					// la case du tableau considérée contient un tableau de données
 					$element = new Individual ();
-					$element->feed ( $datum );
+					$element->feed ( $datum, 'individual_' );
 					$this->addElement ( $element );
 				}
 			}

@@ -61,7 +61,7 @@ abstract class Collection implements IteratorAggregate {
 			}
 		} catch ( Exception $e ) {
 			echo '<p>' . get_class ( $this ) . ' : ' . htmlentities ( $e->getMessage () ) . '</p>';
-			ToolBox::html_dump ( $element );
+			//print_r( $element );
 			exit ();
 		}
 	}

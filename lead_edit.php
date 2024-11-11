@@ -67,7 +67,7 @@ if (isset($_REQUEST['society_id']) && is_numeric($_REQUEST['society_id'])) {
 	// on demande le rattachement de la piste à une nouvelle société.
 	//
 	$society = new Society();
-	$society->feed($_POST);
+	$society->feed($_POST, 'society_');
 
 	// on exige au moins un nom pour créer la Société
 	if ($society->getName() || $society->getId()){
@@ -128,7 +128,7 @@ if (isset($_REQUEST['individual_id']) && is_numeric($_REQUEST['individual_id']))
 	// On demande l'association de la piste avec un nouvel individu
 	//
 	$individual = new Individual();
-	$individual->feed($_POST);
+	$individual->feed($_POST, 'individual_');
 	// on exige au moins un nom ou un prénom pour créer l'individu
 	if ($individual->getFirstName() || $individual->getLastName() || $individual->getId()){
 		/**
