@@ -494,7 +494,7 @@ class Membership {
 	/**
 	 *
 	 * @since 12/2018
-	 * @version 11/2024*
+	 * @version 11/2024
 	 */
 	public function getHtmlLinkToIndividual(string $mode = 'normal') {
 		if ($this->isIndividualIdentified ()) {

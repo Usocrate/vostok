@@ -159,7 +159,7 @@ if (isset ( $_POST ['task'] )) {
 
 // on détermine le titre de la page
 if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified ()) {
-	$h1_content = $membership->getHtmlLinkToIndividual () . ' <small>chez ' . $membership->getHtmlLinkToSociety () . '</small>';
+	$h1_content = $membership->getHtmlLinkToIndividual ('friendly') . ' <small>chez ' . $membership->getHtmlLinkToSociety () . '</small>';
 } elseif ($membership->isIndividualIdentified ()) {
 	$h1_content = 'Une participation de ' . $membership->getHtmlLinkToIndividual ();
 } elseif ($membership->isSocietyIdentified ()) {

@@ -13,10 +13,9 @@ class Individual {
 	protected $country;
 	protected $lastPin_date;
 	protected $memberships;
-	
 	public function __construct($data = NULL) {
-		if (is_array($data)) {
-			$this->feed($data);
+		if (is_array ( $data )) {
+			$this->feed ( $data );
 		} else {
 			$this->id = $data;
 		}
@@ -388,6 +387,14 @@ class Individual {
 	 * @since 12/2016
 	 */
 	public function getHtmlLinkToIndividual($mode = 'normal') {
+		if ((empty ( $this->firstName ) && empty ( $this->lastName )) && $this->hasId ()) {
+			$dataset = $this->getDataFromBase ( array (
+					'individual_firstName',
+					'individual_lastName'
+			) );
+			$this->feed ( $dataset, 'individual_' );
+		}
+
 		switch ($mode) {
 			case 'friendly' :
 				$label = empty ( $this->firstName ) ? $this->getWholeName () : $this->firstName;
@@ -733,7 +740,7 @@ class Individual {
 		return empty ( $var ) ? null : Toolbox::getGoogleQueryUrl ( '"' . $var . '"', $type );
 	}
 	/**
-	 * 
+	 *
 	 * @param string $input
 	 */
 	public function getAddressFromGoogle($input = NULL) {
@@ -1334,7 +1341,6 @@ class Individual {
 	 * @version 11/2024
 	 */
 	public function feed($array = NULL, $prefix = NULL) {
-		
 		if (is_null ( $array )) {
 			$row = $this->getDataFromBase ();
 			return $this->feed ( $row, 'individual_' );
@@ -1344,8 +1350,8 @@ class Individual {
 					// on ne traite que les clés avec le préfixe spécifié
 					if (strcmp ( iconv_substr ( $key, 0, iconv_strlen ( $prefix ) ), $prefix ) != 0)
 						continue;
-						// on retire le préfixe
-						$key = iconv_substr ( $key, iconv_strlen ( $prefix ) );
+					// on retire le préfixe
+					$key = iconv_substr ( $key, iconv_strlen ( $prefix ) );
 				}
 				// echo $key.': '.$value.'<br />';
 				$this->setAttribute ( $key, $value );
