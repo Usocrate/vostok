@@ -68,10 +68,15 @@ if (isset ( $_POST ['task'] )) {
 				// personne n'est déclaré comme participant
 				$i = new Individual ();
 				$i->feed ( $_POST, 'individual_' );
-				if (! $i->identifyFromName ()) {
-					$i->toDB();
-				}				
-				$membership->setIndividual ( $i );
+				if ($i->identifyFromName ()) {
+					// nouvelle participation d'un individu déjà enregistré
+					$membership->setIndividual ( $i );
+				} else {
+					// participation d'un nouvel individu					
+					if ($i->toDB()) {
+						$membership->setIndividual ( $i );	
+					}
+				}
 			}
 			if ($membership->toDB ()) {
 				// enregistrement effectif !
@@ -139,8 +144,10 @@ if (isset ( $_POST ['task'] )) {
 							break;
 					}
 				} else {
+
 					// pas de déclaration en série, redirection vers l'écran de l'entité à l'origine de la demande de déclaration
 					if (isset ( $applicant )) {
+						//*
 						switch (get_class ( $applicant )) {
 							case 'Society' :
 								header ( 'location:society.php?society_id=' . $applicant->getId () );
@@ -149,6 +156,7 @@ if (isset ( $_POST ['task'] )) {
 								header ( 'location:individual.php?individual_id=' . $applicant->getId () );
 								exit ();
 						}
+						//*/
 					} else {
 						$fb->addSuccessMessage ( 'Mise à jour de la participation effective.' );
 					}

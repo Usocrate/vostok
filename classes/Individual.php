@@ -249,8 +249,12 @@ class Individual {
 		$statement->bindValue ( ':lastName', $this->getLastName (), PDO::PARAM_STR );
 		$statement->bindValue ( ':firstName', $this->getFirstName (), PDO::PARAM_STR );
 		$statement->execute ();
-		$this->id = $statement->fetchColumn ();
-		return isset($this->id);
+		$result = $statement->fetchColumn ();
+		if ($result) {
+			$this->id = $result;
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * Obtient la civilité.
