@@ -14,7 +14,7 @@ $society = new Society();
 if (isset($_REQUEST['society_id'])) {
 	$society->setId($_REQUEST['society_id']);
 }
-$society->initFromDB();
+$society->feed();
 
 $address = $society->getAddress();
 if (!empty($address)) {

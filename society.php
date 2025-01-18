@@ -16,8 +16,8 @@ if (empty ($_SESSION['user_id'])) {
 $society = new Society();
 if (isset($_REQUEST['society_id'])) {
 	$society->setId($_REQUEST['society_id']);
+	$society->feed();
 }
-$society->initFromDB();
 
 // participations
 $memberships = $society->getMemberships();

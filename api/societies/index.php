@@ -17,7 +17,7 @@ switch ($_SERVER["REQUEST_METHOD"]) {
 		if (isset($_GET['id'])) {
 			$society->setId($_GET['id']);
 		}
-		$society->initFromDB();
+		$society->feed();
 		echo $society->getJson();
 		exit;
 		

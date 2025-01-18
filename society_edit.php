@@ -29,9 +29,6 @@ if (isset($_POST['task'])) {
 		case 'registration':
 			ToolBox::formatUserPost($_POST);
 			$society->feed($_POST, 'society_');
-			if (! empty ( $_POST['society_address'] ) ) {
-    			$society->getAddressFromGoogle($_POST['society_address']);
-    		}
 			$society->toDB();
 
 			//
@@ -115,10 +112,21 @@ if (isset($_POST['task'])) {
         			<input type="url" id="society_url_i" name="society_url" value="<?php echo ToolBox::toHtml($society->getUrl()); ?>" size="55" class="form-control" onchange="javascript:checkUrlInput('society_web_input', 'society_web_link');" /> 
         		</div>
         		
-        		<div class="form-group">
-        			<label for="society_address_i">Adresse</label>
-        			<input id="society_address_i" type="text" name="society_address" value="<?php echo ToolBox::toHtml($society->getAddress()); ?>" size="55" class="form-control" />
+
+				<div class="form-group">
+					<label for="society_street_i">Rue</label>
+					<input id="society_street_i" type="text" name="society_street" value="<?php echo ToolBox::toHtml($society->getstreet()); ?>" size="55" class="form-control" />
+				</div>
+				
+				<div class="form-group">
+        			<label for="society_city_i">Ville</label>
+        			<input id="society_city_i" type="text" name="society_city" value="<?php echo ToolBox::toHtml($society->getCity()); ?>" size="55" class="form-control" />
         		</div>
+				
+				<div class="form-group">
+					<label for="society_postalcode_i">Code postal</label>
+					<input id="society_postalcode_i" type="text" name="society_postalcode" value="<?php echo ToolBox::toHtml($society->getPostalCode()); ?>" size="55" class="form-control" />
+				</div>
 
         		<div class="form-group">
         			<label for="society_phone_id">Téléphone</label>

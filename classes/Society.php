@@ -226,15 +226,9 @@ class Society {
 		if (! empty ( $input ))
 			$this->description = $input;
 	}
-	/**
-	 * Obtient la description de la société.
-	 */
 	public function getDescription() {
 		return $this->getAttribute ( 'description' );
 	}
-	/**
-	 * Fixe le téléphone de la société.
-	 */
 	public function setPhone($input) {
 		if (! empty ( $input ))
 			$this->phone = $input;
@@ -242,35 +236,20 @@ class Society {
 	public function getPhone() {
 		return $this->getAttribute ( 'phone' );
 	}
-	/**
-	 * Obtient l'adresse de facturation.
-	 *
-	 * @return string
-	 */
 	public function getStreet() {
-		return $this->getAttribute ( 'street' );
+		return isset($this->street) ? $this->street : null;
 	}
-	/**
-	 * Obtient la premiére partie de l'adresse physique.
-	 *
-	 * @todo Supprimer caractére indésirable notamment double-espace; retour-chariot courants lors de copier-coller.
-	 */
+	public function getCity() {
+		return isset($this->city) ? $this->city : null;
+	}
+	public function getPostalCode() {
+		return isset($this->postalcode) ? $this->postalcode : null;
+	}
 	public function setStreet($input) {
 		return $this->setAttribute ( 'street', $input );
 	}
-	public function getPostalCode() {
-		return $this->getAttribute ( 'postalcode' );
-	}
 	public function setPostalCode($input) {
 		return $this->setAttribute ( 'postalcode', $input );
-	}
-	/**
-	 * Obtient le nom de la ville où est située la société
-	 *
-	 * @return string
-	 */
-	public function getCity() {
-		return $this->getAttribute ( 'city' );
 	}
 	private static function getKnownCities($substring = NULL) {
 		global $system;
@@ -1046,13 +1025,20 @@ class Society {
 		return $statement->execute ();
 	}
 	/**
-	 * Fixe les attributs de la société à partir d'un tableau aux clefs normalisées
+	 * Fixe les attributs de la société à partir d'un tableau aux clefs normalisées ou les récupère en base de données si la société est identifiée
 	 *
-	 * @version 04/2006
+	 * @version 01/2025
 	 */
 	public function feed($array = NULL, $prefix = NULL) {
+		global $system;
 		if (is_null ( $array )) {
-			return $this->initFromDB ();
+			if (isset($this->id)) {
+				$statement = $system->getPdo ()->prepare ( 'SELECT * FROM society WHERE society_id=:id' );
+				$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+				$statement->execute ();
+				return $this->feed ( $statement->fetch ( PDO::FETCH_ASSOC ) , 'society_');
+			}
+			return false;
 		} else {
 			foreach ( $array as $key => $value ) {
 				if (isset ( $prefix )) {
@@ -1062,26 +1048,11 @@ class Society {
 					// on retire le préfixe
 						$key = iconv_substr ( $key, iconv_strlen ( $prefix ) );
 				}
-				// echo $key.': '.$value.'<br />';
+				//echo $key.': '.$value.'<br />';
 				$this->setAttribute ( $key, $value );
 			}
 			return true;
 		}
-	}
-	/**
-	 * Fixe les attributs de la société à partir de son enregistrement en base de données.
-	 *
-	 * @version 11/2024
-	 */
-	public function initFromDB() {
-		global $system;
-		if ($this->getId ()) {
-			$statement = $system->getPdo ()->prepare ( 'SELECT * FROM society WHERE society_id=:id' );
-			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
-			$statement->execute ();
-			return $this->feed ( $statement->fetch ( PDO::FETCH_ASSOC ) , '_society');
-		}
-		return false;
 	}
 	/**
 	 * Enregistre les données de l'objet en base de données.
@@ -1199,6 +1170,8 @@ class Society {
 		}
 
 		$result = $statement->execute ();
+		
+		//$statement->debugDumpParams();
 
 		if ($result && $new) {
 			$this->id = $system->getPdo ()->lastInsertId ();
