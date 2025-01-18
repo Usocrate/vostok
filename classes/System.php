@@ -454,6 +454,53 @@ class System {
 			$this->reportException ( $e );
 		}
 	}
+	public function getIndividualHomonyms($individual) {
+		try {
+			$sql = 'SELECT i.individual_id, i.individual_firstName, i.individual_lastName';
+			$sql .= ' FROM individual AS i';
+			//$sql .= ' OUTER JOIN membership AS m ON (m.individual_id=i.individual_id)';
+			//$sql .= ' INNER JOIN society AS s ON (s.society_id=m.society_id)';
+
+			// WHERE
+			$where = array ();
+
+			if ($individual->hasId()) {
+				$where [] = 'i.individual_id NOT IN(:individual_id)';
+			}
+
+			if ($individual->getLastName()) {
+				$where [] = 'i.individual_lastName = :individual_lastName';
+			}
+
+			if ($individual->getFirstName()) {
+				$where [] = 'i.individual_firstName = :individual_firstName';
+			}
+
+			if (count ( $where ) > 0) {
+				$sql .= ' WHERE ' . implode ( ' AND ', $where );
+			}
+			
+			$statement = $this->getPdo ()->prepare ( $sql );
+
+			if ($individual->hasId()) {
+				$statement->bindValue ( ':individual_id', $individual->getId(), PDO::PARAM_INT );
+			}
+			if ($individual->getLastName()) {
+				$statement->bindValue ( ':individual_lastName', $individual->getLastName(), PDO::PARAM_STR );
+			}
+			if ($individual->getFirstName()) {
+				$statement->bindValue ( ':individual_firstName', $individual->getFirstName(), PDO::PARAM_STR );
+			}
+
+			$statement->setFetchMode ( PDO::FETCH_ASSOC );
+
+			$statement->execute ();
+
+			return $statement->fetchAll ();
+		} catch ( Exception $e ) {
+			$this->reportException ( $e, __METHOD__ );
+		}		
+	}
 	/**
 	 * 
 	 * @param Individual|Society $firstTerm

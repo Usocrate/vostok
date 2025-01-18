@@ -9907,8 +9907,8 @@ BODY {
 }
 BODY > .container-fluid, BODY > .container-sm, BODY > .container-md, BODY > .container-lg, BODY > .container-xl, BODY > .container {
   background-color: #fff;
-  box-shadow: 0 0 60px #d2d5d2;
-  padding: 20px 30px;
+  box-shadow: 0 0 2rem #d2d5d2;
+  padding: 1rem 2rem;
 }
 BODY > .container-fluid H1, BODY > .container-sm H1, BODY > .container-md H1, BODY > .container-lg H1, BODY > .container-xl H1, BODY > .container H1 {
   padding-top: 0;
@@ -10101,12 +10101,12 @@ DIV.individual-description-area, DIV.membership-description-area {
 #loginDoc FORM {
   background-image: url("./images/login.png");
   background-color: #f2f3f2;
-  background-blend-mode: color-burn;
+  background-blend-mode: darken;
   background-position: top center;
   background-repeat: no-repeat;
   background-size: contain;
   margin: auto;
-  padding: 260px 20px 20px 20px;
+  padding: 200px 1.5rem 0.75rem 1.5rem;
 }
 #loginDoc FIGURE {
   background-image: url("./images/gagarinecasque.gif");
@@ -10197,8 +10197,12 @@ body.menu .container, body.menu .container-fluid, body.menu .container-sm, body.
     max-width: 1580px;
   }
 
+  #loginDoc MAIN {
+    margin-top: 5%;
+  }
+
   #indexDoc .card {
-    width: 288px;
+    width: 287px;
   }
 
   #societyDoc .card {

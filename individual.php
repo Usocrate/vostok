@@ -151,8 +151,8 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								}
 								echo '</div>';
 								echo '<div class="btn-group btn-group-sm">';
-								echo '<a href="membership_edit.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>';
 								echo '<a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="fab fa-google"></i></a>';
+								echo '<a href="membership_menu.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></a>';
 								echo '</div>';
 								echo '</div>';
 															

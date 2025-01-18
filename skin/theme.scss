@@ -26,8 +26,8 @@ BODY {
 	
 	>.container-fluid, >.container {
 		background-color: $white;
-		box-shadow: 0 0 60px $gray-400;
-		padding: 20px 30px;
+		box-shadow: 0 0 2rem $gray-400;
+		padding: 1rem 2rem;
 		
 		H1 {
 			padding-top: 0;
@@ -232,12 +232,12 @@ DIV.individual-description-area, DIV.membership-description-area {
 	FORM {
 		background-image: url("./images/login.png");
 		background-color: $gray-100;
-		background-blend-mode:color-burn;
+		background-blend-mode:darken;
 		background-position: top center;
 		background-repeat: no-repeat;
 		background-size: contain;
 		margin: auto;
-		padding: 260px 20px 20px 20px;
+		padding: 200px 1.5rem .75rem 1.5rem;
 	}
 	
 	FIGURE {
@@ -279,7 +279,7 @@ body.menu {
 		FORM {
 			padding-top: 400px;
 		}
-	
+		
 		FIGURE {
 			background-position: bottom left;
 			padding: 10px 10px 10px 90px;
@@ -355,9 +355,15 @@ body.menu {
 		max-width: 1580px;
 	}
 	
+	#loginDoc {
+		MAIN {
+			margin-top:5%;
+		}
+	}
+	
 	#indexDoc {
 		.card {
-			width: 288px;
+			width: 287px;
 		}
 	}
 	

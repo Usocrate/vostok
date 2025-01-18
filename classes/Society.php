@@ -101,7 +101,7 @@ class Society {
 	 *
 	 * @version 02/2022
 	 */
-	public function setName(string $input) {
+	public function setName($input) {
 		if (! empty ( $input )) {
 			$this->name = $input;
 		}

@@ -45,7 +45,7 @@ if (! empty ( $_REQUEST ['membership_id'] )) {
 if (isset ( $_POST ['task'] )) {
 
 	ToolBox::formatUserPost ( $_POST );
-
+	
 	switch ($_POST ['task']) {
 		case 'membership_submission' :
 			//
@@ -55,7 +55,7 @@ if (isset ( $_POST ['task'] )) {
 			if (! is_a ( $membership->getSociety (), 'Society' ) && ! empty ( $_POST ['society_name'] )) {
 				// aucune société n'est encore déclarée comme contexte de la participation
 				$s = new Society ();
-				$s->feed ( $_POST );
+				$s->feed ( $_POST, 'society_' );
 				if (! $s->identifyFromName ())
 					$s->toDB ();
 				$membership->setSociety ( $s );
@@ -67,9 +67,10 @@ if (isset ( $_POST ['task'] )) {
 			if (! is_a ( $membership->getIndividual (), 'Individual' ) && ! empty ( $_POST ['individual_lastName'] )) {
 				// personne n'est déclaré comme participant
 				$i = new Individual ();
-				$i->feed ( $_POST );
-				if (! $i->identifyFromName ())
-					$i->toDB ();
+				$i->feed ( $_POST, 'individual_' );
+				if (! $i->identifyFromName ()) {
+					$i->toDB();
+				}				
 				$membership->setIndividual ( $i );
 			}
 			if ($membership->toDB ()) {

@@ -115,7 +115,7 @@ class Individual {
 	 *
 	 * @since 02/2022
 	 */
-	public function setDescription(string $input) {
+	public function setDescription($input) {
 		$this->description = $input;
 	}
 	public function getAttribute($name) {
@@ -238,17 +238,19 @@ class Individual {
 	}
 	/**
 	 *
-	 * @version 03/2017
+	 * @version 01/2025
 	 */
 	public function identifyFromName() {
 		global $system;
-		if (empty ( $this->lastName ) || empty ( $this->firstName ))
-			return false;
+		if (empty ( $this->lastName ) || empty ( $this->firstName )) {
+			return false;			
+		}
 		$statement = $system->getPdo ()->prepare ( 'SELECT individual_id FROM individual WHERE individual_lastName=:lastName AND individual_firstName=:firstName' );
 		$statement->bindValue ( ':lastName', $this->getLastName (), PDO::PARAM_STR );
 		$statement->bindValue ( ':firstName', $this->getFirstName (), PDO::PARAM_STR );
 		$statement->execute ();
-		return $this->id = $statement->fetchColumn ();
+		$this->id = $statement->fetchColumn ();
+		return isset($this->id);
 	}
 	/**
 	 * Obtient la civilité.

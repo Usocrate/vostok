@@ -50,7 +50,7 @@ if (isset ( $_POST )) {
 
 if (isset ( $_POST ['cmd'] )) {
 	switch ($_POST ['cmd']) {
-		case 'Abandonner' :
+		case 'Quitter' :
 			unset ( $_SESSION ['pendingProcess'] );
 			header ( 'location:' . $formerRelatedSociety->getDisplayUrl() );
 			exit ();
@@ -222,7 +222,7 @@ var_dump($_SESSION);
 				
 				echo '<div class="btn-group">';
 				echo '<input type="submit" name="cmd" value="Poursuivre" class="btn btn-default btn-primary" />';
-				echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
+				echo '<input type="submit" name="cmd" value="Quitter" class="btn btn-default" />';
 				echo '</div>';
 				
 				echo '</form>';
@@ -253,7 +253,7 @@ var_dump($_SESSION);
 				
 				echo '<div class="btn-group">';
 				echo '<input type="submit" name="cmd" value="Poursuivre" class="btn btn-default btn-primary" />';
-				echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
+				echo '<input type="submit" name="cmd" value="Quitter" class="btn btn-default" />';
 				echo '</div>';
 				echo '</form>';
 				
@@ -281,7 +281,7 @@ var_dump($_SESSION);
 				
 				echo '<div class="btn-group">';
 				echo '<input type="submit" name="cmd" value="Poursuivre" class="btn btn-default btn-primary" />';
-				echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
+				echo '<input type="submit" name="cmd" value="Quitter" class="btn btn-default" />';
 				echo '</div>';
 				echo '</form>';
 				
@@ -309,7 +309,7 @@ var_dump($_SESSION);
 				
 				echo '<div class="btn-group">';
 				echo '<input type="submit" name="cmd" value="Poursuivre" class="btn btn-default btn-primary" />';
-				echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
+				echo '<input type="submit" name="cmd" value="Quitter" class="btn btn-default" />';
 				echo '</div>';
 				echo '</form>';
 				
@@ -339,7 +339,7 @@ var_dump($_SESSION);
 				
 				echo '<div class="btn-group">';
 				echo '<input type="submit" name="cmd" value="Poursuivre" class="btn btn-default btn-primary" />';
-				echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
+				echo '<input type="submit" name="cmd" value="Quitter" class="btn btn-default" />';
 				echo '</div>';
 				echo '</form>';
 				
@@ -416,7 +416,7 @@ var_dump($_SESSION);
 				echo '<input type="hidden" name="task_id" value="confirmation" />';
 				echo '<div class="btn-group">';
 				echo '<input type="submit" name="cmd" value="Je confirme" class="btn btn-default btn-primary" />';
-				echo '<input type="submit" name="cmd" value="Abandonner" class="btn btn-default" />';
+				echo '<input type="submit" name="cmd" value="Quitter" class="btn btn-default" />';
 				echo '</div>';
 				
 				break;

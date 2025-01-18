@@ -21,7 +21,7 @@ class Membership {
 	 *
 	 * @since 01/2006
 	 */
-	public function setAttribute(string $name, $value) {
+	public function setAttribute($name, $value) {
 		$value = trim ( $value );
 		$value = html_entity_decode ( $value, ENT_QUOTES, 'UTF-8' );
 		$this->{$name} = $value;
@@ -30,21 +30,21 @@ class Membership {
 	 *
 	 * @since 05/2018
 	 */
-	public function setTitle(string $input = '') {
+	public function setTitle($input = '') {
 		$this->title = $input;
 	}
 	/**
 	 *
 	 * @since 05/2018
 	 */
-	public function setDepartment(string $input = '') {
+	public function setDepartment($input = '') {
 		$this->department = $input;
 	}
 	/**
 	 *
 	 * @since 05/2018
 	 */
-	public function setDescription(string $input = '') {
+	public function setDescription($input = '') {
 		$this->description = $input;
 	}
 	/**
@@ -52,7 +52,7 @@ class Membership {
 	 * @since 04/2022
 	 * @param int $input
 	 */
-	public function setWeight(int $input) {
+	public function setWeight($input) {
 		$this->weight = $input;
 	}
 	/**
@@ -137,7 +137,7 @@ class Membership {
 	 * @param int $input
 	 * @since 11/2005
 	 */
-	public function setId(int $input) {
+	public function setId($input) {
 		return $this->setAttribute ( 'id', $input );
 	}
 	/**
@@ -183,7 +183,7 @@ class Membership {
 	 *
 	 * @since 10/2012
 	 */
-	private static function getKnownTitles(string $substring = '') {
+	private static function getKnownTitles($substring = '') {
 		global $system;
 		$sql = 'SELECT title AS value, COUNT(*) AS count FROM membership';
 		$sql .= ' WHERE title IS NOT NULL';
@@ -202,7 +202,7 @@ class Membership {
 	 *
 	 * @since 10/2012
 	 */
-	public static function knownTitlesToJson(string $substring = '') {
+	public static function knownTitlesToJson($substring = '') {
 		$output = '{"titles":[';
 		$items = self::getKnownTitles ( $substring );
 		for($i = 0; $i < count ( $items ); $i ++) {
@@ -380,26 +380,30 @@ class Membership {
 	/**
 	 * Renvoie la personne impliquée.
 	 *
-	 * @version 11/2024
+	 * @version 01/2025
 	 * @return Individual|NULL
 	 */
 	public function getIndividual() {
-		if (! isset ( $this->individual )) {
+		if (! isset ( $this->individual ) && $this->hasId()) {
 			$i = $this->getIndividualIdentityFromDB ();
-			$this->setIndividual ( $i );
+			if(is_a($i,'Individual')) {
+				$this->setIndividual ( $i );
+			}
 		}
 		return isset ( $this->individual ) ? $this->individual : NULL;
 	}
 	/**
 	 * Renvoie la société concernée.
 	 *
-	 * @version 11/2024
+	 * @version 01/2025
 	 * @return Society|NULL
 	 */
 	public function getSociety() {
-		if (! isset ( $this->society )) {
+		if (! isset ( $this->society ) && $this->hasId()) {
 			$s = $this->getSocietyIdentityFromDB ();
-			$this->setSociety ( $s );
+			if(is_a($s,'Society')) {
+				$this->setSociety ( $s );
+			}
 		}
 		return isset ( $this->society ) ? $this->society : NULL;
 	}
@@ -408,7 +412,7 @@ class Membership {
 	 *
 	 * @param Individual $input
 	 */
-	public function setIndividual(Individual $input) {
+	public function setIndividual($input) {
 		if (is_a ( $input, 'Individual' )) {
 			$this->individual = $input;
 			return true;
@@ -421,7 +425,7 @@ class Membership {
 	 * @param Society $input
 	 * @version 11/2024
 	 */
-	public function setSociety(Society $input) {
+	public function setSociety($input) {
 		if (is_a ( $input, 'Society' )) {
 			$this->society = $input;
 			return true;
@@ -430,34 +434,37 @@ class Membership {
 	}
 	/**
 	 * Renvoie l'id de la personne impliquée.
+	 * @version 01/2025
 	 */
 	public function getIndividualId() {
-		if (! isset ( $this->individual )) {
-			$this->individual = $this->getIndividualIdentityFromDB ();
-		}
-		return isset ( $this->individual ) ? $this->individual->getId () : NULL;
+		return $this->isIndividualIdentified() ? $this->individual->getId () : NULL;
 	}
 	/**
 	 *
 	 * @since 12/2018
-	 * @version 11/2024
+	 * @version 01/2025
 	 */
 	public function isSocietyIdentified() {
-		if (! isset ( $this->society )) {
-			$this->society = $this->getSocietyIdentityFromDB ();
+		if (! isset ( $this->society ) && $this->hasId()) {
+			$s = $this->getSocietyIdentityFromDB ();
+			if(is_a($s,'Society')) {
+				$this->setSociety ( $s );
+			}
 		}
 		return isset ( $this->society ) && ! empty ( $this->society->getId () );
 	}
 	/**
 	 *
 	 * @since 12/2018
-	 * @version 11/2024
+	 * @version 01/2025
 	 */
 	public function isIndividualIdentified() {
-		if (! isset ( $this->individual )) {
-			$this->individual = $this->getIndividualIdentityFromDB ();
+		if (! isset ( $this->individual ) && $this->hasId()) {
+			$i = $this->getIndividualIdentityFromDB ();
+			if(is_a($i,'Individual')) {
+				$this->setIndividual ( $i );
+			}
 		}
-
 		return isset ( $this->individual ) && ! empty ( $this->individual->getId () );
 	}
 	/**
@@ -480,7 +487,7 @@ class Membership {
 	 *
 	 * @since 08/2018
 	 */
-	public function setUrl(string $input) {
+	public function setUrl($input) {
 		$this->url = $input;
 	}
 	/**
