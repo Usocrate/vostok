@@ -29,6 +29,10 @@ if (isset($_POST['task'])) {
 		case 'registration':
 			ToolBox::formatUserPost($_POST);
 			$society->feed($_POST, 'society_');
+			
+			if (!empty($system->getGoogleMapsApiKey() && !$society->isAddressComplete()) {
+				
+			}
 			$society->toDB();
 
 			//

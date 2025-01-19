@@ -283,6 +283,18 @@ class Society {
 		}
 		return implode ( ' ', $elements );
 	}
+	
+	/**
+	 * @since 01/2025
+	 */
+	public function isAddressComplete() {
+		return empty($this->getCity()) 
+			|| empty($this->getStreet()) 
+				|| empty($this->getPostalCode()) 
+					|| empty($this->getSubAdministrativeAreaAnme())
+						|| empty($this->getAdministrativeAreaName())
+							|| empty($this->getCountryCode());
+	}
 
 	/**
 	 * Fixe la ville.
@@ -309,8 +321,9 @@ class Society {
 	public function getAddressFromGoogle($input = NULL) {
 		try {
 			global $system;
-			if (empty ( $input ))
+			if (empty ( $input )) {
 				$input = $this->getAddress ();
+			}
 			$json = $system->getGoogleGeocodeAsJson ( $input );
 			$data = json_decode ( $json );
 			if (empty ( $data->{'results'} [0] )) {

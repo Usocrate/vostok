@@ -72,7 +72,7 @@ class System {
 		$this->googlemaps_api_key = $input;
 	}
 	public function getGoogleMapsApiKey() {
-		return $this->googlemaps_api_key;
+		return isset($this->googlemaps_api_key) ? $this->googlemaps_api_key : null;
 	}
 	public function getGoogleGeocodeAsJson($input) {
 		$param ['address'] = $input;

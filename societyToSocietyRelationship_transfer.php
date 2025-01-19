@@ -18,7 +18,7 @@ if (! isset ( $_SESSION ['pendingProcess'] )) {
 	$_SESSION ['pendingProcess'] ['followingSocietiesCollectionIds'] = null;
 
 	// l'étape du processus dans lequel on se trouve
-	$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'target society role selection';
+	$_SESSION ['pendingProcess'] ['currentStep'] = 'target society role selection';
 }
 
 
@@ -68,7 +68,7 @@ if (isset ( $_POST ['task_id'] )) {
 					case 'Poursuivre' :
 						if (isset($_POST ['targetSociety_role'])) {
 							$_SESSION ['pendingProcess'] ['targetSociety_role'] = $_POST ['targetSociety_role'];
-							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'target society selection';
+							$_SESSION ['pendingProcess'] ['currentStep'] = 'target society selection';
 						} else {
 							$fb->addWarningMessage ( 'Il faut choisir une des options.' );
 						}
@@ -84,7 +84,7 @@ if (isset ( $_POST ['task_id'] )) {
 						if (isset($_POST ['targetSociety_id'])) {
 							$_SESSION ['pendingProcess'] ['targetSociety'] = new Society($_POST ['targetSociety_id']);
 							$_SESSION ['pendingProcess'] ['targetSociety'] -> feed();
-							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'new role definition';
+							$_SESSION ['pendingProcess'] ['currentStep'] = 'new role definition';
 						} else {
 							$fb->addWarningMessage ( 'Il faut choisir une des options.' );
 						}
@@ -98,7 +98,7 @@ if (isset ( $_POST ['task_id'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
 						$_SESSION ['pendingProcess'] ['society_role'] = $_POST ['society_role'];
-						$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'target society role definition';
+						$_SESSION ['pendingProcess'] ['currentStep'] = 'target society role definition';
 						break;
 				}
 			}
@@ -112,10 +112,10 @@ if (isset ( $_POST ['task_id'] )) {
 						
 						$items = $formerRelatedSociety->getRelatedSocieties($relationship->getRole($society));
 						if (count($items)>1) {
-							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'following societies selection';
+							$_SESSION ['pendingProcess'] ['currentStep'] = 'following societies selection';
 						} else {
 							// on passe l'étape de transfert des sociétés tenant le même rôle s'il n'y en a pas
-							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'confirmation';
+							$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
 						}
 						break;
 				}
@@ -129,7 +129,7 @@ if (isset ( $_POST ['task_id'] )) {
 						if (isset($_POST['followingSocietiesCollectionIds'])) {
 							$_SESSION ['pendingProcess'] ['followingSocietiesCollectionIds'] = $_POST['followingSocietiesCollectionIds'];
 						}
-						$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'confirmation';
+						$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
 						break;
 				}
 			}
@@ -188,7 +188,7 @@ var_dump($_SESSION);
 <body>
 	<div class="container-fluid">
 		<?php
-		switch ($_SESSION ['pendingProcess'] ['taskToFullfill']) {
+		switch ($_SESSION ['pendingProcess'] ['currentStep']) {
 			
 			case 'target society role selection' :
 
@@ -422,7 +422,7 @@ var_dump($_SESSION);
 				break;
 				
 			default :
-				echo '<p>'.$_SESSION ['pendingProcess'] ['taskToFullfill'].' est une tâche inconnue</p>.';
+				echo '<p>'.$_SESSION ['pendingProcess'] ['currentStep'].' est une étape inconnue</p>.';
 		}
 		?>
 	</div>

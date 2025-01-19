@@ -16,7 +16,7 @@ if (! isset ( $_SESSION ['pendingProcess'] )) {
 	$_SESSION ['pendingProcess'] ['targetIndividual'] = null;
 
 	// l'étape du processus dans lequel on se trouve
-	$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'existing homonym check';
+	$_SESSION ['pendingProcess'] ['currentStep'] = 'existing homonym check';
 }
 
 // la participation à transférer
@@ -41,14 +41,14 @@ $targetIndividual = $_SESSION['pendingProcess']['targetIndividual'];
 $existingHomonyms = $system->getIndividualHomonyms($formerIndividual);
 
 if (count($existingHomonyms)>0) {
-	$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'homonym selection';
+	$_SESSION ['pendingProcess'] ['currentStep'] = 'homonym selection';
 
 } else {
 	$targetIndividual = new Individual();
 	$targetIndividual->setFirstName($formerIndividual->getFirstName());
 	$targetIndividual->setLastName($formerIndividual->getLastName()); 
 	$_SESSION ['pendingProcess'] ['targetIndividual'] = $targetIndividual;	
-	$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'confirmation';
+	$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
 }
 
 if (isset ( $_POST )) {
@@ -64,9 +64,9 @@ if (isset ( $_POST ['cmd'] )) {
 	}
 }
 
-if (isset ( $_POST ['task_id'] )) {
+if (isset ( $_POST ['task'] )) {
 
-	switch ($_POST ['task_id']) {
+	switch ($_POST ['task']) {
 
 		case 'save homonym selection' :
 			if (isset ( $_POST ['cmd'] )) {
@@ -84,7 +84,7 @@ if (isset ( $_POST ['task_id'] )) {
 								$targetIndividual->setLastName($formerIndividual->getLastName()); 
 							}
 							$_SESSION ['pendingProcess'] ['targetIndividual'] = $targetIndividual;	
-							$_SESSION ['pendingProcess'] ['taskToFullfill'] = 'confirmation';
+							$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
 						}
 				}
 			}
@@ -127,7 +127,7 @@ if (isset ( $_POST ['task_id'] )) {
 <body>
 	<div class="container-fluid">
 		<?php
-		switch ($_SESSION ['pendingProcess'] ['taskToFullfill']) {
+		switch ($_SESSION ['pendingProcess'] ['currentStep']) {
 			
 			case 'homonym selection' :
 
@@ -137,7 +137,7 @@ if (isset ( $_POST ['task_id'] )) {
 				
 				echo '<form action="' . $_SERVER ['PHP_SELF'] . '" method="post">';
 
-				echo '<input type="hidden" name="task_id" value="save homonym selection" />';
+				echo '<input type="hidden" name="task" value="save homonym selection" />';
 				
 				echo '<ul class="list-group list-group-flush">';
 				
@@ -183,7 +183,7 @@ if (isset ( $_POST ['task_id'] )) {
 				
 				echo '<div>';
 				echo '<form action="' . $_SERVER ['PHP_SELF'] . '" method="post">';
-				echo '<input type="hidden" name="task_id" value="confirmation" />';
+				echo '<input type="hidden" name="task" value="confirmation" />';
 				echo '<div class="btn-group">';
 				echo '<input type="submit" name="cmd" value="Je confirme" class="btn btn-default btn-primary" />';
 				echo '<input type="submit" name="cmd" value="Quitter" class="btn btn-default" />';
@@ -192,7 +192,7 @@ if (isset ( $_POST ['task_id'] )) {
 				break;
 				
 			default :
-				echo '<p>'.$_SESSION ['pendingProcess'] ['taskToFullfill'].' est une tâche inconnue</p>.';
+				echo '<p>'.$_SESSION ['pendingProcess'] ['currentStep'].' est une tâche inconnue</p>.';
 		}
 		?>
 	</div>
