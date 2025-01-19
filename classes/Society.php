@@ -291,7 +291,7 @@ class Society {
 		return empty($this->getCity()) 
 			|| empty($this->getStreet()) 
 				|| empty($this->getPostalCode()) 
-					|| empty($this->getSubAdministrativeAreaAnme())
+					|| empty($this->getSubAdministrativeAreaName())
 						|| empty($this->getAdministrativeAreaName())
 							|| empty($this->getCountryCode());
 	}
