@@ -1088,7 +1088,7 @@ class Individual {
 
 		foreach ( $data as $row ) {
 			$i = new Individual ();
-			$i->feed ( $row );
+			$i->feed ( $row, 'individual_' );
 			$output [] = array (
 					$i,
 					$row ['relationship_id'],
