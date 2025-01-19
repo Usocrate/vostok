@@ -293,7 +293,7 @@ class Society {
 				|| empty($this->getPostalCode()) 
 					|| empty($this->getSubAdministrativeAreaName())
 						|| empty($this->getAdministrativeAreaName())
-							|| empty($this->getCountryCode());
+							|| empty($this->getCountryNameCode());
 	}
 
 	/**
