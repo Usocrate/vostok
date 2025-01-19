@@ -9,14 +9,6 @@ class Society {
 	protected $administrativeAreaName;
 	protected $countryNameCode;
 
-	/**
-	 * les coordonnées géographiques telles que récupérées par l'API Google
-	 */
-	protected $longitude;
-	protected $latitude;
-	protected $altitude;
-	protected $parent;
-	
 	public function __construct($data = NULL) {
 		if (is_array ( $data )) {
 			$this->feed ( $data );
@@ -58,22 +50,6 @@ class Society {
 		$value = trim ( $value );
 		$value = html_entity_decode ( $value, ENT_QUOTES, 'UTF-8' );
 		return $this->{$name} = $value;
-	}
-	/**
-	 * Obtient la longitude
-	 *
-	 * @since 06/2007
-	 */
-	public function getLongitude() {
-		return $this->getAttribute ( 'longitude' );
-	}
-	/**
-	 * Obtient la latitude
-	 *
-	 * @since 06/2007
-	 */
-	public function getLatitude() {
-		return $this->getAttribute ( 'latitude' );
 	}
 	/**
 	 * Fixe l'identifiant de la société.
@@ -242,6 +218,25 @@ class Society {
 	public function getCity() {
 		return isset($this->city) ? $this->city : null;
 	}
+	/**
+	 * @since 01/2025
+	 */
+	public function getSubAdministrativeAreaName() {
+		return isset($this->subAdministrativeAreaName) ? $this->subAdministrativeAreaName : null;
+	}
+	/**
+	 * @since 01/2025
+	 */
+	public function getAdministrativeAreaName() {
+		return isset($this->administrativeAreaName) ? $this->administrativeAreaName : null;
+	}
+	/**
+	 * @since 01/2025
+	 */
+	public function getCountryNameCode() {
+		return isset($this->countryNameCode) ? $this->countryNameCode : null;
+	}			
+	
 	public function getPostalCode() {
 		return isset($this->postalcode) ? $this->postalcode : null;
 	}
@@ -296,33 +291,6 @@ class Society {
 		return $this->setAttribute ( 'city', $input );
 	}
 	/**
-	 * Fixe les coordonnées géographiques de la société
-	 *
-	 * @since 06/2007
-	 */
-	public function setCoordinates($longitude, $latitude, $altitude) {
-		$this->setAttribute ( 'longitude', $longitude );
-		$this->setAttribute ( 'latitude', $latitude );
-		$this->setAttribute ( 'altitude', $altitude );
-	}
-	/**
-	 * Obtient les coordonnées géographiques de la société
-	 *
-	 * @since 23/06/2007
-	 * @return string
-	 */
-	public function getCoordinates() {
-		$elements = array ();
-		if (isset ( $this->longitude ))
-			$elements [] = $this->longitude;
-		if (isset ( $this->latitude ))
-			$elements [] = $this->latitude;
-		if (isset ( $this->altitude ))
-			$elements [] = $this->altitude;
-		if (count ( $elements ) > 0)
-			return implode ( ',', $elements );
-	}
-	/**
 	 * Obtient l'URL permettant de googliser la société.
 	 *
 	 * @return string
@@ -375,8 +343,6 @@ class Society {
 			if (isset ( $street ['number'] ) && isset ( $street ['route'] )) {
 				$this->street = $street ['number'] . ' ' . $street ['route'];
 			}
-			$this->latitude = $data->{'results'} [0]->{'geometry'}->{'location'}->{'lat'};
-			$this->longitude = $data->{'results'} [0]->{'geometry'}->{'location'}->{'lng'};
 		} catch ( Exception $e ) {
 			$system->reportException ( $e );
 			return false;
@@ -1061,123 +1027,118 @@ class Society {
 	 */
 	public function toDB() {
 		global $system;
+		
+		echo '<hr>';
+		echo '<p>Society to save</p>';
+		print_r($this);
+		echo '<hr>';
 
 		$new = empty ( $this->id );
-
-		$settings = array ();
-		if (isset ( $this->name )) {
-			$settings [] = 'society_name=:name';
-		}
-		if (isset ( $this->description )) {
-			$settings [] = 'society_description=:description';
-		}
-		if (isset ( $this->phone )) {
-			$settings [] = 'society_phone=:phone';
-		}
-		if (isset ( $this->street )) {
-			$settings [] = 'society_street=:street';
-		}
-		if (isset ( $this->city )) {
-			$settings [] = 'society_city=:city';
-		}
-		if (isset ( $this->postalcode )) {
-			$settings [] = 'society_postalcode=:postalcode';
-		}
-		if (isset ( $this->subAdministrativeAreaName )) {
-			$settings [] = 'society_subAdministrativeAreaName=:subAdministrativeAreaName';
-		}
-		if (isset ( $this->administrativeAreaName )) {
-			$settings [] = 'society_administrativeAreaName=:administrativeAreaName';
-		}
-		if (isset ( $this->countryNameCode )) {
-			$settings [] = 'society_countryNameCode=:countryNameCode';
-		}
-		if (isset ( $this->url )) {
-			$settings [] = 'society_url=:url';
-		}
-		if (isset ( $this->longitude ) && isset ( $this->latitude )) {
-			$settings [] = 'society_longitude=:longitude';
-			$settings [] = 'society_latitude=:latitude';
-		}
-		if (isset ( $this->altitude )) {
-			$settings [] = 'society_altitude=:altitude';
-		}
-
-		if ($new) {
-			$settings [] = 'society_creation_date=NOW()';
-			if (isset ( $_SESSION ['user_id'] )) {
-				$settings [] = 'society_creation_user_id=:user_id';
-			}
-		} else {
-			if (isset ( $_SESSION ['user_id'] )) {
-				$settings [] = 'society_lastModification_user_id=:user_id';
-			}
-		}
-
-		$sql = $new ? 'INSERT INTO' : 'UPDATE';
-		$sql .= ' society SET ';
-		$sql .= implode ( ', ', $settings );
-		if (! $new) {
-			$sql .= ' WHERE society_id=:id';
-		}
-
-		$statement = $system->getPDO ()->prepare ( $sql );
-
-		if (isset ( $this->name )) {
-			$statement->bindValue ( ':name', $this->name, PDO::PARAM_STR );
-		}
-		if (isset ( $this->description )) {
-			$statement->bindValue ( ':description', $this->description, PDO::PARAM_STR );
-		}
-		if (isset ( $this->phone )) {
-			$statement->bindValue ( ':phone', $this->phone, PDO::PARAM_STR );
-		}
-		if (isset ( $this->street )) {
-			$statement->bindValue ( ':street', $this->street, PDO::PARAM_STR );
-		}
-		if (isset ( $this->postalcode )) {
-			$statement->bindValue ( ':postalcode', $this->postalcode, PDO::PARAM_INT );
-		}
-		if (isset ( $this->city )) {
-			$statement->bindValue ( ':city', $this->city, PDO::PARAM_STR );
-		}
-		if (isset ( $this->administrativeAreaName )) {
-			$statement->bindValue ( ':administrativeAreaName', $this->administrativeAreaName, PDO::PARAM_STR );
-		}
-		if (isset ( $this->subAdministrativeAreaName )) {
-			$statement->bindValue ( ':subAdministrativeAreaName', $this->subAdministrativeAreaName, PDO::PARAM_STR );
-		}
-		if (isset ( $this->countryNameCode )) {
-			$statement->bindValue ( ':countryNameCode', $this->countryNameCode, PDO::PARAM_STR );
-		}
-		if (isset ( $this->url )) {
-			$statement->bindValue ( ':url', $this->url, PDO::PARAM_STR );
-		}
-		if (isset ( $this->longitude ) && isset ( $this->latitude )) {
-			$statement->bindValue ( ':longitude', $this->longitude, PDO::PARAM_STR );
-			$statement->bindValue ( ':latitude', $this->latitude, PDO::PARAM_STR );
-		}
-		if (isset ( $this->altitude )) {
-			$statement->bindValue ( ':altitude', $this->altitude, PDO::PARAM_STR );
-		}
-
-		if (isset ( $_SESSION ['user_id'] )) {
-			$statement->bindValue ( ':user_id', $_SESSION ['user_id'], PDO::PARAM_INT );
-		}
-
-		if (! $new) {
-			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
-		}
-
-		$result = $statement->execute ();
 		
-		//$statement->debugDumpParams();
+		try {		
+			$settings = array ();
+			if (isset ( $this->name )) {
+				$settings [] = 'society_name=:name';
+			}
+			if (isset ( $this->description )) {
+				$settings [] = 'society_description=:description';
+			}
+			if (isset ( $this->phone )) {
+				$settings [] = 'society_phone=:phone';
+			}
+			if (isset ( $this->street )) {
+				$settings [] = 'society_street=:street';
+			}
+			if (isset ( $this->city )) {
+				$settings [] = 'society_city=:city';
+			}
+			if (isset ( $this->postalcode )) {
+				$settings [] = 'society_postalcode=:postalcode';
+			}
+			if (isset ( $this->subAdministrativeAreaName )) {
+				$settings [] = 'society_subAdministrativeAreaName=:subAdministrativeAreaName';
+			}
+			if (isset ( $this->administrativeAreaName )) {
+				$settings [] = 'society_administrativeAreaName=:administrativeAreaName';
+			}
+			if (isset ( $this->countryNameCode )) {
+				$settings [] = 'society_countryNameCode=:countryNameCode';
+			}
+			if (isset ( $this->url )) {
+				$settings [] = 'society_url=:url';
+			}
+	
+			if ($new) {
+				$settings [] = 'society_creation_date=NOW()';
+				if (isset ( $_SESSION ['user_id'] )) {
+					$settings [] = 'society_creation_user_id=:user_id';
+				}
+			} else {
+				if (isset ( $_SESSION ['user_id'] )) {
+					$settings [] = 'society_lastModification_user_id=:user_id';
+				}
+			}
+	
+			$sql = $new ? 'INSERT INTO' : 'UPDATE';
+			$sql .= ' society SET ';
+			$sql .= implode ( ', ', $settings );
+			if (! $new) {
+				$sql .= ' WHERE society_id=:id';
+			}
+	
+			$statement = $system->getPDO ()->prepare ( $sql );
+	
+			if (isset ( $this->name )) {
+				$statement->bindValue ( ':name', $this->name, PDO::PARAM_STR );
+			}
+			if (isset ( $this->description )) {
+				$statement->bindValue ( ':description', $this->description, PDO::PARAM_STR );
+			}
+			if (isset ( $this->phone )) {
+				$statement->bindValue ( ':phone', $this->phone, PDO::PARAM_STR );
+			}
+			if (isset ( $this->street )) {
+				$statement->bindValue ( ':street', $this->street, PDO::PARAM_STR );
+			}
+			if (isset ( $this->postalcode )) {
+				$statement->bindValue ( ':postalcode', $this->postalcode, PDO::PARAM_INT );
+			}
+			if (isset ( $this->city )) {
+				$statement->bindValue ( ':city', $this->city, PDO::PARAM_STR );
+			}
+			if (isset ( $this->administrativeAreaName )) {
+				$statement->bindValue ( ':administrativeAreaName', $this->administrativeAreaName, PDO::PARAM_STR );
+			}
+			if (isset ( $this->subAdministrativeAreaName )) {
+				$statement->bindValue ( ':subAdministrativeAreaName', $this->subAdministrativeAreaName, PDO::PARAM_STR );
+			}
+			if (isset ( $this->countryNameCode )) {
+				$statement->bindValue ( ':countryNameCode', $this->countryNameCode, PDO::PARAM_STR );
+			}
+			if (isset ( $this->url )) {
+				$statement->bindValue ( ':url', $this->url, PDO::PARAM_STR );
+			}
+	
+			if (isset ( $_SESSION ['user_id'] )) {
+				$statement->bindValue ( ':user_id', $_SESSION ['user_id'], PDO::PARAM_INT );
+			}
+	
+			if (! $new) {
+				$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			}
 
-		if ($result && $new) {
-			$this->id = $system->getPdo ()->lastInsertId ();
-		}
-
-		return $result;
+			//$statement->debugDumpParams();
+				
+			$result = $statement->execute ();
+				
+			if ($result && $new) {
+				$this->id = $system->getPdo ()->lastInsertId ();
+			}
+	
+			return $result;
+		} catch ( Exception $e ) {
+			$system->reportException ( $e, __METHOD__ );
+		}		
 	}
 	/**
 	 * Supprime la société de la base de données ainsi que toutes les données associées (pistes, participations, etc).

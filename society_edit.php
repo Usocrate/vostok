@@ -58,8 +58,11 @@ if (isset($_POST['task'])) {
 				$relationship->setItemRole('Maison-mère', 1);
 				$relationship->toDB();
 			}
+			/*
 			header('Location:society.php?society_id='.$society->getId());
 			exit;
+			*/
+			break;
 		default :
 			trigger_error('Demande d\'éxécution d\'une tâche inconnue.');
 	}
@@ -111,27 +114,44 @@ if (isset($_POST['task'])) {
         			<label for="society_url_i">URL</label>
         			<input type="url" id="society_url_i" name="society_url" value="<?php echo ToolBox::toHtml($society->getUrl()); ?>" size="55" class="form-control" onchange="javascript:checkUrlInput('society_web_input', 'society_web_link');" /> 
         		</div>
-        		
-
-				<div class="form-group">
-					<label for="society_street_i">Rue</label>
-					<input id="society_street_i" type="text" name="society_street" value="<?php echo ToolBox::toHtml($society->getstreet()); ?>" size="55" class="form-control" />
-				</div>
 				
 				<div class="form-group">
-        			<label for="society_city_i">Ville</label>
-        			<input id="society_city_i" type="text" name="society_city" value="<?php echo ToolBox::toHtml($society->getCity()); ?>" size="55" class="form-control" />
-        		</div>
-				
-				<div class="form-group">
-					<label for="society_postalcode_i">Code postal</label>
-					<input id="society_postalcode_i" type="text" name="society_postalcode" value="<?php echo ToolBox::toHtml($society->getPostalCode()); ?>" size="55" class="form-control" />
+					<label for="society_phone_id">Téléphone</label>
+					<input id="society_phone_id" type="tel" name="society_phone" value="<?php echo ToolBox::toHtml($society->getPhone()); ?>" size="20" class="form-control" />
 				</div>
-
-        		<div class="form-group">
-        			<label for="society_phone_id">Téléphone</label>
-        			<input id="society_phone_id" type="tel" name="society_phone" value="<?php echo ToolBox::toHtml($society->getPhone()); ?>" size="20" class="form-control" />
-        		</div>
+				        		
+				<fieldset>
+					<legend>Localisation</legend>
+					<div class="form-group">
+						<label for="society_street_i">Rue</label>
+						<input id="society_street_i" type="text" name="society_street" value="<?php echo ToolBox::toHtml($society->getstreet()); ?>" size="55" class="form-control" />
+					</div>
+					
+					<div class="form-group">
+		    			<label for="society_city_i">Ville</label>
+		    			<input id="society_city_i" type="text" name="society_city" value="<?php echo ToolBox::toHtml($society->getCity()); ?>" size="55" class="form-control" />
+		    		</div>
+					
+					<div class="form-group">
+						<label for="society_subAdministrativeAreaName_i">Département</label>
+						<input id="society_subAdministrativeAreaName_i" type="text" name="society_subAdministrativeAreaName" value="<?php echo ToolBox::toHtml($society->getSubAdministrativeAreaName()); ?>" size="55" class="form-control" />
+					</div>
+					
+					<div class="form-group">
+						<label for="society_administrativeAreaName_i">Région</label>
+						<input id="society_administrativeAreaName_i" type="text" name="society_administrativeAreaName" value="<?php echo ToolBox::toHtml($society->getAdministrativeAreaName()); ?>" size="55" class="form-control" />
+					</div>
+					
+					<div class="form-group">
+						<label for="society_countryNameCode_i">Code pays</label>
+						<input id="society_countryNameCode_i" type="text" name="society_countryNameCode" value="<?php echo ToolBox::toHtml($society->getCountryNameCode()); ?>" size="3" class="form-control" />
+					</div>								
+					
+					<div class="form-group">
+						<label for="society_postalcode_i">Code postal</label>
+						<input id="society_postalcode_i" type="text" name="society_postalcode" value="<?php echo ToolBox::toHtml($society->getPostalCode()); ?>" size="55" class="form-control" />
+					</div>
+				<fieldset>
     		</div>
     		
     		<div class="col-md-6">
