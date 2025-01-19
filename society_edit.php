@@ -58,11 +58,8 @@ if (isset($_POST['task'])) {
 				$relationship->setItemRole('Maison-mère', 1);
 				$relationship->toDB();
 			}
-			/*
 			header('Location:society.php?society_id='.$society->getId());
 			exit;
-			*/
-			break;
 		default :
 			trigger_error('Demande d\'éxécution d\'une tâche inconnue.');
 	}
