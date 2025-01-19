@@ -31,7 +31,7 @@ if (isset($_POST['task'])) {
 			$society->feed($_POST, 'society_');
 			
 			if (!empty($system->getGoogleMapsApiKey()) && !$society->isAddressComplete()) {
-				$this->getAddressFromGoogle();
+				$society->getAddressFromGoogle();
 			}
 			$society->toDB();
 
