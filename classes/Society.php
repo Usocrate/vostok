@@ -1027,11 +1027,6 @@ class Society {
 	 */
 	public function toDB() {
 		global $system;
-		
-		echo '<hr>';
-		echo '<p>Society to save</p>';
-		print_r($this);
-		echo '<hr>';
 
 		$new = empty ( $this->id );
 		
