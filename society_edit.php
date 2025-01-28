@@ -30,7 +30,7 @@ if (isset($_POST['task'])) {
 			ToolBox::formatUserPost($_POST);
 			$society->feed($_POST, 'society_');
 			
-			if (!empty($system->getGoogleMapsApiKey()) && !$society->isAddressComplete()) {
+			if (!empty($system->getGoogleMapsApiKey()) && !$society->isAddressComplete() && !empty($society->getCity()) && !empty($society->getStreet())) {
 				$society->getAddressFromGoogle();
 			}
 			$society->toDB();
