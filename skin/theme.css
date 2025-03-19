@@ -10174,12 +10174,16 @@ body.menu .container, body.menu .container-fluid, body.menu .container-sm, body.
     max-width: 1900px;
   }
 
+  .tab-content {
+    padding: 16px;
+  }
+
   #indexDoc .card {
     width: 289px;
   }
 
   #societyDoc .card {
-    width: 351px;
+    width: 344px;
   }
 
   #individualDoc .card {
