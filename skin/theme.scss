@@ -264,48 +264,13 @@ body.menu {
 	}
 }
 
-@media ( min-width : 768px) {
-	.container, .container-fluid {
-		max-width: 768px;
-		background-color: $white;		
-	}
-	
-	#indexDoc {
-		.card {
-			width: 344px;
-		}
-	}
-	#loginDoc {
-		FORM {
-			padding-top: 400px;
-		}
-		
-		FIGURE {
-			background-position: bottom left;
-			padding: 10px 10px 10px 90px;
-			
-			Q {
-				font-size:1.2em;
-			}
-		}
-	}
-}
+/* Redmi note 11 viewport width : 393 px */
+/* Philips home screen viewport width : 1785 px */
 
-@media ( min-width : 992px) {
-	.container, .container-fluid {
-		max-width: 988px;
-	}
-	
-	#indexDoc {
-		.card {
-			width: 296px;
-		}
-	}
-}
-
-@media ( min-width : 1200px) {
+@media ( min-width : 1280px) {
 	.container, .container-fluid {
 		max-width: 1200px;
+		padding : 16px 32px;
 	}
 	
 	#indexDoc {
@@ -322,30 +287,6 @@ body.menu {
 	#societyIndividualTransferDoc {
 		.card {
 			width: 257px;
-		}
-	}
-}
-
-@media ( min-width : 1359px) {
-	.container, .container-fluid {
-		max-width: 1348px;
-	}
-
-	#indexDoc {
-		.card {
-			width: 307px;
-		}
-	}
-	
-	#societyDoc {
-		.card {
-			width: 298px;
-		}
-	}
-
-	#societyIndividualTransferDoc {
-		.card {
-			width: 294px;
 		}
 	}
 }
