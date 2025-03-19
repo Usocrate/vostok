@@ -324,6 +324,10 @@ body.menu {
 	.container, .container-fluid {
 		max-width: 1900px;
 	}
+	
+	.tab-content {
+		padding:16px;
+	}
 
 	#indexDoc {
 		.card {
@@ -333,7 +337,7 @@ body.menu {
 	
 	#societyDoc {
 		.card {
-			width: 351px;
+			width: 344px;
 		}
 	}
 	
