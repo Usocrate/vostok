@@ -67,6 +67,10 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 				<p class="mb-1">Pour modifier depuis un même écran toutes les caractéristiques de la participation</p>
 			</li>
 			<li class="list-group-item">
+				<h3><a href="membership_weight_edit.php?membership_id=<?php echo $membership->getId() ?>">Donner du poids à cette participation</a></h3>
+				<p class="mb-1">Pour faire en sorte que <?php echo $membership->getHtmlLinkToIndividual ()?> soit plus visible au sein de <?php echo $membership->getHtmlLinkToSociety ()?></p>
+			</li>
+			<li class="list-group-item">
 				<h3><a href="membership_transfer.php?membership_id=<?php echo $membership->getId() ?>">Transférer la participation à un homonyme</a></h3>
 				<p class="mb-1">Si la participation concerne un homonyme</p>
 			</li>

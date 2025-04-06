@@ -5,7 +5,6 @@
 @import url('https://fonts.googleapis.com/css?family=Oswald');
 @import "swatch";
 
-$card-cap-bg : $secondary;
 $card-border-color : $gray-300;
 
 $link-color:$primary;
@@ -197,6 +196,7 @@ DIV.individual-description-area, DIV.membership-description-area {
 
 .card-header {
 	font-family:$headings-font-family;
+	background-color : $secondary;
 	color:$white;
 }
 
@@ -270,7 +270,6 @@ body.menu {
 @media ( min-width : 1240px) {
 	.container, .container-fluid {
 		max-width: 1200px;
-		padding : 16px 32px;
 	}
 	
 	#indexDoc {

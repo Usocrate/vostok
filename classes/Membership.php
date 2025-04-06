@@ -53,7 +53,7 @@ class Membership {
 	 * @param int $input
 	 */
 	public function setWeight($input) {
-		$this->weight = $input;
+		$this->weight = is_int($input) ? $input : (int) $input;
 	}
 	/**
 	 *

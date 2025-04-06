@@ -197,7 +197,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 								}
 								if ($ms->getTitle()) {
 									$position_elt[] = ToolBox::toHtml($ms->getTitle());
-								};
+								}
 								if (count($position_elt)>0) {
 									echo '<p>'.implode(' / ', $position_elt).'</p>';
 								}

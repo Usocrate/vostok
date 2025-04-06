@@ -348,16 +348,9 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 		<?php
 		if ($membership->hasId ()) {
 			echo '<p>Tu veux oublier cette participation ? C\'est <a id="delete_a" href="#">ici</a>.</p>';
-			echo '<p>Pour positionner la participation par rapport aux autres, c\'est <a href="membership_weight_edit.php?membership_id=' . $membership->getId () . '">là</a>.</p>';
 		}
 		?>
 	</section>
-	
-	<?php
-	if (! empty ( $membership->getTitle () )) {
-		echo '<nav><p>Voir tous les gens ayant comme fonction <a href="title.php?title=' . urlencode ( $membership->getTitle () ) . '">' . ToolBox::toHtml ( $membership->getTitle () ) . '</a>.</p></nav>';
-	}
-	?>
 </div>
 
 <script>

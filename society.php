@@ -259,9 +259,17 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     						}
 
     						echo '<div class="card-body">';
+   						
     						echo '<h3 class="card-title"><a href="individual.php?individual_id='.$i->getId().'">'.ToolBox::toHtml($i->getWholeName()).'</a></h3>';
+    						
     						foreach ($memberships as $ms) {
-    							echo '<h4 class="card-subtitle"><a href="membership_edit.php?membership_id='.$ms->getId().'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
+    							if ($ms->getTitle()) {
+    								echo '<div class="d-lg-flex flex-lg-row justify-content-between align-items-center mb-1 mt-1">';
+    								echo '<h4 class="card-subtitle"><a href="title.php?title='.urlencode($ms->getTitle()).'" class="implicit">'.ToolBox::toHtml($ms->getTitle()).'</a></h4>';
+    								if ($ms->getWeight()) echo '<div>'.str_repeat('<span style="font-size:1.2em;mix-blend-mode:luminosity">🏅</span>', $ms->getWeight()).'</div>';
+    								echo '</div>';
+    							}
+  							
     							echo '<p class="card-text">';
     							$smallElt = array();
     							if ( $ms->getPeriod() ) $smallElt[] = $ms->getPeriod();
@@ -271,8 +279,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     							if ( $ms->hasDescription() ) {
     								echo $ms->getHtmlExpandableDescription();
     							}
-    							if ($ms->getWeight()) echo '<div>'.str_repeat('<span style="font-size:1.2em;mix-blend-mode:luminosity">🏅</span>', $ms->getWeight()).'</div>';
-    							//echo '<a href="membership_edit.php?membership_id='.current($memberships)->getId().'" class="card-link">édition</a>';
+    							echo '<div><a href="membership_menu.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></a></div>';
     						}
     						echo '</div>';
     						echo '</div>';
