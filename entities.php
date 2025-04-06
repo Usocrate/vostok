@@ -13,8 +13,12 @@ if (empty ( $_SESSION ['user_id'] )) {
 	$user->feed();
 }
 
+if (isset($_POST)) {
+	ToolBox::formatUserPost($_POST);
+}
+
 $doc_title = 'Résultat de la recherche';
-$name_substring = isset($_REQUEST['name_substring']) ? $_REQUEST['name_substring'] : '';
+$name_substring = isset($_POST['name_substring']) ? $_POST['name_substring'] : '';
 $count_max = 70;
 $entities = $system->getEntities($name_substring, 0, $count_max);
 
