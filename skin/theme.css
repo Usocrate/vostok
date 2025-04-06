@@ -9908,7 +9908,7 @@ BODY {
 BODY > .container-fluid, BODY > .container-sm, BODY > .container-md, BODY > .container-lg, BODY > .container-xl, BODY > .container {
   background-color: #fff;
   box-shadow: 0 0 2rem #d2d5d2;
-  padding: 1rem 2rem;
+  padding: 16px 32px;
 }
 BODY > .container-fluid H1, BODY > .container-sm H1, BODY > .container-md H1, BODY > .container-lg H1, BODY > .container-xl H1, BODY > .container H1 {
   padding-top: 0;
@@ -9970,7 +9970,7 @@ A.implicit :hover, H1 A :hover, H2 A :hover, H3 A :hover, H4 A :hover, H5 A :hov
 }
 
 .tab-content {
-  padding: 1em;
+  padding: 16px;
 }
 
 .navbar-brand, .brand {
@@ -10130,7 +10130,7 @@ body.menu .container, body.menu .container-fluid, body.menu .container-sm, body.
 
 /* Redmi note 11 viewport width : 393 px */
 /* Philips home screen viewport width : 1920 px */
-@media (min-width: 1280px) {
+@media (min-width: 1240px) {
   .container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
     max-width: 1200px;
     padding: 16px 32px;
@@ -10162,7 +10162,7 @@ body.menu .container, body.menu .container-fluid, body.menu .container-sm, body.
   }
 
   #societyDoc .card {
-    width: 357px;
+    width: 356px;
   }
 
   #societyIndividualTransferDoc .card {

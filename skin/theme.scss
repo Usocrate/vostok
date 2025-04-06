@@ -27,7 +27,7 @@ BODY {
 	>.container-fluid, >.container {
 		background-color: $white;
 		box-shadow: 0 0 2rem $gray-400;
-		padding: 1rem 2rem;
+		padding: 16px 32px;
 		
 		H1 {
 			padding-top: 0;
@@ -92,7 +92,7 @@ A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 }
 
 .tab-content {
-	padding: 1em;
+	padding: 16px;
 }
 
 .navbar-brand, .brand {
@@ -310,7 +310,7 @@ body.menu {
 	
 	#societyDoc {
 		.card {
-			width: 357px;
+			width: 356px;
 		}
 	}
 	#societyIndividualTransferDoc {
