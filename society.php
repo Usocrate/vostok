@@ -279,6 +279,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     							if ( $ms->hasDescription() ) {
     								echo $ms->getHtmlExpandableDescription();
     							}
+    							if ($ms->hasUrl()) {
+    								echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
+    							}
     							echo '<div><a href="membership_menu.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></a></div>';
     						}
     						echo '</div>';

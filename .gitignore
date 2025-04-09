@@ -5,6 +5,7 @@
 /config/host.json
 /config/client_id.json
 /data/
+/data-backup/
 /logs/
 /vendor/
 /Dockerfile

@@ -496,7 +496,7 @@ class Membership {
 	 * @since 12/2006
 	 */
 	public function getHtmlLinkToWeb() {
-		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" title="' . $this->getUrl () . '">[web]</a>' : NULL;
+		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" title="' . $this->getUrl () . '">Sur le web...</a>' : NULL;
 	}
 	/**
 	 *
