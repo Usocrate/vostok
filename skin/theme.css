@@ -10140,6 +10140,10 @@ body.menu .container, body.menu .container-fluid, body.menu .container-sm, body.
     width: 269px;
   }
 
+  #loginDoc FORM {
+    padding-top: 400px;
+  }
+
   #societyDoc .card {
     width: 354px;
   }
@@ -10151,10 +10155,6 @@ body.menu .container, body.menu .container-fluid, body.menu .container-sm, body.
 @media (min-width: 1600px) {
   .container, .container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
     max-width: 1580px;
-  }
-
-  #loginDoc MAIN {
-    margin-top: 5%;
   }
 
   #indexDoc .card {

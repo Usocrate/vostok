@@ -278,6 +278,12 @@ body.menu {
 		}
 	}
 	
+	#loginDoc {
+		FORM {
+			padding-top: 400px;
+		}
+	}	
+	
 	#societyDoc {
 		.card {
 			width: 354px;
@@ -293,12 +299,6 @@ body.menu {
 @media ( min-width : 1600px) {
 	.container, .container-fluid {
 		max-width: 1580px;
-	}
-	
-	#loginDoc {
-		MAIN {
-			margin-top:5%;
-		}
 	}
 	
 	#indexDoc {
