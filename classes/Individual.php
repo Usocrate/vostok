@@ -1,8 +1,9 @@
 <?php
 class Individual {
 	public $id;
-	protected $twitter_id;
+	protected $x_id;
 	protected $linkedin_id;
+	protected $instagram_id;
 	public $firstName;
 	public $lastName;
 	protected $description;
@@ -165,15 +166,15 @@ class Individual {
 	 *
 	 * @since 08/2018
 	 */
-	public function getTwitterId() {
-		return isset ( $this->twitter_id ) ? $this->twitter_id : null;
+	public function getXId() {
+		return isset ( $this->x_id ) ? $this->x_id : null;
 	}
 	/**
 	 *
 	 * @since 08/2018
 	 */
-	public function hasTwitterId() {
-		return ! empty ( $this->twitter_id );
+	public function hasXId() {
+		return ! empty ( $this->x_id );
 	}
 	/**
 	 *
@@ -195,6 +196,19 @@ class Individual {
 	 */
 	public function hasLinkedinId() {
 		return ! empty ( $this->linkedin_id );
+	}
+	/**
+	 *
+	 * @since 11/2025
+	 */
+	public function getInstagramId() {
+		return isset ( $this->instagram_id ) ? $this->instagram_id : null;
+	}
+	/**
+	 * @since 11/2025
+	 */
+	public function hasInstagramId() {
+		return ! empty ( $this->instagram_id );
 	}
 	/**
 	 * Indique si l'identifiant de l'individu est connu.
@@ -428,15 +442,22 @@ class Individual {
 	 *
 	 * @since 08/2018
 	 */
-	public function getHtmlLinkToTwitter() {
-		return '<i class="fab fa-twitter"></i> <a href="https://twitter.com/' . $this->getTwitterId () . '" target="_blank">' . $this->getTwitterId () . '</a>';
+	public function getHtmlLinkToX() {
+		return '<i class="fab fa-x-twitter"></i> <a href="https://x.com/' . $this->getXId () . '" target="_blank">' . $this->getXId () . '</a>';
 	}
 	/**
 	 *
 	 * @since 08/2018
 	 */
 	public function getHtmlLinkToLinkedin() {
-		return '<i class="fab fa-linkedin"></i> <a href="https://Linkedin.com/in/' . $this->getLinkedinId () . '/" target="_blank">' . $this->getLinkedinId () . '</a>';
+		return '<i class="fab fa-linkedin"></i> <a href="https://linkedin.com/in/' . $this->getLinkedinId () . '/" target="_blank">' . $this->getLinkedinId () . '</a>';
+	}
+	/**
+	 *
+	 * @since 11/2025
+	 */
+	public function getHtmlLinkToInstagram() {
+		return '<i class="fab fa-instagram"></i><a href="https://instagram.com/' . $this->getInstagramId () . '/" target="_blank">' . $this->getInstagramId () . '</a>';
 	}
 	/**
 	 *
@@ -1166,7 +1187,7 @@ class Individual {
 	/**
 	 * Enregistre les données de l'individu en base de données.
 	 *
-	 * @version 08/2018
+	 * @version 11/2025
 	 */
 	public function toDB() {
 		global $system;
@@ -1175,11 +1196,14 @@ class Individual {
 
 		$settings = array ();
 
-		if (isset ( $this->twitter_id )) {
-			$settings [] = 'individual_twitter_id=:twitter_id';
+		if (isset ( $this->x_id )) {
+			$settings [] = 'individual_x_id=:x_id';
 		}
 		if (isset ( $this->linkedin_id )) {
 			$settings [] = 'individual_linkedin_id=:linkedin_id';
+		}
+		if (isset ( $this->instagram_id )) {
+			$settings [] = 'individual_instagram_id=:instagram_id';
 		}
 		if (isset ( $this->salutation )) {
 			$settings [] = 'individual_salutation=:salutation';
@@ -1239,11 +1263,14 @@ class Individual {
 
 		$statement = $system->getPdo ()->prepare ( $sql );
 
-		if (isset ( $this->twitter_id )) {
-			$statement->bindValue ( ':twitter_id', $this->twitter_id, PDO::PARAM_STR );
+		if (isset ( $this->x_id )) {
+			$statement->bindValue ( ':x_id', $this->x_id, PDO::PARAM_STR );
 		}
 		if (isset ( $this->linkedin_id )) {
 			$statement->bindValue ( ':linkedin_id', $this->linkedin_id, PDO::PARAM_STR );
+		}
+		if (isset ( $this->instagram_id )) {
+			$statement->bindValue ( ':instagram_id', $this->instagram_id, PDO::PARAM_STR );
 		}
 		if (isset ( $this->salutation )) {
 			$statement->bindValue ( ':salutation', $this->salutation, PDO::PARAM_STR );

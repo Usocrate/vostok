@@ -114,24 +114,32 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 
 		<div class="form-row">
 			<div class="form-group col-md-4">
-				<label for="individual_twitter_id_i" class="sr-only">Compte Twitter</label>
+				<label for="individual_instagram_id_i" class="sr-only">Instagram</label>
 				<div class="input-group">
 					<div class="input-group-prepend">
-				      <div class="input-group-text"><i class="fab fa-twitter"></i></div>
+				      <div class="input-group-text"><i class="fab fa-instagram"></i></div>
 				    </div>
-					<input type="text" id="individual_twitter_id_i" name="individual_twitter_id" value="<?php echo $individual->getTwitterId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant Twitter" />
+					<input type="text" id="individual_instagram_id_i" name="individual_instagram_id" value="<?php echo $individual->getInstagramId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant Instagram" />
 				</div>
 			</div>
-			
 			<div class="form-group col-md-4">
-				<label for="individual_Linkedin_id_i" class="sr-only">Compte Linkedin</label>
+				<label for="individual_Linkedin_id_i" class="sr-only">Linkedin</label>
 				<div class="input-group">
 					<div class="input-group-prepend">
 				      <div class="input-group-text"><i class="fab fa-linkedin"></i></div>
 				    </div>
 					<input type="text" id="individual_Linkedin_id_i" name="individual_linkedin_id" value="<?php echo $individual->getLinkedinId(); ?>" size="15" maxlength="255" class="form-control" placeholder="Person ID Linkedin" />
 				</div>
-			</div>			
+			</div>
+			<div class="form-group col-md-4">
+				<label for="individual_x_id_i" class="sr-only">X</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+				      <div class="input-group-text"><i class="fab fa-x-twitter"></i></div>
+				    </div>
+					<input type="text" id="individual_x_id_i" name="individual_x_id" value="<?php echo $individual->getXId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant X" />
+				</div>
+			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-4">

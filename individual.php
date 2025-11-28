@@ -27,7 +27,7 @@ $doc_title = $individual->getWholeName();
 
 //var_dump($_SESSION);
 
-if (isset($_SESSION['preferences']['individual']['focus']) && strcmp($_SESSION['preferences']['individual']['focus'], 'onTweets')==0 && !$individual->hasTwitterId()) {
+if (isset($_SESSION['preferences']['individual']['focus']) && strcmp($_SESSION['preferences']['individual']['focus'], 'onTweets')==0 && !$individual->hasXId()) {
 	unset($_SESSION['preferences']['individual']['focus']);	
 }
 
@@ -76,11 +76,14 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				
 				// liens vers comptes des réseaux sociaux
 				$links = array();
-				if ($individual->hasTwitterId()) {
-					$links[] = $individual->getHtmlLinkToTwitter();
+				if ($individual->hasXId()) {
+					$links[] = $individual->getHtmlLinkToX();
 				}
 				if ($individual->hasLinkedinId()) {
 					$links[] = $individual->getHtmlLinkToLinkedin();
+				}
+				if ($individual->hasInstagramId()) {
+					$links[] = $individual->getHtmlLinkToInstagram();
 				}
 				if ($individual->getAddress()) {
 					$links[] = $individual->getAddress();
