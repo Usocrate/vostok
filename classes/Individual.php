@@ -89,9 +89,6 @@ class Individual {
 					return $this->salutation = $value;
 				}
 				break;
-			case 'postalCode' :
-				return is_numeric ( $value ) ? $this->postalCode = ( int ) $value : null;
-				break;
 			default :
 				// après gestion des cas particuliers, règle générale
 				return $this->{$name} = $value;
