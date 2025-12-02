@@ -119,7 +119,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 					<div class="input-group-prepend">
 				      <div class="input-group-text"><i class="fab fa-instagram"></i></div>
 				    </div>
-					<input type="text" id="individual_instagram_id_i" name="individual_instagram_id" value="<?php echo $individual->getInstagramId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant Instagram" />
+					<input type="text" id="individual_instagram_id_i" name="individual_instagram_id" value="<?php echo $individual->getInstagramId(); ?>" size="15" maxlength="255" class="form-control" placeholder="identifiant Instagram" />
 				</div>
 			</div>
 			<div class="form-group col-md-4">
