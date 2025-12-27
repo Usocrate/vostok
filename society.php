@@ -99,7 +99,36 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 <?php include 'navbar.inc.php'; ?>
 <main class="container-fluid">
 	<header>
+		<hgroup>
 		<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+		<?php 
+		//
+		// adresse physique et url
+		//
+		$address_elt = array();
+		if ($society->getStreet() || $society->getCity() || $society->getPostalcode()){
+			$geo_elt = array();
+			if ($society->getStreet()) {
+				$geo_elt[] = ToolBox::toHtml($society->getStreet());
+			}
+			if ($society->getPostalCode()) {
+				$geo_elt[] = $society->getPostalCode();
+			}
+			if ($society->getCity()) {
+				$geo_elt[] = '<a href="societies.php?society_newsearch=1&society_city='.urlencode($society->getCity()).'" class="implicit">'.ToolBox::toHtml($society->getCity()).'</a>';
+			}
+			if (count($geo_elt)>0) {
+				$address_elt[] = implode(' ', $geo_elt);
+			}
+		}
+		if ($society->getUrl()) {
+			$address_elt [] = '<a href="'.$society->getUrl().'" target="_blank">'.$society->getUrl().'</a>';
+		}
+		if (count($address_elt)>0) {
+			echo '<p><address>'.implode(' <small>-</small> ', $address_elt).'</address></p>';
+		}
+		?>
+		</hgroup>
 		<nav class="btn-group btn-group-sm">
 			<a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="ph-bold ph-pencil-simple"></i></a>
 			<a href="society_industries_edit.php?society_id=<?php echo $society->getId() ?>"><i class="ph-bold ph-tag"></i></a> 
@@ -108,31 +137,6 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	</header>
     <?php
     	$html = '';
-        //
-        // adresse physique et url
-        //
-        $address_elt = array();
-        if ($society->getStreet() || $society->getCity() || $society->getPostalcode()){
-            $geo_elt = array();
-            if ($society->getStreet()) {
-                $geo_elt[] = ToolBox::toHtml($society->getStreet());
-            }
-            if ($society->getPostalCode()) {
-                $geo_elt[] = $society->getPostalCode();
-            }
-            if ($society->getCity()) {
-                $geo_elt[] = '<a href="societies.php?society_newsearch=1&society_city='.urlencode($society->getCity()).'" class="implicit">'.ToolBox::toHtml($society->getCity()).'</a>';
-            }
-            if (count($geo_elt)>0) {
-                $address_elt[] = implode(' ', $geo_elt);
-            }
-        }
-        if ($society->getUrl()) {
-            $address_elt [] = '<a href="'.$society->getUrl().'" target="_blank">'.$society->getUrl().'</a>';
-        }
-        if (count($address_elt)>0) {
-            $html.= '<address>'.implode(' <small>-</small> ', $address_elt).'</address>';
-        }
         //
         // description
         //
