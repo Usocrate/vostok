@@ -68,8 +68,7 @@ main {
 }
 
 section {
-	border-bottom:1px solid $gray-400;
-
+	
 	>header {
 		margin-bottom:1rem;
 		
@@ -335,6 +334,7 @@ DIV.membership-description-area {
 }
 
 .tab-pane > SECTION {
+	border-bottom:1px solid $gray-400;
 	padding-left : 0;
 	padding-right : 0;
 	margin-left : 0;
