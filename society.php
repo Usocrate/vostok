@@ -148,27 +148,22 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
         //
         $industries = $society->getIndustries();
         if (count($industries)>0) {
-            $html.= '<div>';
+            echo '<p>';
             foreach ($industries as $i) {
-                $html.= '<span class="badge badge-info">'.$i->getHtmlLink().'</span> ';
+            	echo '<span class="badge badge-info">'.$i->getHtmlLink().'</span> ';
             }
-            $html.= '</div>';
+            echo '</p>';
 
 			$inSameIndustrySocieties = $society->getInSameIndustrySocieties();
 			if (count($inSameIndustrySocieties) > 0) {
-				$html.= '<div>';
-				$html.= '<p><small>Similaire à : </small>';
+				echo '<p><small>Similaire à : </small>';
 				$links = array();
 				foreach($inSameIndustrySocieties as $item) {
 					$links[] = '<a href="./society.php?society_id='.$item->getId().'">'.$item->getName().'</a>';
 				}
-				$html.= implode(', ',$links);
-				$html.= '</p>';
-				$html.= '</div>';
+				echo implode(', ',$links);
+				echo  '</p>';
 			}
-        }
-        if (!empty($html)) {
-        	echo '<section>'.$html.'</section>';
         }
     ?>
 
