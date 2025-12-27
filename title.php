@@ -37,7 +37,7 @@ $doc_title = $title;
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml(ucfirst($doc_title)); ?></h1>
+	<h1><?php echo ToolBox::toHtml(ucfirst($doc_title)); ?></h1>
     <section>
         <?php
 			//print_r($memberships);

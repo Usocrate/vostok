@@ -97,8 +97,15 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 </head>
 <body id="societyDoc">
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a> <a href="<?php echo ToolBox::getGoogleQueryUrl($society->getName()) ?>" target="_blank"><i class="fab fa-google"></i></a></small></h1>
+<main class="container-fluid">
+	<header>
+		<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+		<nav class="btn-group btn-group-sm">
+			<a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a>
+			<a href="society_industries_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fab fa-tag"></i></a> 
+			<a href="<?php echo ToolBox::getGoogleQueryUrl($society->getName()) ?>" target="_blank"><i class="fab fa-google"></i></a>
+		</nav>
+	</header>
     <?php
     	$html = '';
         //
@@ -377,7 +384,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	    </div>
 	  </div>
 	</div>
-</div>
+</main>
 <script>
 	const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
 	const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';

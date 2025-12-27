@@ -115,8 +115,8 @@ $doc_title = 'Une piste';
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
+<main class="container-fluid">
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
     	<form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
     		<input name="lead_id" type="hidden" value="<?php if ($lead->getId()) echo $lead->getId() ?>" />
     		<div>
@@ -197,6 +197,6 @@ $doc_title = 'Une piste';
 	    		<button name="toDB_order" type="submit" value="1" class="btn btn-primary">Enregistrer</button>
     		</div>
 	</form>
-</div>	
+</main>	
 </body>
 </html>

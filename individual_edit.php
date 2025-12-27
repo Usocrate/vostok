@@ -68,9 +68,9 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
+<main class="container-fluid">
 		
-	<h1 class="bd-title"><a href="individual.php?individual_id=<?php echo $individual->getId() ?>"><?php echo ToolBox::toHtml($doc_title); ?></a></h1>
+	<h1><a href="individual.php?individual_id=<?php echo $individual->getId() ?>"><?php echo ToolBox::toHtml($doc_title); ?></a></h1>
 	
 	<?php
         if (count($messages) > 0) {
@@ -222,7 +222,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 		}
 	?>
 	</section>
-</div>
+</main>
 <?php if($individual->hasId()): ?>
 <script type="text/javascript">
 	document.addEventListener("DOMContentLoaded", function() {

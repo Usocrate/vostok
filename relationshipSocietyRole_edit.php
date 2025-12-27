@@ -60,8 +60,8 @@ if (isset($_POST)) {
     <li class="breadcrumb-item active">éditer</li>
   </ol>
 </nav>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($role) ?></h1>
+<main class="container-fluid">
+	<h1><?php echo ToolBox::toHtml($role) ?></h1>
 		
 	<?php
     if (isset($fb)) {
@@ -78,7 +78,7 @@ if (isset($_POST)) {
 		</div>
 		<button name="task_id" type="submit" value="replaceRole" class="btn btn-primary">Enregistrer</button>
 	</form>
-</div>
+</main>
 <script>
 const apiUrl = '<?php echo $system->getApiUrl() ?>';
 

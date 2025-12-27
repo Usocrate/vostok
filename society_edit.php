@@ -35,19 +35,6 @@ if (isset($_POST['task'])) {
 			}
 			$society->toDB();
 
-			//
-			// traitement de la sélection d'activités.
-			//
-			$society->resetIndustries();
-			if (isset($_POST['industries_ids']) && is_array($_POST['industries_ids'])) {
-				foreach ($_POST['industries_ids'] as $id) {
-					if (empty($id)) continue;
-					$i = new Industry($id);
-					$society->addIndustry($i);
-				}
-			}
-			$society->saveIndustries();
-
 			if (!empty($_POST['society_parent_name']) && strcmp($_POST['society_parent_name'], $_POST['society_lastparent_name'])!=0) {
 				$parent = new Society();
 				$parent->setName($_POST['society_parent_name']);
@@ -85,7 +72,7 @@ if (isset($_POST['task'])) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-    <h1 class="bd-title"><?php echo $h1_content ?></h1>
+    <h1><?php echo $h1_content ?></h1>
     <section>
     <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     	<?php
@@ -121,7 +108,14 @@ if (isset($_POST['task'])) {
 					<input id="society_phone_id" type="tel" name="society_phone" value="<?php echo ToolBox::toHtml($society->getPhone()); ?>" size="20" class="form-control" />
 				</div>
 				        		
-				<fieldset>
+        		<div class="form-group">
+        			<label for="society_description_i">Notes</label>
+            		<textarea name="society_description" cols="51" rows="5" class="form-control"><?php echo $society->getDescription(); ?></textarea>
+            	</div>
+    		</div>
+    		
+    		<div class="col-md-6">
+        		<fieldset>
 					<legend>Localisation</legend>
 					<div class="form-group">
 						<label for="society_street_i">Rue</label>
@@ -153,21 +147,6 @@ if (isset($_POST['task'])) {
 						<input id="society_postalcode_i" type="text" name="society_postalcode" value="<?php echo ToolBox::toHtml($society->getPostalCode()); ?>" size="55" class="form-control" />
 					</div>
 				<fieldset>
-    		</div>
-    		
-    		<div class="col-md-6">
-        		<div class="form-group">
-        			<label for="industries_i">Activité</label>
-        			<select id="industries_i" name="industries_ids[]" multiple="multiple" size="9"  class="form-control">
-        	    		<option value="">-- choisir --</option>
-            			<?php echo $system->getIndustryOptionsTags($society->getIndustriesIds()) ?>
-            		</select>
-        		</div>
-        		
-        		<div class="form-group">
-        			<label for="society_description_i">Notes</label>
-            		<textarea name="society_description" cols="51" rows="5" class="form-control"><?php echo $society->getDescription(); ?></textarea>
-            	</div>
     		</div>
     	</div>
    	

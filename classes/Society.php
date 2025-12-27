@@ -576,18 +576,30 @@ class Society {
 		return false;
 	}
 	/**
-	 * Supprime de la base de données la liste des activités déclarées de la société.
+	 * Supprime de la base de données la liste des activités déclarées de la société (ou une sélection d'activités).
 	 *
 	 * @since 08/2006
-	 * @version 12/2016
+	 * @version 12/2025
 	 */
-	public function deleteIndustries() {
+	public function deleteIndustries($selection=NULL) {
 		global $system;
-		if (empty ( $this->id ))
-			return false;
-		$statement = $system->getPdo ()->prepare ( 'DELETE FROM society_industry WHERE society_id=:id' );
-		$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
-		return $statement->execute ();
+
+		if (empty ( $this->id )) return false;
+		
+		if (is_array($selection)) {
+			$statement = $system->getPdo ()->prepare ( 'DELETE FROM society_industry WHERE society_id=:id AND industry_id=:industry_id' );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			foreach ($selection as $industry_id) {
+				$statement->bindValue ( ':industry_id', $industry_id, PDO::PARAM_INT );
+				$statement->execute ();
+			}
+			return true;
+		} else {
+			$statement = $system->getPdo ()->prepare ( 'DELETE FROM society_industry WHERE society_id=:id' );
+			$statement->bindValue ( ':id', $this->id, PDO::PARAM_INT );
+			return $statement->execute ();
+		}
+
 	}
 	/**
 	 * Fixe l'activité de la société.

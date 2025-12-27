@@ -56,8 +56,8 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo $h1_content ?></h1>
+<main class="container-fluid">
+	<h1><?php echo $h1_content ?></h1>
 	<?php echo $fb->toHtml() ?>
 	<section>
 		<h2>Options</h2>
@@ -76,6 +76,6 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 			</li>
 		</ul>
 	</section>	
-</div>
+</main>
 </body>
 </html>

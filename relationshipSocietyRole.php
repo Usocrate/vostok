@@ -76,10 +76,11 @@ $doc_title = $role;
   </ol>
 </nav>
 
-<div class="container-fluid">
+<main class="container-fluid">
 	<header>
-        <h1 class="bd-title"><?php echo ToolBox::toHtml(ucfirst($doc_title)); ?>
+        <h1><?php echo ToolBox::toHtml(ucfirst($doc_title)); ?>
         <small>(<?php echo count($societiesHavingThatRole) ?>)</small>
+        </h1>
         <div class="dropdown" style="display:inline-block">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="sortOptionButton" data-toggle="dropdown"><small><i class="fas fa-filter"></i></small> Trier par</button>
             <div class="dropdown-menu">
@@ -95,8 +96,7 @@ $doc_title = $role;
                 ?>
             </div>
         </div>
-        <a class="btn btn-secondary" href="relationshipSocietyRole_edit.php?role=<?php echo $role ?>"><small><i class="fas fa-edit"></i></small> Éditer</a>
-        </h1>
+        <a class="btn btn-secondary" href="relationshipSocietyRole_edit.php?role=<?php echo $role ?>"><small><i class="fas fa-edit"></i></small> Éditer</a>        
     </header>
     
     <?php
@@ -160,6 +160,6 @@ $doc_title = $role;
         	</div>
         </div>
 	</div>
-</div>
+</main>
 </body>
 </html>

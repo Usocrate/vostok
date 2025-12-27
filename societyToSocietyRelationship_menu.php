@@ -33,7 +33,7 @@ $refItem = $relationship->getRelatedItem($itemToFocus);
 </head>
 <body class="menu">
 <div class="container-fluid">
-	<h1 class="bd-title"><?php echo $itemToFocus->getHtmlLinkToSociety() ?></h1>
+	<h1><?php echo $itemToFocus->getHtmlLinkToSociety() ?></h1>
 	<p class="text-muted"><?php echo '... et ' . $refItem->getHtmlLinkToSociety() ?></p>
 	<section>
 		<h2>Options</h2>

@@ -41,7 +41,7 @@ $doc_title = $system->getAppliName();
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 </head>
 <body id="loginDoc" >
-<div class="container">	
+<main class="container">	
 	<h1 class="brand"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<div>
@@ -65,7 +65,7 @@ $doc_title = $system->getAppliName();
 	  <q>Reçu. Sens bien, excellent état d'esprit, prêt à y aller.</q>
 	  <figcaption><cite><a href="https://fr.wikipedia.org/wiki/Vostok_1">Youri Gagarine, 12 avril 1961</a></cite></figcaption>
 	</figure>	
-</div>
+</main>
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		document.getElementById('user_name_i').focus();

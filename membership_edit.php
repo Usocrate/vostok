@@ -192,8 +192,8 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo $h1_content ?></h1>
+<main class="container-fluid">
+	<h1><?php echo $h1_content ?></h1>
 	<?php echo $fb->toHtml() ?>
 	<section>
 			<form id="membership_form" action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
@@ -351,7 +351,7 @@ if ($membership->isSocietyIdentified () && $membership->isIndividualIdentified (
 		}
 		?>
 	</section>
-</div>
+</main>
 
 <script>
 	const apiUrl = '<?php echo $system->getApiUrl() ?>';

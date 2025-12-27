@@ -110,9 +110,9 @@ $doc_title = 'Les gens';
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
+<main class="container-fluid">
 	
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?><small><a href="individual_edit.php"> <i class="fas fa-plus"></i></a></small></h1>
+	<header><h1><?php echo ToolBox::toHtml($doc_title); ?></h1><nav><small><a href="individual_edit.php"> <i class="fas fa-plus"></i></a></small></nav></header>
 	
 	<?php
         if (count($messages) > 0) {
@@ -157,6 +157,6 @@ $doc_title = 'Les gens';
             ?>
     	</div>
 	</section>
-</div>	
+</main>	
 </body>
 </html>

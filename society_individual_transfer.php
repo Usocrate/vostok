@@ -68,7 +68,7 @@ $h1_content = 'Transférer les gens de ' . $society->getHtmlLinkToSociety ();
 <body id="societyIndividualTransferDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-		<h1 class="bd-title"><?php echo $h1_content ?></h1>
+		<h1><?php echo $h1_content ?></h1>
 
 		<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
     	<?php

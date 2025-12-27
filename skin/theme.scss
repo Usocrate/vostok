@@ -7,7 +7,7 @@
 
 $card-border-color : $gray-300;
 
-$link-color:$primary;
+$link-color: $primary;
 //$link-hover-color:$gray-600;
 
 $brand-font-family : "Sigmar One";
@@ -18,40 +18,75 @@ $btn-font-size: 1.1rem;
 
 @import "../vendor/twbs/bootstrap/scss/bootstrap";
 
-BODY {
+body {
 
 	background-color: $gray-300;
-	font-family:$common-font-family;
-	
-	>.container-fluid, >.container {
+	font-family: $common-font-family;
+
+	>.container-fluid,
+	>.container {
 		background-color: $white;
 		box-shadow: 0 0 2rem $gray-400;
 		padding: 16px 32px;
-		
+
 		H1 {
 			padding-top: 0;
 			margin-top: 0;
 		}
 	}
 }
+main {
+	>header:first-child {
+		margin-bottom:1rem;
+		
+		h1 {
+			font-family: $headings-font-family;
+			font-size: 2rem;
+		}
+	
+		nav {
+			display: flex;
+			gap: 0.25rem;
+	
+			button,
+			a {
+				padding: 0.25rem 0.5rem;
+				font-size: 0.875rem;
+				line-height: 1.5;
+				border-radius: 0.2rem;
+				border: 1px solid $secondary;
+				color: $secondary;
+				background: $white;
+				cursor: pointer;
+			}
+	
+			button:hover,
+			a:hover {
+				background: $secondary;
+				color: $white;
+			}
+		}
+	}
+}
 
 H1 {
-	font-size:2rem;
+	color: $gray-900;
+	font-size: 2rem;
 }
 
 H2 {
-	color:$gray-800;
-	font-size:1.8rem;
+	color: $gray-800;
+	font-size: 1.8rem;
 }
 
 H3 {
-	color:$gray-700;
-	font-size:1.4rem;	
+	color: $gray-700;
+	font-size: 1.4rem;
 }
 
 H4 {
-	color:$gray-600;
-	font-size:1.2rem;	
+	color: $gray-600;
+	font-size: 1.2rem;
 }
 
 SECTION {
@@ -72,15 +107,45 @@ IMG {
 }
 
 FORM FIELDSET LEGEND {
-	font-family:$headings-font-family;
-	color:$tertiary;
-	font-size:1.2em;		
+	font-family: $headings-font-family;
+	color: $tertiary;
+	font-size: 1.2em;
 }
 
-A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
+FIELDSET.tag-cloud {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .5rem;
+	padding: .8rem 0;
+	margin: 1rem 0;
+
+	LABEL {
+		display: block;
+		padding: .6rem .8rem;
+		border-radius: 1rem;
+		background-color: $gray-300;
+
+		* {
+			margin: .4rem;
+		}
+	}
+
+	LABEL.checked {
+		background-color: $tertiary;
+		color: $white;
+	}
+}
+
+A.implicit,
+H1 A,
+H2 A,
+H3 A,
+H4 A,
+H5 A,
+H6 A {
 	color: inherit;
-	
-	:hover{
+
+	:hover {
 		color: $primary;
 	}
 }
@@ -94,12 +159,13 @@ A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 	padding: 16px;
 }
 
-.navbar-brand, .brand {
+.navbar-brand,
+.brand {
 	color: $primary !important;
 	font-family: $brand-font-family;
-	
+
 	SMALL {
-		color:$gray-200;
+		color: $gray-200;
 		font-family: $common-font-family;
 	}
 }
@@ -108,7 +174,8 @@ A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 	font-family: $btn-font-family;
 }
 
-.nav-item A, .badge A {
+.nav-item A,
+.badge A {
 	color: inherit;
 }
 
@@ -119,11 +186,11 @@ A.implicit, H1 A, H2 A, H3 A, H4 A, H5 A, H6 A {
 
 SMALL {
 	font-size: inherit;
-	color:$gray-600
+	color: $gray-600
 }
 
 I {
-	color:$secondary;
+	color: $secondary;
 }
 
 I.colored {
@@ -131,26 +198,25 @@ I.colored {
 }
 
 .btn I {
-	color:inherit;
+	color: inherit;
 }
 
-BUTTON SMALL, A.btn SMALL {
+BUTTON SMALL,
+A.btn SMALL {
 	font-size: 1em !important;
-	color:inherit;
+	color: inherit;
 	opacity: .4;
 }
 
-.bd-title {
-	padding: 1rem 0;
-	margin: 0;
-}
-
-H1 SMALL, H2 SMALL, H3 SMALL, H4 SMALL {
+H1 SMALL,
+H2 SMALL,
+H3 SMALL,
+H4 SMALL {
 	font-size: .8em;
 }
 
 SMALL A I {
-	color:$gray-500;
+	color: $gray-500;
 }
 
 /* autres styles génériques */
@@ -164,9 +230,9 @@ SMALL A I {
 }
 
 .il-legend {
-	display:block;
-	font-size:1.1rem;
-	font-weight:bold;
+	display: block;
+	font-size: 1.1rem;
+	font-weight: bold;
 	color: $gray-500;
 	padding: 1rem 0 1.2rem 0;
 }
@@ -175,19 +241,20 @@ SMALL A I {
 	color: inherit;
 }
 
-DIV.individual-description-area, DIV.membership-description-area {
+DIV.individual-description-area,
+DIV.membership-description-area {
 	white-space: pre-wrap;
 	margin: 1em 0
 }
 
 .card {
 	margin-bottom: 20px;
-	width:100%;
+	width: 100%;
 }
 
 .card-img-top-wrapper {
-	filter:saturate(0.6);
-	background : linear-gradient(135deg, $white 5%, $gray-600 10%, $primary 80%);	
+	filter: saturate(0.6);
+	background: linear-gradient(135deg, $white 5%, $gray-600 10%, $primary 80%);
 }
 
 .card-img-top {
@@ -195,15 +262,15 @@ DIV.individual-description-area, DIV.membership-description-area {
 }
 
 .card-header {
-	font-family:$headings-font-family;
-	background-color : $secondary;
-	color:$white;
+	font-family: $headings-font-family;
+	background-color: $secondary;
+	color: $white;
 }
 
 .card-body {
 	DIV.membership-description-area {
 		color: $gray-600;
-		
+
 		SPAN.more {
 			display: none;
 		}
@@ -213,7 +280,7 @@ DIV.individual-description-area, DIV.membership-description-area {
 .card-body {
 	DIV.membership-description-area {
 		color: $gray-600;
-		
+
 		SPAN.more {
 			display: none;
 		}
@@ -228,38 +295,40 @@ DIV.individual-description-area, DIV.membership-description-area {
 	.container {
 		max-width: 560px;
 	}
-	
+
 	FORM {
 		background-image: url("./images/login.png");
 		background-color: $gray-100;
-		background-blend-mode:darken;
+		background-blend-mode: darken;
 		background-position: top center;
 		background-repeat: no-repeat;
 		background-size: contain;
 		margin: auto;
 		padding: 200px 1.5rem .75rem 1.5rem;
 	}
-	
+
 	FIGURE {
 		background-image: url("./images/gagarinecasque.gif");
 		background-position: top center;
 		background-repeat: no-repeat;
 		border-width: 1px 0;
 		border-style: dotted;
-		border-color: $gray-600;	
+		border-color: $gray-600;
 		padding: 70px 10px 10px 10px;
-		
+
 		Q {
-			font-family:$headings-font-family;
-			color: $gray-600;			
+			font-family: $headings-font-family;
+			color: $gray-600;
 			font-size: 1em;
 		}
 	}
 }
 
 body.menu {
-	.container, .container-fluid {
-		margin:auto;
+
+	.container,
+	.container-fluid {
+		margin: auto;
 		max-width: 768px;
 	}
 }
@@ -267,28 +336,42 @@ body.menu {
 /* Redmi note 11 viewport width : 393 px */
 /* Philips home screen viewport width : 1920 px */
 
-@media ( min-width : 1240px) {
-	.container, .container-fluid {
+@media (min-width : 1240px) {
+
+	.container,
+	.container-fluid {
 		max-width: 1200px;
 	}
-	
+
+	main>header:first-child {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+
+		padding-block: 0rem;
+		padding-inline: 0rem;
+		margin-block-end: 1rem;
+	}
+
 	#indexDoc {
 		.card {
 			width: 269px;
 		}
 	}
-	
+
 	#loginDoc {
 		FORM {
 			padding-top: 400px;
 		}
-	}	
-	
+	}
+
 	#societyDoc {
 		.card {
 			width: 354px;
 		}
 	}
+
 	#societyIndividualTransferDoc {
 		.card {
 			width: 257px;
@@ -296,22 +379,25 @@ body.menu {
 	}
 }
 
-@media ( min-width : 1600px) {
-	.container, .container-fluid {
+@media (min-width : 1600px) {
+
+	.container,
+	.container-fluid {
 		max-width: 1580px;
 	}
-	
+
 	#indexDoc {
 		.card {
 			width: 287px;
 		}
 	}
-	
+
 	#societyDoc {
 		.card {
 			width: 356px;
 		}
 	}
+
 	#societyIndividualTransferDoc {
 		.card {
 			width: 228px;
@@ -319,13 +405,15 @@ body.menu {
 	}
 }
 
-@media ( min-width : 1920px) {
-	.container, .container-fluid {
+@media (min-width : 1920px) {
+
+	.container,
+	.container-fluid {
 		max-width: 1900px;
 	}
-	
+
 	.tab-content {
-		padding:16px;
+		padding: 16px;
 	}
 
 	#indexDoc {
@@ -333,13 +421,13 @@ body.menu {
 			width: 289px;
 		}
 	}
-	
+
 	#societyDoc {
 		.card {
 			width: 344px;
 		}
 	}
-	
+
 	#individualDoc {
 		.card {
 			width: 450px;

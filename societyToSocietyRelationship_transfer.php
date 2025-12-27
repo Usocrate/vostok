@@ -186,7 +186,7 @@ var_dump($_SESSION);
 	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 </head>
 <body>
-	<div class="container-fluid">
+	<main class="container-fluid">
 		<?php
 		switch ($_SESSION ['pendingProcess'] ['currentStep']) {
 			
@@ -425,5 +425,5 @@ var_dump($_SESSION);
 				echo '<p>'.$_SESSION ['pendingProcess'] ['currentStep'].' est une étape inconnue</p>.';
 		}
 		?>
-	</div>
+	</main>
 </body>

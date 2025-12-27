@@ -125,7 +125,7 @@ if (isset ( $_POST ['task'] )) {
 	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 </head>
 <body>
-	<div class="container-fluid">
+	<main class="container-fluid">
 		<?php
 		switch ($_SESSION ['pendingProcess'] ['currentStep']) {
 			
@@ -195,5 +195,5 @@ if (isset ( $_POST ['task'] )) {
 				echo '<p>'.$_SESSION ['pendingProcess'] ['currentStep'].' est une tâche inconnue</p>.';
 		}
 		?>
-	</div>
+	</main>
 </body>

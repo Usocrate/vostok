@@ -72,7 +72,7 @@ $doc_title = 'Les relations entre sociétés';
 </nav>
 <div class="container-fluid">
 
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 	<section>

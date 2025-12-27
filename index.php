@@ -72,7 +72,7 @@ $doc_title = 'Accueil';
 </head>
 <body id="indexDoc">
     <?php include 'navbar.inc.php'; ?>
-    <div class="container">
+    <main class="container">
 		<h1 class="sr-only"><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<?php
 			switch($people_focus) {
@@ -159,7 +159,7 @@ $doc_title = 'Accueil';
 					break;			
 			}
 		?>
-	</div>
+	</main>
 	<script>
 		const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
 		const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';

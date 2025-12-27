@@ -207,8 +207,8 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 </head>
 <body id="leadEditDoc" >
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo isset($society) && $society->hasId() ? 'Une piste chez <a href="society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>' : 'Une piste à suivre'; ?></h1>
+<main class="container-fluid">
+	<h1><?php echo isset($society) && $society->hasId() ? 'Une piste chez <a href="society.php?society_id='.$society->getId().'">'.$society->getNameForHtmlDisplay().'</a>' : 'Une piste à suivre'; ?></h1>
 	<form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 		<input name="lead_id" type="hidden" value="<?php if ($lead->getId()) echo $lead->getId(); ?>" />
 		<?php
@@ -430,7 +430,7 @@ $doc_title = isset($society) && $society->hasId() ? 'Une piste chez '.$society->
 			<?php endif; ?>			
 		</div>
 	</form>
-</div>
+</main>
 
 <script>
 	const apiUrl = '<?php echo $system->getApiUrl() ?>';

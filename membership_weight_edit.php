@@ -51,11 +51,11 @@ if (isset ( $_POST ['task'] )) {
 	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 </head>
 <body>
-<div class="container-fluid">
-	<div class="bd-title">
-	<h1>Quelle poids pour cette participation ?</h1>
-	<small><?php echo $membership->getHtmlLinkToIndividual () .' chez ' . $membership->getHtmlLinkToSociety () ?></small>
-	</div>
+<main class="container-fluid">
+	<header>
+		<h1>Quelle poids pour cette participation ?</h1>
+		<small><?php echo $membership->getHtmlLinkToIndividual () .' chez ' . $membership->getHtmlLinkToSociety () ?></small>
+	</header>
 	
 	<?php echo $fb->toHtml() ?>
 
@@ -89,6 +89,6 @@ if (isset ( $_POST ['task'] )) {
 			<button name="task" type="submit" value="membership_upgrade" class="btn btn-primary">Enregistrer</button>
 		</div>
 	</form>
-</div>
+</main>
 </body>
 </html>

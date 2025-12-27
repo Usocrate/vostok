@@ -38,13 +38,13 @@ $entities = $system->getEntities($name_substring, 0, $count_max);
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
+<main class="container-fluid">
 	<?php
 		if (count($entities)==0) {
-			echo '<h1 class="bd-title">Aucun résultat</h1>';
+			echo '<h1>Aucun résultat</h1>';
 			echo '<p>Introduire une <a href="society_edit.php?society_name='.urlencode(ucfirst($_REQUEST['name_substring'])).'">nouvelle société</a> ou un <a href="individual_edit.php?individual_lastname='.urlencode(ucfirst($_REQUEST['name_substring'])).'">nouvel individu</a>.</p>';
 		} else {
-			echo '<h1 class="bd-title">'.ToolBox::toHtml($doc_title).' <small>'.$count_max.' max</small></h1>';
+			echo '<h1>'.ToolBox::toHtml($doc_title).' <small>'.$count_max.' max</small></h1>';
 			echo '<ul class="list-group">';
 			foreach ($entities as $e) {
 				echo '<li class="list-group-item">';
@@ -64,6 +64,6 @@ $entities = $system->getEntities($name_substring, 0, $count_max);
 			echo '</ul>';			
 		}
 	?>
-</div>
+</main>
 </body>
 </html>

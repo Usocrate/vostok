@@ -52,8 +52,15 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 </head>
 <body id="individualDoc">
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a> <a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a> <a href="<?php echo ToolBox::getGoogleQueryUrl($individual->getWholeName()) ?>" target="_blank"><i class="fab fa-google"></i></a></small></h1>
+<main class="container-fluid">
+	<header>
+		<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
+		<nav>
+			<a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a>
+			<a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a>
+			<a href="<?php echo ToolBox::getGoogleQueryUrl($individual->getWholeName()) ?>" target="_blank"><i class="fab fa-google"></i></a>
+		</nav>
+	</header>
   	<div class="row">
     	<div class="col-lg-3">
     		<div class="card" style="width:100%">
@@ -229,10 +236,10 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
 				    	<div id="individual_description_i" class="individual-description-area"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...'; ?></div>
 				    </div>
-		</div>
+				</div>
 			</div>
 	    </div>
-  	</div>
+  	</main>
 	<script>
 		const trombiUrl = '<?php echo $system->getTrombiUrl() ?>';
 		const trombiReworkUrl = '<?php echo $system->getTrombiReworkUrl() ?>';

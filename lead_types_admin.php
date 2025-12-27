@@ -43,9 +43,9 @@ if (isset ( $_POST ['task'] )) {
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
+<main class="container-fluid">
 
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	
 	<?php
 	if (count ( $messages ) > 0) {
@@ -73,6 +73,6 @@ if (isset ( $_POST ['task'] )) {
     		<button type="submit" class="btn btn-primary">Ok</button>
     	</form>
 	</section>
-</div>	
+</main>	
 </body>
 </html>

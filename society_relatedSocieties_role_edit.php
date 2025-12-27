@@ -81,7 +81,7 @@ foreach ($relatedSocieties as $item) {
 <body>
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($_REQUEST['role']); ?></h1>
+	<h1><?php echo ToolBox::toHtml($_REQUEST['role']); ?></h1>
 	<p>Chez <?php echo $society->getHtmlLinkToSociety(); ?></p>
 
 	<?php if (isset($feedBack)) echo $feedBack->toHtml(); ?>

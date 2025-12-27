@@ -28,8 +28,8 @@ $doc_title = 'Les villes d\'implantation';
 </head>
 <body>
 <?php include 'navbar.inc.php'; ?>
-<div class="container-fluid">
-	<h1 class="bd-title"><?php echo ToolBox::toHtml($doc_title); ?></h1>
+<main class="container-fluid">
+	<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 	<table class="table">
 		<thead>
 			<tr>
@@ -56,6 +56,6 @@ $doc_title = 'Les villes d\'implantation';
         ?>
     	</tbody>
 	</table>
-</div>
+</main>
 </body>
 </html>
