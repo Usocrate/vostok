@@ -9174,53 +9174,90 @@ body > .container H1 {
   margin-top: 0;
 }
 
-main > header:first-child {
+main > header {
   margin-bottom: 1rem;
 }
-main > header:first-child h1 {
-  font-family: "Oswald";
-  font-size: 2rem;
-}
-main > header:first-child nav {
+main > header nav {
   display: flex;
   gap: 0.25rem;
 }
-main > header:first-child nav button,
-main > header:first-child nav a {
+main > header nav button,
+main > header nav a {
   padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.5rem;
   border-radius: 0.2rem;
   border: 1px solid #7d6f6c;
   color: #7d6f6c;
   background: #fff;
   cursor: pointer;
 }
-main > header:first-child nav button:hover, main > header:first-child nav a:hover {
+main > header nav button:hover, main > header nav a:hover {
   background: #7d6f6c;
   color: #fff;
 }
-main > header:first-child nav button:hover i, main > header:first-child nav a:hover i {
+main > header nav button:hover i, main > header nav a:hover i {
+  color: #fff;
+}
+
+section {
+  border-bottom: 1px solid #d2d5d2;
+}
+section > header {
+  margin-bottom: 1rem;
+}
+section > header hgroup p {
+  color: #4c524c;
+}
+section > header nav {
+  display: flex;
+  gap: 0.25rem;
+}
+section > header nav button,
+section > header nav a {
+  padding: 0.2rem 0.4rem;
+  font-size: 1rem;
+  line-height: 1rem;
+  border-radius: 1rem;
+  border: none;
+  background: rgba(218, 128, 85, 0.2);
+  color: #da8055;
+  cursor: pointer;
+}
+section > header nav button i,
+section > header nav a i {
+  color: #da8055;
+}
+section > header nav button:hover, section > header nav a:hover {
+  background: #da8055;
+  color: #fff;
+  text-decoration: none;
+}
+section > header nav button:hover i, section > header nav a:hover i {
   color: #fff;
 }
 
 H1 {
   color: #0c0d0c;
+  font-family: "Oswald";
   font-size: 2rem;
 }
 
 H2 {
   color: #3d383d;
+  font-family: "Oswald";
   font-size: 1.8rem;
 }
 
 H3 {
   color: #4c524c;
+  font-family: "Oswald";
   font-size: 1.4rem;
 }
 
 H4 {
   color: #717a71;
+  font-family: "Oswald";
   font-size: 1.2rem;
 }
 
@@ -9418,6 +9455,13 @@ DIV.membership-description-area {
   display: none;
 }
 
+.tab-pane > SECTION {
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .missing-thumbnail {
   background-color: #eceeec;
 }
@@ -9471,9 +9515,9 @@ body.menu .container-xl {
   .container-xl {
     max-width: 1200px;
   }
-  main > header:first-child {
+  main > header, section > header {
     display: flex;
-    align-items: center;
+    align-items: first baseline;
     justify-content: space-between;
     gap: 1rem;
     padding-block: 0rem;

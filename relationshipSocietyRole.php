@@ -60,7 +60,7 @@ $doc_title = $role;
     <title><?php ToolBox::toHtml($doc_title) ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>    
+    <link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>    
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
@@ -82,7 +82,7 @@ $doc_title = $role;
         <small>(<?php echo count($societiesHavingThatRole) ?>)</small>
         </h1>
         <div class="dropdown" style="display:inline-block">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortOptionButton" data-toggle="dropdown"><small><i class="fas fa-filter"></i></small> Trier par</button>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="sortOptionButton" data-toggle="dropdown"><small><i class="ph-bold ph-funnel-simple"></i></small> Trier par</button>
             <div class="dropdown-menu">
                 <?php
                 $options = array();
@@ -96,7 +96,7 @@ $doc_title = $role;
                 ?>
             </div>
         </div>
-        <a class="btn btn-secondary" href="relationshipSocietyRole_edit.php?role=<?php echo $role ?>"><small><i class="fas fa-edit"></i></small> Éditer</a>        
+        <a class="btn btn-secondary" href="relationshipSocietyRole_edit.php?role=<?php echo $role ?>"><small><i class="ph-bold ph-pencil-simple"></i></small> Éditer</a>        
     </header>
     
     <?php

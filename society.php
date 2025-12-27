@@ -85,7 +85,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     <title>Une société</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>    
+    <link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
@@ -101,9 +101,9 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 	<header>
 		<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<nav class="btn-group btn-group-sm">
-			<a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a>
-			<a href="society_industries_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-tag"></i></a> 
-			<a href="<?php echo ToolBox::getGoogleQueryUrl($society->getName()) ?>" target="_blank"><i class="fab fa-google"></i></a>
+			<a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="ph-bold ph-pencil-simple"></i></a>
+			<a href="society_industries_edit.php?society_id=<?php echo $society->getId() ?>"><i class="ph-bold ph-tag"></i></a> 
+			<a href="<?php echo ToolBox::getGoogleQueryUrl($society->getName()) ?>" target="_blank"><i class="ph-bold ph-google-logo"></i></a>
 		</nav>
 	</header>
     <?php
@@ -200,19 +200,23 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 				foreach ($groups as $name=>$societies) {
 					echo '<section>';
 
-					echo '<div class="d-lg-flex flex-lg-row justify-content-between align-items-center mb-3 mt-3">';
+					echo '<header>';
+				
+					//echo '<hgroup>';
 					echo '<h2><a href="relationshipSocietyRole.php?role='.ToolBox::toHtml($name).'">'.ToolBox::toHtml($name).'</a>';
 					if (count($societies) > 1) {
 						echo ' <small>'.count($societies).'</small>';
 					}
 					echo '</h2>';
+					//echo '</hgroup>';
 					
-					echo '<div class="btn-group btn-group-sm">';
-					echo '<a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'&item1_role='.ToolBox::toHtml($name).'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-plus"></i></a>';
-					echo '<a href="society_relatedSocieties_role_edit.php?society_id='.$society->getId().'&role='.ToolBox::toHtml($name).'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></a>';
-					echo '</div>';
+					echo '<nav>';
+					echo '<a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'&item1_role='.ToolBox::toHtml($name).'"><i class="ph-bold ph-plus"></i></a>';
+					echo '<a href="society_relatedSocieties_role_edit.php?society_id='.$society->getId().'&role='.ToolBox::toHtml($name).'"><i class="ph-bold ph-dots-three"></i></a>';
+					echo '</nav>';
 					
-					echo '</div>';
+					echo '</header>';
+					
 					echo '<ul class="list-group list-group-flush">';
 					foreach ($societies as $item) {
 						// $item[0] : Société
@@ -223,7 +227,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 						echo '<div class="row">';
 						
 						echo '<div class="col-lg-5 align-self-start">';
-						echo '<h3><a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a> <small><a href="societyToSocietyRelationship_menu.php?relationship_id='.$item[1].'&societyToFocus_id='.$item[0]->getId().'"><i class="fas fa-ellipsis-h"></i></a></small></h3>';
+						echo '<h3><a href="society.php?society_id='.$item[0]->getId().'">'.$item[0]->getNameForHtmlDisplay().'</a> <small><a href="societyToSocietyRelationship_menu.php?relationship_id='.$item[1].'&societyToFocus_id='.$item[0]->getId().'"><i class="ph-bold ph-dots-three"></i></a></small></h3>';
 						if (!empty($item[5])) {
 							echo '<div><small>Jusqu\'en '.$item[5].'</small></div>';
 						}
@@ -244,12 +248,12 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					echo '</ul>';
 					echo '</section>';
 				}
-				echo '<div><a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></div>';
+				echo '<nav><a href="societyToSocietyRelationship_edit.php?item0_id='.$society->getId().'"><i class="ph-bold ph-plus"></i></a></nav>';
 				?>
 			
 	    </div>
 	    <div role="tabpanel" class="tab-pane<?php if (strcmp($focus,'onIndividuals')==0) echo ' active' ?>" id="individuals-tab">
-			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <i class="fas fa-plus"></i></a></small></h2>
+			<h2>Les gens<small><a href="membership_edit.php?society_id=<?php echo $society->getId() ?>"> <i class="ph-bold ph-plus"></i></a></small></h2>
 			<?php
 				if (isset($members)) {
 				    if (count($actualMembers)>0) {
@@ -289,7 +293,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     							if ($ms->hasUrl()) {
     								echo '<p>'.$ms->getHtmlLinkToWeb().'</p>';
     							}
-    							echo '<div><a href="membership_menu.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></a></div>';
+    							echo '<nav><a href="membership_menu.php?membership_id='.$ms->getId().'"><i class="ph-bold ph-dots-three"></i></a></nav>';
     						}
     						echo '</div>';
     						echo '</div>';
@@ -297,7 +301,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
     					echo '</div>';
 
     					if (count($relatedSocieties)>0 && count($actualMembers)>1) {
-    						echo '<div><a href="society_individual_transfer.php?society_id='.$society->getId().'">Transférer des gens</a></div>';
+    						echo '<nav><a href="society_individual_transfer.php?society_id='.$society->getId().'">Transférer des gens</a></nav>';
     					}
 				    }
 					
@@ -353,12 +357,12 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					echo $l->getShortDescription() ? ToolBox::toHtml($l->getShortDescription()) : 'Piste n°'.$l->getId();
 					echo '</a>';
 					if ($l->getCreationDate()) echo ' <small>('.ToolBox::toHtml($l->getCreationDateFr()).')';
-					echo ' <a href="lead_edit.php?lead_id='.$l->getId().'"><i class="fas fa-edit"></i></a>';
+					echo ' <a href="lead_edit.php?lead_id='.$l->getId().'"><i class="ph-bold ph-pencil-simple"></i></a>';
 					echo '</small>';
 					echo '</h2>';
 					echo '</li>';
 				}
-				echo '<li class="list-group-item"><a href="lead_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
+				echo '<li class="list-group-item"><a href="lead_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="ph-bold ph-plus"></i></a></li>';
 				?>
 			</ul>
 	    </div>
@@ -372,13 +376,13 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 					echo date("d/m/Y", ToolBox::mktimeFromMySqlDatetime($e->getDatetime()));
 					echo '</a>';
 					echo ' <small>('.ToolBox::toHtml(ucfirst($e->getType())).')';
-					echo ' <a href="society_event_edit.php?event_id='.$e->getId().'"><i class="fas fa-edit"></i></a>';					
+					echo ' <a href="society_event_edit.php?event_id='.$e->getId().'"><i class="ph-bold ph-pencil-simple"></i></a>';					
 					echo '</small>';
 					echo '</h2>';
 					echo '<p>'.nl2br(ToolBox::toHtml($e->getComment())).'</p>';
 					echo '</li>';
 				}
-				echo '<li class="list-group-item"><a href="society_event_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
+				echo '<li class="list-group-item"><a href="society_event_edit.php?society_id='.$society->getId().'" class="btn btn-sm btn-secondary"><i class="ph-bold ph-plus"></i></a></li>';
 				?>
 			</ul>
 	    </div>

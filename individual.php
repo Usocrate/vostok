@@ -43,7 +43,7 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	<title><?php echo $doc_title ?></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-	<script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>	
+	<link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>	
 	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
 	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
@@ -56,9 +56,9 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 	<header>
 		<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<nav>
-			<a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="fas fa-edit"></i></a>
-			<a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="fas fa-thumbtack"></i></a>
-			<a href="<?php echo ToolBox::getGoogleQueryUrl($individual->getWholeName()) ?>" target="_blank"><i class="fab fa-google"></i></a>
+			<a href="individual_edit.php?individual_id=<?php echo $individual->getId() ?>"><i class="ph-bold ph-pencil-simple"></i></a>
+			<a href="index.php?individual_task_id=pin&individual_id=<?php echo $individual->getId() ?>&memberships_focus=onLastPinned"><i class="ph-bold ph-push-pin"></i></a>
+			<a href="<?php echo ToolBox::getGoogleQueryUrl($individual->getWholeName()) ?>" target="_blank"><i class="ph-bold ph-google-logo"></i></a>
 		</nav>
 	</header>
   	<div class="row">
@@ -137,13 +137,12 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onMemberships')==0) echo 'active' ?>" id="memberships-tab">
 						<?php
 						if (isset($memberships)){
-							echo '<ul class="list-group list-group-flush">';
 							foreach ($memberships as $ms) {
 								$s = $ms->getSociety();
-								echo '<li class="list-group-item">';
-								
-								echo '<div class="d-lg-flex flex-lg-row justify-content-between align-items-center mb-3 mt-3">';
-								echo '<div>';
+								echo '<section>';
+
+								echo '<header>';
+								echo '<hgroup>';
 								echo '<h2>'.$s->getHtmlLinkToSociety().'</h2>';
 								$more = array();
 								if ($ms->getDepartment()) {
@@ -157,14 +156,14 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 									
 								}
 								if (count($more)>0) {
-									echo '<h4>'.implode(' - ', $more).'</small></h4>';
+									echo '<p>'.implode(' - ', $more).'</p>';
 								}
-								echo '</div>';
-								echo '<div class="btn-group btn-group-sm">';
-								echo '<a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="fab fa-google"></i></a>';
-								echo '<a href="membership_menu.php?membership_id='.$ms->getId().'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-ellipsis-h"></i></a>';
-								echo '</div>';
-								echo '</div>';
+								echo '</hgroup>';
+								echo '<nav>';
+								echo '<a href="'.ToolBox::getGoogleQueryUrl($s->getName().' "'.$individual->getWholeName().'"').'" target="_blank"><i class="ph-bold ph-google-logo"></i></a>';
+								echo '<a href="membership_menu.php?membership_id='.$ms->getId().'"><i class="ph-bold ph-dots-three"></i></a>';
+								echo '</nav>';
+								echo '</header>';
 															
 								echo '<div class="membership-description-area" data-ms-id="'.$ms->getId().'">';
 								echo $ms->hasDescription() ? $ms->getDescription() : 'Il était une fois...';
@@ -181,31 +180,28 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 								if (count($data)>0) {
 									echo '<p>'.implode('<span> | </span>', $data).'</p>';
 								}
-								echo '</li>';
+								echo '</section>';
 							}
-							echo '<li class="list-group-item"><a href="membership_edit.php?individual_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
-							echo '</ul>';
+							echo '<nav><a href="membership_edit.php?individual_id='.$individual->getId().'"><i class="ph-bold ph-plus"></i></a></nav>';
 						}
 						?>
 				    </div>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onRelatedIndividuals')==0) echo 'active' ?>" id="relations-tab">
-						<?php if (isset($relatedIndividuals)): ?>
-						<ul class="list-group list-group-flush">
-							<?php
+					<?php if (isset($relatedIndividuals)){
+							
 							foreach ($relatedIndividuals as $item) {
 								// $item[0] : Individu
 								// $item[1] : Identifiant de la relation
 								// $item[2] : Rôle
 								// $item[3] : Description
 								// $item[4] : Period object
-								echo '<li class="list-group-item">';
+								echo '<section>';
 								
-								echo '<div class="d-lg-flex flex-lg-row justify-content-between align-items-center mb-3 mt-3">';
-								echo '<div>';
-								echo '<h2>';
-								echo '<a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a>';
-								echo '</h2>';
-
+								echo '<header>';
+						
+								echo '<hgroup>';
+								echo '<h2><a href="individual.php?individual_id='.$item[0]->getId().'">'.ToolBox::toHtml($item[0]->getWholeName()).'</a></h2>';
+								
 								$more = array();
 								$more[] = empty($item[2]) ? '?' : ToolBox::toHtml(ucfirst($item[2]));
 								if ($item[4]->isDefined()) {
@@ -213,25 +209,26 @@ if (!empty($_SESSION['preferences']['individual']['focus'])) {
 									
 								}
 								if (count($more)>0) {
-									echo '<h4>'.implode(' - ', $more).'</small></h4>';
+									echo '<p>'.implode(' - ', $more).'</p>';
 								}
-								echo '</div>';
-								echo '<div class="btn-group btn-group-sm">';
-								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'" class="btn btn-sm btn-outline-secondary"><i class="fas fa-edit"></i></a>';
-								echo '<a href="'.ToolBox::getGoogleQueryUrl('"'.$item[0]->getWholeName().'" "'.$individual->getWholeName().'"').'" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="fab fa-google"></i></a>';
-								echo '</div>';
-								echo '</div>';
+								echo '</hgroup>';
+																
+								echo '<nav>';
+								echo '<a href="individualToIndividualRelationship_edit.php?relationship_id='.$item[1].'"><i class="ph-bold ph-pencil-simple"></i></a>';
+								echo '<a href="'.ToolBox::getGoogleQueryUrl('"'.$item[0]->getWholeName().'" "'.$individual->getWholeName().'"').'" target="_blank"><i class="ph-bold ph-google-logo"></i></a>';
+								echo '</nav>';
+								
+								echo '</header>';
 					
 								echo '<div class="relationship-description-area" data-rs-id="'.$item[1].'">';
 								echo empty($item[3]) ? 'Il était une fois...' : $item[3];
 								echo '</div>';
 								
-								echo '</li>';
+								echo '</section>';
 							}
-							echo '<li class="list-group-item"><a href="individualToIndividualRelationship_edit.php?item0_id='.$individual->getId().'" class="btn btn-sm btn-secondary"><i class="fas fa-plus"></i></a></li>';
-							?>
-						</ul>	    	
-						<?php endif; ?>
+							echo '<nav><a href="individualToIndividualRelationship_edit.php?item0_id='.$individual->getId().'"><i class="ph-bold ph-plus"></i></a></nav>';
+						}
+					?>
 				    </div>
 				    <div role="tabpanel" class="tab-pane <?php if (strcmp($focus,'onDescription')==0) echo 'active' ?>" id="description-tab">
 				    	<div id="individual_description_i" class="individual-description-area"><?php echo $individual->hasDescription() ? $individual->getDescription():'Il était une fois...'; ?></div>

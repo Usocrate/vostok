@@ -76,7 +76,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
     <title><?php echo $system->getAppliName() ?>: Liste des Sociétés</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>    
+    <link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>    
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
@@ -88,7 +88,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 <body id="societiesListDoc">
 <?php include 'navbar.inc.php'; ?>
 <div class="container-fluid">
-	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php"><i class="fas fa-plus"></i></a></small></h1>
+	<h1><?php echo ToolBox::toHtml($doc_title); ?> <small><a href="society_edit.php"><i class="ph-bold ph-plus"></i></a></small></h1>
 	<section>
 	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
 			<div class="form-group m-2">

@@ -59,7 +59,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
     <title><?php echo ToolBox::toHtml($doc_title) ?></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>    
+    <link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>    
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
@@ -117,7 +117,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 				<label for="individual_instagram_id_i" class="sr-only">Instagram</label>
 				<div class="input-group">
 					<div class="input-group-prepend">
-				      <div class="input-group-text"><i class="fab fa-instagram"></i></div>
+				      <div class="input-group-text"><i class="ph-bold ph-instagram-logo"></i></div>
 				    </div>
 					<input type="text" id="individual_instagram_id_i" name="individual_instagram_id" value="<?php echo $individual->getInstagramId(); ?>" size="15" maxlength="255" class="form-control" placeholder="identifiant Instagram" />
 				</div>
@@ -126,7 +126,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 				<label for="individual_Linkedin_id_i" class="sr-only">Linkedin</label>
 				<div class="input-group">
 					<div class="input-group-prepend">
-				      <div class="input-group-text"><i class="fab fa-linkedin"></i></div>
+				      <div class="input-group-text"><i class="ph-bold ph-linkedin-logo"></i></div>
 				    </div>
 					<input type="text" id="individual_Linkedin_id_i" name="individual_linkedin_id" value="<?php echo $individual->getLinkedinId(); ?>" size="15" maxlength="255" class="form-control" placeholder="Person ID Linkedin" />
 				</div>
@@ -135,7 +135,7 @@ $doc_title = $individual->hasId() ? $individual->getWholeName() : 'Un individu';
 				<label for="individual_x_id_i" class="sr-only">X</label>
 				<div class="input-group">
 					<div class="input-group-prepend">
-				      <div class="input-group-text"><i class="fab fa-x-twitter"></i></div>
+				      <div class="input-group-text"><i class="ph-bold ph-x-logo"></i></div>
 				    </div>
 					<input type="text" id="individual_x_id_i" name="individual_x_id" value="<?php echo $individual->getXId(); ?>" size="15" maxlength="15" class="form-control" placeholder="identifiant X" />
 				</div>

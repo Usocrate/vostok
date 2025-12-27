@@ -60,7 +60,7 @@ $doc_title = 'Les rôles';
     <title><?php echo ToolBox::toHtml($system->getAppliName()) ?>: Rôles</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>    
+    <link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>    
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
     <script src="<?php echo JQUERY_URI; ?>"></script>
@@ -77,8 +77,8 @@ $doc_title = 'Les rôles';
 		<thead>
 			<tr>
 				<th style="display:none"></th>
-				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
-				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="ph-bold ph-sort-ascending"></i></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="ph-bold ph-sort-descending"></i></small></a>' ?></th>
 			</tr>
 		</thead>
 		<tbody>

@@ -69,7 +69,7 @@ $doc_title = 'Les activités exercées';
     <title><?php echo ToolBox::toHtml($system->getAppliName()) ?>: Répartition des sociétés par activité</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-    <script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>    
+    <link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>    
     <link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
     <?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
     <script src="<?php echo JQUERY_URI; ?>"></script>
@@ -92,8 +92,8 @@ $doc_title = 'Les activités exercées';
 					<thead>
 						<tr>
 							<th></th>
-							<th><?php echo strcmp($_SESSION['industries_list_sort'], 'Alphabetical')==0 ? 'Activité' : 'Activité <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="fas fa-filter"></i></small></a>' ?></th>
-							<th><?php echo strcmp($_SESSION['industries_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="fas fa-filter"></i></small></a>' ?></th>
+							<th><?php echo strcmp($_SESSION['industries_list_sort'], 'Alphabetical')==0 ? 'Activité' : 'Activité <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="ph-bold ph-sort-ascending"></i></small></a>' ?></th>
+							<th><?php echo strcmp($_SESSION['industries_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="ph-bold ph-sort-descending"></i></small></a>' ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -128,7 +128,7 @@ $doc_title = 'Les activités exercées';
         					    default :
         					        echo ToolBox::toHtml($i->getName());
         					}
-        					echo ' <small><a href="industry_edit.php?id='.$i->getId().'"><i class="fas fa-edit"></i></a></small>';
+        					echo ' <small><a href="industry_edit.php?id='.$i->getId().'"><i class="ph-bold ph-pencil-simple"></i></a></small>';
         					echo '</a>';
         					echo '</td>';
         					echo '<td>';

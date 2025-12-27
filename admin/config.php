@@ -77,7 +77,7 @@ header ( 'charset=utf-8' );
 	<meta name="description" content="<?php echo $system->getAppliDescription() ?>" />
 	<title><?php echo $system->getAppliName().' : '.$system->getappliDescription() ?></title>
 	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
-	<script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>
+	<link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
 	<script src="../vendor/twbs/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>

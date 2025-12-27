@@ -90,7 +90,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 	<title><?php echo ToolBox::toHtml($system->getAppliName()).' : '.ToolBox::toHtml($doc_title) ?></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-	<script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>	
+	<link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>	
 	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
 	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
@@ -99,7 +99,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 <body>
 <?php include 'navbar.inc.php'; ?>
 <main class="container-fluid">
-	<h1>Les pistes <span class="badge badge-secondary"><?php echo $leads_nb ?></span> <small><a href="lead_edit.php"><i class="fas fa-plus"></i></a></small></h1>
+	<h1>Les pistes <span class="badge badge-secondary"><?php echo $leads_nb ?></span> <small><a href="lead_edit.php"><i class="ph-bold ph-plus"></i></a></small></h1>
 	<section>
     	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
     		<div class="form-group m-2">
@@ -140,7 +140,7 @@ $doc_title = 'Les pistes ('.$leads_nb.')';
 					echo '<li class="list-group-item">';
 					//title
 					if ($l->getShortDescription()) {
-					    echo '<h2>'.$l->getShortDescription().'<small><a href="lead_edit.php?lead_id=' . $l->getId() . '"> <i class="fas fa-edit"></i></a></small></h2>';
+					    echo '<h2>'.$l->getShortDescription().'<small><a href="lead_edit.php?lead_id=' . $l->getId() . '"> <i class="ph-bold ph-pencil-simple"></i></a></small></h2>';
 					}
 					//	society
 					$href = 'society.php?society_id=' . $l->society->getId();

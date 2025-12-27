@@ -61,7 +61,7 @@ $doc_title = 'Accueil';
 	<title><?php echo ToolBox::toHtml($system->getAppliName()).' : '.ToolBox::toHtml($doc_title) ?></title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
-	<script src="<?php echo FONTAWESOME_KIT_URI ?>" crossorigin="anonymous"></script>
+	<link type="text/css" rel="stylesheet" href="<?php echo PHOSPHOR_URI ?>"></link>
 	<link type="text/css" rel="stylesheet" href="<?php echo $system->getSkinUrl() ?>theme.css"></link>
 	<?php echo $system->writeHtmlHeadTagsForFavicon(); ?>
 	<script src="<?php echo JQUERY_URI; ?>"></script>
@@ -106,7 +106,7 @@ $doc_title = 'Accueil';
 									}
 								} else {
 									echo '<a href="'.$href.'" class="implicit">';
-									echo '<i class="fas fa-edit"></i> éditer';
+									echo '<i class="ph-bold ph-pencil-simple"></i> éditer';
 									echo '</a>';
 								}
 								//echo '</div>';

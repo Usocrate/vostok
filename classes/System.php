@@ -1512,9 +1512,7 @@ class System {
 	public function getIndustryFromId($id) {
 		$sql = 'SELECT * FROM industry WHERE id=?';
 		$statement = $this->getPdo ()->prepare ( $sql );
-		$statement->execute ( array (
-				$id500
-		) );
+		$statement->execute ( array ($id) );
 		$data = $statement->fetch ( PDO::FETCH_ASSOC );
 		if ($data) {
 			$output = new Industry ();

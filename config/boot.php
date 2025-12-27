@@ -8,5 +8,5 @@ define ( 'POPPER_JS_URI_INTEGRITY', 'sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP
 // JQuery
 define ( 'JQUERY_URI', 'https://code.jquery.com/jquery-1.12.4.min.js' );
 
-// Font Awesome
-define ( 'FONTAWESOME_KIT_URI', 'https://kit.fontawesome.com/2ddac83e67.js');
+// Phosphor Icons
+define ( 'PHOSPHOR_URI', 'https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css');

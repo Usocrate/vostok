@@ -430,38 +430,38 @@ class Individual {
 		return 'individual.php?individual_id=' . $this->getId ();
 	}
 	public function getHtmlLinkToPhoneCall() {
-		return '<i class="fas fa-phone"></i> <a href="tel:' . $this->getPhoneNumber () . '">' . $this->getPhoneNumber () . '</a>';
+		return '<i class="ph-bold ph-phone"></i> <a href="tel:' . $this->getPhoneNumber () . '">' . $this->getPhoneNumber () . '</a>';
 	}
 	public function getHtmlLinkToMobilePhoneCall() {
-		return '<i class="fas fa-mobile-alt"></i> <a href="tel:' . $this->getMobilePhoneNumber () . '">' . $this->getMobilePhoneNumber () . '</a>';
+		return '<i class="ph-bold ph-device-mobile"></i> <a href="tel:' . $this->getMobilePhoneNumber () . '">' . $this->getMobilePhoneNumber () . '</a>';
 	}
 	/**
 	 *
 	 * @since 08/2018
 	 */
 	public function getHtmlLinkToX() {
-		return '<i class="fab fa-x-twitter"></i> <a href="https://x.com/' . $this->getXId () . '" target="_blank">' . $this->getXId () . '</a>';
+		return '<i class="ph-bold ph-x-logo"></i> <a href="https://x.com/' . $this->getXId () . '" target="_blank">' . $this->getXId () . '</a>';
 	}
 	/**
 	 *
 	 * @since 08/2018
 	 */
 	public function getHtmlLinkToLinkedin() {
-		return '<i class="fab fa-linkedin"></i> <a href="https://linkedin.com/in/' . $this->getLinkedinId () . '/" target="_blank">' . $this->getLinkedinId () . '</a>';
+		return '<i class="ph-bold ph-linkedin-logo"></i> <a href="https://linkedin.com/in/' . $this->getLinkedinId () . '/" target="_blank">' . $this->getLinkedinId () . '</a>';
 	}
 	/**
 	 *
 	 * @since 11/2025
 	 */
 	public function getHtmlLinkToInstagram() {
-		return '<i class="fab fa-instagram"></i><a href="https://instagram.com/' . $this->getInstagramId () . '/" target="_blank">' . $this->getInstagramId () . '</a>';
+		return '<i class="ph-bold ph-instagram-logo"></i><a href="https://instagram.com/' . $this->getInstagramId () . '/" target="_blank">' . $this->getInstagramId () . '</a>';
 	}
 	/**
 	 *
 	 * @since 12/2018
 	 */
 	public function getHtmlLinkToGoogleSearch($type = null) {
-		$out = '<i class="fab fa-google"></i> ';
+		$out = '<i class="ph-bold ph-google-logo"></i> ';
 		$out .= ' <a href="' . Toolbox::getGoogleQueryUrl ( $type ) . '" target="_blank">';
 		switch ($type) {
 			case 'actualités' :
@@ -502,7 +502,7 @@ class Individual {
 	}
 	public function getHtmlLinkToWeb() {
 		if (! empty ( $this->web ))
-			return '<a href="' . $this->web . '" target="_blank">' . $this->web . '</a>';
+			return '<i class="ph-bold ph-link"></i> <a href="' . $this->web . '" target="_blank">' . $this->web . '</a>';
 	}
 
 	/**
@@ -551,7 +551,7 @@ class Individual {
 	 */
 	public function getEmailHtml() {
 		if ($this->getAttribute ( 'email' ))
-			return '<i class="fas fa-envelope"></i> <a href="mailto:' . $this->getAttribute ( 'email' ) . '">' . $this->getAttribute ( 'email' ) . '</a>';
+			return '<i class="ph-bold ph-envelope-simple"></i></i> <a href="mailto:' . $this->getAttribute ( 'email' ) . '">' . $this->getAttribute ( 'email' ) . '</a>';
 	}
 	/**
 	 * Obtient l'Url de la photographie de la personne.

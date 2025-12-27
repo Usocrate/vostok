@@ -398,7 +398,7 @@ class Society {
 	 * @version 08/2018
 	 */
 	public function getHtmlLinkToWeb() {
-		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" target="_blank" title="' . $this->getUrl () . '"><i class="fas fa-external-link"></i></a>' : NULL;
+		return $this->getUrl () ? '<a href="' . $this->getUrl () . '" target="_blank" title="' . $this->getUrl () . '"><i class="ph-bold ph-link"></i></a>' : NULL;
 	}
 	/**
 	 * Obtenir le lien vers l'écran dédié à la société.

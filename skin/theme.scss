@@ -8,7 +8,6 @@
 $card-border-color : $gray-300;
 
 $link-color: $primary;
-//$link-hover-color:$gray-600;
 
 $brand-font-family : "Sigmar One";
 $common-font-family : "Open Sans";
@@ -37,13 +36,8 @@ body {
 }
 
 main {
-	>header:first-child {
+	>header {
 		margin-bottom:1rem;
-		
-		h1 {
-			font-family: $headings-font-family;
-			font-size: 2rem;
-		}
 	
 		nav {
 			display: flex;
@@ -52,8 +46,8 @@ main {
 			button,
 			a {
 				padding: 0.25rem 0.5rem;
-				font-size: 0.875rem;
-				line-height: 1.5;
+				font-size: 1rem;
+				line-height: 1.5rem;
 				border-radius: 0.2rem;
 				border: 1px solid $secondary;
 				color: $secondary;
@@ -73,23 +67,72 @@ main {
 	}
 }
 
+section {
+	border-bottom:1px solid $gray-400;
+
+	>header {
+		margin-bottom:1rem;
+		
+		hgroup {
+			p {
+				color:$gray-700;
+			}
+		}
+	
+		nav {
+			display: flex;
+			gap: 0.25rem;
+	
+			button,
+			a {
+				padding: 0.2rem 0.4rem;
+				font-size: 1rem;
+				line-height: 1rem;
+				border-radius: 1rem;
+				border: none;
+				background: rgba($primary, .2);
+				color: $primary;
+				cursor: pointer;
+				
+				i{
+					color: $primary;
+				}
+			}
+	
+			button:hover, a:hover {
+				background: $primary;
+				color: $white;
+				text-decoration:none;
+				
+				i{
+					color: $white;
+				}
+			}
+		}
+	}
+}
+
 H1 {
 	color: $gray-900;
+	font-family: $headings-font-family;	
 	font-size: 2rem;
 }
 
 H2 {
 	color: $gray-800;
+	font-family: $headings-font-family;
 	font-size: 1.8rem;
 }
 
 H3 {
 	color: $gray-700;
+	font-family: $headings-font-family;
 	font-size: 1.4rem;
 }
 
 H4 {
 	color: $gray-600;
+	font-family: $headings-font-family;
 	font-size: 1.2rem;
 }
 
@@ -291,6 +334,13 @@ DIV.membership-description-area {
 	}
 }
 
+.tab-pane > SECTION {
+	padding-left : 0;
+	padding-right : 0;
+	margin-left : 0;
+	margin-right : 0;
+}
+
 .missing-thumbnail {
 	background-color: $gray-300;
 }
@@ -347,9 +397,9 @@ body.menu {
 		max-width: 1200px;
 	}
 
-	main>header:first-child {
+	main>header, section>header {
 		display: flex;
-		align-items: center;
+		align-items: first baseline;
 		justify-content: space-between;
 		gap: 1rem;
 
