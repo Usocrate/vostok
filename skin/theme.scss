@@ -61,10 +61,13 @@ main {
 				cursor: pointer;
 			}
 	
-			button:hover,
-			a:hover {
+			button:hover, a:hover {
 				background: $secondary;
 				color: $white;
+				
+				i{
+					color: $white;
+				}
 			}
 		}
 	}

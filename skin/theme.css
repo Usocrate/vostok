@@ -9196,9 +9196,11 @@ main > header:first-child nav a {
   background: #fff;
   cursor: pointer;
 }
-main > header:first-child nav button:hover,
-main > header:first-child nav a:hover {
+main > header:first-child nav button:hover, main > header:first-child nav a:hover {
   background: #7d6f6c;
+  color: #fff;
+}
+main > header:first-child nav button:hover i, main > header:first-child nav a:hover i {
   color: #fff;
 }
 
