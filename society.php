@@ -102,7 +102,7 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 		<h1><?php echo ToolBox::toHtml($doc_title); ?></h1>
 		<nav class="btn-group btn-group-sm">
 			<a href="society_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-edit"></i></a>
-			<a href="society_industries_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fab fa-tag"></i></a> 
+			<a href="society_industries_edit.php?society_id=<?php echo $society->getId() ?>"><i class="fas fa-tag"></i></a> 
 			<a href="<?php echo ToolBox::getGoogleQueryUrl($society->getName()) ?>" target="_blank"><i class="fab fa-google"></i></a>
 		</nav>
 	</header>
