@@ -136,12 +136,11 @@ if (!empty($_SESSION['preferences']['society']['focus'])) {
 		</nav>
 	</header>
     <?php
-    	$html = '';
         //
         // description
         //
         if ($society->getDescription()) {
-            $html.= '<blockquote>'.ToolBox::toHtml($society->getDescription()).'</blockquote>';
+            echo '<p><blockquote>'.ToolBox::toHtml($society->getDescription()).'</blockquote><p>';
         }
         //
         // activités
