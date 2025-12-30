@@ -382,7 +382,7 @@ class Event {
 			if ($this->society instanceof Society && $this->society->hasId ()) {
 				$settings [] = 'society_id=:society_id';
 			}
-			if (isset ( $_SESSION ['user_id'] )) {
+			if (isset ( $_SESSION[$systemIdInSession]['user_id'] )) {
 				$settings [] = 'user_id=:user_id';
 			}
 			if (isset ( $this->datetime )) {
@@ -421,8 +421,8 @@ class Event {
 			if ($this->society instanceof Society && $this->society->hasId ()) {
 				$statement->bindValue ( ':society_id', $this->society->getId (), PDO::PARAM_INT );
 			}
-			if (isset ( $_SESSION ['user_id'] )) {
-				$statement->bindValue ( ':user_id', $_SESSION ['user_id'], PDO::PARAM_INT );
+			if (isset ( $_SESSION[$systemIdInSession]['user_id'] )) {
+				$statement->bindValue ( ':user_id', $_SESSION[$systemIdInSession]['user_id'], PDO::PARAM_INT );
 			}
 			if (isset ( $this->datetime )) {
 				$statement->bindValue ( ':datetime', $this->datetime, PDO::PARAM_STR );

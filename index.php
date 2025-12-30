@@ -2,15 +2,16 @@
 require_once 'config/boot.php';
 require_once 'classes/System.php';
 $system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start ();
 
-if (empty ( $_SESSION ['user_id'] )) {
+if (empty ( $_SESSION[$systemIdInSession]['user_id'] )) {
 	header ( 'Location:login.php' );
 	exit ();
 } else {
 
-	$user = new User ( $_SESSION ['user_id'] );
+	$user = new User ( $_SESSION[$systemIdInSession]['user_id'] );
 	$user->feed ();
 
 	if (isset($_REQUEST['individual_task_id'])) {
@@ -26,18 +27,18 @@ if (empty ( $_SESSION ['user_id'] )) {
 	}
 	
 	if ( isset($_REQUEST['people_focus']) ) {
-	    if (!isset($_SESSION['preferences'])) {
-	        $_SESSION['preferences'] = array();
+	    if (!isset($_SESSION[$systemIdInSession]['preferences'])) {
+	        $_SESSION[$systemIdInSession]['preferences'] = array();
 	    }
-        if ( ! isset($_SESSION['preferences']['people']) ) {
-            $_SESSION['preferences']['people'] = array();
+        if ( ! isset($_SESSION[$systemIdInSession]['preferences']['people']) ) {
+            $_SESSION[$systemIdInSession]['preferences']['people'] = array();
         }
-        $_SESSION['preferences']['people']['focus'] = $_REQUEST['people_focus'];
+        $_SESSION[$systemIdInSession]['preferences']['people']['focus'] = $_REQUEST['people_focus'];
 	    //var_dump($_SESSION);
 	}
 	
-	if (!empty($_SESSION['preferences']['people']['focus'])) {
-		$people_focus = $_SESSION['preferences']['people']['focus'];
+	if (!empty($_SESSION[$systemIdInSession]['preferences']['people']['focus'])) {
+		$people_focus = $_SESSION[$systemIdInSession]['preferences']['people']['focus'];
 	} else {
 		$people_focus = 'onLastPinned';
 	}

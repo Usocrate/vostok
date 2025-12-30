@@ -1090,11 +1090,11 @@ class Society {
 	
 			if ($new) {
 				$settings [] = 'society_creation_date=NOW()';
-				if (isset ( $_SESSION ['user_id'] )) {
+				if (isset ( $_SESSION[$systemIdInSession]['user_id'] )) {
 					$settings [] = 'society_creation_user_id=:user_id';
 				}
 			} else {
-				if (isset ( $_SESSION ['user_id'] )) {
+				if (isset ( $_SESSION[$systemIdInSession]['user_id'] )) {
 					$settings [] = 'society_lastModification_user_id=:user_id';
 				}
 			}
@@ -1139,8 +1139,8 @@ class Society {
 				$statement->bindValue ( ':url', $this->url, PDO::PARAM_STR );
 			}
 	
-			if (isset ( $_SESSION ['user_id'] )) {
-				$statement->bindValue ( ':user_id', $_SESSION ['user_id'], PDO::PARAM_INT );
+			if (isset ( $_SESSION[$systemIdInSession]['user_id'] )) {
+				$statement->bindValue ( ':user_id', $_SESSION[$systemIdInSession]['user_id'], PDO::PARAM_INT );
 			}
 	
 			if (! $new) {

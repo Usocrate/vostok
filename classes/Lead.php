@@ -492,7 +492,7 @@ class Lead {
 		if (! $new) {
 			$statement->bindValue ( ':id', ( int ) $this->id, PDO::PARAM_INT );
 		}
-		$statement->bindValue ( ':user_id', ( int ) $_SESSION ['user_id'], PDO::PARAM_INT );
+		$statement->bindValue ( ':user_id', ( int ) $_SESSION[$systemIdInSession]['user_id'], PDO::PARAM_INT );
 		$result = $statement->execute ();
 		if ($new) {
 			$this->id = $system->getPdo ()->lastInsertId ();

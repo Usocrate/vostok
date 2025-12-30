@@ -1,47 +1,48 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System ( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start ();
 
-if (! isset ( $_SESSION ['pendingProcess'] )) {
-	$_SESSION ['pendingProcess'] = array ();
-	$_SESSION ['pendingProcess'] ['name'] = 'society relationship transfer';
+if (! isset ( $_SESSION[$systemIdInSession] ['pendingProcess'] )) {
+	$_SESSION[$systemIdInSession] ['pendingProcess'] = array ();
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['name'] = 'society relationship transfer';
 	
 	// toutes les données à collecter pour accomplir le processus
-	$_SESSION ['pendingProcess'] ['society'] = null;
-	$_SESSION ['pendingProcess'] ['formerRelationship'] = null;
-	$_SESSION ['pendingProcess'] ['society_role'] = null;
-	$_SESSION ['pendingProcess'] ['targetSociety'] = null;
-	$_SESSION ['pendingProcess'] ['targetSociety_role'] = null;
-	$_SESSION ['pendingProcess'] ['followingSocietiesCollectionIds'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['society'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['formerRelationship'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['society_role'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety_role'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['followingSocietiesCollectionIds'] = null;
 
 	// l'étape du processus dans lequel on se trouve
-	$_SESSION ['pendingProcess'] ['currentStep'] = 'target society role selection';
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'target society role selection';
 }
 
 
 // la société à transférer
 if (array_key_exists ( 'society_id', $_REQUEST )) {
-	$_SESSION ['pendingProcess'] ['society'] = new Society($_REQUEST ['society_id']);
-	$_SESSION ['pendingProcess'] ['society']->feed();
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['society'] = new Society($_REQUEST ['society_id']);
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['society']->feed();
 }
 
 // la relation d'origine
 if (array_key_exists ( 'relationship_id', $_REQUEST )) {
-	$_SESSION ['pendingProcess'] ['formerRelationship'] = new Relationship($_REQUEST ['relationship_id']);
-	$_SESSION ['pendingProcess'] ['formerRelationship']->feed();
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['formerRelationship'] = new Relationship($_REQUEST ['relationship_id']);
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['formerRelationship']->feed();
 }
 
 // la société ciblée
 if (array_key_exists ( 'targetSociety_id', $_REQUEST )) {
-	$_SESSION ['pendingProcess'] ['targetSociety'] = new Society($_REQUEST ['targetSociety_id']);
-	$_SESSION ['pendingProcess'] ['targetSociety']->feed();
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety'] = new Society($_REQUEST ['targetSociety_id']);
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety']->feed();
 }
 
-$society = $_SESSION['pendingProcess']['society'];
-$relationship = $_SESSION['pendingProcess']['formerRelationship'];
+$society = $_SESSION[$systemIdInSession] ['pendingProcess']['society'];
+$relationship = $_SESSION[$systemIdInSession] ['pendingProcess']['formerRelationship'];
 $formerRelatedSociety = $relationship->getRelatedItem($society);
 
 if (isset ( $_POST )) {
@@ -51,7 +52,7 @@ if (isset ( $_POST )) {
 if (isset ( $_POST ['cmd'] )) {
 	switch ($_POST ['cmd']) {
 		case 'Quitter' :
-			unset ( $_SESSION ['pendingProcess'] );
+			unset ( $_SESSION[$systemIdInSession] ['pendingProcess'] );
 			header ( 'location:' . $formerRelatedSociety->getDisplayUrl() );
 			exit ();
 	}
@@ -67,8 +68,8 @@ if (isset ( $_POST ['task_id'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
 						if (isset($_POST ['targetSociety_role'])) {
-							$_SESSION ['pendingProcess'] ['targetSociety_role'] = $_POST ['targetSociety_role'];
-							$_SESSION ['pendingProcess'] ['currentStep'] = 'target society selection';
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety_role'] = $_POST ['targetSociety_role'];
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'target society selection';
 						} else {
 							$fb->addWarningMessage ( 'Il faut choisir une des options.' );
 						}
@@ -82,9 +83,9 @@ if (isset ( $_POST ['task_id'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
 						if (isset($_POST ['targetSociety_id'])) {
-							$_SESSION ['pendingProcess'] ['targetSociety'] = new Society($_POST ['targetSociety_id']);
-							$_SESSION ['pendingProcess'] ['targetSociety'] -> feed();
-							$_SESSION ['pendingProcess'] ['currentStep'] = 'new role definition';
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety'] = new Society($_POST ['targetSociety_id']);
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety'] -> feed();
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'new role definition';
 						} else {
 							$fb->addWarningMessage ( 'Il faut choisir une des options.' );
 						}
@@ -97,8 +98,8 @@ if (isset ( $_POST ['task_id'] )) {
 			if (isset ( $_POST ['cmd'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
-						$_SESSION ['pendingProcess'] ['society_role'] = $_POST ['society_role'];
-						$_SESSION ['pendingProcess'] ['currentStep'] = 'target society role definition';
+						$_SESSION[$systemIdInSession] ['pendingProcess'] ['society_role'] = $_POST ['society_role'];
+						$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'target society role definition';
 						break;
 				}
 			}
@@ -108,14 +109,14 @@ if (isset ( $_POST ['task_id'] )) {
 			if (isset ( $_POST ['cmd'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
-						$_SESSION ['pendingProcess'] ['targetSociety_role'] = $_POST ['society_role'];
+						$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety_role'] = $_POST ['society_role'];
 						
 						$items = $formerRelatedSociety->getRelatedSocieties($relationship->getRole($society));
 						if (count($items)>1) {
-							$_SESSION ['pendingProcess'] ['currentStep'] = 'following societies selection';
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'following societies selection';
 						} else {
 							// on passe l'étape de transfert des sociétés tenant le même rôle s'il n'y en a pas
-							$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'confirmation';
 						}
 						break;
 				}
@@ -127,9 +128,9 @@ if (isset ( $_POST ['task_id'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Poursuivre' :
 						if (isset($_POST['followingSocietiesCollectionIds'])) {
-							$_SESSION ['pendingProcess'] ['followingSocietiesCollectionIds'] = $_POST['followingSocietiesCollectionIds'];
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['followingSocietiesCollectionIds'] = $_POST['followingSocietiesCollectionIds'];
 						}
-						$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
+						$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'confirmation';
 						break;
 				}
 			}
@@ -140,20 +141,20 @@ if (isset ( $_POST ['task_id'] )) {
 				switch ($_POST ['cmd']) {
 					case 'Je confirme' :
 				
-						$relationship->setRole($society, $_SESSION ['pendingProcess'] ['society_role']);
-						$relationship->setRelatedItem($society, $_SESSION ['pendingProcess'] ['targetSociety'],  $_SESSION ['pendingProcess'] ['targetSociety_role']);
+						$relationship->setRole($society, $_SESSION[$systemIdInSession] ['pendingProcess'] ['society_role']);
+						$relationship->setRelatedItem($society, $_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety'],  $_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety_role']);
 						
 						if ($relationship->toDB()) {
-							if (isset($_SESSION['pendingProcess']['followingSocietiesCollectionIds'])){
-								$followingOnes = $system->getSocieties(array("ids"=>$_SESSION['pendingProcess']['followingSocietiesCollectionIds']));
+							if (isset($_SESSION[$systemIdInSession] ['pendingProcess']['followingSocietiesCollectionIds'])){
+								$followingOnes = $system->getSocieties(array("ids"=>$_SESSION[$systemIdInSession] ['pendingProcess']['followingSocietiesCollectionIds']));
 								foreach ($followingOnes as $s) {
 									$r = $system->getRelationship($s,$formerRelatedSociety);
-									$r->setRole($s, $_SESSION ['pendingProcess'] ['society_role']);
-									$r->setRelatedItem($s, $_SESSION ['pendingProcess'] ['targetSociety'],  $_SESSION ['pendingProcess'] ['targetSociety_role']);
+									$r->setRole($s, $_SESSION[$systemIdInSession] ['pendingProcess'] ['society_role']);
+									$r->setRelatedItem($s, $_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety'],  $_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety_role']);
 									$r->toDB();
 								}
 							}
-							unset ( $_SESSION ['pendingProcess'] );
+							unset ( $_SESSION[$systemIdInSession] ['pendingProcess'] );
 							header ( 'location:' . $formerRelatedSociety->getDisplayUrl() );
 							exit ();
 						}
@@ -164,7 +165,7 @@ if (isset ( $_POST ['task_id'] )) {
 }
 
 $formerRelatedSociety = $relationship->getRelatedItem($society);
-$targetSociety = $_SESSION['pendingProcess']['targetSociety'];
+$targetSociety = $_SESSION[$systemIdInSession] ['pendingProcess']['targetSociety'];
 
 /*
 echo '<h2>Post</h2>';
@@ -188,7 +189,7 @@ var_dump($_SESSION);
 <body>
 	<main class="container-fluid">
 		<?php
-		switch ($_SESSION ['pendingProcess'] ['currentStep']) {
+		switch ($_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep']) {
 			
 			case 'target society role selection' :
 
@@ -230,7 +231,7 @@ var_dump($_SESSION);
 				break;
 				
 			case 'target society selection' :
-				$options = $formerRelatedSociety->getRelatedSocieties($_SESSION ['pendingProcess'] ['targetSociety_role']);
+				$options = $formerRelatedSociety->getRelatedSocieties($_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety_role']);
 			
 				echo '<header><h1>Quelle est la société ? <small>étape 2</small></h1></header>';
 				
@@ -263,7 +264,7 @@ var_dump($_SESSION);
 					
 				echo '<header><h1>Quel rôle pour '.$society->getName().' ? <small>étape 3</small></h1></header>';
 				
-				echo '<p>Vis à vis de <em>'.$_SESSION['pendingProcess']['targetSociety']->getName().'</em></p>';
+				echo '<p>Vis à vis de <em>'.$_SESSION[$systemIdInSession] ['pendingProcess']['targetSociety']->getName().'</em></p>';
 				
 				echo '<form action="' . $_SERVER ['PHP_SELF'] . '" method="post">';
 				echo '<input type="hidden" name="task_id" value="new role definition" />';
@@ -289,7 +290,7 @@ var_dump($_SESSION);
 				
 			case 'target society role definition' :
 					
-				echo '<header><h1>Quel rôle pour '.$_SESSION['pendingProcess']['targetSociety']->getName().' ? <small>étape 4</small></h1></header>';
+				echo '<header><h1>Quel rôle pour '.$_SESSION[$systemIdInSession] ['pendingProcess']['targetSociety']->getName().' ? <small>étape 4</small></h1></header>';
 				
 				echo '<p>Vis à vis de <em>'.$society->getName().'</em></p>';
 				
@@ -304,7 +305,7 @@ var_dump($_SESSION);
 				
 				echo '<div class="form-group">';
 				echo '<label for="society_role_i">Son rôle</label>';
-				echo '<input id="society_role_i" name="society_role" type="text" list="role_list" value="'.$_SESSION ['pendingProcess'] ['targetSociety_role'].'" size="20" class="form-control" />';
+				echo '<input id="society_role_i" name="society_role" type="text" list="role_list" value="'.$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetSociety_role'].'" size="20" class="form-control" />';
 				echo '</div>';
 				
 				echo '<div class="btn-group">';
@@ -349,8 +350,8 @@ var_dump($_SESSION);
 				
 				echo '<header><h1>Récapitulatif <small>étape 6</small></h1></header>';
 				
-				if (isset($_SESSION['pendingProcess']['followingSocietiesCollectionIds'])) {
-					$followingOnes = $system->getSocieties(array("ids"=>$_SESSION['pendingProcess']['followingSocietiesCollectionIds']));
+				if (isset($_SESSION[$systemIdInSession] ['pendingProcess']['followingSocietiesCollectionIds'])) {
+					$followingOnes = $system->getSocieties(array("ids"=>$_SESSION[$systemIdInSession] ['pendingProcess']['followingSocietiesCollectionIds']));
 				}
 		
 				
@@ -374,7 +375,7 @@ var_dump($_SESSION);
 				if (!empty($relationship->getPeriod())) {
 					echo '<div><small>'.$relationship->getPeriod().'</small></div>';
 				}
-				echo Toolbox::toHtml($_SESSION ['pendingProcess'] ['society_role']).' <em>'.Toolbox::toHtml($targetSociety->getName()).'</em>';
+				echo Toolbox::toHtml($_SESSION[$systemIdInSession] ['pendingProcess'] ['society_role']).' <em>'.Toolbox::toHtml($targetSociety->getName()).'</em>';
 				if (!empty($relationship->getDescription())) {
 					echo '<p>'.Toolbox::toHtml($relationship->getDescription()).'</p>';
 				}
@@ -400,7 +401,7 @@ var_dump($_SESSION);
 					if (!empty($r->getPeriod())) {
 						echo '<div><small>'.$r->getPeriod().'</small></div>';
 					}
-					echo Toolbox::toHtml($_SESSION ['pendingProcess'] ['society_role']).' <em>'.Toolbox::toHtml($targetSociety->getName()).'</em>';
+					echo Toolbox::toHtml($_SESSION[$systemIdInSession] ['pendingProcess'] ['society_role']).' <em>'.Toolbox::toHtml($targetSociety->getName()).'</em>';
 					if (!empty($r->getDescription())) {
 						echo '<p>'.Toolbox::toHtml($r->getDescription()).'</p>';
 					}
@@ -422,7 +423,7 @@ var_dump($_SESSION);
 				break;
 				
 			default :
-				echo '<p>'.$_SESSION ['pendingProcess'] ['currentStep'].' est une étape inconnue</p>.';
+				echo '<p>'.$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'].' est une étape inconnue</p>.';
 		}
 		?>
 	</main>

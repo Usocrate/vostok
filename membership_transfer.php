@@ -1,54 +1,55 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System ( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start ();
 
 $fb = new UserFeedBack ();
 
-if (! isset ( $_SESSION ['pendingProcess'] )) {
-	$_SESSION ['pendingProcess'] = array ();
-	$_SESSION ['pendingProcess'] ['name'] = 'membership transfer to homonym';
+if (! isset ( $_SESSION[$systemIdInSession] ['pendingProcess'] )) {
+	$_SESSION[$systemIdInSession] ['pendingProcess'] = array ();
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['name'] = 'membership transfer to homonym';
 	
 	// toutes les données à collecter pour accomplir le processus
-	$_SESSION ['pendingProcess'] ['membership'] = null;
-	$_SESSION ['pendingProcess'] ['targetIndividual'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['membership'] = null;
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetIndividual'] = null;
 
 	// l'étape du processus dans lequel on se trouve
-	$_SESSION ['pendingProcess'] ['currentStep'] = 'existing homonym check';
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'existing homonym check';
 }
 
 // la participation à transférer
 if (array_key_exists ( 'membership_id', $_REQUEST )) {
-	$_SESSION ['pendingProcess'] ['membership'] = new Membership($_REQUEST ['membership_id']);
-	$_SESSION ['pendingProcess'] ['membership']->feed();
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['membership'] = new Membership($_REQUEST ['membership_id']);
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['membership']->feed();
 }
 
 // l'individu ciblé
 if (array_key_exists ('targetIndividual_id', $_REQUEST )) {
-	$_SESSION ['pendingProcess'] ['targetIndividual'] = new individual($_REQUEST ['targetIndividual_id']);
-	$_SESSION ['pendingProcess'] ['targetIndividual']->feed();
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetIndividual'] = new individual($_REQUEST ['targetIndividual_id']);
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetIndividual']->feed();
 }
 
-$membership = $_SESSION['pendingProcess']['membership'];
+$membership = $_SESSION[$systemIdInSession] ['pendingProcess']['membership'];
 
 $formerIndividual = $membership->getIndividual();
 $formerIndividual->feed();
 
-$targetIndividual = $_SESSION['pendingProcess']['targetIndividual'];
+$targetIndividual = $_SESSION[$systemIdInSession] ['pendingProcess']['targetIndividual'];
 
 $existingHomonyms = $system->getIndividualHomonyms($formerIndividual);
 
 if (count($existingHomonyms)>0) {
-	$_SESSION ['pendingProcess'] ['currentStep'] = 'homonym selection';
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'homonym selection';
 
 } else {
 	$targetIndividual = new Individual();
 	$targetIndividual->setFirstName($formerIndividual->getFirstName());
 	$targetIndividual->setLastName($formerIndividual->getLastName()); 
-	$_SESSION ['pendingProcess'] ['targetIndividual'] = $targetIndividual;	
-	$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetIndividual'] = $targetIndividual;	
+	$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'confirmation';
 }
 
 if (isset ( $_POST )) {
@@ -58,7 +59,7 @@ if (isset ( $_POST )) {
 if (isset ( $_POST ['cmd'] )) {
 	switch ($_POST ['cmd']) {
 		case 'Quitter' :
-			unset ( $_SESSION ['pendingProcess'] );
+			unset ( $_SESSION[$systemIdInSession] ['pendingProcess'] );
 			header ( 'location:membership_menu.php?membership_id=' . $membership->getId() );
 			exit ();
 	}
@@ -83,8 +84,8 @@ if (isset ( $_POST ['task'] )) {
 								$targetIndividual->setFirstName($formerIndividual->getFirstName());
 								$targetIndividual->setLastName($formerIndividual->getLastName()); 
 							}
-							$_SESSION ['pendingProcess'] ['targetIndividual'] = $targetIndividual;	
-							$_SESSION ['pendingProcess'] ['currentStep'] = 'confirmation';
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['targetIndividual'] = $targetIndividual;	
+							$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'] = 'confirmation';
 						}
 				}
 			}
@@ -104,7 +105,7 @@ if (isset ( $_POST ['task'] )) {
 						$membership->toDB();
 						
 						
-						unset ( $_SESSION ['pendingProcess'] );
+						unset ( $_SESSION[$systemIdInSession] ['pendingProcess'] );
 						header ( 'location:' . $targetIndividual->getDisplayUrl() );
 						exit ();
 				}
@@ -127,7 +128,7 @@ if (isset ( $_POST ['task'] )) {
 <body>
 	<main class="container-fluid">
 		<?php
-		switch ($_SESSION ['pendingProcess'] ['currentStep']) {
+		switch ($_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep']) {
 			
 			case 'homonym selection' :
 
@@ -192,7 +193,7 @@ if (isset ( $_POST ['task'] )) {
 				break;
 				
 			default :
-				echo '<p>'.$_SESSION ['pendingProcess'] ['currentStep'].' est une tâche inconnue</p>.';
+				echo '<p>'.$_SESSION[$systemIdInSession] ['pendingProcess'] ['currentStep'].' est une tâche inconnue</p>.';
 		}
 		?>
 	</main>

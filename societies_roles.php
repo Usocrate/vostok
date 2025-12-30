@@ -1,15 +1,16 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start ();
 
-if (empty ( $_SESSION ['user_id'] )) {
+if (empty ( $_SESSION[$systemIdInSession]['user_id'] )) {
 	header ( 'Location:login.php' );
 	exit ();
 } else {
-	$user = new User ( $_SESSION ['user_id'] );
+	$user = new User ( $_SESSION[$systemIdInSession]['user_id'] );
 	$user->feed ();
 }
 
@@ -34,17 +35,17 @@ if (isset ( $_POST ['task'] )) {
 	}
 }
 
-if (isset($_REQUEST['newsort']) || empty($_SESSION['societies_roles_sort'])) {
+if (isset($_REQUEST['newsort']) || empty($_SESSION[$systemIdInSession]['societies_roles_sort'])) {
     if (isset($_REQUEST['newsort'])) {
         switch ($_REQUEST['newsort']) {
             case 'alpha':
-                $_SESSION['societies_roles_sort'] = 'Alphabetical';
+                $_SESSION[$systemIdInSession]['societies_roles_sort'] = 'Alphabetical';
                 break;
             case 'count':
-                $_SESSION['societies_roles_sort'] = 'Most used first';
+                $_SESSION[$systemIdInSession]['societies_roles_sort'] = 'Most used first';
         }
     } else {
-        $_SESSION['societies_roles_sort'] = 'Most used first';
+        $_SESSION[$systemIdInSession]['societies_roles_sort'] = 'Most used first';
     }
 }
 
@@ -80,13 +81,13 @@ $doc_title = 'Les relations entre sociétés';
 		<thead>
 			<tr>
 				<th style="display:none"></th>
-				<th><?php echo strcmp($_SESSION['societies_roles_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="ph-bold ph-sort-ascending"></i></small></a>' ?></th>
-				<th><?php echo strcmp($_SESSION['societies_roles_sort'], 'Most used first')==0 ? 'Nombre de sociétés assumant ce rôle' : 'Nombre de sociétés assumant ce rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="ph-bold ph-sort-descending"></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION[$systemIdInSession]['societies_roles_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="ph-bold ph-sort-ascending"></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION[$systemIdInSession]['societies_roles_sort'], 'Most used first')==0 ? 'Nombre de sociétés assumant ce rôle' : 'Nombre de sociétés assumant ce rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="ph-bold ph-sort-descending"></i></small></a>' ?></th>
 			</tr>
 		</thead>		
 		<tbody>
 			<?php
-			foreach ( Relationship::getKnownRoles(null,'society',$_SESSION['societies_roles_sort']) as $item) {
+			foreach ( Relationship::getKnownRoles(null,'society',$_SESSION[$systemIdInSession]['societies_roles_sort']) as $item) {
 			    //print_r($r);
 				echo '<tr>';
 				echo '<td style="display:none"><input name="roles[]" type="checkbox" value="'.ToolBox::toHtml($item['role']).'" /></td>';

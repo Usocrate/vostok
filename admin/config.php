@@ -3,6 +3,7 @@
 require_once '../config/boot.php';
 require_once '../classes/System.php';
 $system = new System( '../config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 if ($system->configFileExists ()) {
 	$system->parseConfigFile ();

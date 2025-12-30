@@ -1247,7 +1247,7 @@ class Individual {
 
 		if ($new) {
 			$settings [] = 'individual_creation_date=NOW()';
-			if (isset ( $_SESSION ['user_id'] )) {
+			if (isset ( $_SESSION[$systemIdInSession]['user_id'] )) {
 				$settings [] = 'individual_creation_user_id=:user_id';
 			}
 		}
@@ -1317,8 +1317,8 @@ class Individual {
 		}
 
 		if ($new) {
-			if (isset ( $_SESSION ['user_id'] )) {
-				$statement->bindValue ( ':user_id', $_SESSION ['user_id'], PDO::PARAM_INT );
+			if (isset ( $_SESSION[$systemIdInSession]['user_id'] )) {
+				$statement->bindValue ( ':user_id', $_SESSION[$systemIdInSession]['user_id'], PDO::PARAM_INT );
 			}
 		}
 

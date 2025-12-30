@@ -1,15 +1,16 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start ();
 
-if (empty ( $_SESSION ['user_id'] )) {
+if (empty ( $_SESSION[$systemIdInSession]['user_id'] )) {
 	header ( 'Location:login.php' );
 	exit ();
 } else {
-	$user = new User ( $_SESSION ['user_id'] );
+	$user = new User ( $_SESSION[$systemIdInSession]['user_id'] );
 	$user->feed ();
 }
 
@@ -37,18 +38,18 @@ if (isset ( $_POST ['task'] )) {
 /*
  * gestion du tri de la liste des activités
  */
-if (isset($_REQUEST['newsort']) || empty($_SESSION['role_list_sort'])) {
+if (isset($_REQUEST['newsort']) || empty($_SESSION[$systemIdInSession]['role_list_sort'])) {
 
     if (isset($_REQUEST['newsort'])) {
         switch ($_REQUEST['newsort']) {
             case 'alpha':
-                $_SESSION['role_list_sort'] = 'Alphabetical';
+                $_SESSION[$systemIdInSession]['role_list_sort'] = 'Alphabetical';
                 break;
             case 'count':
-                $_SESSION['role_list_sort'] = 'Most used first';
+                $_SESSION[$systemIdInSession]['role_list_sort'] = 'Most used first';
         }
     } else {
-        $_SESSION['role_list_sort'] = 'Most used first';
+        $_SESSION[$systemIdInSession]['role_list_sort'] = 'Most used first';
     }
 }
 
@@ -77,13 +78,13 @@ $doc_title = 'Les rôles';
 		<thead>
 			<tr>
 				<th style="display:none"></th>
-				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="ph-bold ph-sort-ascending"></i></i></small></a>' ?></th>
-				<th><?php echo strcmp($_SESSION['role_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="ph-bold ph-sort-descending"></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION[$systemIdInSession]['role_list_sort'], 'Alphabetical')==0 ? 'Rôle' : 'Rôle <a href="'.$_SERVER['PHP_SELF'].'?newsort=alpha"><small><i class="ph-bold ph-sort-ascending"></i></i></small></a>' ?></th>
+				<th><?php echo strcmp($_SESSION[$systemIdInSession]['role_list_sort'], 'Most used first')==0 ? 'Nombre' : 'Nombre <a href="'.$_SERVER['PHP_SELF'].'?newsort=count"><small><i class="ph-bold ph-sort-descending"></i></small></a>' ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php
-			foreach ( $system->getMembershipTitles($_SESSION['role_list_sort']) as $i ) {
+			foreach ( $system->getMembershipTitles($_SESSION[$systemIdInSession]['role_list_sort']) as $i ) {
 				echo '<tr>';
 				echo '<td style="display:none"><input name="titles[]" type="checkbox" value="'.ToolBox::toHtml($i['label']).'" /></td>';
 				echo '<td>';

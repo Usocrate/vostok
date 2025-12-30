@@ -1,11 +1,12 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start();
 
-if (empty($_SESSION['user_id'])) {
+if (empty($_SESSION[$systemIdInSession]['user_id'])) {
 	header('Location:login.php');
 	exit;
 }

@@ -1,15 +1,16 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start ();
 
-if (empty ( $_SESSION ['user_id'] )) {
+if (empty ( $_SESSION[$systemIdInSession]['user_id'] )) {
 	header ( 'Location:login.php' );
 	exit ();
 } else {
-	$user = new User ( $_SESSION ['user_id'] );
+	$user = new User ( $_SESSION[$systemIdInSession]['user_id'] );
 	$user->feed ();
 }
 
@@ -18,52 +19,52 @@ $page_items_nb = 14;
 
 // si ordre d'effectuer une nouvelle recherche,
 // les données propres à la sélection de societies courante sont réinitialisées
-if (isset ( $_REQUEST ['society_newsearch'] ) || ! isset( $_SESSION ['society_search'] )) {
-	$_SESSION ['society_search'] = array ();
-	$_SESSION ['society_search']['criteria'] = array ();
+if (isset ( $_REQUEST ['society_newsearch'] ) || ! isset( $_SESSION[$systemIdInSession]['society_search'] )) {
+	$_SESSION[$systemIdInSession]['society_search'] = array ();
+	$_SESSION[$systemIdInSession]['society_search']['criteria'] = array ();
 
 	if (isset ( $_REQUEST ['society_name'] ) && ! empty($_REQUEST ['society_name']) ) {
-		$_SESSION ['society_search']['criteria']['name'] = $_REQUEST ['society_name'];
+		$_SESSION[$systemIdInSession]['society_search']['criteria']['name'] = $_REQUEST ['society_name'];
 	}
 	
 	if (isset ( $_REQUEST ['industry_id'] ) && ! empty ( $_REQUEST ['industry_id']) ) {
-		$_SESSION ['society_search']['criteria']['industry_id'] = $_REQUEST ['industry_id'];
+		$_SESSION[$systemIdInSession]['society_search']['criteria']['industry_id'] = $_REQUEST ['industry_id'];
 	}
 	
 	if (isset ( $_REQUEST ['society_city'] ) && ! empty($_REQUEST ['society_city']) ) {
-		$_SESSION ['society_search']['criteria']['city'] = $_REQUEST ['society_city'];
+		$_SESSION[$systemIdInSession]['society_search']['criteria']['city'] = $_REQUEST ['society_city'];
 	}
 	
-	$_SESSION ['society_search']['page_index'] = 1;
-	$_SESSION ['society_search']['sort'] = 'Last created first';
+	$_SESSION[$systemIdInSession]['society_search']['page_index'] = 1;
+	$_SESSION[$systemIdInSession]['society_search']['sort'] = 'Last created first';
 }
 
 // nb de comptes correspondant aux critères
-$items_nb = $system->getSocietiesNb ( $_SESSION ['society_search']['criteria'] );
+$items_nb = $system->getSocietiesNb ( $_SESSION[$systemIdInSession]['society_search']['criteria'] );
 $pages_nb = ceil ( $items_nb / $page_items_nb );
 
 // changement de page
 if (isset ( $_REQUEST ['society_search_page_index'] )) {
-	$_SESSION ['society_search'] ['page_index'] = $_REQUEST ['society_search_page_index'];
+	$_SESSION[$systemIdInSession]['society_search'] ['page_index'] = $_REQUEST ['society_search_page_index'];
 }
 
 // sélection de sociétés correspondant aux critères (dont le nombre dépend de la variable $page_items_nb)
-$page_debut = ($_SESSION ['society_search'] ['page_index'] - 1) * $page_items_nb;
-$societies = $system->getSocieties( $_SESSION ['society_search']['criteria'], $_SESSION ['society_search']['sort'], $page_debut, $page_items_nb );
+$page_debut = ($_SESSION[$systemIdInSession]['society_search'] ['page_index'] - 1) * $page_items_nb;
+$societies = $system->getSocieties( $_SESSION[$systemIdInSession]['society_search']['criteria'], $_SESSION[$systemIdInSession]['society_search']['sort'], $page_debut, $page_items_nb );
 
 // si une seule société redirection vers fiche individuelle.
 if (count ( $societies ) == 1) {
     // on considère que la recherche est arrivée à son terme
-    unset($_SESSION['society_search']);
+    unset($_SESSION[$systemIdInSession]['society_search']);
 	header ( 'Location:society.php?society_id=' . $societies [0]->getId () );
 	exit ();
 }
 
 // redirection vers création de fiche société.
-if (count ( $societies ) == 0 && isset($_SESSION ['society_search']['criteria']['name'])) {
-    $name = $_SESSION ['society_search']['criteria']['name'];
+if (count ( $societies ) == 0 && isset($_SESSION[$systemIdInSession]['society_search']['criteria']['name'])) {
+    $name = $_SESSION[$systemIdInSession]['society_search']['criteria']['name'];
     // on considère que la recherche est arrivée à son terme
-    unset($_SESSION['society_search']);
+    unset($_SESSION[$systemIdInSession]['society_search']);
 	header ( 'Location:society_edit.php?society_name=' . $name );
 	exit ();
 }
@@ -93,21 +94,21 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 	   	<form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" class="form-inline">
 			<div class="form-group m-2">
 	    		<label for="s_name_i" class="mr-2">Nom</label>
-	    		<input id="s_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION ['society_search']['criteria']['name'])) echo $_SESSION ['society_search']['criteria']['name']; ?>" class="form-control" /> 
+	    		<input id="s_name_i" name="society_name" type="text" value="<?php if (isset($_SESSION[$systemIdInSession]['society_search']['criteria']['name'])) echo $_SESSION[$systemIdInSession]['society_search']['criteria']['name']; ?>" class="form-control" /> 
 			</div>
 			<div class="form-group m-2">
 	    		<label for="s_industry_i" class="mr-2">Activité</label>
 	    		<select id="s_industry_i" name="industry_id" class="form-control">
 	    			<option value="">-- choisir --</option>
-	    			<?php echo isset($_SESSION['society_search']['criteria']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION['society_search']['criteria']['industry_id']) : $system->getIndustryOptionsTags(); ?>
+	    			<?php echo isset($_SESSION[$systemIdInSession]['society_search']['criteria']['industry_id']) ? $system->getIndustryOptionsTags($_SESSION[$systemIdInSession]['society_search']['criteria']['industry_id']) : $system->getIndustryOptionsTags(); ?>
 	    		</select>
 			</div>
 			<div class="form-group m-2">
 	    		<label for="s_city_i" class="mr-2">Ville</label>
-	    		<input id="s_city_i" name="society_city" is="society-city-autocomplete" value="<?php if (isset($_SESSION ['society_search']['criteria']['city'])) echo $_SESSION ['society_search']['criteria']['city']; ?>" class="form-control"></input>
+	    		<input id="s_city_i" name="society_city" is="society-city-autocomplete" value="<?php if (isset($_SESSION[$systemIdInSession]['society_search']['criteria']['city'])) echo $_SESSION[$systemIdInSession]['society_search']['criteria']['city']; ?>" class="form-control"></input>
 			</div>
 	   		<button type="submit" name="society_newsearch" value="filtrer" class="btn btn-secondary m-2">Filtrer</button>
-	   		<?php if( count($_SESSION['society_search']['criteria']) > 0) echo ' <a href="societies.php?society_newsearch=1">Toutes les sociétés</a>'  ?>
+	   		<?php if( count($_SESSION[$systemIdInSession]['society_search']['criteria']) > 0) echo ' <a href="societies.php?society_newsearch=1">Toutes les sociétés</a>'  ?>
 		</form>
    	</section>
    	<div class="row">
@@ -128,7 +129,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 							}
 							echo '</h2>';
 							echo '<div class="list-group-item-text">';
-							if ($s->getCity() && empty($_SESSION ['society_search']['criteria']['city'])) {
+							if ($s->getCity() && empty($_SESSION[$systemIdInSession]['society_search']['criteria']['city'])) {
 								echo ' <p>'.$s->getCity ().'</p>';
 							}
 							if ($s->getDescription ())
@@ -153,7 +154,7 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 		    		<?php
 		    		if ($pages_nb > 1) {
 		    			$params = array ();
-		    			echo ToolBox::getHtmlPagesNav ( $_SESSION ['society_search'] ['page_index'], $pages_nb, $params, 'society_search_page_index' );
+		    			echo ToolBox::getHtmlPagesNav ( $_SESSION[$systemIdInSession]['society_search'] ['page_index'], $pages_nb, $params, 'society_search_page_index' );
 		    		}
 		    		?>
 		    	</div>
@@ -163,14 +164,14 @@ $doc_title = 'Les sociétés qui m\'intéressent';
 			<section>
 				<?php
 				$criteria = array();
-				if (isset($_SESSION ['society_search']['criteria']['name'])) {
-					$criteria['society_name_like_pattern'] = $_SESSION ['society_search']['criteria']['name'];
+				if (isset($_SESSION[$systemIdInSession]['society_search']['criteria']['name'])) {
+					$criteria['society_name_like_pattern'] = $_SESSION[$systemIdInSession]['society_search']['criteria']['name'];
 				}				
-				if (isset($_SESSION ['society_search']['criteria']['industry_id'])) {
-					$criteria['industry_id'] = $_SESSION ['society_search']['criteria']['industry_id'];
+				if (isset($_SESSION[$systemIdInSession]['society_search']['criteria']['industry_id'])) {
+					$criteria['industry_id'] = $_SESSION[$systemIdInSession]['society_search']['criteria']['industry_id'];
 				}
-				if (isset($_SESSION ['society_search']['criteria']['city'])) {
-					$criteria['society_city'] = $_SESSION ['society_search']['criteria']['city'];
+				if (isset($_SESSION[$systemIdInSession]['society_search']['criteria']['city'])) {
+					$criteria['society_city'] = $_SESSION[$systemIdInSession]['society_search']['criteria']['city'];
 				}				
 				$memberships = $system->getMemberships($criteria, 'Last updated first', 0, 8);
 				if ($memberships) {

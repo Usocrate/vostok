@@ -1,15 +1,16 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start();
 
-if (empty ($_SESSION['user_id'])) {
+if (empty ($_SESSION[$systemIdInSession]['user_id'])) {
 	header('Location:login.php');
 	exit;
 } else {
-	$user = new User($_SESSION['user_id']);
+	$user = new User($_SESSION[$systemIdInSession]['user_id']);
 	$user->feed();
 }
 
@@ -35,21 +36,21 @@ if (isset($_POST)) {
     }
 }
 
-if (isset($_REQUEST['newsort']) || empty($_SESSION['societiesHavingThatRole_list_sort'])) {
+if (isset($_REQUEST['newsort']) || empty($_SESSION[$systemIdInSession]['societiesHavingThatRole_list_sort'])) {
     if (isset($_REQUEST['newsort'])) {
         switch ($_REQUEST['newsort']) {
             case 'alpha':
-                $_SESSION['societiesHavingThatRole_list_sort'] = 'Alphabetical';
+                $_SESSION[$systemIdInSession]['societiesHavingThatRole_list_sort'] = 'Alphabetical';
                 break;
             case 'count':
-                $_SESSION['societiesHavingThatRole_list_sort'] = 'Most used first';
+                $_SESSION[$systemIdInSession]['societiesHavingThatRole_list_sort'] = 'Most used first';
         }
     } else {
-        $_SESSION['societiesHavingThatRole_list_sort'] = 'Most used first';
+        $_SESSION[$systemIdInSession]['societiesHavingThatRole_list_sort'] = 'Most used first';
     }
 }
 
-$societiesHavingThatRole = $system->getSocietiesHavingThatRole($role, $_SESSION['societiesHavingThatRole_list_sort']);
+$societiesHavingThatRole = $system->getSocietiesHavingThatRole($role, $_SESSION[$systemIdInSession]['societiesHavingThatRole_list_sort']);
 
 $doc_title = $role;
 
@@ -86,8 +87,8 @@ $doc_title = $role;
             <div class="dropdown-menu">
                 <?php
                 $options = array();
-                $options[] = array('label'=>'Nom','sort'=>'alpha','active'=>strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Alphabetical')==0);
-                $options[] = array('label'=>'Nombre de sociétés auprès desquelles le rôle est assumé','sort'=>'count','active'=>strcmp($_SESSION['societiesHavingThatRole_list_sort'], 'Most used first')==0);
+                $options[] = array('label'=>'Nom','sort'=>'alpha','active'=>strcmp($_SESSION[$systemIdInSession]['societiesHavingThatRole_list_sort'], 'Alphabetical')==0);
+                $options[] = array('label'=>'Nombre de sociétés auprès desquelles le rôle est assumé','sort'=>'count','active'=>strcmp($_SESSION[$systemIdInSession]['societiesHavingThatRole_list_sort'], 'Most used first')==0);
               
                 foreach ($options as $o) {
                     $class = $o['active'] ? 'dropdown-item active' : 'dropdown-item';

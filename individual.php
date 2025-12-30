@@ -1,15 +1,16 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start();
 
-if (empty ($_SESSION['user_id'])) {
+if (empty ($_SESSION[$systemIdInSession]['user_id'])) {
 	header('Location:login.php');
 	exit;
 } else {
-	$user = new User($_SESSION['user_id']);
+	$user = new User($_SESSION[$systemIdInSession]['user_id']);
 	$user->feed();
 }
 
@@ -27,12 +28,12 @@ $doc_title = $individual->getWholeName();
 
 //var_dump($_SESSION);
 
-if (isset($_SESSION['preferences']['individual']['focus']) && strcmp($_SESSION['preferences']['individual']['focus'], 'onTweets')==0 && !$individual->hasXId()) {
-	unset($_SESSION['preferences']['individual']['focus']);	
+if (isset($_SESSION[$systemIdInSession]['preferences']['individual']['focus']) && strcmp($_SESSION[$systemIdInSession]['preferences']['individual']['focus'], 'onTweets')==0 && !$individual->hasXId()) {
+	unset($_SESSION[$systemIdInSession]['preferences']['individual']['focus']);	
 }
 
-if (!empty($_SESSION['preferences']['individual']['focus'])) {
-	$focus = $_SESSION['preferences']['individual']['focus'];
+if (!empty($_SESSION[$systemIdInSession]['preferences']['individual']['focus'])) {
+	$focus = $_SESSION[$systemIdInSession]['preferences']['individual']['focus'];
 } else {
 	$focus = 'onMemberships';
 }

@@ -1,15 +1,16 @@
 <?php
 require_once 'config/boot.php';
 require_once 'classes/System.php';
-$system = new System( 'config/host.json' );
+$system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start();
 
-if (empty ($_SESSION['user_id'])) {
+if (empty ($_SESSION[$systemIdInSession]['user_id'])) {
 	header('Location:login.php');
 	exit;
 } else {
-	$user = new User($_SESSION['user_id']);
+	$user = new User($_SESSION[$systemIdInSession]['user_id']);
 	$user->feed();
 }
 
@@ -62,17 +63,17 @@ $events = $society->getEvents();
 $doc_title = $society->getName();
 
 if (isset($_REQUEST['focus'])) {
-	if (!isset($_SESSION['preferences'])) {
-		$_SESSION['preferences'] = array();
+	if (!isset($_SESSION[$systemIdInSession]['preferences'])) {
+		$_SESSION[$systemIdInSession]['preferences'] = array();
 	}
-	if (!isset($_SESSION['preferences']['society'])) {
-		$_SESSION['preferences']['society'] = array();
+	if (!isset($_SESSION[$systemIdInSession]['preferences']['society'])) {
+		$_SESSION[$systemIdInSession]['preferences']['society'] = array();
 	}
-	$_SESSION['preferences']['society']['focus'] = $_REQUEST['focus'];
+	$_SESSION[$systemIdInSession]['preferences']['society']['focus'] = $_REQUEST['focus'];
 }
 
-if (!empty($_SESSION['preferences']['society']['focus'])) {
-	$focus = $_SESSION['preferences']['society']['focus'];
+if (!empty($_SESSION[$systemIdInSession]['preferences']['society']['focus'])) {
+	$focus = $_SESSION[$systemIdInSession]['preferences']['society']['focus'];
 } else {
 	$focus = 'onRelatedSocieties';
 }

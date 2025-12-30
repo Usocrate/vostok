@@ -72,7 +72,7 @@ class System {
 		$this->googlemaps_api_key = $input;
 	}
 	public function getGoogleMapsApiKey() {
-		return isset($this->googlemaps_api_key) ? $this->googlemaps_api_key : null;
+		return isset ( $this->googlemaps_api_key ) ? $this->googlemaps_api_key : null;
 	}
 	public function getGoogleGeocodeAsJson($input) {
 		$param ['address'] = $input;
@@ -133,7 +133,8 @@ class System {
 		try {
 			$path = $this->dir_path . DIRECTORY_SEPARATOR . 'data';
 			if (! is_dir ( $path )) {
-				mkdir ( $path, 770 );
+				// les répertoires standard non versionnés (git) doivent être créés
+				mkdir ( $path, 0770 );
 			}
 			return $path;
 		} catch ( Exception $e ) {
@@ -161,7 +162,8 @@ class System {
 		try {
 			$path = $this->getDataDirPath () . DIRECTORY_SEPARATOR . 'trombinoscope';
 			if (! is_dir ( $path )) {
-				mkdir ( $path, 770 );
+				// les répertoires standard non versionnés (git) doivent être créés
+				mkdir ( $path, 0770 );
 			}
 			return $path;
 		} catch ( Exception $e ) {
@@ -178,7 +180,8 @@ class System {
 		try {
 			$path = $this->getTrombiDirPath () . DIRECTORY_SEPARATOR . 'rework';
 			if (! is_dir ( $path )) {
-				mkdir ( $path, 770 );
+				// les répertoires standard non versionnés (git) doivent être créés
+				mkdir ( $path, 0770 );
 			}
 			return $path;
 		} catch ( Exception $e ) {
@@ -326,17 +329,17 @@ class System {
 	 */
 	public function saveSkinLoginScreenImg($file) {
 		try {
-			$im = new Imagick ( $file['tmp_name'] );
-			$im->setImageFormat('png');
+			$im = new Imagick ( $file ['tmp_name'] );
+			$im->setImageFormat ( 'png' );
 			$im->scaleImage ( 500, 0 );
 			$im->normalizeimage ();
 			$im->orderedPosterizeImage ( "h4x4a", imagick::CHANNEL_BLUE );
 			$im->orderedPosterizeImage ( "h4x4a", imagick::CHANNEL_GREEN );
 			$im->transformimagecolorspace ( Imagick::COLORSPACE_GRAY );
-			
-			$targetPath = $this->getSkinDirPath().DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'login.png';
+
+			$targetPath = $this->getSkinDirPath () . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'login.png';
 			$handle = fopen ( $targetPath, 'w+' );
-			
+
 			return $im->writeimagefile ( $handle );
 		} catch ( Exception $e ) {
 			$this->reportException ( __METHOD__, $e );
@@ -458,38 +461,38 @@ class System {
 		try {
 			$sql = 'SELECT i.individual_id, i.individual_firstName, i.individual_lastName';
 			$sql .= ' FROM individual AS i';
-			//$sql .= ' OUTER JOIN membership AS m ON (m.individual_id=i.individual_id)';
-			//$sql .= ' INNER JOIN society AS s ON (s.society_id=m.society_id)';
+			// $sql .= ' OUTER JOIN membership AS m ON (m.individual_id=i.individual_id)';
+			// $sql .= ' INNER JOIN society AS s ON (s.society_id=m.society_id)';
 
 			// WHERE
 			$where = array ();
 
-			if ($individual->hasId()) {
+			if ($individual->hasId ()) {
 				$where [] = 'i.individual_id NOT IN(:individual_id)';
 			}
 
-			if ($individual->getLastName()) {
+			if ($individual->getLastName ()) {
 				$where [] = 'i.individual_lastName = :individual_lastName';
 			}
 
-			if ($individual->getFirstName()) {
+			if ($individual->getFirstName ()) {
 				$where [] = 'i.individual_firstName = :individual_firstName';
 			}
 
 			if (count ( $where ) > 0) {
 				$sql .= ' WHERE ' . implode ( ' AND ', $where );
 			}
-			
+
 			$statement = $this->getPdo ()->prepare ( $sql );
 
-			if ($individual->hasId()) {
-				$statement->bindValue ( ':individual_id', $individual->getId(), PDO::PARAM_INT );
+			if ($individual->hasId ()) {
+				$statement->bindValue ( ':individual_id', $individual->getId (), PDO::PARAM_INT );
 			}
-			if ($individual->getLastName()) {
-				$statement->bindValue ( ':individual_lastName', $individual->getLastName(), PDO::PARAM_STR );
+			if ($individual->getLastName ()) {
+				$statement->bindValue ( ':individual_lastName', $individual->getLastName (), PDO::PARAM_STR );
 			}
-			if ($individual->getFirstName()) {
-				$statement->bindValue ( ':individual_firstName', $individual->getFirstName(), PDO::PARAM_STR );
+			if ($individual->getFirstName ()) {
+				$statement->bindValue ( ':individual_firstName', $individual->getFirstName (), PDO::PARAM_STR );
 			}
 
 			$statement->setFetchMode ( PDO::FETCH_ASSOC );
@@ -499,27 +502,27 @@ class System {
 			return $statement->fetchAll ();
 		} catch ( Exception $e ) {
 			$this->reportException ( $e, __METHOD__ );
-		}		
+		}
 	}
 	/**
-	 * 
+	 *
 	 * @param Individual|Society $firstTerm
 	 * @param Individual|Society $secondTerm
 	 * @since 08/2024
 	 */
-	public function getRelationship($firstTerm=null, $secondTerm=null) {
-		$criteria =array();
-		if (isset($firstTerm)) {
-			$criteria['firstTerm'] = $firstTerm; 
+	public function getRelationship($firstTerm = null, $secondTerm = null) {
+		$criteria = array ();
+		if (isset ( $firstTerm )) {
+			$criteria ['firstTerm'] = $firstTerm;
 		}
-		if (isset($secondTerm)) {
-			$criteria['secondTerm'] = $secondTerm;
+		if (isset ( $secondTerm )) {
+			$criteria ['secondTerm'] = $secondTerm;
 		}
-		$data = $this->getRelationshipsData($criteria);
+		$data = $this->getRelationshipsData ( $criteria );
 
-		if (is_array($data)) {
-			$r = new Relationship();
-			$r->feed($data[0]);
+		if (is_array ( $data )) {
+			$r = new Relationship ();
+			$r->feed ( $data [0] );
 			return $r;
 		}
 	}
@@ -532,10 +535,10 @@ class System {
 	public function getRelationshipsData($criteria = null) {
 		try {
 			$sql = 'SELECT * FROM relationship AS r';
-			
+
 			// WHERE
 			$where = array ();
-			
+
 			if (isset ( $criteria ['firstTerm'] )) {
 				if (isset ( $criteria ['firstTermRole'] )) {
 					$where [] = '((r.item0_class = :firstTerm_class_1 AND r.item0_id = :firstTerm_id_1 AND r.item0_role = :firstTerm_role_1) OR (r.item1_class = :firstTerm_class_2 AND r.item1_id = :firstTerm_id_2 AND r.item0_role = :firstTerm_role_2))';
@@ -543,7 +546,7 @@ class System {
 					$where [] = '((r.item0_class = :firstTerm_class_1 AND r.item0_id = :firstTerm_id_1) OR (r.item1_class = :firstTerm_class_2 AND r.item1_id = :firstTerm_id_2))';
 				}
 			}
-			
+
 			if (isset ( $criteria ['secondTerm'] )) {
 				if (isset ( $criteria ['secondTermRole'] )) {
 					$where [] = '((r.item0_class = :secondTerm_class_1 AND r.item0_id = :secondTerm_id_1 AND r.item0_role = :secondTerm_role_1) OR (r.item1_class = :secondTerm_class_2 AND r.item1_id = :secondTerm_id_2 AND r.item0_role = :secondTerm_role_2))';
@@ -551,45 +554,45 @@ class System {
 					$where [] = '((r.item0_class = :secondTerm_class_1 AND r.item0_id = :secondTerm_id_1) OR (r.item1_class = :secondTerm_class_2 AND r.item1_id = :secondTerm_id_2))';
 				}
 			}
-			
+
 			if (count ( $where ) > 0) {
 				$sql .= ' WHERE ' . implode ( ' AND ', $where );
 			}
-			
+
 			$statement = $this->getPdo ()->prepare ( $sql );
-			
+
 			// BINDING
 			if (isset ( $criteria ['firstTerm'] )) {
-				
+
 				$statement->bindValue ( ':firstTerm_class_1', get_class ( $criteria ['firstTerm'] ), PDO::PARAM_STR );
 				$statement->bindValue ( ':firstTerm_id_1', $criteria ['firstTerm']->getId (), PDO::PARAM_INT );
-				
+
 				$statement->bindValue ( ':firstTerm_class_2', get_class ( $criteria ['firstTerm'] ), PDO::PARAM_STR );
 				$statement->bindValue ( ':firstTerm_id_2', $criteria ['firstTerm']->getId (), PDO::PARAM_INT );
-				
+
 				if (isset ( $criteria ['firstTermRole'] )) {
 					$statement->bindValue ( ':firstTerm_role_1', $criteria ['firstTermRole'], PDO::PARAM_STR );
 					$statement->bindValue ( ':firstTerm_role_2', $criteria ['firstTermRole'], PDO::PARAM_STR );
 				}
 			}
 			if (isset ( $criteria ['secondTerm'] )) {
-				
+
 				$statement->bindValue ( ':secondTerm_class_1', get_class ( $criteria ['secondTerm'] ), PDO::PARAM_STR );
 				$statement->bindValue ( ':secondTerm_id_1', $criteria ['secondTerm']->getId (), PDO::PARAM_INT );
-				
+
 				$statement->bindValue ( ':secondTerm_class_2', get_class ( $criteria ['secondTerm'] ), PDO::PARAM_STR );
 				$statement->bindValue ( ':secondTerm_id_2', $criteria ['secondTerm']->getId (), PDO::PARAM_INT );
-				
+
 				if (isset ( $criteria ['secondTermRole'] )) {
 					$statement->bindValue ( ':secondTerm_role_1', $criteria ['secondTermRole'], PDO::PARAM_STR );
 					$statement->bindValue ( ':secondTerm_role_2', $criteria ['secondTermRole'], PDO::PARAM_STR );
 				}
 			}
-			
+
 			$statement->execute ();
 			return $statement->fetchAll ( PDO::FETCH_ASSOC );
-		} catch (PDOException $e) {
-			$statement->debugDumpParams();
+		} catch ( PDOException $e ) {
+			$statement->debugDumpParams ();
 			$this->reportException ( $e, __METHOD__ );
 		}
 	}
@@ -601,7 +604,6 @@ class System {
 	 * @since 05/2018
 	 */
 	public function getMemberships($criteria = NULL, $sort = 'Last updated first', $offset = 0, $count = NULL) {
-		
 		try {
 			$sql = 'SELECT m.membership_id AS id, m.individual_id, m.society_id, m.title, m.department, m.description, m.weight, m.init_year, m.end_year, m.timestamp';
 			$sql .= ', i.individual_firstName, i.individual_lastName';
@@ -1512,7 +1514,9 @@ class System {
 	public function getIndustryFromId($id) {
 		$sql = 'SELECT * FROM industry WHERE id=?';
 		$statement = $this->getPdo ()->prepare ( $sql );
-		$statement->execute ( array ($id) );
+		$statement->execute ( array (
+				$id
+		) );
 		$data = $statement->fetch ( PDO::FETCH_ASSOC );
 		if ($data) {
 			$output = new Industry ();

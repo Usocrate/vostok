@@ -2,6 +2,7 @@
 require_once 'config/boot.php';
 require_once 'classes/System.php';
 $system = new System( './config/host.json' );
+$systemIdInSession = $system->getAppliName();
 
 session_start();
 
@@ -12,12 +13,12 @@ if (isset($_REQUEST['anonymat_submission'])) {
 	unset($_SESSION);
 }
 // authentification de l'utilisateur
-if (empty($_SESSION['user_id'])) {
+if (empty($_SESSION[$systemIdInSession]['user_id'])) {
 	if (isset($_POST['login_submission'])) {
 		$user = new User();
 		if ($user->identification($_POST['user_name'], $_POST['user_password'])) {
 			// authentification suite à soumission du formulaire d'identification
-			$_SESSION['user_id'] = $user->getId();
+			$_SESSION[$systemIdInSession]['user_id'] = $user->getId();
 			header('Location:index.php');
 			exit;
 		} else {
